@@ -1,4 +1,4 @@
-var socket = io.connect('http://192.168.1.247:3000');
+var socket = io.connect('http://'+window.location.host+':3000');
 socket.on("Recibirpedidos", recibirpedido);
 
 $('.hora').each(function(){

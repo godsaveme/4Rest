@@ -264,7 +264,7 @@
 	{{HTML::script('js/vendor/modernizr.js'); }}
   	{{HTML::script('js/vendor/jquery.js'); }}
   	{{HTML::script('js/bootstrap.min.js')}}
-  	<script src="http://192.168.1.247:3000/socket.io/socket.io.js"></script>
+  	<script src="/dev/socket.io/socket.io.js"></script>
   	{{HTML::script('js/jquery.plugin.js'); }}
   	{{HTML::script('js/jquery.tooltipster.min.js')}}
   	{{HTML::script('js/kendo.all.min.js')}}

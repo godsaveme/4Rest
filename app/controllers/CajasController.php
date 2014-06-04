@@ -446,6 +446,7 @@ class CajasController extends BaseController {
 						->where('familia.id', '=', $familiaid)
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('fnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 			$contador = 1;
 			$flag = '';
