@@ -1,0 +1,16 @@
+
+module mypool 1.0;
+
+require {
+	type cupsd_etc_t;
+	type httpd_t;
+	type ipp_port_t;
+	class tcp_socket name_connect;
+	class dir search;
+}
+
+#============= httpd_t ==============
+allow httpd_t cupsd_etc_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t ipp_port_t:tcp_socket name_connect;

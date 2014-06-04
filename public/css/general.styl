@@ -1,0 +1,267 @@
+@import 'nib/vendor'
+vendor-prefixes = o ms moz webkit official
+@import 'nib/gradients'
+
+html, body
+	height 100%
+	width 100%
+	margin 0px auto
+	background-color #FFFFFF
+
+.highlight
+	background-color #FFFF88
+#contenido
+	width 100%
+	height 100%
+	margin-top 55px
+.bullet-item
+    color #333333
+    font-size 0.870rem
+
+.centrartexto
+	text-align center
+
+.negrita
+	font-weight 900
+
+.cont_derecha
+	position absolute
+	top 55px
+	left 0
+	width 220px
+	height 100%
+	border 1px solid #000
+
+.cont_izquierda
+	position absolute
+	top 55px
+	right 0
+	height 100%
+	width 250px
+
+.mesa_libre
+	background green
+
+.mesa_ocupada
+	background red
+
+.I,.C ,.P ,.E ,.D
+	color white
+	font-size 13px
+	font-weight 900
+	min-height 30px
+	border-bottom 1px solid #FFFFFF
+.I
+	background	#42BDC2
+.C
+	background	#42BDC2
+.P
+	background #FF8A3C
+.E
+	background #FFD800
+.D
+	background #7FC242
+
+.notas
+	font-weight 900
+	color black
+	font-size 2rem
+	cursor pointer
+	&:hover
+		background #0000
+.btn_mesascajas
+	display inline-block
+	height 100px
+	width 100px
+	margin 10px
+	display -ms-flexbox
+	-ms-flex-pack center
+	-ms-flex-align center
+	display -moz-box
+	-moz-box-pack center
+	-moz-box-align center
+	display -webkit-box
+	-webkit-box-pack center
+	-webkit-box-align center
+	display box
+	box-pack center
+	box-align center
+	color #000
+	font-weight bold
+	border none
+	background rgb(255,255,255)
+	background -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%)
+	background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1)))
+	background -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%)
+	background -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%)
+	background -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%)
+	background linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%)
+	-webkit-box-shadow 1px 0px 2px 0px rgba(34, 37, 55, 0.59)
+	-moz-box-shadow    1px 0px 2px 0px rgba(34, 37, 55, 0.59)
+	box-shadow         1px 0px 2px 0px rgba(34, 37, 55, 0.59)
+	cursor pointer
+	&:hover
+		color #9da0a2
+		font-weight bold
+		border none
+.nav_bar
+	height 20px
+	width 100%
+	background black
+	color white
+	display -ms-flexbox
+	-ms-flex-align center
+	display -moz-box
+	-moz-box-align center
+	display -webkit-box
+	-webkit-box-align center
+	display box
+	box-align center
+	ul
+		list-style none
+		display inline
+		display -ms-flexbox
+		-ms-flex-pack center
+		-ms-flex-align center
+		display -moz-box
+		-moz-box-pack center
+		-moz-box-align center
+		display -webkit-box
+		-webkit-box-pack center
+		-webkit-box-align center
+		display box
+		box-pack center
+		box-align center
+		li
+			margin 2px
+.navbar-default
+	.navbar-brand
+		font-weight 900
+
+.container
+	margin-top 50px
+	padding 5px
+	background-color #FFFFFF
+
+.caja_derecha, .caja_izquierda
+	margin-top 50px
+
+.caja_derecha
+	width 60%
+.O
+	background  rgb(255,48,25) /* Old browsers */	
+	background  -moz-linear-gradient(top, rgba(255,48,25,1) 0%, rgba(207,4,4,1) 100%)
+	background  -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,48,25,1)), color-stop(100%,rgba(207,4,4,1)))
+	background  -webkit-linear-gradient(top, rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%)
+	background  -o-linear-gradient(top, rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%)
+	background  -ms-linear-gradient(top, rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%)
+	background  linear-gradient(to bottom, rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%)
+
+.R
+	background: rgb(255,214,94) /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,214,94,1) 0%, rgba(254,191,4,1) 100%)
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,214,94,1)), color-stop(100%,rgba(254,191,4,1)))
+	background: -webkit-linear-gradient(top, rgba(255,214,94,1) 0%,rgba(254,191,4,1) 100%)
+	background: -o-linear-gradient(top, rgba(255,214,94,1) 0%,rgba(254,191,4,1) 100%)
+	background: -ms-linear-gradient(top, rgba(255,214,94,1) 0%,rgba(254,191,4,1) 100%)
+	background: linear-gradient(to bottom, rgba(255,214,94,1) 0%,rgba(254,191,4,1) 100%)
+
+.cont_inputcaja
+	margin 10px
+	width 70%
+
+.calculadora
+	width 325px
+	height auto
+	background #9dd2ea
+	background linear-gradient(top,#9dd2ea, #8bceec)
+	border-radius 3px
+	box-shadow 0px 4px #009de4, 0px 10px 15px rgba(0, 0, 0, 0.2)
+	padding 20px 20px 9px
+	.btn_calcu
+		float left
+		position relative
+		top 0
+		cursor pointer
+		width 60px
+		height 50px
+		background white
+		border-radius 5px
+		border none
+		box-shadow 0px 4px rgba(0, 0, 0, 0.2)
+		margin 0 7px 11px 0
+		color #888
+		line-height 50px
+		text-align center
+		user-select none
+		transition all 0.2s ease
+		font-size 25px
+		font-weight 800
+		&:hover
+			background #9c89f6
+			box-shadow 0px 4px #6b54d3
+			color white
+		&:active
+			box-shadow 0px 0px #6b54d3
+			top 4px
+	.operator
+		background #FFF0F5
+		margin-right 0
+	.clear
+		background #ff9fa8
+		box-shadow 0px 4px #ff7c87
+		color white
+		&:hover
+			background #f68991
+			box-shadow 0px 4px #d3545d
+			color white
+	.eval
+		background #f1ff92
+		box-shadow 0px 4px #9da853
+		color #888e5f
+		&:hover
+			background #abb850
+			box-shadow 0px 4px #717a33
+			color #ffffff
+	.keys, .top 
+		overflow hidden
+	.keys
+		margin-top 10px
+	.top 
+		.screen 
+			height 50px
+			width 220px
+			float right
+			padding 0 10px
+			background rgba(0, 0, 0, 0.2)
+			border-radius: 3px
+			border none
+			box-shadow inset 0px 4px rgba(0, 0, 0, 0.2)
+			font-size 17px
+			line-height 40px
+			color white
+			text-shadow 1px 1px 2px rgba(0, 0, 0, 0.2)
+			text-align right
+			letter-spacing: 1px
+
+.profile
+	  background-color #FF766C
+	  border 1px solid #ff766c
+	  img
+		display block
+		border 10px solid rgba(255, 255, 255, 0.3)
+		margin 0 auto
+		margin-top 10px
+		margin-bottom 10px
+	  p
+		text-align center
+		color #fff
+
+.list_menu
+	background-color #fff
+	border-radius 0px !important
+	border 1px solid #DDD
+	&.list-group-itemactive
+	&:hover
+		border-left 3px solid #FF766C
+		background-color #F8F7F5

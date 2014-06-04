@@ -1,0 +1,119 @@
+/*Perfil*/
+.ra-well-title {
+  font-size: 1.2857em;
+  line-height: 1.2857em;
+  border-bottom: 2px dotted white;
+  margin: -5px -19px 0.8333em;
+  padding: 0 19px 0.7222em;
+}
+.ra-first-name {
+  display: block;
+  margin-top: 0.8571em;
+}
+.ra-last-name {
+  display: block;
+  font-size: 1.7143em;
+  line-height: 1.3em;
+}
+
+.ra-position {
+  font-size: 0.8571em;
+  color: #999;
+  padding-bottom: 2em;
+}
+.ra-avatar {
+border: 1px solid #e7e7e7;
+border-radius: 2px;
+}
+
+.profile-pic{
+  border: 1px solid #CCC;
+background-color: #FFF;
+padding: 4px;
+display: inline-block;
+max-width: 100%;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+box-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+border-radius: 4px; 
+}
+/**/
+
+
+/*FOOTER*/
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /*position: relative;*/
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  background: #f2f4f8;
+  font-family: "Open Sans",Helvetica,Arial,sans-serif;
+  /*background:  url('../../images/bg.png');*/
+  /*background-repeat: repeat;*/
+  /*background-image: url('/images/bg_resto.jpg');*/
+
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  /*background-color: #f5f5f5;*/
+
+}
+.cls-footer{
+    color:  white;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+}
+/*modal windows*/
+.bg_resto {
+
+  float: left;
+  margin: 0px 20px 10px 20px;
+  text-align: center;
+}
+.bg_resto img {
+  width: 240px;
+  height: 160px;
+  display: block;
+  margin-bottom: 10px;
+}
+/**/
+
+/*._loading{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: block;
+  background: url('../kendo/Bootstrap/loading_2x.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1;
+}*/
+
+/*del menu*/
+.list-group-item {
+    background-color: #fff;
+    border-radius: 0px !important;
+    border: 1px solid #DDD;
+}
+
+.list-group-item.active, .list-group-item:hover {
+    border-left: 3px solid #FF766C;
+    background-color: #F8F7F5;
+}
+.pb-menu{
+  padding: 0px;
+  margin: 0px;
+}
+.pb-menu ul {
+  margin: 0px;
+}
+/*fin del menu*/
+
+

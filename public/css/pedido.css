@@ -1,0 +1,123 @@
+/*.splash
+{
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: -webkit-gradient(lienar, 0 0, 0 100%, from(#10c4b2), to(#000));
+    background: -webkit-linear-gradient(top, #10c4b2, #000);
+    background: -moz-linear-gradient(top, #10c4b2, #000);
+    background: -ms-linear-gradient(top, #10c4b2, #000);
+    background: linear-gradient(to bottom, #10c4b2, #000);
+}
+
+.splash:before
+{
+    display: block;
+    content: "\a0";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent url('/images/logo.png') no-repeat 50% 50%;
+    background-size: auto 25%;
+    }*/
+    .teamMate:after {
+        content: ".";
+        display: block;
+        height: 0;
+        line-height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    .teamMate h2 {
+        font-size: 1.4em;
+        font-weight: normal;
+        padding-top: 20px;
+    }
+    .teamMate p {
+        margin: 5px 0;
+    }
+    .teamMate img {
+        float: left;
+        margin: 5px 15px 5px 5px;
+        border: 1px solid #ccc;
+    }
+
+/*.k-link{
+height: 50px;
+}*/
+
+
+/* Platos sortables*/
+                #example {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                }
+
+#pages {
+    margin: 30px auto;
+    width: 300px;
+    background-color: #f3f5f7;
+    border-radius: 4px; 
+    border: 1px solid rgba(0,0,0,.1);
+}
+
+#pages-title {
+    /*height: 60px;*/
+    /*background: url('../../content/web/sortable/handlers-title.png') no-repeat 50% 15px;*/
+}
+
+#pages-title span {
+    display: none;
+}
+
+.item {
+    margin: 5px;
+    padding: 0 10px 0 0;
+    min-width: 200px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 3px;
+    font-size: 1.3em;
+    line-height: 2.5em;
+}
+
+.handler {
+    display: inline-block;
+    width: 30px;
+    margin-right: 10px;
+    border-radius: 3px 0 0 3px;
+    background: url('../../images/handle.png') no-repeat 50% 50% #ccc;
+}
+
+.handler:hover {
+    background-color: #2db245;
+}
+
+.placeholder {
+    width: 298px;
+    border: 1px solid #2db245;
+}
+
+.hint {
+    border: 2px solid #2db245;
+    border-radius: 6px;
+}
+
+.hint .handler {
+    background-color: #2db245;
+}
+
+    .km-sortable-el:after,
+    .km-sortable-el:before
+    {
+        content: "\e0f1";
+    }
+
+/**/

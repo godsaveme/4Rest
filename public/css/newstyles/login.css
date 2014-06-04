@@ -1,0 +1,101 @@
+/*Formulario de inicio de sesion*/
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #3a92c8;
+  background: radial-gradient(circle,#94d2f8,#3a92c8);
+  /*background-color: #eee;*/
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.sesion_msg {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-signin-heading {
+  color: #292f33;
+}
+
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/*FIN Formulario de inicio de sesion*/
+
+/*FOOTER*/
+/* Sticky footer styles
+-------------------------------------------------- */
+
+/**/
+
+.englobe{
+  background: white;
+  position: relative;
+padding: 24px;
+height: 469px;
+width: 475px;
+border: 1px solid #6fa3c4;
+box-shadow: 0 0 125px rgba(255,255,255,.35);
+margin: 0 auto;
+border-radius: 4px;
+}
+
+.englobe::before,.englobe::after{
+    content: "";
+    position: absolute;
+    width: 100%;height: 100%;
+    top: 3.5px;left: 0;
+    background: #fff;
+    z-index: -1;
+    -webkit-transform: rotateZ(4deg);
+    -moz-transform: rotateZ(4deg);
+    -ms-transform: rotateZ(4deg);
+    /*border: 1px solid #ccc;*/
+    border: 1px solid #6fa3c4;
+    border-radius: 4px;
+}
+
+.englobe::after{
+    top: 5px;
+    z-index: -2;
+    -webkit-transform: rotateZ(-2deg);
+    -moz-transform: rotateZ(-2deg);
+    -ms-transform: rotateZ(-2deg);
+    border: 1px solid #6fa3c4;
+    border-radius: 4px;
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+                                <html lang="es">
+                                <head>
+                                <meta charset="UTF-8">
+                                </head>
+                                <style>
+                                    body{
+                                         width: 250px;
+                                         font-family: arial;
+                                         font-size: 13px;
+                                         padding: 10px; 
+                                        /* margin-bottom:-45px; 
+                                         margin-left: -45px; 
+                                         margin-top:-45px;*/
+                                    }
+                                    table{
+                                        width: 100%;
+                                        font-size: 13px;
+                                        border-bottom: 1px solid #000;
+                                        overflow: hidden;
+                                    }
+                                    td {
+                                        overflow: hidden;
+                                    }
+                                    .importetotal{
+                                        font-size: 14px;
+                                        text-align: right;
+                                        font-weight: 900;
+                                        width: 100%;
+                                    }
+                                    .titulos{
+                                        border-bottom: 1px solid #000;
+                                    }
+                                    .head{
+                                        font-size: 16px;
+                                    }
+                                    subhead{
+                                        font-size: 14px;
+                                    }
+                                    p {
+                                        padding: 0;
+                                        margin: 2px; 
+                                    }
+                                    .datos{
+                                        width: 52px;
+                                    }
+
+                                </style>
+                                <body>
+                                <center><strong class="head">KANGO CAFE</strong></center>
+                                <center><strong class="subhead">K&C International SAC</strong></center>
+                                <center><strong>RUC Nº 20507803173</strong></center>
+                                <center><strong>Elias Aguirre 661 - Chiclayo - Chiclayo</strong></center>
+                                <center><strong>Ticket:'.$tickete->numero.' &nbsp;&nbsp;Serie:'.$restaurante->serie.'</strong></center>
+                                <center><strong>Fecha:'.date('d-m-Y').'&nbsp;&nbsp;Hora:'.date('H:i:s').'</strong></center>
+                                <br>
+                                <table>
+                                <thead class="titulos">
+                                    <tr >
+                                        <td>Descripcion</td>
+                                        <td>P.Uni.</td>
+                                        <td>Cant.</td>
+                                        <td>S/.</td>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                </tr>
+                                
+                                </table>
+                                <table style="border: none">
+                                    <tr>
+                                    <td style="width: 125px">Descuento</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">&nbsp;</td>
+                                    <td style="width:125px; text-align: right">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Subtotal</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">IGV</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Total</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table style="border: none">
+                                    <tr>
+                                        <td class="datos">Cliente</td>
+                                        <td>sssssssssssss ddddddddddddf</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="datos">DNI/RUC</td>
+                                        <td ></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="datos">Dirección</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <br>
+                                <table style="border: none">
+                                    <tr>
+                                    <td style="width: 125px">Importe Pagado</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Vuelto</td>
+                                    <td style="width:125px; text-align: right">S/. 0.00</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Mesa Atendida</td>
+                                    <td style="width:125px;">: '.$nombremesa.'</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Atendido por</td>
+                                    <td style="width:125px;">: '.$nombremozo.'</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="width: 125px">Cajero:</td>
+                                    <td style="width:125px;">: '.Auth::user()->login.'</td>
+                                    </tr>
+                                </table>
+                                </body>
+                                </html>

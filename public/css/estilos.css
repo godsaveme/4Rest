@@ -1,0 +1,9 @@
+footer#footer_pedido{
+	width: 100%;
+	float: left;
+	position: relative;
+	height: 5rem;
+	padding: 15px 0;
+	background: #333333;
+}
+
