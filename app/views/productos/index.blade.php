@@ -24,7 +24,6 @@
                     <col style="width:130px" />
                     <col style="width:130px" />
                     <col style="width:130px" />
-                    <col style="width:130px" />
                     <col style="width:120px" />
                     <col style="width:130px" />
                 </colgroup>
@@ -34,7 +33,6 @@
       <th data-field="descripcion">Descripción</th>
       <th data-field="estado">Habilitado</th>
       <th data-field="familia">Familia</th>
-      <th data-field="stock">Stock</th>
       <th data-field="unMed">Und. Med.</th>
       <th data-field="editar">Editar</th>
       <th data-field="eliminar">Eliminar</th>
@@ -47,9 +45,8 @@
     <td>{{$dato->descripcion}}</td>
     <td>@if($dato->estado==1)Sí @else No @endif</td>
     <td>{{$dato->familia->nombre}}</td>
-    <td>{{$dato->stock}}</td>
     <td>{{$dato->unidadMedida}}</td>
-      <td><a href="productos/edit/{{$dato->id}}" type="button" class="k-button">
+      <td><a href="/productos/edit/{{$dato->id}}" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                         <span class="k-icon k-i-pencil"></span>
                         Editar

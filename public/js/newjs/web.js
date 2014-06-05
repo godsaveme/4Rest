@@ -1,5 +1,161 @@
 function ON_READY() {
 
+
+    $('#id_restaurante').change(function(){
+         $.ajax({
+                type: 'POST',
+                url: '/buscarareasp',
+                dataType: "json",
+                data:{parametro:$('#id_restaurante').val()},
+                beforeSend: function(){
+                },
+                success: function (data) {
+                  var areas = '<option value="">Seleccionar..</option>';        
+                    for(datos in data){
+                        areas += '<option value="'+data[datos].id+'">';
+                        areas += data[datos].nombre;
+                        areas += '</option>';
+                    }
+                    $('#id_tipoareapro').html(areas);
+                }
+        });
+       });
+
+    if($('#id_restaurante').val()){
+        $.ajax({
+                type: 'POST',
+                url: '/buscarareasp',
+                dataType: "json",
+                data:{parametro:$('#id_restaurante').val()},
+                beforeSend: function(){
+                },
+                success: function (data) {
+                  var areas = '<option value="">Seleccionar..</option>';        
+                    for(datos in data){
+                        areas += '<option value="'+data[datos].id+'">';
+                        areas += data[datos].nombre;
+                        areas += '</option>';
+                    }
+                    $('#id_tipoareapro').html(areas);
+                    $('#id_tipoareapro option').filter(function(){
+                    return $(this).val() == $('#id_tipoareapro').attr('select-areap');
+                    }).prop('selected', true);
+                }
+        });
+    }
+
+    $('#login').keyup(function(event) {
+          $.ajax({
+            url: '/compr_login',
+            type: 'POST',
+            dataType: 'json',
+            data: {login: $(this).val()},
+          })
+          .done(function(data) {
+            if (data) {
+              $('.check_1').css({display: 'none'});
+              $('.check_2').css({display: 'block'});
+            }else{
+              $('.check_1').css({display: 'block'});
+              $('.check_2').css({display: 'none'});
+            };
+          })
+          .fail(function() {
+
+          })
+          .always(function() {
+
+          });
+      
+     });
+
+        $('#login').change(function(event) {
+          $.ajax({
+            url: '/compr_login',
+            type: 'POST',
+            dataType: 'json',
+            data: {login: $(this).val()},
+          })
+          .done(function(data) {
+            if (data) {
+              $('.check_1').css({display: 'none'});
+              $('.check_2').css({display: 'block'});
+            }else{
+              $('.check_1').css({display: 'block'});
+              $('.check_2').css({display: 'none'});
+            };
+          })
+          .fail(function() {
+
+          })
+          .always(function() {
+
+          });
+      
+     });
+
+
+        /*agregar combi*/
+
+          $('body').on('click', 'input[name^="foobar"]', function(event) {
+            
+            var checkboxes = $(this).prop('checked');
+
+            if (!checkboxes) {
+              $('#tdia').prop('checked', false );
+            };
+
+            if (checkboxes) {
+              var c_x = 0;
+              $('input[name^="foobar"]').each(function(index, el) {
+                if ($(this).prop('checked')) {
+                  c_x++;
+                };
+              });
+            };
+
+            if (c_x == 7) {
+              $('#tdia').prop('checked', true );
+            };
+
+          });
+
+          $('body').on('click', '#tdia', function(event) {
+            var tdiamarcado = $(this).prop('checked');
+
+            if (tdiamarcado) {
+                    $('#lun2').prop('checked', true);
+                   $('#mar3').prop('checked', true);
+                    $('#mie4').prop('checked', true);
+                     $('#jue5').prop('checked', true);
+                    $('#vie6').prop('checked', true);
+                    $('#sab7').prop('checked', true);
+                      $('#dom1').prop('checked', true);
+            }else{
+                    $('#lun2').prop('checked', false);
+                  $('#mar3').prop('checked', false);
+                 $('#mie4').prop('checked', false);
+                 $('#jue5').prop('checked', false);
+                   $('#vie6').prop('checked', false);
+                   $('#sab7').prop('checked', false);
+                   $('#dom1').prop('checked', false);
+            };
+
+          });
+
+          //
+          if($('#lun2').prop('checked') &&  $('#mar3').prop('checked') &&  $('#mie4').prop('checked') &&  $('#jue5').prop('checked') && $('#vie6').prop('checked') &&  $('#sab7').prop('checked') && $('#dom1').prop('checked')){
+            $('#tdia').prop('checked', true );
+          }
+
+
+
+                    
+
+        /*fin agregar combi*/
+
+
+
   $('#precio').kendoNumericTextBox({
       format: "c",
       decimals: 3
@@ -22,13 +178,13 @@ function ON_READY() {
 
   });
 
-        $('#FechaInicio').kendoDatePicker({
+        /*$('#FechaInicio').kendoDatePicker({
           format: "dd/MM/yy"
         });
 
                 $('#FechaTermino').kendoDatePicker({
           format: "dd/MM/yy"
-        });
+        });*/
 
   $('#precio').removeClass('');
 
@@ -226,6 +382,42 @@ function ON_READY() {
     },
   });
 
+        $("#gridNotas").kendoGrid({
+    dataSource: {
+      pageSize: 10
+    },
+                            
+    height: 525,
+    sortable: true,
+    selectable: true,
+    scrollable: true,
+    sortable: true,
+    filterable: true,
+    resizable: true,
+    pageable: {
+      refresh: true,
+      pageSizes: true
+    },
+  });
+
+                $("#gridSabores").kendoGrid({
+    dataSource: {
+      pageSize: 10
+    },
+                            
+    height: 525,
+    sortable: true,
+    selectable: true,
+    scrollable: true,
+    sortable: true,
+    filterable: true,
+    resizable: true,
+    pageable: {
+      refresh: true,
+      pageSizes: true
+    },
+  });
+
 
 };
 
@@ -262,7 +454,7 @@ function ON_LOAD(){
         if (data != 'true') {
   //window.location = "/restaurantes/";
   alert('No se puede eliminar. Consulte al administrador del sistema.');
-  window.location = route;
+  //window.location = route;
 }else{
   window.location = route;
 };
@@ -300,3 +492,4 @@ function ON_LOAD(){
     event.preventDefault();
     $('#window').data("kendoWindow").open();
   } 
+

@@ -40,22 +40,23 @@
                     <div class="col-md-3">
 
                     {{Form::label('precio', 'Precio', array('class'=>'control-label'))}}
-            {{Form::text('precio', '', array('class' => 'form-control', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0'))}}
+
           </div>
           <div class="col-md-4">
-        {{Form::label('stock', 'Stock', array('class'=>'control-label'))}}
-        {{Form::text('stock', '' ,array('class' => 'form-control','placeholder'=>'#.##','min'=>'0'))}}
+            {{Form::text('precio', '', array('class' => 'form-control', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0', 'required'))}}
           </div>
-          <div class="col-md-2">
-            {{Form::label('stockMin', 'Stock Min', array('class'=>'control-label'))}}
-            {{Form::text('stockMin', '', array('class' => 'form-control','placeholder'=>'#.##','min'=>'0'))}}
-          </div>
-          <div class="col-md-2">
-            {{Form::label('stockMax', 'Stock Max', array('class'=>'control-label'))}}
-            {{Form::text('stockMax', '', array('class' => 'form-control','placeholder'=>'#.##','min'=>'0'))}}
-          </div>
-          <div class="col-md-1">
-            &nbsp;
+
+
+
+        </div>
+
+        <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+
+            <label> {{Form::checkbox('havePrice', '', true,array('id' => 'havePrice'))}} Habilitar precio </label>
+            <p class="text-warning"> El precio se habilita para que el producto aparezca en la Carta de 4Rest. <br>
+            Si desactiva el precio, el producto solamente se podrá utilizar para hacer combinaciones .
+             </p>
           </div>
         </div>
       <div class="form-group">
@@ -65,12 +66,11 @@
       </div>
       <div class="col-md-3">
       {{Form::label(' id_tipoarepro', 'Area de Producción', array('class'=>'control-label'))}}
-      {{Form::select('  id_tipoarepro', array('' => "Seleccione un área") + $tipoarea,'', array('class' => 'form-control'))}}
+      {{Form::select('  id_tipoarepro', $tipoarea,'', array('class' => 'form-control'))}}
       </div>
       <div class="col-md-3">
         {{Form::label('familia_id', 'Familia', array('class'=>'control-label'))}}
         <select name="familia_id" id="" class='form-control'>
-          <option value="">Escoja una familia</option>
           @foreach ($familias as $dato) {
             <option value=" {{$dato->id}} "> {{$dato->nombre}}</option>
           }
@@ -83,84 +83,44 @@
             {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'),'', array('class' => 'form-control'))}}
 
       </div>
-      <div class="col-md-2">
-        {{Form::label('selector_adicional', 'Adicionales', array('class'=>'control-label'))}} 
-        {{Form::select('selector_adicional', array(1=>'Si', 0=>'No'),0, array('class' => 'form-control'))}}
-      </div>
+
     </div>
-    <div id="adiconales">
-      {{Form::hidden('contaadic', '', array('id'=>'contaadic'))}}
-    <div class="form-group" id="b_pro_adi" style="display: none">
-      <div class="col-md-5 ">
-        <label for="b_pro">Productos Adicionales</label>
-        <input type="text" id="b_proadi" placeholder="Buscar Productos Adicionales">
-      </div>
-      <div class="col-md-7 ">&nbsp;</div>
-      <div class="row"> 
-          <div class="col-md-12"> 
-            <ul class="pricing-table" id="lista_adiconales">
-              <li class="title">Lista de Productos Adicionales</li>
-            </ul> 
-          </div>
-      </div>
-    </div>
-    </div>
-        <div class="row">
-          <div class="col-md-3">&nbsp;</div>
-          <div class="col-md-3">
-          <a href="javascript:void(0);" class="button tiny radius" onclick="select_ingre('1');" id="s_ins">Insumos</a>
-          </div>
-          <div class="col-md-2">&nbsp;</div>
-          <div class="col-md-2">
-            <a href="javascript:void(0);" class="button tiny radius " onclick="select_ingre('2');" id="s_pro">Productos</a>
-          </div>
-          <div class="small-2 medium-2 large-3 columns">&nbsp;</div>
-        </div>
-        <div id="b_listaingre">
-          <div class="row" id="b_ins_" style="display:none">
-            <div class="large-5 columns">
-              <label for="b_ingre">Ingredientes</label>
-              <input type="text" id="b_ingre" placeholder="Buscar Ingredientes">
-            </div>
-            <div class="large-7 columns">&nbsp;</div>
-          </div>
-    <div class="row" id="b_pro_" style="display:none">
-      <div class="large-5 columns">
-        <label for="b_pro">Productos</label>
-        <input type="text" id="b_pro" placeholder="Buscar Productos">
-      </div>
-      <div class="large-7 columns">&nbsp;</div>
-    </div>
-        </div>
-            <div id="ingr_sel" style="display:none;">
-            <div class="row"> 
-              <div class="large-12 columns"> 
-                <ul class="pricing-table" id="lista_insumos">
-                  <li class="title">Lista de Insumos</li>
-                </ul> 
-              </div>
-            </div>
-            </div>
-            <div id="pro_sel" style="display:none;">
-            <div class="row"> 
-              <div class="large-12 columns"> 
-                <ul class="pricing-table" id="lista_productos">
-                  <li class="title">Lista de Productos</li>
-                </ul> 
-              </div>
-            </div>
-            </div>
-            <input id='sel_pro_ins' type="hidden" name='sel_pro_ins' value="">
-            <input id='containgre' type="hidden" name='containgre' value="">
+
+
+
     <div class="form-group">
-              <div class="col-md-8">
+              <div class="col-md-4">
         {{Form::submit('Guardar',array('class' => 'btn btn-warning'))}}
       </div>
-      <div class="col-md-4">
-        &nbsp;
-      </div>
     </div>
+
 </fieldset>
         {{ Form::close() }}
         </div> <!-- del panel body -->
+
+        <script type="text/javascript">
+
+        $(document).ready(function($) {
+
+          var precio = $("#precio").data("kendoNumericTextBox");
+
+
+          var $checked;
+
+
+          $('body').on('click', '#havePrice', function(event) {
+            
+            $checked = $('#havePrice').prop('checked');
+              if ($checked) {
+                  precio.enable(true);
+                  
+              }else{
+                  precio.enable(false);
+
+              };
+            
+          });
+
+          });
+        </script>
 @stop

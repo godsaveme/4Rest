@@ -26,10 +26,10 @@
                     <col style="width:350px" />
                     <col style="width:120px" />
                     <col style="width:150px"  />
-                    <col style="width:120px" />
-                    <col style="width:80px" />
-                    <col style="width:120px" />
-                    <col style="width:130px" />
+                    <col style="width:110px" />
+                    <col style="width:110px" />
+                    <col style="width:110px" />
+                    <col style="width:110px" />
                     <col style="width:120px" />
                     <col style="width:150px"  />
                 </colgroup>
@@ -62,15 +62,24 @@
 	          @endforeach
 
 	      @else
-	      -    
+	      {{ "<strong>En esta categoría están todos los productos a precios normales.</strong>"}}    
           @endif
            </td>
            <td> @if($comb->nombre != 'Normal') {{$comb->precio}} @else - @endif</td>
           <td>{{$comb->tipocomb->nombre}}</td>
-          <td>{{$comb->HoraInicio}}</td>
-          <td>{{$comb->HoraTermino}}</td>
-          <td>{{$comb->FechaInicio}}</td>
-          <td>{{$comb->FechaTermino}}</td>
+          <td> @if(!empty($comb->horcomb->FechaInicio))
+           {{ date('h:i a', strtotime($comb->horcomb->FechaInicio)) }} 
+           @endif 
+           </td>
+          <td> @if(!empty($comb->horcomb->FechaTermino))
+           {{ date('h:i a', strtotime($comb->horcomb->FechaTermino)) }} 
+           @endif</td>
+          <td> @if(!empty($comb->horcomb->FechaInicio))
+           {{ date('d/m/Y', strtotime($comb->horcomb->FechaInicio)) }} 
+           @endif</td>
+          <td> @if(!empty($comb->horcomb->FechaTermino))
+           {{ date('d/m/Y', strtotime($comb->horcomb->FechaTermino)) }}
+            @endif</td>
           <td><a href="combinacions/edit/{{$comb->id}}" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                 <span class="k-icon k-i-pencil"></span>
