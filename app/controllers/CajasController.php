@@ -171,7 +171,7 @@ class CajasController extends BaseController {
 						curtime() BETWEEN DATE_FORMAT(x.x1,'%H:%i') AND DATE_FORMAT(x.x2,'%H:%i') ELSE 
 						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
 						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
-						and x.TipoCombinacionId =".$dato->id." GROUP BY CombinacionId"));
+						and x.TipoCombinacionId =".$dato->TipoCombinacionId." GROUP BY CombinacionId"));
 			}
 
 			$platosfamilia = array();
