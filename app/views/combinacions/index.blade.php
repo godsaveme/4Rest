@@ -85,7 +85,7 @@
                 <span class="k-icon k-i-pencil"></span>
         Editar
       </a></td>
-          <td><a onclick="onDestroy('combinacions/destroy/{{$comb->id}}','salones');" href="#" type="button" class="k-button">
+          <td><a onclick="onDestroy('combinacions/destroy/{{$comb->id}}','combinacions');" href="#" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-remove"></span> -->
         <span class="k-icon k-i-close"></span>
       Eliminar

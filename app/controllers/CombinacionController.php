@@ -221,15 +221,20 @@ class CombinacionController extends BaseController {
 	 */
 	public function postDestroy($id)
 	{
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
-		$tipocomb = TipoComb::find($id);
-		$tipocomb->delete();
+
+		$combinacion = Combinacion::find($id);
+		$combinacion->delete();
+
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 
 	}
 

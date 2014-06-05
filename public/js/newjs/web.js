@@ -449,16 +449,20 @@ function ON_LOAD(){
     var r=confirm("¿Realmente desea eliminar?");
     if (r==true)
     {
-      event.preventDefault();
-      var jqxhr = $.post( path, function(data) {
-        if (data != 'true') {
-  //window.location = "/restaurantes/";
-  alert('No se puede eliminar. Consulte al administrador del sistema.');
-  //window.location = route;
-}else{
-  window.location = route;
-};
-});
+          event.preventDefault();
+          var jqxhr = $.post( path);
+
+                jqxhr.done(function(data) {
+                  if (!data) {
+                      //window.location = "/restaurantes/";
+                      alert('No se puede eliminar. Consulte al administrador del sistema.');
+                      //window.location = route;
+                    }else{
+                      window.location = route;
+                    };
+              });
+
+
 
 
     }
