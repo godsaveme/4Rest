@@ -20,7 +20,8 @@
 		public function getCreate()
 		{
 			$restaurantes = Restaurante::all()->lists('nombreComercial','id');
-	        return View::make('usuarios.create', compact('restaurantes', 'areas'));
+			$colaboradores = Colaborador::all()->lists('nombre','id');
+	        return View::make('usuarios.create', compact('restaurantes', 'colaboradores'));
 		}
 
 		/**
@@ -31,13 +32,28 @@
 		public function postCreate()
 		{
 			$persona = Usuario::where('persona_id', '=', Input::get('persona_id'))->get();
-			if(!empty($persona)){
+			$user = Usuario::where('login','=',Input::get('login'))->get();
+			//var_dump(Input::all());
+			//var_dump($user);
+			//var_dump($user);
+
+			//die();
+			if(count($persona) > 0){
+
+				Input::flash();
+				return Redirect::to('usuarios/create')->withErrors('Esta Persona ya tiene un Usuario');
+
+			}elseif(count($user) > 0){
+
+				return Redirect::to('usuarios/create')->withErrors('Este nombre de usuario está en uso');
+
+			}else{
+
 				$input = Input::all();
 		    	$input['password'] = Hash::make($input['password']);
 		    	Usuario::create($input);
-		    	return Redirect::to('usuarios')->with('mensaje_succes','');
-			}else{
-				return Redirect::to('usuarios')->with('mensaje_error','Esta Persona ya tiene un Usuario');
+		    	return Redirect::to('usuarios')->with('success','');
+
 			}
 		}
 
@@ -62,7 +78,8 @@
 		{
 			$restaurantes = Restaurante::all()->lists('nombreComercial','id');
 			$usuario = Usuario::find($id);
-	        return View::make('usuarios.edit', compact('usuario', 'restaurantes','areas'));
+			$colaboradores = Colaborador::all()->lists('nombre','id');
+	        return View::make('usuarios.edit', compact('usuario', 'restaurantes','colaboradores'));
 		}
 
 		/**
@@ -87,15 +104,24 @@
 		 */
 		public function postDestroy($id)
 		{
-			$e= true;
-			try {
+
+
+		DB::beginTransaction();	
+
+		try {
+
 			$usuario = Usuario::find($id);
 			$usuario->delete();
-			} catch (Exception $e) {
-			return false;
-			}
-			
-			return json_encode($e);
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+
+
 		}
 
 	}

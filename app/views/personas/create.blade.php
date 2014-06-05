@@ -106,7 +106,6 @@
     <div class="col-md-3">
       {{Form::label('perfil_id', 'Perfil', array('class'=>'control-label'))}}
       <select name="perfil_id" id="perfil_id" class="form-control">
-        <option value="">Seleccionar</option>
         @foreach ($perfiles as $dato) {
         <option value="{{$dato->id}}">{{$dato->nombre}}</option>
         }

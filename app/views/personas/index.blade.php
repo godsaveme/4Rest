@@ -36,13 +36,13 @@
 @foreach ($personas as $dato)
 <tr>
           <td>{{$dato->nombres}} {{$dato->apPaterno}} {{$dato->apMaterno}}</td>
-          <td>{{$dato->nombre}}</td>
+          <td> @if (isset($dato->PerfilNombre)) {{$dato->PerfilNombre}} @else - @endif </td>
           <td><a href="personas/edit/{{$dato->id}}" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                 <span class="k-icon k-i-pencil"></span>
         Editar
       </a></td>
-          <td><a onclick="onDestroy('personas/destroy/{{$dato->id}}','salones');" href="#" type="button" class="k-button">
+          <td><a onclick="onDestroy('personas/destroy/{{$dato->id}}','personas');" href="#" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-remove"></span> -->
         <span class="k-icon k-i-close"></span>
       Eliminar

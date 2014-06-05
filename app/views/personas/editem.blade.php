@@ -18,6 +18,7 @@
   <legend></legend>
 <div class="form-group">
     <div class="col-md-3">
+    {{Form::hidden('id', $empresa->id)}}
       {{Form::label('razonSocial', 'Razon Social', array('class'=>'control-label'))}}
           </div>
     <div class="col-md-5">
@@ -95,7 +96,6 @@
     <div class="col-md-3">
       {{Form::label('perfil_id', 'Perfil', array('class'=>'control-label'))}}
       <select name="perfil_id" id="perfil_id" class="form-control">
-        <option value="" >Seleccionar</option>
         @foreach ($perfiles as $dato)
         <option value="{{$dato->id}}"
         @if ($dato->id == $empresa->perfil_id)

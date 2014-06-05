@@ -36,13 +36,13 @@
 @foreach ($empresas as $dato)
 <tr>
           <td>{{$dato->razonSocial}}</td>
-          <td>{{$dato->nombre}}</td>
+          <td> @if (isset($dato->PerfilNombre)) {{$dato->PerfilNombre}} @else - @endif  </td>
           <td><a href="editem/{{$dato->id}}" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                 <span class="k-icon k-i-pencil"></span>
         Editar
       </a></td>
-          <td><a onclick="onDestroy('destroyem/{{$dato->id}}','salones');" href="#" type="button" class="k-button">
+          <td><a onclick="onDestroy('destroyem/{{$dato->id}}','personas/empresas');" href="#" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-remove"></span> -->
         <span class="k-icon k-i-close"></span>
       Eliminar

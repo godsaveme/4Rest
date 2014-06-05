@@ -13,16 +13,35 @@
 </strong></div>
 
 <div class="panel-body">
+
+
+    @if ( $errors->count() > 0 )
+    <div class="alert alert-danger fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <p><strong>Los siguientes errores han ocurrido:</strong></p>
+
+      <ul>
+        @foreach( $errors->all() as $message )
+          <li><strong>{{ $message }}</strong> </li>
+        @endforeach
+      </ul>
+
+      </div>
+    @endif
+
         {{ Form::open(array('id'=>'form_resto','url' => 'usuarios/create', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal')) }}
 <fieldset>
   <legend></legend>
   <div class="form-group">
     <div class="col-md-3">
-      {{Form::label('login', 'Usuario')}}
+      {{Form::label('login', 'Usuario',array('class'=>'control-label'))}}
           </div>
     <div class="col-md-5">
-      {{Form::input('text', 'login','', array('class' => 'form-control','placeholder'=>'ej gperez', 'autofocus','required', 'validationMessage'=>'Por favor entre un nombre.'))}}
+      {{Form::input('text', 'login','', array('class' => 'form-control','placeholder'=>'ej gperez', 'autofocus','required', 'validationMessage'=>'Por favor entre un login.'))}}
+
     </div>
+    <div class="col-md-4 control-label check_1" style="display:none;"><i class="fa fa-check fa-5"></i> <span class="text-info">El nombre de usuario está disponible</span></div>
+    <div class="col-md-4 control-label check_2" style="display:none;"><i class="fa fa-bell fa-5"></i><span class="text-danger">El nombre de usuario no está disponible</span></div>
   </div>
 
 <div class="form-group">
@@ -40,30 +59,32 @@
           </div>
 
     <div class="col-md-5">
-      {{Form::select('estado', array(0=>'Inactivo', 1=>'Activo'), '',array('class' => 'form-control'))}}
+      {{Form::select('estado', array(1=>'Activo',0=>'Inactivo'), '',array('class' => 'form-control'))}}
        </div>
 </div>
 <div class="form-group">
   <div class="col-md-3">
       {{Form::hidden('persona_id', '', array('id'=>'persona_id'))}}
-      {{Form::label('usuario', 'Buscar persona por', array('class' => 'control-label'))}}
+      {{Form::label('usuario', 'Persona/Empresa', array('class' => 'control-label'))}}
       </div>
       <div class="col-md-5">
-      {{Form::select('selector_', array('1'=>'Nombre', '2'=>'DNI'), '1', array('id'=>'selector_', 'class' => 'form-control'))}}
-      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre', 'class' => 'form-control'))}}
-      {{Form::input('text', 'dni_', '', array('id'=>'dni_', 'placeholder' => 'Buscar por DNI', 'style'=>'display: none','class' => 'form-control'))}}
+      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre/ruc/dni/rs'))}}
     </div>
   </div>
 
 <div class="form-group">
     <div class="col-md-3">
       {{Form::label('id_restaurante', 'Local', array('class'=>'control-label'))}}
-      {{Form::select('id_restaurante',  array('' => "Seleccione ... ") +$restaurantes, '',array('class' => 'form-control'))}}
+      {{Form::select('id_restaurante',  array('0' => "Seleccione ... ") +$restaurantes, '',array('class' => 'form-control'))}}
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-4">
       {{Form::label('id_tipoareapro', 'Área', array('class'=>'control-label'))}}
       {{Form::select('id_tipoareapro', array('' => "Seleccione ... "),'', array('class'=>'form-control'))}}
+    </div>
+        <div class="col-md-4">
+      {{Form::label('lblColaborador', 'Colaborador', array('class'=>'control-label'))}}
+      {{Form::select('colaborador', array('0' => "Seleccione ... ") + $colaboradores,'', array('class'=>'form-control'))}}
     </div>
 </div>
 
@@ -74,4 +95,42 @@
 </div>
 </fieldset>
 {{ Form::close() }}
+
+<script type="text/x-kendo-template" id="per_templ">
+  <h3>#: data.nombres #</h3>
+  <article>
+    <img src="">
+    <p></p>
+  </article>
+</script>
+
+<script type="text/javascript">
+
+                      $("#nombre_").kendoAutoComplete({
+                        dataTextField: "nombres",
+                        filter: "contains",
+                        minLength: 3,
+                        template: kendo.template($("#per_templ").html()),
+                        dataSource: {
+                            type: "json",
+                            serverFiltering: true,
+                            transport: {
+                                read: "/bus_per_"
+                            }
+                        },
+                        select: onSelect,
+                        height:200
+                    });
+
+
+
+function onSelect(e){
+   var dataItem = this.dataItem(e.item.index());
+   $('#persona_id').val(dataItem.id);
+   //$('#persona_id').text(dataItem.id);
+   //console.log(dataItem.id);
+   //console.log($('#persona_id').val());
+};
+</script>
+
 @stop

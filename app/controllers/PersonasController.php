@@ -4,15 +4,15 @@ class PersonasController extends BaseController {
 
 	public function getIndex()
 	{
-		$personas = Persona::where('razonSocial', '=', NULL)->join('perfil', 'perfil.id', '=', 'persona.perfil_id')
-		->select('persona.id', 'persona.nombres', 'persona.apPaterno', 'persona.apMaterno','perfil.nombre')->get();
+		$personas = Persona::where('razonSocial', '=', NULL)->leftJoin('perfil', 'perfil.id', '=', 'persona.perfil_id')
+		->select('persona.id', 'persona.nombres', 'persona.apPaterno', 'persona.apMaterno','perfil.nombre as PerfilNombre')->get();
         return View::make('personas.index', compact('personas'));
 	}
 
 	public function getEmpresas()
 	{
-		$empresas = Persona::where('nombres', '=', NULL)->join('perfil', 'perfil.id', '=', 'persona.perfil_id')
-		->select('persona.id', 'persona.razonSocial','perfil.nombre')->get();
+		$empresas = Persona::where('nombres', '=', NULL)->leftJoin('perfil', 'perfil.id', '=', 'persona.perfil_id')
+		->select('persona.id', 'persona.razonSocial','perfil.nombre as PerfilNombre')->get();
         return View::make('personas.indexem', compact('empresas'));
 	}
 
@@ -96,18 +96,43 @@ class PersonasController extends BaseController {
 		return Redirect::to('personas/empresas');
 	}
 
-	public function getDestroy($id)
+	public function postDestroy($id)
 	{
-		$persona = Persona::find($id);
-		$persona->delete();
-		return Redirect::to('personas');
+		DB::beginTransaction();	
+
+		try {
+
+			$persona = Persona::find($id);
+			$persona->delete();
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+
 	}
 
-	public function getDestroyem($id)
+	public function postDestroyem($id)
 	{
-		$persona = Persona::find($id);
-		$persona->delete();
-		return Redirect::to('personas/empresas');
+
+
+		DB::beginTransaction();	
+
+		try {
+
+			$persona = Persona::find($id);
+			$persona->delete();
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 }
