@@ -90,10 +90,10 @@
 		<ul class="text-center" id="carta">
 		@foreach ($tiposcomb as $tipocomb)
 			<li>
-			{{$tipocomb->nombre}}
+			{{$tipocomb->TipoCombinacionNombre}}
 			<ul>
-			@foreach ($combinaciones[$tipocomb->nombre] as $pcom)
-				<li><a href="javascript:void(0)" class="btn_createcombi" data-idcombi="{{$pcom->id}}" data-combiprecio ="{{$pcom->preciotcomb}}">{{$pcom->nombre}}</a>
+			@foreach ($combinaciones[$tipocomb->TipoCombinacionId] as $pcom)
+				<li><a href="javascript:void(0)" class="btn_createcombi" data-idcombi="{{$pcom->CombinacionId}}" data-combiprecio ="{{$pcom->CombinacionPrecio}}">{{$pcom->CombinacionNombre}}</a>
 				</li>
 			@endforeach
 			</ul>

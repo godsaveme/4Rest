@@ -144,18 +144,36 @@ class CajasController extends BaseController {
 			$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
 			/*CARTA*/
 			$familias = Familia::select('familia.nombre', 'familia.id')->join('producto', 'producto.familia_id', '=', 'familia.id')->join('precio', 'precio.producto_id', '=', 'producto.id')->where('precio.combinacion_id', '=', 1)->groupby('familia.nombre')->get();
-			$tiposcomb = Combinacion::select('tipocomb.nombre', 'tipocomb.id')->join('tipocomb', 'combinacion.TipoComb_id', '=', 'combinacion.id')->whereraw("combinacion.FechaInicio <= curdate() and combinacion.FechaTermino >= curdate()
-							and combinacion.HoraInicio <= curtime() and combinacion.HoraTermino >= curtime()
-							and tipocomb.nombre != 'Normal'")->groupby('tipocomb.nombre')->get();
+			$tiposcomb = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
+						combinacion.id as CombinacionId, combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
+						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
+					    from combinacion inner join tipocomb
+						on tipocomb.id = combinacion.TipoComb_id inner join horComb
+						on combinacion.id = horComb.combinacion_id ) as x
+						WHERE curdate() BETWEEN CAST(x.x1 AS DATE) AND CAST(x.x2 AS DATE)
+						AND	CASE WHEN  DATE_FORMAT(x.x1,'%H:%i') <=  DATE_FORMAT(x.x2,'%H:%i') THEN 
+						curtime() BETWEEN DATE_FORMAT(x.x1,'%H:%i') AND DATE_FORMAT(x.x2,'%H:%i') ELSE 
+						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
+						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
+						and x.CombinacionNombre != 'Normal' group by x.TipoCombinacionId"));
+			
 			$combinaciones = array();
+
 			foreach ($tiposcomb as $dato) {
-				$combinaciones[$dato->nombre] = Combinacion::selectraw('combinacion.id, combinacion.nombre, 
-												combinacion.precio as preciotcomb')
-												->whereraw("FechaInicio <= curdate() and FechaTermino >= curdate()
-												and HoraInicio <= curtime() and HoraTermino >= curtime()
-												and TipoComb_id =".$dato->id)
-												->get();
+				$combinaciones[$dato->TipoCombinacionId] = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
+						combinacion.id as CombinacionId, combinacion.precio as CombinacionPrecio,combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
+						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
+					    from combinacion inner join tipocomb
+						on tipocomb.id = combinacion.TipoComb_id inner join horComb
+						on combinacion.id = horComb.combinacion_id ) as x
+						WHERE curdate() BETWEEN CAST(x.x1 AS DATE) AND CAST(x.x2 AS DATE)
+						AND	CASE WHEN  DATE_FORMAT(x.x1,'%H:%i') <=  DATE_FORMAT(x.x2,'%H:%i') THEN 
+						curtime() BETWEEN DATE_FORMAT(x.x1,'%H:%i') AND DATE_FORMAT(x.x2,'%H:%i') ELSE 
+						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
+						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
+						and x.TipoCombinacionId =".$dato->id." GROUP BY CombinacionId"));
 			}
+
 			$platosfamilia = array();
 			foreach ($familias as $dato) {
 				$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores')
@@ -473,6 +491,7 @@ class CajasController extends BaseController {
 						->where('familia.id', '=', $familiaid, 'AND')
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('fnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 				$contador = 1;
 				$diario = 1;
