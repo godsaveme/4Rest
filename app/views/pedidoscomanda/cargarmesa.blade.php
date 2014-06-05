@@ -87,16 +87,16 @@
 	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-7 col-sm-offset-7 col-md-offset-7 col-lg-offset-7" style="position:fixed;top:auto;overflow-y:scroll;height:72%;">
 		<ul class="text-center" id="carta">
 		@foreach ($tiposcomb as $tipocomb)
-			<li>
-			{{$tipocomb->nombre}}
-			<ul>
-			@foreach ($combinaciones[$tipocomb->nombre] as $pcom)
-				<li><a href="javascript:void(0)" class="btn_createcombi" data-idcombi="{{$pcom->id}}" data-combiprecio ="{{$pcom->preciotcomb}}">{{$pcom->nombre}}</a>
-				</li>
-			@endforeach
-			</ul>
-			</li>
-		@endforeach
+            <li>
+            {{$tipocomb->TipoCombinacionNombre}}
+            <ul>
+            @foreach ($combinaciones[$tipocomb->TipoCombinacionId] as $pcom)
+                <li><a href="javascript:void(0)" class="btn_createcombi" data-idcombi="{{$pcom->CombinacionId}}" data-combiprecio ="{{$pcom->CombinacionPrecio}}">{{$pcom->CombinacionNombre}}</a>
+                </li>
+            @endforeach
+            </ul>
+            </li>
+        @endforeach
 		@foreach ($familias as $familia)
 			<li class="familia" data-idf="{{$familia->id}}">
 			{{$familia->nombre}}
