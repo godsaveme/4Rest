@@ -33,7 +33,6 @@
   {{HTML::script('js/jquery.plugin.js'); }}
   {{HTML::script('js/jquery.timeentry.min.js'); }}
   {{HTML::script('js/alertify.min.js'); }}
-  {{HTML::script('js/general.js'); }}
   {{HTML::script('js/newjs/web.js')}}
   @show
 

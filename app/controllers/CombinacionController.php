@@ -129,7 +129,7 @@ class CombinacionController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function postUpdate($id)
+	public function postUpdate()
 	{
 		//
 		//var_dump(Input::all());

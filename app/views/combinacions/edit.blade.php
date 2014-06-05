@@ -83,22 +83,9 @@
 
 	  	$check_flag = false;
 
-	  	//var_dump();
-
-	  	
-
-	  	foreach ($combinacion->productos as $productos) {
-	  		var_dump($productos->nombre);
-	  	}
 
 	  ?>
-	  <br>
-	  <?php echo Combinacion::join('precio','precio.combinacion_id' ,'=','combinacion.id')
- 							->join('producto','precio.producto_id','=','producto.id')
- 							->where('combinacion.id','=',$combinacion->id)
- 							->select('producto.nombre as nombre','producto.descripcion as descripcion', 'precio.cantidad as cantidad')
- 							->get()->toJson(); ?>
-	  	
+	  <br>	  	
 	  	<label>{{Form::checkbox('tdia', 1 , '',array('id' => 'tdia'))}} <strong>Todos los días </strong></label> <br>
 		<?php  if (in_array(2, $arrDias)) { $check_flag =  true;}else{$check_flag =  false;} ?>
 		<label>{{Form::checkbox('foobar2', 2,$check_flag ,array('id' => 'lun2'))}} Lunes </label>
