@@ -2,7 +2,7 @@
 
 class Combinacion extends Eloquent {
 	protected $table = 'combinacion';
-	protected $fillable = array();
+	protected $fillable = array('nombre','precio','descripcion','TipoComb_id');
 	protected $guarded = array();
 	public static $rules = array();
 
@@ -16,6 +16,10 @@ class Combinacion extends Eloquent {
 
 	public function tipocomb(){
 		return $this->belongsTo('TipoComb', 'TipoComb_id');
+	}
+
+	public function horcomb(){
+		return $this->hasOne('Horcomb','combinacion_id');
 	}
 
 }

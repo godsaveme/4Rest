@@ -101,14 +101,75 @@ Route::group(array('before' => 'auth'), function (){
 		}
 	}
 	);
-	Route::post('buscarinsumos', function () {
-		if (Request::ajax()) {
-			$patron = Input::get('parametro');
-			$insumos = Insumo::where('nombre', 'like', $patron.'%')->take(10)->get();
-			return $insumos->toJson();
-		}
+
+		/*route javi*/
+	Route::get('buscarinsumos', function () {
+		//if (Request::ajax()) {
+			//$patron = Input::get('parametro');
+			//$insumos = Insumo::where('nombre', 'like', 'Vas%')->take(10)->get();
+			$insumos = Insumo::all();
+			return Response::json($insumos);
+		//}
 	}
 	);
+
+	Route::get('bus_per_', function () {
+		$valor = $_REQUEST["filter"]["filters"][0]["value"];
+		$persona = Persona::where('dni', 'like', $valor.'%')
+				 ->where('dni','like', $valor.'%', 'or')
+				 ->where('ruc', 'like', $valor.'%', 'or')
+				 ->where('nombres', 'like', $valor.'%', 'or')
+				 ->where('apMaterno', 'like', $valor.'%', 'or')
+				 ->where('apPaterno', 'like', $valor.'%', 'or')
+				 ->where('razonSocial', 'like', $valor.'%', 'or')
+				 ->get();
+		$arraydatos = array();
+		foreach ($persona as $dato) {
+			if ($dato->ruc) {
+				$arraydatos[] = array('id' => $dato->id,'nombres' => $dato->razonSocial, 'direccion' => $dato->direccion, 'dni' => $dato->ruc, );
+			}
+			else {
+				$arraydatos[] = array('id' => $dato->id,'nombres' => $dato->nombres.' '.$dato->apPaterno.' '.$dato->apMaterno, 'direccion' => $dato->direccion, 'dni' => $dato->dni, );
+			}
+		}
+		return Response::json($arraydatos);
+	}
+	);
+
+	Route::get('bus_prod_', function () {
+		$valor = $_REQUEST["filter"]["filters"][0]["value"];
+		//$productos = Producto::where('nombre','like',$valor.'%')->lists('id','nombre','descripcion');
+		$productos = Producto::where('nombre','like','%'.$valor.'%')->get();
+		//var_dump($productos);
+		//die();
+		 $arrProd = array();
+		 foreach ($productos as $dato) {
+
+				$arrProd[] = array('id' => $dato->id,'nombre' => $dato->nombre, 'descripcion' => $dato->descripcion, 'cantidad' => '1' );
+
+		 }
+		return Response::json($arrProd);
+	}
+	);
+
+	Route::post('compr_login', function(){
+		if(Request::ajax()){
+			$login = Input::get('login');
+			$user = Usuario::where('login','=',$login)->lists('id');
+			//var_dump($user);
+			//die();
+			if (count($user) > 0) {
+				return Response::json(true);
+			}else{
+				return Response::json(false);
+			}
+		}
+	});
+
+		/*FIN*/
+
+
+
 	Route::post('buscarareasp', function () {
 		if (Request::ajax()) {
 			$patron = Input::get('parametro');

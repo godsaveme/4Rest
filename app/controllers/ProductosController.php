@@ -56,55 +56,29 @@ class ProductosController extends BaseController {
 	 */
 	public function postCreate()
 	{
-		$listaadicionales = '';
-		// DB::beginTransaction();	
-		// 	try {
+
+
+		//var_dump(Input::all());
+		//die();
+		 DB::beginTransaction();	
+		 	try {
 				 $producto = Producto::create(Input::all());
 				 $insertedId = $producto->id;
-				 $select = Input::get('sel_pro_ins');
-				 $precio = new Precio;
-				 $precio->producto_id = $insertedId;
-				 $precio->combinacion_id = 1;
-				 $precio->precio=Input::get('precio');
-				 $precio->seleccionador = 0;
-				 $precio->save();
-				 if(Input::get('selector_adicional') == 1){
-				 	for ($i=0; $i <= Input::get('contaadic') ; $i++) {
-				 		$adicional = Input::get('proadi_'.$i);
-				 		if (isset($adicional)) {
-				 			$listaadicionales = $listaadicionales.','.$adicional;
-				 		}
-				 	}
-				 	$producto->lista_prod = substr($listaadicionales, 1);
-				 	$producto->save();
+					 if (!empty(Input::get('precio'))) {
+					 		 $precio = new Precio;
+							 $precio->producto_id = $insertedId;
+							 $precio->combinacion_id = 1;
+							 $precio->precio=Input::get('precio');
+							 //$precio->seleccionador = '';
+							 //$precio->cantidad = '';
+							 $precio->save();
+					 }
+
+				 
+				 } catch (Exception $e) {
+				 		DB::rollback();
 				 }
-				 if ($select == 1) {
-				 for ($i=0; $i <= Input::get('containgre'); $i++) { 
-				 $p = Input::get('ingre_'.$i);
-				 	if(isset($p)){
-				 		$receta = new Receta;
-				 		$receta->producto_id = $insertedId;
-				 		$receta->insumo_id = Input::get('ingre_'.$i);
-				 		$receta->cantidad = Input::get('ingre_cant_'.$i);
-				 		$receta->save();
-				 	}
-				 }
-				 }elseif ($select == 2) {
-				 for ($i=0; $i <= Input::get('containgre'); $i++) {
-				 $p = Input::get('pro_'.$i);
-				 	if(isset($p)){
-				 		$detPro = new DetPro;
-				 		$detPro->parent_id = $insertedId;
-				 		$detPro->child_id = Input::get('pro_'.$i);
-				 		$detPro->cantidad = Input::get('pro_cant_'.$i);
-				 		$detPro->save();
-				 	}
-				 }
-				 }
-				// } catch (Exception $e) {
-				// 		DB::rollback();
-				// 	}
-				// DB::commit();
+		DB::commit();
 		 return Redirect::to('productos');
 	}
 	/**
@@ -151,6 +125,29 @@ class ProductosController extends BaseController {
 		$producto = Producto::find(Input::get('id'));
 		$producto->update(Input::all());
 		$producto->save();
+		$insertedId = $producto->id;
+
+		if (!empty(Input::get('precio'))) {
+				
+			 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+				 	if(!empty($prod_comb_normal)){
+				 	//var_dump($prod_comb_normal->precio);
+				 	//die();
+				 	$prod_comb_normal->precio = Input::get('precio');
+				 	$prod_comb_normal->save();
+				 }else{
+				 			$precio = new Precio;
+							 $precio->producto_id = $insertedId;
+							 $precio->combinacion_id = 1;
+							 $precio->precio=Input::get('precio');
+							 $precio->save();
+				 }
+		 }else{
+		 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+		 	if(!empty($prod_comb_normal)){
+		 	$prod_comb_normal->delete();
+		 	}
+		 }
 		return Redirect::to('productos');
 	}
 

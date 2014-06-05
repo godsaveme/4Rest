@@ -10,8 +10,9 @@ class CombinacionController extends BaseController {
 
 	public function getCreate()
 	{
-		$tipodecombinacion = TipoComb::all();
-        return View::make('combinacions.create', compact('tipodecombinacion'));
+		$tipodecombinacion = TipoComb::where('nombre','!=','Normal')->get();
+		$familias = Familia::lists('nombre','id');
+        return View::make('combinacions.create', compact('tipodecombinacion', 'familias'));
 	}
 
 	/**
@@ -21,22 +22,80 @@ class CombinacionController extends BaseController {
 	 */
 	public function postStore()
 	{
+		DB::beginTransaction();	
+		 try {
+		//var_dump(Input::all());
+		//var_dump('fin');
+		$wl = Input::get('wordlist');
+		$prods = json_decode($wl);
+		//foreach ($prods as $prod) {
+		//	var_dump($prod->nombre);
+		//}
+		// die();
+		// var_dump(count($prods));
+		
+		// if (count($prods)>0) {
+		// 	echo 'ok';
+		// }
+		//var_dump(Input::get('FechaInicio'));
+		//die();
+
+
 		$combinacion = Combinacion::create(Input::all());
 		$insertedId = $combinacion->id;
-		if(Input::get('flag_pro')== 1){
-			for ($i=0; $i <= Input::get('contador'); $i++) {
-			$dato= Input::get('pro_'.$i);
-			if(isset($dato)){
-				$precio = new Precio;
-				$precio->producto_id = Input::get('pro_'.$i);
-				$precio->combinacion_id = $insertedId;
-				$precio->precio=Input::get('pro_pre_'.$i);
-				$precio->seleccionador = Input::get('procant_'.$i);
-				$precio->save();
-			} 
+
+		$horComb = new Horcomb;
+		$horComb->FechaInicio = Input::get('FechaInicio');
+		$horComb->FechaTermino = Input::get('FechaTermino');
+		$horComb->combinacion_id = $insertedId;
+		$horComb->save();
+
+		$insertedIdHorComb = $horComb->id;
+
+		// Input::get('foobar'.1);
+		// Input::get('foobar'.2);
+		// Input::get('foobar'.3);
+		// Input::get('foobar'.4);
+		// Input::get('foobar'.5);
+		// Input::get('foobar'.6);
+		// Input::get('foobar'.7);
+
+
+
+		for ($i=1; $i < 8  ; $i++) { 
+
+			if (!empty(Input::get('foobar'.$i))) {
+
+				$det_dias = new Detdias;
+				$det_dias->horcomb_id = $insertedIdHorComb;
+				$det_dias->dias_id = Input::get('foobar'.$i);
+				$det_dias->save();
+
 			}
 		}
-		return Redirect::to('combinacions');
+
+
+		if(count($prods) > 0){
+			foreach ($prods as $prod) {
+				$precio = new Precio;
+				$precio->producto_id = $prod->id;
+				$precio->combinacion_id = $insertedId;
+				$precio->cantidad = $prod->cantidad;
+				$precio->save();
+			}
+
+
+			
+		 }
+		
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 	/**
@@ -59,8 +118,9 @@ class CombinacionController extends BaseController {
 	public function getEdit($id)
 	{
 		$combinacion = Combinacion::find($id);
-		$tipodecombinacion = TipoComb::all();
-        return View::make('combinacions.edit',compact('tipodecombinacion','combinacion'));
+		$tipodecombinacion = TipoComb::where('nombre','!=','Normal')->lists('nombre','id');
+        $familias = Familia::lists('nombre','id');
+        return View::make('combinacions.edit',compact('tipodecombinacion','combinacion','familias'));
 	}
 
 	/**
@@ -72,6 +132,85 @@ class CombinacionController extends BaseController {
 	public function postUpdate($id)
 	{
 		//
+		//var_dump(Input::all());
+		//die();
+
+		DB::beginTransaction();	
+		 try {
+
+		$wl = Input::get('wordlist');
+		$prods = json_decode($wl);
+
+		$combinacion = Combinacion::find(Input::get('id'));
+		$combinacion->update(Input::all());
+		//$combinacion->save();
+		$insertedId = $combinacion->id;
+
+
+
+		$horComb = Horcomb::where('combinacion_id','=',$insertedId)->first(); 
+
+		//$horComb = new Horcomb;
+		$horComb->FechaInicio = Input::get('FechaInicio');
+		$horComb->FechaTermino = Input::get('FechaTermino');
+		//$horComb->combinacion_id = $insertedId;
+		$horComb->save();
+
+		$insertedIdHorComb = $horComb->id;
+
+		// Input::get('foobar'.1);
+		// Input::get('foobar'.2);
+		// Input::get('foobar'.3);
+		// Input::get('foobar'.4);
+		// Input::get('foobar'.5);
+		// Input::get('foobar'.6);
+		// Input::get('foobar'.7);
+
+		$det_dias = Detdias::where('horcomb_id','=',$insertedIdHorComb)->delete();
+
+		//die();
+
+		//$arrDetdias = 
+
+		//Detdias::
+
+		for ($i=1; $i < 8  ; $i++) { 
+
+			if (!empty(Input::get('foobar'.$i))) {
+
+				$det_dias = new Detdias;
+				$det_dias->horcomb_id = $insertedIdHorComb;
+				$det_dias->dias_id = Input::get('foobar'.$i);
+				$det_dias->save();
+
+			}
+		}
+
+		$precios = Precio::where('combinacion_id','=',$insertedId)->delete();
+
+		//die();
+
+		if(count($prods) > 0){
+			foreach ($prods as $prod) {
+				$precio = new Precio;
+				$precio->producto_id = $prod->id;
+				$precio->combinacion_id = $insertedId;
+				$precio->cantidad = $prod->cantidad;
+				$precio->save();
+			}
+
+
+			
+		 }
+
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 	/**
