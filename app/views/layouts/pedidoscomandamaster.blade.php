@@ -180,7 +180,7 @@
     @yield('content')
 
     @if (Auth::user()->colaborador != 1)
-	<div id="windowsnotificaciones">
+	<div id="windowsnotificaciones" style="display:none">
     	<span id="notificationpedidos" style="display:none;"></span>
     </div>
 	@endif
@@ -191,7 +191,7 @@
             <p>Plato: #=producto #</p>
         </div>
     </script>
-    <div id="windowscontrolpedidos">
+    <div id="windowscontrolpedidos" style="display:none">
     	<div class="panel panel-info">
             <div class="panel-heading">
             	Control Pedidos
@@ -201,7 +201,7 @@
             		@foreach ($platoscontrol as $platocontrol)
             			<li class="list-group-item {{$platocontrol->estado}}" data-iddetped="{{$platocontrol->id}}" data-estado="{{$platocontrol->estado}}">
             				{{$platocontrol->mesa}} / {{$platocontrol->nombre}} x {{$platocontrol->cantidad}} / ({{$platocontrol->login}})
-            				<br><time class="timeago" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
+            				<time class="timeago pull-right" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
             			</li>
             		@endforeach
             	@endif
@@ -216,7 +216,7 @@
     		data-estado="#=listaplatos[i]['estado']#">
 			#=listaplatos[i]['mesa']# / #=listaplatos[i]['nombre']# x #=listaplatos[i]['cantidad']# / 
 			(#=listaplatos[i]['login']#)
-			<br><time class="timeago" datetime="#=(listaplatos[i]['fechaInicio']).replace(" ", "T")#-05:00"></time>
+			<time class="timeago pull-right" datetime="#=(listaplatos[i]['fechaInicio']).replace(" ", "T")#-05:00"></time>
         	</li>
     	#}#
     </script>
