@@ -383,6 +383,7 @@ class CajasController extends BaseController {
 	public function getReporteproductoscaja($detallecaja_id = NULL, $flag=NULL){
 		if (isset($detallecaja_id) && !isset($flag)) {
 			$detacaja = Detcaja::find($detallecaja_id);
+			$ventastotales = $detacaja->tickets()->sum('importe');
 			$restaurante = $detacaja->caja->restaurante;
 			$productos = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, familia.nombre as fnombre, familia.id as famiid')
@@ -393,6 +394,7 @@ class CajasController extends BaseController {
 						->where('detallecaja.id', '=', $detallecaja_id)
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('fnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 			$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
@@ -402,21 +404,32 @@ class CajasController extends BaseController {
 						->where('detallecaja.id', '=', $detallecaja_id)
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('cnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 			$contador = 1;
 			$flag = '';
 			return View::make('cajas.reporteproductosvendidos', 
-				compact('productos', 'detacaja', 'restaurante', 'contador', 'combinaciones', 'flag'));
+				compact('productos', 'detacaja', 'restaurante', 'contador', 'combinaciones', 'flag', 'ventastotales'));
 		}elseif (isset($detallecaja_id) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detallecaja_id);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
+				$ventastotales = 0;
 				$newfecha = substr($detacaja->fechaInicio,0,10);
 				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
+				$ocajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+							->wherein('caja_id', $cajas)
+							->orderby('FechaInicio')
+							->get();
+				foreach ($ocajones as $cajon) {
+					$oventa = $cajon->tickets()->sum('importe');
+					$ventastotales= $ventastotales + $oventa;
+				}
+
 				$productos = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, familia.nombre as fnombre, familia.id as famiid')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
@@ -426,6 +439,7 @@ class CajasController extends BaseController {
 						->wherein('detallecaja.id', $cajones)
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('fnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 				$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
@@ -435,11 +449,12 @@ class CajasController extends BaseController {
 						->wherein('detallecaja.id', $cajones)
 						->where('ticketventa.estado', '=', 0, 'AND')
 						->groupby('cnombre')
+						->orderby('preciot', 'Desc')
 						->get();
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.reporteproductosvendidos', 
-				compact('productos', 'detacaja', 'restaurante', 'combinaciones','contador', 'diario','flag'));
+				compact('ventastotales','productos', 'detacaja', 'restaurante', 'combinaciones','contador', 'diario','flag'));
 			}else{
 				return Redirect::to('/web');
 			}
@@ -453,6 +468,7 @@ class CajasController extends BaseController {
 		if (isset($detallecaja_id) && isset($familiaid) && !isset($flag)) {
 			$detacaja = Detcaja::find($detallecaja_id);
 			$restaurante = $detacaja->caja->restaurante;
+			$ventastotales = $detacaja->tickets()->sum('importe');
 			$productos = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, producto.nombre as fnombre,
 						producto.id as proid')
@@ -469,17 +485,26 @@ class CajasController extends BaseController {
 			$contador = 1;
 			$flag = '';
 			return View::make('cajas.detalleproductosvendidos', 
-				compact('productos', 'detacaja', 'restaurante', 'contador', 'flag'));
+				compact('productos', 'detacaja', 'restaurante', 'contador', 'flag', 'ventastotales'));
 		}elseif (isset($detallecaja_id) && isset($familiaid) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detallecaja_id);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
 				$newfecha = substr($detacaja->fechaInicio,0,10);
+				$ventastotales = 0;
 				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
+				$ocajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+							->wherein('caja_id', $cajas)
+							->orderby('FechaInicio')
+							->get();
+				foreach ($ocajones as $cajon) {
+					$oventa = $cajon->tickets()->sum('importe');
+					$ventastotales= $ventastotales + $oventa;
+				}
 				$productos = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, producto.nombre as fnombre,
 						producto.id as proid')
@@ -496,7 +521,7 @@ class CajasController extends BaseController {
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.detalleproductosvendidos', 
-				compact('productos', 'detacaja', 'restaurante', 'contador', 'diario', 'flag'));
+				compact('productos', 'detacaja', 'restaurante', 'contador', 'diario', 'flag', 'ventastotales'));
 			}else{
 				return Redirect::to('/web');
 			}
@@ -519,6 +544,7 @@ class CajasController extends BaseController {
 						->where('detallecaja.id', '=', $detallecaja_id)
 						->where('producto.id', '=', $productoid)
 						->where('ticketventa.estado', '=', 0, 'AND')
+						->orderby('preciot', 'Desc')
 						->get();
 			$contador = 1;
 			return View::make('cajas.detalleticketxproducto', 
@@ -543,6 +569,7 @@ class CajasController extends BaseController {
 						->wherein('detallecaja.id', $cajones)
 						->where('producto.id', '=', $productoid)
 						->where('ticketventa.estado', '=', 0, 'AND')
+						->orderby('preciot', 'Desc')
 						->get();
 				$contador = 1;
 				$diario = 1;
@@ -622,8 +649,8 @@ class CajasController extends BaseController {
 			$detacaja = Detcaja::find($detcajaid);
 			$restaurante = $detacaja->caja->restaurante;
 			$descuentos = $detacaja->tickets()->where('ticketventa.estado','=',0)
-						->where('ticketventa.importe', '>', '0')
-						->where('ticketventa.idescuento', '!=', 0.00)->get();
+						->where('ticketventa.importe', '>=', 0)
+						->where('ticketventa.idescuento', '!=', 0)->get();
 			$contador = 1;
 			return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
 							'contador','restaurante'));
@@ -639,8 +666,8 @@ class CajasController extends BaseController {
 							->lists('id');
 				$descuentos = Ticket::wherein('ticketventa.detcaja_id', $cajones)
 							->where('ticketventa.estado','=',0)
-							->where('ticketventa.importe', '>', '0')
-							 ->where('ticketventa.idescuento', '!=', 0.00, 'AND')->get();
+							->where('ticketventa.importe', '>=', 0)
+							 ->where('ticketventa.idescuento', '!=', 0, 'AND')->get();
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 

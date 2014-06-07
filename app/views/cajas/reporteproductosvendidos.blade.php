@@ -19,10 +19,11 @@
             <thead>
                 <tr>
                     <th>Nº</th>
-                    <th>Nombre</th>
-                    <th>Cantidad</th>
-                    <th>Precio Un</th>
-                    <th>Precio To</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Promedio</th>
+                    <th class="text-center">Precio To</th>
+                    <th class="text-center">% Ventas</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,11 +32,16 @@
                     <td>{{$contador++}}</td>
                     <td><a href="/cajas/detalleprovendidos/{{$detacaja->id}}/{{$producto->famiid}}/{{$flag}}">{{$producto->fnombre}}</a></td>
                     <td class="text-right">{{$producto->cantidadpro}}</td>
-                    <td class="text-right">{{$producto->preciou}}</td>
+                    <td class="text-right">{{number_format($producto->preciot/$producto->cantidadpro,2,'.', '')}}</td>
                     <td class="text-right">{{$producto->preciot}}</td>
+                    <td class="text-right">{{number_format(($producto->preciot*100)/$ventastotales,2,'.', '').' '.'%'}}</td>
                 </tr>
             @endforeach
-
+                <tr>
+                    <td>
+                        Combinaciones
+                    </td>
+                </tr>
             @foreach ($combinaciones as $combinacion)
                 <tr>
                     <td>{{$contador++}}</td>
@@ -43,6 +49,7 @@
                     <td class="text-right">{{$combinacion->cantidadpro}}</td>
                     <td class="text-right">{{$combinacion->preciou}}</td>
                     <td class="text-right">{{$combinacion->preciot}}</td>
+                    <td class="text-right">{{number_format(($combinacion->preciot*100)/$ventastotales,2,'.', '').' '.'%'}}</td>
                 </tr>
             @endforeach
             </tbody>

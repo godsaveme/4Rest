@@ -17,10 +17,11 @@
             <thead>
                 <tr>
                     <th>Nº</th>
-                    <th>Nombre</th>
-                    <th>Cantidad</th>
-                    <th>Precio Un</th>
-                    <th>Precio To</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Precio Un</th>
+                    <th class="text-center">Precio To</th>
+                    <th class="text-center">% Ventas</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@
                     <td  class="text-right">{{$producto->cantidadpro}}</td>
                     <td class="text-right">{{$producto->preciou}}</td>
                     <td class="text-right">{{$producto->preciot}}</td>
+                    <td class="text-right">{{number_format(($producto->preciot*100)/$ventastotales,2,'.', '')}} %</td>
                 </tr>
             @endforeach
             </tbody>

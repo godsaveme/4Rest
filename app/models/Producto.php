@@ -13,7 +13,7 @@ class Producto extends Eloquent {
 		return $this->belongsToMany('Insumo','receta','producto_id','insumo_id')
 				->withPivot('cantidad');
 	}
-
+	
 	public function precios(){
 		return $this->hasMany('Precio', 'producto_id');
 	}

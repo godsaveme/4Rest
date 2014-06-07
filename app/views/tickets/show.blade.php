@@ -58,6 +58,10 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Forma de Pago</th>
+                            <th>{{$ticket->tipopago()->first()->nombre}}</th>
+                        </tr>
+                        <tr>
                             <th>Cliente</th>
                             <th>{{$ticket->cliente}}</th>
                         </tr>
