@@ -15,7 +15,7 @@ class CreateTiporesponsable extends Migration {
 		Schema::create('tiporesponsable', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->descripcion('descripcion');
+			$table->string('descripcion');
 			$table->timestamps();
 		});
 	}

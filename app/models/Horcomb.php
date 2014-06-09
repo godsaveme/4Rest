@@ -9,7 +9,7 @@ class Horcomb extends Eloquent {
 	public static $rules = array();
 
 	public function dias(){
-		return $this->belongsToMany('Dias','det_dias','horcomb_id','dias_id');
+		return $this->belongsToMany('Dia','det_dias','horcomb_id','dias_id');
 
 	}
 }
