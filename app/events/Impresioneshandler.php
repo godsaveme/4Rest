@@ -142,6 +142,7 @@
 							$cmd .= $pdfPatd;
 							$response = shell_exec($cmd);
 							$i = $i +1;
+							File::delete($pdfPatd);
 						}
 					}
 			}

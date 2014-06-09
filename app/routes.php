@@ -52,7 +52,9 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/pedidoscomanda', 'PedidoscomandaController');
 	Route::controller('/eventos', 'EventosController');
 	Route::controller('/tickets', 'TicketsController');
-	Route::controller('/sabores', 'SaboresController');
+	Route::controller('/detallepedidos', 'DetallepediController');
+
+
 	Route::post('provincias', function () {
 	$patron = '';
 		if (Request::ajax()) {
@@ -105,12 +107,12 @@ Route::group(array('before' => 'auth'), function (){
 
 		/*route javi*/
 	Route::get('buscarinsumos', function () {
-		
-		if (Request::ajax()) {
-			$valor = $_REQUEST["filter"]["filters"][0]["value"];
-			$insumos = Insumo::where('nombre','like','%'.$valor.'%')->get();
+		//if (Request::ajax()) {
+			//$patron = Input::get('parametro');
+			//$insumos = Insumo::where('nombre', 'like', 'Vas%')->take(10)->get();
+			$insumos = Insumo::all();
 			return Response::json($insumos);
-		}
+		//}
 	}
 	);
 
@@ -1783,7 +1785,6 @@ Route::group(array('before' => 'auth'), function (){
 	/*FIN RUTAS JAVIER*/
 	Route::get('restaurandoproductos', function (){
         $productos = Producto::all();
-
         foreach ($productos as $producto) {
             $precio = $producto->precios()->where('combinacion_id', '=', 1)->first();
             if (count($precio)>0) {
@@ -1815,5 +1816,67 @@ Route::group(array('before' => 'auth'), function (){
                 }
             }
         }
+    });
+
+    Route::post('reportetiempos', function(){
+    	if (Request::ajax()) {
+    		$fechaInicio = Input::get('fechainicio');
+    		$fechaFin = Input::get('fechafin');
+    		$restauranteid = Input::get('idrestaurante');
+    		$detalletiempos = DetPedido::selectraw("producto.nombre,producto_id, SUM(detallepedido.cantidad) as cantidad,
+				TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
+				AS tiempoesperaminimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i')
+				AS tiempococinaminimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+				AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
+				AS tiempototaliminimo, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
+				AS tiempoesperapromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') 
+				AS tiempococinapromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+				AS tiempomozopromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
+				AS tiempototalpromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
+				AS tiempoesperamaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') 
+				AS tiempococinamaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+				AS tiempomozomaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
+				AS tiempototalmaximo")
+			->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
+			->join('areadeproduccion', 'areadeproduccion.id', '=', 'detallepedido.idarea')
+			->join('restaurante', 'restaurante.id', '=', 'areadeproduccion.id_restaurante')
+    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 00:00:00'))
+    		->where('restaurante.id','=', $restauranteid)
+    		->groupby('producto_id')
+    		->get();
+
+    		return Response::json($detalletiempos);
+    	}
+    });
+
+	Route::post('tiemposproductos', function(){
+    	if (Request::ajax()) {
+    		$fechaInicio = Input::get('fechainicio');
+    		$fechaFin = Input::get('fechafin');
+    		$restauranteid = Input::get('idrestaurante');
+    		$productoid = Input::get('idpro');
+    		$detalletiempos = DetPedido::selectraw("producto.nombre,producto_id, detallepedido.cantidad,
+				TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso ))*60), '%H:%i') 
+				AS tiempoesperaminimo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho ))*60), '%H:%i')
+				AS tiempococinaminimo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado))*60), '%H:%i') 
+				AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado ))*60), '%H:%i') 
+				AS tiempototaliminimo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso ))*60), '%H:%i') 
+				AS tiempoesperapromedio, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho ))*60), '%H:%i') 
+				AS tiempococinapromedio, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado))*60), '%H:%i') 
+				AS tiempomozopromedio, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado ))*60), '%H:%i') 
+				AS tiempototalpromedio, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso ))*60), '%H:%i') 
+				AS tiempoesperamaximo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho ))*60), '%H:%i') 
+				AS tiempococinamaximo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado))*60), '%H:%i') 
+				AS tiempomozomaximo, TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado ))*60), '%H:%i') 
+				AS tiempototalmaximo")
+			->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
+			->join('areadeproduccion', 'areadeproduccion.id', '=', 'detallepedido.idarea')
+			->join('restaurante', 'restaurante.id', '=', 'areadeproduccion.id_restaurante')
+    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 00:00:00'))
+    		->where('restaurante.id','=', $restauranteid)
+    		->where('producto_id', '=', $productoid)
+    		->get();
+    		return Response::json($detalletiempos);
+    	}
     });
 });
