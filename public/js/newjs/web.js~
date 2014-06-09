@@ -166,10 +166,6 @@ function ON_READY() {
       decimals: 3
   });
 
-        $('#porcion').kendoNumericTextBox({
-      format: "#.00 porciones"
-  });
-
     $('#stockMax').kendoNumericTextBox({
 
 
@@ -458,7 +454,7 @@ function ON_LOAD(){
 
                 jqxhr.done(function(data) {
                   if (data) {
-                      alert('Item eliminado. Actualizando...');	
+                      alert('Item eliminado. Redirigiendo...');	
                       window.location = route;
                     }else{
 			//window.location = "/restaurantes/";

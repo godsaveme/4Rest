@@ -253,6 +253,34 @@
   </div>
 </div>
 
+<div class="panel-group" id="accordion5">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion5" href="#collapseOne5">
+          <i class="fa fa-tasks"></i> Notas y Sabores<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne5" class="panel-collapse collapse @if (Request::is('notas') || Request::is('notas/*') || Request::is('sabores') || Request::is('sabores/*')) in @endif">
+       <div class="panel-body pb-menu">
+      <ul class="list-group">
+        <li class="list-group-item @if (Request::is('notas') || Request::is('notas/*')) active @endif">{{ HTML::link('notas', 'Notas') }}
+                        @if (Request::is('notas/create')) <span class="text-muted pull-right">CREAR</span> @endif
+                @if (Request::is('notas/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
+        </li>
+        <li class="list-group-item @if (Request::is('sabores') || Request::is('sabores/*')) active @endif">{{ HTML::link('sabores', 'Sabores'); }}
+                @if (Request::is('sabores/create')) <span class="text-muted pull-right">CREAR</span> @endif
+                @if (Request::is('sabores/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
                     </div>
                     </div>
 

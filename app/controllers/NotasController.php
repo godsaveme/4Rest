@@ -55,8 +55,7 @@ class NotasController extends BaseController {
 	public function postEdit()
 	{
 		$nota = Notas::find(Input::get('id'));
-		$nota->descripcion = Input::get('descripcion');
-		$nota->save();
+		$nota->update(Input::all());
 		return Redirect::to('notas');
 	}
 
@@ -66,11 +65,26 @@ class NotasController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function getDestroy($id)
+	public function postDestroy($id)
 	{
+
+		DB::beginTransaction();	
+
+		try {
+
 		$nota = Notas::find($id);
 		$nota->delete();
-		return Redirect::to('notas');
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+
+
+
 	}
 
 	public function getAgregarnotas($id){

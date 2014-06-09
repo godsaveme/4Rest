@@ -1,30 +1,35 @@
 @extends('layouts.master')
- 
-@section('sidebar')
-     Notas
-@stop
+
 
 @section('content')
-<div class="row">
-    <div class="small-6 medium-6 large-6 columns">
-      &nbsp;
-    </div>
-    <div class="small-6 medium-6 large-6 columns">
-      {{HTML::link('notas', 'Volver', array('class'=>'button radius right'))}}
-    </div>
-</div>
-        {{ Form::open(array('url' => 'notas/create', 'data-abide' => 'data-abide')) }}
+@parent
+@stop 
+@section('sub-content')
+
+        <a href="{{URL('notas')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
+
+
+
+<div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> CREAR NOTA
+</strong></div>
+
+<div class="panel-body">
+        {{ Form::open(array('id'=>'form_resto','url' => 'notas/create','enctype' => 'multipart/form-data' , 'class'=>'form-horizontal')) }}
 <fieldset>
-  <legend>Crear Nota</legend>
-  <div class="row">
-    <div class="large-12 columns">
-      {{Form::label('descripcion', 'Descripcion')}}
-      {{Form::input('text', 'descripcion', '', array('Placeholder' => 'Ejm. Sin Sal...'))}}
+  <legend></legend>
+
+  <div class="form-group">
+    <div class="col-md-3">
+      {{Form::label('descripcion', 'Descripcion',array('class'=>'control-label'))}}
+          </div>
+    <div class="col-md-5">
+      {{Form::input('text', 'descripcion', '', array('class' => 'form-control','placeholder'=>'ej. Sin sal', 'autofocus','required', 'validationMessage'=>'Por favor entre un nombre.'))}}
     </div>
   </div>
-  <div class="row">
-    <div class="small-12 medium-12 large-12 columns">
-      {{Form::submit('Guardar', array('class'=> 'button radius right'))}}
+
+<div class="form-group">
+    <div class="col-md-4">
+      {{Form::submit('Guardar', array('class' => 'btn btn-warning'))}}
     </div>
   </div>
 </fieldset>

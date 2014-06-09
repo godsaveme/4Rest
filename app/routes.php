@@ -52,6 +52,7 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/pedidoscomanda', 'PedidoscomandaController');
 	Route::controller('/eventos', 'EventosController');
 	Route::controller('/tickets', 'TicketsController');
+	Route::controller('/sabores', 'SaboresController');
 	Route::post('provincias', function () {
 	$patron = '';
 		if (Request::ajax()) {
@@ -104,12 +105,12 @@ Route::group(array('before' => 'auth'), function (){
 
 		/*route javi*/
 	Route::get('buscarinsumos', function () {
-		//if (Request::ajax()) {
-			//$patron = Input::get('parametro');
-			//$insumos = Insumo::where('nombre', 'like', 'Vas%')->take(10)->get();
-			$insumos = Insumo::all();
+		
+		if (Request::ajax()) {
+			$valor = $_REQUEST["filter"]["filters"][0]["value"];
+			$insumos = Insumo::where('nombre','like','%'.$valor.'%')->get();
 			return Response::json($insumos);
-		//}
+		}
 	}
 	);
 

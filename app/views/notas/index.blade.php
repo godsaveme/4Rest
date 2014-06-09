@@ -1,38 +1,61 @@
 @extends('layouts.master')
-@section('sidebar')
-     Notas
-@stop
+
+
 @section('content')
-<div class="row">
-	  <div class="small-6 medium-6 large-6 columns">
-	  	{{HTML::link('notas/create', 'Crear', array('class'=>'button radius left'))}}
-	  </div>
-	  <div class="small-6 medium-6 large-6 columns">
-	  	{{HTML::link('web', 'Volver', array('class'=>'button radius right'))}}
-	  </div>
-</div>
-<ul class="pricing-table">
-  <li class="title"><strong>Lista de Notas</strong></li>
-  <li class="title">
-  	<div class="row">
-    <div class="small-1 medium-1 large-1 columns">Nº</div>
-    <div class="small-7 medium-7 large-7 columns">Nota</div>
-    <div class="small-2 medium-2 large-2 columns">Editar</div>
-    <div class="small-2 medium-2 large-2 columns">Eliminar</div>
-  	</div>
-</li>
-<?php $i = 1;?>
-@foreach ($notas as $dato)
-  <li class="bullet-item">
-  <div class="row">
-    <div class="small-1 medium-1 large-1 columns">{{$i}}</div>
-    <div class="small-5 medium-5 large-5 columns">{{$dato->descripcion}}</div>
-    <div class="small-2 medium-2 large-2 columns"><a href="/notas/agregarnotas/{{$dato->id}}"><i class="fi-plus"></i></a></div>
-    <div class="small-2 medium-2 large-2 columns"><a href="/notas/edit/{{$dato->id}}"><i class="fi-page-edit"></i></a></div>
-    <div class="small-2 medium-2 large-2 columns"><a href="/notas/destroy/{{$dato->id}}"><i class="fi-x"></i></a></div>
+@parent
+@stop 
+@section('sub-content')
+  @parent
+<a id="cntnr1" style="opacity: 0;" href="{{URL('notas/create')}}" class='pull-right btn btn-primary'><i class="fa fa-edit"></i> Crear Nota</a>
+
+<div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> NOTAS
+</strong></div>
+
+                    
+
+<div id="cntnrGrid" style="opacity: 0;">
+
+<div class="panel-body" style="position:relative; overflow:hidden;">
+
+
+    <table id="gridNotas">
+                        <colgroup>
+                    <col style="width:120px" />
+                    <col style="width:150px"  />
+                    <col style="width:120px" />
+                    <col style="width:130px" />
+                </colgroup>
+      <thead>
+        <tr>
+          <th data-field="numero">Número</th>
+          <th data-field="nota">Nota</th>
+          <th data-field="editar">Editar</th>
+          <th data-field="eliminar">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($notas as $dato)
+        <tr>
+          <td>{{$dato->id}}</td>
+          <td>{{$dato->descripcion}}</td>
+          <td><a href="notas/edit/{{$dato->id}}" type="button" class="k-button">
+        <!-- <span class="glyphicon glyphicon-pencil"></span> -->
+                <span class="k-icon k-i-pencil"></span>
+        Editar
+      </a></td>
+          <td><a onclick="onDestroy('notas/destroy/{{$dato->id}}','notas');" href="#" type="button" class="k-button">
+        <!-- <span class="glyphicon glyphicon-remove"></span> -->
+        <span class="k-icon k-i-close"></span>
+      Eliminar
+        </a></td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+
+
+</div> <!-- del panel body -->
+
   </div>
-  </li>
-  <?php $i++;?>
-@endforeach
-</ul>
+
 @stop
