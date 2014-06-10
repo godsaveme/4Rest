@@ -280,6 +280,7 @@
   	{{HTML::script('js/timeago.js')}}
   	{{HTML::script('js/jquery.countup.js')}}
   	{{HTML::script('js/funcionescaja.js')}}
+  	{{HTML::script('js/drawer.js')}}
 	@yield('js')
 </body>
 </html>

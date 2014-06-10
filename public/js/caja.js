@@ -69,6 +69,7 @@ socket.on('NotificacionPedidos',notificacionespedidos);
 socket.on('ActualizarControlpedidos',actulizarcontrolpedidos);
 socket.on('ActulizarestadoAll', actulizarestadosall);
 socket.on('ActulizarPedidosMesa',actulizarpedidosmesa);
+
 //actulizarpedidosmesa
 function actulizarpedidosmesa(idpedido, usuario){
 	var mesaid;
@@ -185,43 +186,6 @@ $('#btn_salirmesa').on('click', function(event) {
             }
         }
     });
-
-    $('.navbar-form').on('click', 'button', function(event) {
-    	event.preventDefault();
-    	/* Act on the event */
-    });
-	$(".caja_derecha").kendoMobileDrawer({
-	    container: "#contenido",
-	    position: "right"
-	});
-	$(".caja_izquierda").kendoMobileDrawer({
-	    container: "#contenido",
-	    position: "left"
-	});
-	$('#btn_draweriz').on('click', function(event) {
-		event.preventDefault();
-		/* Act on the event */
-		if($(this).attr('data-active') == 1){
-			$(this).attr('data-active', 0);
-			$(".caja_izquierda").data("kendoMobileDrawer").hide();
-		}else{
-			//alert($(this).attr('data-idcombi'));
-			$(this).attr('data-active', 1);	
-			$(".caja_izquierda").data("kendoMobileDrawer").show();
-		}
-	});
-	$('#btn_drawerder').on('click', function(event) {
-		event.preventDefault();
-		/* Act on the event */
-		if($(this).attr('data-active') == 1){
-			$(this).attr('data-active', 0);
-			$(".caja_derecha").data("kendoMobileDrawer").hide();
-		}else{
-			//alert($(this).attr('data-idcombi'));
-			$(this).attr('data-active', 1);	
-			$(".caja_derecha").data("kendoMobileDrawer").show();
-		}
-	});
 
 	$('.btn_mesascajas').on('click', function(event) {
 		event.preventDefault();

@@ -786,6 +786,7 @@ Route::group(array('before' => 'auth'), function (){
 			$caja_id = Input::get('caja_id');
 			$infocaja = Caja::find($caja_id);
 			$detcajaid = Input::get('detcajaid');
+			$idmozo = Input::get('idmozo');
 			$arrayudateprecuenta = array();
 			$subtotal = 0;
 			$newtotal = 0;
@@ -851,7 +852,9 @@ Route::group(array('before' => 'auth'), function (){
 											   'direccion'=>$cliente['direccion'],
 											   'mesa'=>$nombremesa,
 											   'mozo'=>$nombremozo,
-											   'cajero'=>Auth::user()->login));
+											   'cajero'=>Auth::user()->login,
+											   'mozoid'=>$idmozo,
+											   'cajeroid'=>Auth::user()->id));
 					Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
 					$odetallestickete = $tickete->detallest;
 					
@@ -1885,4 +1888,32 @@ Route::group(array('before' => 'auth'), function (){
     		return Response::json($detalletiempos);
     	}
     });
+
+	Route::get('corregircajas', function(){
+		$tickets = Ticket::whereNull('mozoid')->get();
+		$usuarios = Usuario::all();
+		foreach ($tickets as $tickete) {
+			foreach ($usuarios as $user) {
+				if(trim($tickete->mozo) == $user->login){
+					$tickete->mozoid = $user->id;
+					$tickete->save();
+				}
+			}
+		}
+	});
+
+	Route::get('corregircajeros', function(){
+		$tickets = Ticket::whereNull('cajeroid')->get();
+		$usuarios = Usuario::all();
+		foreach ($tickets as $tickete) {
+			foreach ($usuarios as $user) {
+				if(trim($tickete->cajero) == $user->login){
+					$tickete->cajeroid = $user->id;
+					$tickete->save();
+				}
+			}
+		}
+	});
+
+
 });

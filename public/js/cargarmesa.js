@@ -1281,7 +1281,8 @@ $('#btn_cobraraceptar').on('click', function(event) {
 					vuelto: validarvalores($('#input_ivuelto').val()),
 					cliente: $('#infomesa').data('cliente'),
 					caja_id: $('#infomesa').attr('data-cajaid'),
-					detcajaid: $('#infomesa').attr('data-detcajaid')
+					detcajaid: $('#infomesa').attr('data-detcajaid'),
+					idmozo: $('#infomozo').attr('data-idmozo')
 					}
 		})
 		.done(function(data) {

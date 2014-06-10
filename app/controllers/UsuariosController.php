@@ -104,24 +104,23 @@
 		 */
 		public function postDestroy($id)
 		{
-
-
 		DB::beginTransaction();	
-
 		try {
-
 			$usuario = Usuario::find($id);
 			$usuario->delete();
-
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(false);
 		}
-
 		DB::commit();
 		return Response::json(true);
-
-
 		}
 
+		public function getReportemozos($idrestaurante = NULL){
+			if (isset($idrestaurante)) {
+				$restaurante = Restaurante::find($idrestaurante);
+				return View::make('usuarios.reportesmozos', compact('restaurante'));
+			}else{
+			}
+		}
 	}
