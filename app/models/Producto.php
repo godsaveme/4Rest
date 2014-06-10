@@ -34,4 +34,6 @@ class Producto extends Eloquent {
 		return $this->belongsToMany('Pedido', 'detallepedido', 'producto_id','pedido_id')
 				->withPivot('importeFinal', 'cantidad','combinacion_id', 'pedido_id');
 	}
+
+
 }

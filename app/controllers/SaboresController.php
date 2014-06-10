@@ -16,6 +16,11 @@ class SaboresController extends \BaseController {
 		return Response::view('sabores.index', compact('sabores'));
 	}
 
+	public function getIndexDet(){
+		$prod_sabor = Producto::sabores();
+		return Response::view('sabores.indexDet', compact('$prod_sabor'));
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *

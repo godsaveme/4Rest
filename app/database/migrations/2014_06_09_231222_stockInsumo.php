@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class StockProducto extends Migration {
+class StockInsumo extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,19 +12,16 @@ class StockProducto extends Migration {
 	 */
 	public function up()
 	{
-		//
-		/*Schema::create('stockProducto', function(Blueprint $tabla) 
+		Schema::create('stockInsumo', function(Blueprint $tabla) 
         {
- 
-
             $tabla->increments('id');
             $tabla->decimal('stockActual',10,2);
 			$tabla->decimal('stockMin',10,2);
 			$tabla->decimal('stockMax',10,2);
-			$tabla->integer('producto_id');
+			$tabla->integer('insumo_id');
 			$tabla->integer('almacen_id')->unsigned();
 			$tabla->foreign('almacen_id')->references('id')->on('almacen');
-            $tabla->foreign('producto_id')->references('id')->on('producto');
+            $tabla->foreign('insumo_id')->references('id')->on('insumo');
             //$tabla->integer('almacen_id');
 
  
@@ -32,10 +29,7 @@ class StockProducto extends Migration {
             //created_at updated_at
             $tabla->timestamps();
  
-        });*/
-
-		
-
+        });
 	}
 
 	/**
