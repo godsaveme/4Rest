@@ -30,14 +30,16 @@ function socketconection(cliente){
 
     cliente.on('NotificarPedidos', function(data, area){
             io.sockets.in(area).emit("NotificacionPedidos", data);
+            io.sockets.emit('ActulizarestadoAll', data);
             io.sockets.emit('ActualizarControlpedidos');
     });
 
-    cliente.on('Enviaracocina', function(mesa, pedido, cocinas){
+    cliente.on('Enviaracocina', function(mesa, pedido, cocinas, usuario){
         totalcocinas = cocinas.length;
         for (i=0;i< totalcocinas;i++) {
             io.sockets.in(cocinas[i]['cocina']).emit('Recibirpedidos',cocinas, mesa, pedido);
         }
+            io.sockets.emit('ActulizarPedidosMesa', pedido,usuario);
             io.sockets.emit('ActualizarControlpedidos');
     });
 

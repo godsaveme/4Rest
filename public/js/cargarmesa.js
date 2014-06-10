@@ -333,8 +333,8 @@ function enviarcocina(data, arrayareas2, con){
   }
 }
 //finenviarmensaje a cocinas
-function notificacioncocina(infomesa, pedido, cocinas){
-	socket.emit('Enviaracocina', infomesa, pedido, cocinas);
+function notificacioncocina(infomesa, pedido, cocinas, usuario){
+	socket.emit('Enviaracocina', infomesa, pedido, cocinas,usuario);
 }
 
 function enviarordenes(cocinas){
@@ -440,7 +440,7 @@ function enviarordenes(cocinas){
 			CalcularPrecioTotal();
 			precuenta(1, 0);
 			console.log(data);
-			notificacioncocina($('#infomesa').text(), pedido, data['orden']);
+			notificacioncocina($('#infomesa').text(), pedido, data['orden'], $('#usuario').attr('user_id'));
 	})
 	.fail(function() {
 		console.log("error");

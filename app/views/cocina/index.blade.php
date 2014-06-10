@@ -17,8 +17,8 @@
 			                @foreach ($platos[$datos->pedido_id.'_'.$datos->ordenCocina] as $dato)
 								@if ($dato->estado != 'E' && $dato->estado != 'A')
 				                    <li class="list-group-item {{$dato->estado}}" data-idpro="{{$dato->producto_id}}" 
-										data-iddetped="{{$dato->id}}" data-estado="{{$dato->estado}}">
-											{{$dato->nombre}} x <span>{{$dato->cantidad}}</span>
+										data-iddetped="{{$dato->id}}" data-estado="{{$dato->estado}}" style="line-height: 30px">
+									{{HTML::image('images/'.$dato->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}} &nbsp;{{$dato->nombre}} x <span>{{$dato->cantidad}}</span>
 									</li>
 								@endif
 							@endforeach
@@ -38,7 +38,8 @@
 		                    <li class="list-group-item #=platos[i]['estado']#" 
 		                    	data-idpro="#=platos[i]['productoid']#" 
 								data-iddetped="#=platos[i]['id']#" 
-								data-estado="#=platos[i]['estado']#">
+								data-estado="#=platos[i]['estado']#" style="line-height: 30px">
+							<img width="30" height="30" alt="alt" src="/images/#=platos[i]['estado']#.png">
 									#=platos[i]['nombre']# x <span>#=platos[i]['cantidad']#</span>
 								#if (platos[i]['notas'].length > 0) {#
 									<br>
@@ -70,12 +71,17 @@
                 <div class="panel-heading">
                 	<h5>TOTALES</h5>
                 </div>
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush" id="panel_platosacumulados">
                 	@foreach ($platospanel as $plato)
-					<li data-idpro="{{$plato->producto_id}}" class="list-group-item {{$plato->estado}}">
+					<li data-idpro="{{$plato->producto_id}}" class="list-group-item I">
 					{{$plato->nombre}} x <span>{{$plato->sumcantidad}}</span>
 					</li>
 					@endforeach
+					<script type="text/x-kendo-template" id="template_platospanel">
+						<li data-idpro="#:producto_id#" class="list-group-item I">
+						#:nombre# x <span>#:cantidad#</span>
+						</li>
+					</script>
                 </ul>
             </div>
 		</div>

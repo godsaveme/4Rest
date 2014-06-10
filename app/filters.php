@@ -38,17 +38,7 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::guest('login');
 	//Añadido
 	if (Auth::check()) {
-					
-			if (Session::get('LAST_ACTIVITY') && (time() - Session::get('LAST_ACTIVITY') > Session::get('TIME_SESSION') )) {
-				Session::flush();
-				Auth::logout();
-				//return 'holaa';
-			    
-			    return Redirect::to('login');
-			}
-
 			Session::set('LAST_ACTIVITY', time());  
-			
 	}
 	//
 });

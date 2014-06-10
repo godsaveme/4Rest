@@ -15,11 +15,6 @@ Route::get('login', function () {
 
 Route::post('login', function () {
 	if (Auth::attempt(array('login' => Input::get('login'), 'password' => Input::get('password'), 'estado' => 1), true)) {
-		if (Input::has('remember')) {
-			Session::put('TIME_SESSION', 43200);
-		} else {
-			Session::put('TIME_SESSION', 2700);
-		}
 		return Redirect::to('web');
 	} else {
 		return Redirect::to('login')->with('mensaje_login', 'Ingreso invalido');
@@ -189,13 +184,13 @@ Route::group(array('before' => 'auth'), function (){
 			$arraydatoscocina = array();
 			DetPedido::whereraw("detallepedido.pedido_id =".$pedido." and detallepedido.estado = 'I' 
 						and idarea = ".Auth::user()->id_tipoareapro)
-						->update(array('detallepedido.estado' => 'C'));
+						->update(array('detallepedido.cocinaonline' => 1));
 			$detallepedido = DetPedido::select('detallepedido.estado', 'detallepedido.ordenCocina', 'detallepedido.cantidad', 
 				'producto.id as productoid', 'producto.nombre', 'detallepedido.cantidad', 
 				'detallepedido.id', 'detallepedido.pedido_id', 'detallepedido.detalle_id')
 				->join('producto', 'detallepedido.producto_id', '=', 'producto.id')
-				->whereraw("detallepedido.pedido_id =".$pedido." and detallepedido.estado
-                             = 'C' and idarea = ".Auth::user()->id_tipoareapro." and 
+				->whereraw("detallepedido.pedido_id =".$pedido." and detallepedido.cocinaonline
+                             = 1 and idarea = ".Auth::user()->id_tipoareapro." and 
                              detallepedido.ordenCocina = ".$orden)
 				->groupBy('detallepedido.id')
 				->get();
@@ -248,7 +243,9 @@ Route::group(array('before' => 'auth'), function (){
 			if ($estado != '') {
 				$opedido = DetPedido::select('pedido.id','usuario.login', 'mesa.nombre', 
 							'producto.nombre as pnombre', 'detallepedido.combinacion_c',
-							'usuario.id_tipoareapro', 'areadeproduccion.nombre as anombre')
+							'usuario.id_tipoareapro', 'areadeproduccion.nombre as anombre',
+							'detallepedido.cantidad', 'detallepedido.id as detpedidoid', 
+							'producto.id as proid')
 						->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 						->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 						->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
@@ -294,12 +291,13 @@ Route::group(array('before' => 'auth'), function (){
 							'pedido' => $opedido->id, 
 							'producto' => $opedido->pnombre, 
 							'combinacion_c' => $opedido->combinacion_c,
-							'areapro'=>$opedido->anombre.'_'.$opedido->id_tipoareapro);
+							'areapro'=>$opedido->anombre.'_'.$opedido->id_tipoareapro,
+							'proid' =>$opedido->proid,
+							'cantidad'=>$opedido->cantidad);
 				return Response::json($arrayco);
 			}
 		}
-	}
-	);
+	});
 	Route::post('listarproductos', function () {
 		if (Request::ajax()) {
 			$orden = Input::get('pedido');
@@ -1773,6 +1771,14 @@ Route::group(array('before' => 'auth'), function (){
 								->get();
 
 			return Response::json($platoscontrol);
+		}
+	});
+	
+	Route::post('pedidomesa', function (){
+		if (Request::ajax()) {
+			$idpedido = Input::get('idpedido');
+			$mesaid = DetMesa::select('mesa_id')->where('pedido_id', '=', $idpedido)->first();
+			return  Response::json($mesaid);
 		}
 	});
 	/*finrutas IVAN*/

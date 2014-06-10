@@ -67,6 +67,65 @@ var notificationpedido = $("#notificationpedidos").kendoNotification({
 
 socket.on('NotificacionPedidos',notificacionespedidos);
 socket.on('ActualizarControlpedidos',actulizarcontrolpedidos);
+socket.on('ActulizarestadoAll', actulizarestadosall);
+socket.on('ActulizarPedidosMesa',actulizarpedidosmesa);
+//actulizarpedidosmesa
+function actulizarpedidosmesa(idpedido, usuario){
+	var mesaid;
+	$.ajax({
+		url: '/pedidomesa',
+		type: 'POST',
+		dataType: 'json',
+		data: {idpedido: idpedido},
+	})
+	.done(function(data) {
+		mesaid= data['mesa_id'];
+		if($('#infomesa').attr('data-id') == mesaid){
+			if($('#usuario').attr('user_id')!= usuario){
+				location.reload();
+			}
+		}else{
+			$('.btn_mesascajas').filter(function(index) {
+				return $(this).attr('data-id') == mesaid;
+			}).addClass('O');
+			$('.btn_mesascajas').filter(function(index) {
+				return $(this).attr('data-id') == mesaid;
+			}).attr('data-estado', 'O');
+		}
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+}
+//finactulizarpedidosmesa
+
+//actulizarestados todos
+	function actulizarestadosall(data){
+		var estado = data['estado'];
+		var preestado = '';
+		if(data['estado'] == 'P'){
+			prestado = 'I';
+		}else if (data['estado'] == 'E'){
+			prestado = 'P';
+		}else if (data['estado'] == 'D') {
+			prestado = 'E';
+		};	
+		var oitempedido = $('.'+prestado).filter(function(index) {
+			return $(this).attr('data-iddetped') == data['iddetallep'];
+		});
+		oitempedido.removeClass(prestado);
+		oitempedido.addClass(data['estado']);
+		oitempedido.attr('data-estado', data['estado']);
+		if(estado == 'C'){
+			estado = 'I';
+		}
+		oitempedido.find('img').attr('src', '/images/'+estado+'.png');
+	}
+//finactulizarestados todos
+
 var template_controlpedidos = kendo.template($('#refresh_listcontrolpedidos').html());
 
 function actulizarcontrolpedidos(){
@@ -236,15 +295,7 @@ function actulizarestados(estado, iddetalle){
         dataType: "json",
         data:{estado: estado, iddetallep: iddetalle},
         success: function(data){
-            if(data['estado']){
-            $('.list-group-item').each(function(){
-                if($(this).attr('data-iddetped') == data['iddetallep']){
-                    $(this).removeClass($(this).attr('data-estado'));
-                    $(this).addClass(data['estado']);
-                    $(this).attr('data-estado', data['estado']);
-                }
-            });
-            }
+        	socket.emit('NotificarPedidos', data, data['areapro']);
         }
     });
 }

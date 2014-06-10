@@ -37,5 +37,6 @@
 </div>
 @stop
 @section('js')
+{{HTML::script('js/caja.js')}}
 {{HTML::script('js/cronometro.js')}}
 @stop

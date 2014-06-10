@@ -1,5 +1,41 @@
 var socket = io.connect('http://'+window.location.host+':3000');
+socket.emit('loginuser',$('#usuario').text(), 
+          $('#area').text()+'_'+$('#area').attr('data-ida'), 
+          $('#usuario').attr('user_id'));
+socket.on("Conectado", conectado);
+function conectado(mensaje){
+    console.log(mensaje);
+}
+
+$('body').timeago();
 socket.on("Recibirpedidos", recibirpedido);
+socket.on('ActulizarestadoAll', actulizarestadosall);
+
+//actulizarestados todos
+    function actulizarestadosall(data){
+        var estado = data['estado'];
+        var preestado = '';
+        if(data['estado'] == 'P'){
+            prestado = 'I';
+        }else if (data['estado'] == 'E'){
+            prestado = 'P';
+        }else if (data['estado'] == 'D') {
+            prestado = 'E';
+        };  
+        var oitempedido = $('.'+prestado).filter(function(index) {
+            return $(this).attr('data-iddetped') == data['iddetallep'];
+        });
+        oitempedido.removeClass(prestado);
+        oitempedido.addClass(data['estado']);
+        oitempedido.attr('data-estado', data['estado']);
+        oitempedido.find('img').attr('src', '/images/'+estado+'.png');
+        if(data['estado'] == 'E'){
+            restarplatospanel(data['proid'], data['cantidad']);
+            oitempedido.remove();
+            contarli();
+        }
+    }
+//finactulizarestados todos
 
 $('.hora').each(function(){
         id = $(this).find('div').attr('id');
@@ -10,7 +46,7 @@ $('.hora').each(function(){
         $('.countDays').remove();
         $('.countDiv0').remove();
 });
-var template_cocina = kendo.template($("#template_platoscocina").html())
+var template_cocina = kendo.template($("#template_platoscocina").html());
 
 function recibirpedido(datos, mesa, pedido){
     var orden;
@@ -44,6 +80,9 @@ function recibirpedido(datos, mesa, pedido){
                 $('.timeago').timeago('refresh');
                 $('.countDays').remove();
                 $('.countDiv0').remove();
+                for (var i in data) {
+                    sumarplatospanel(data[i]['productoid'], data[i]['cantidad'], data[i]['nombre']);
+                }
             }
     });
 }
@@ -62,9 +101,6 @@ function corregirtiempo(valor){
 //notificaciones a mozos
 $('#contaitnerplatos').on('click', '.list-group-item', function(){
      var oitem = $(this);
-     if($(this).attr('data-estado') == 'I' || $(this).attr('data-estado') == 'C'){
-        restarplatospanel($(this).attr('data-idpro'), $(this).find('span').text());
-     }
      actulizarestados($(this).attr('data-estado'), $(this).attr('data-iddetped'));
 });
 
@@ -111,27 +147,31 @@ function actulizarestados(estado, iddetalle){
         dataType: "json",
         data:{estado: estado, iddetallep: iddetalle},
         success: function(data){
-            if(data['estado']){
-            $('.list-group-item').each(function(){
-                if($(this).attr('data-iddetped') == data['iddetallep']){
-                    $(this).removeClass($(this).attr('data-estado'));
-                    $(this).addClass(data['estado']);
-                    if(data['estado'] == 'E'){
-                    $(this).remove();
-                    contarli();
-                    }else{
-                        $(this).attr('data-estado', data['estado']);
-                    }
-                }
-            });
-            }
             notificarpedidos(data, 1, data['areapro']);
         }
     });
 }
 
+var template_panelplatoscocina = kendo.template($("#template_platospanel").html());
+
+function sumarplatospanel(id, canti, nombre){
+    var flag = $("#panel_platosacumulados li").filter(function() {
+                return $(this).attr('data-idpro') == id;
+                });
+    if (flag.attr('data-idpro') >= 0) {
+        cantidad = parseInt(flag.find('span').text()) + parseInt(canti);
+        flag.find('span').text(cantidad);
+    }else{
+        var datos = {};
+        datos['nombre']= nombre;
+        datos['producto_id']= id;
+        datos['cantidad']= canti;
+        $("#panel_platosacumulados").append(template_panelplatoscocina(datos));
+    }
+}
+
 function restarplatospanel(id, canti){
-     var flag = $("#platospanel li").filter(function() {
+     var flag = $("#panel_platosacumulados li").filter(function() {
                 return $(this).attr('data-idpro') == id;
                 });
         if(flag){

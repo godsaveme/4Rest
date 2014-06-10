@@ -26,7 +26,6 @@ class CocinaController extends BaseController {
         				->join('producto','detallepedido.producto_id','=','producto.id')
         				->where('detallepedido.estado','!=','D')
         				->where('detallepedido.estado','!=','E', 'AND')
-        				->where('detallepedido.estado','!=','P', 'AND')
         				->where('detallepedido.estado','!=','A', 'AND')
         				->where('idarea','=' ,Auth::user()->id_tipoareapro , 'AND')
         				->groupBy('producto_id')
