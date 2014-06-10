@@ -205,8 +205,13 @@
             <ul class="list-group list-group-flush" id="lista_controlpedidos">
             	@if (isset($platoscontrol))
             		@foreach ($platoscontrol as $platocontrol)
-            			<li class="list-group-item {{$platocontrol->estado}}" data-iddetped="{{$platocontrol->id}}" data-estado="{{$platocontrol->estado}}">
-            				{{$platocontrol->mesa}} / {{$platocontrol->nombre}} x {{$platocontrol->cantidad}} / ({{$platocontrol->login}}) <time class="timeago pull-right" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
+            			<li class="list-group-item {{$platocontrol->estado}}" data-iddetped="{{$platocontrol->id}}" data-estado="{{$platocontrol->estado}}" style="line-height: 30px">
+            				@if ($platocontrol->estado == 'C')
+            					{{HTML::image('images/I.png', 'alt', array('height'=>30, 'width'=>30))}}
+            				@else
+            					{{HTML::image('images/'.$platocontrol->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}}
+            				@endif
+            				&nbsp;{{$platocontrol->mesa}} / {{$platocontrol->nombre}} x {{$platocontrol->cantidad}} / ({{$platocontrol->login}}) <time class="timeago pull-right" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
             			</li>
             		@endforeach
             	@endif
@@ -218,8 +223,13 @@
     	#for (var i in listaplatos) {#
     		<li class="list-group-item #=listaplatos[i]['estado']#" 
     		data-iddetped="#=listaplatos[i]['id']#" 
-    		data-estado="#=listaplatos[i]['estado']#">
-			#=listaplatos[i]['mesa']# / #=listaplatos[i]['nombre']# x #=listaplatos[i]['cantidad']# / 
+    		data-estado="#=listaplatos[i]['estado']#" style="line-height: 30px">
+    		#if (listaplatos[i]['estado'] == 'C') {#
+    			<img width="30" height="30" alt="alt" src="/images/I.png">
+    		#}else{#
+    			<img width="30" height="30" alt="alt" src="/images/#=listaplatos[i]['estado']#.png">
+    		#}#
+			&nbsp;#=listaplatos[i]['mesa']# / #=listaplatos[i]['nombre']# x #=listaplatos[i]['cantidad']# / 
 			(#=listaplatos[i]['login']#) <time class="timeago pull-right" datetime="#=(listaplatos[i]['fechaInicio']).replace(" ", "T")#-05:00"></time>
         	</li>
     	#}#

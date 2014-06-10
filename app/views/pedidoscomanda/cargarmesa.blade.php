@@ -47,8 +47,13 @@
 							<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 								{{$dato->cantidad}}
 							</div>
-							<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-								{{$dato->pnombre}}
+							<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-left" style="line-height: 30px">
+                                @if ($dato->estado == 'C')
+                                {{HTML::image('images/I.png', 'alt', array('height'=>30, 'width'=>30))}}
+                                @else
+                                    {{HTML::image('images/'.$dato->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}}
+                                @endif
+                                &nbsp;{{$dato->pnombre}}
 							</div>
 							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 								S/. <span class="montoTotal">{{$dato->importefinal}}</span>
@@ -67,8 +72,13 @@
 								<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 									<ul class="list-group list-group-flush">
 										@foreach ($placombinacionp[$dato->combinacion_id.'_'.$dato->combinacion_c] as $plato)
-											<li class="list-group-item {{$plato->estado}}" data-iddetped="{{$plato->id}}" data-estado="{{$plato->estado}}" data-tipo="c">
-												{{$plato->pnombre}}
+											<li class="list-group-item {{$plato->estado}} text-left" data-iddetped="{{$plato->id}}" data-estado="{{$plato->estado}}" data-tipo="c" style="line-height: 30px">
+                                            @if ($plato->estado == 'C')
+                                            {{HTML::image('images/I.png', 'alt', array('height'=>30, 'width'=>30))}}
+                                            @else
+                                                {{HTML::image('images/'.$plato->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}}
+                                            @endif
+                                            &nbsp;{{$plato->pnombre}}
 											</li>
 										@endforeach
 									</ul>
@@ -292,8 +302,9 @@
 				<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 					#=cantidad#
 				</div>
-				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-					#=pronombre#
+				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-left" style="line-height: 30px">
+                <img width="30" height="30" alt="alt" src="/images/#=pestado#.png">
+                    &nbsp;#=pronombre#
 				</div>
 				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 					S/. <span class="montoTotal">#=precio#</span>
@@ -311,8 +322,10 @@
 			<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 				<ul class="list-group list-group-flush">
 					#for(var i in produccomb){#
-						<li class="list-group-item #=produccomb[i]['pestado']#" data-iddetped="#=produccomb[i]['iddetpedido']#" data-estado="#=produccomb[i]['pestado']#" data-tipo="c">
-							#=produccomb[i]['pronombre']#
+						<li class="list-group-item #=produccomb[i]['pestado']# text-left" data-iddetped="#=produccomb[i]['iddetpedido']#" data-estado="#=produccomb[i]['pestado']#" data-tipo="c"
+                        style="line-height: 30px">
+                        <img width="30" height="30" alt="alt" src="/images/#=produccomb[i]['pestado']#.png">
+                            &nbsp;#=produccomb[i]['pronombre']#
 						</li>
 					#}#
 				</ul>
