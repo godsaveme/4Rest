@@ -83,6 +83,7 @@ function recibirpedido(datos, mesa, pedido){
                 for (var i in data) {
                     sumarplatospanel(data[i]['productoid'], data[i]['cantidad'], data[i]['nombre']);
                 }
+                document.getElementById('sonido_recibirpedido').play();
             }
     });
 }

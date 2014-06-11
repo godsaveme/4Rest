@@ -1052,7 +1052,26 @@ Route::group(array('before' => 'auth'), function (){
 			                  ->where('ticket_id', '=', NULL, 'AND')->get();
 			$contelementos = count($odetallepedidos);
 			if ($contelementos == 0) {
-				if (count($despachado) == 0) {
+				if(Auth::user()->id_restaurante == 2){
+					if (count($despachado) == 0) {
+						$opedido = Pedido::find($idpedido);
+						$newimporte = $opedido->tickets()->sum('importe');
+						$newdescuento = $opedido->tickets()->sum('idescuento');
+						$omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
+						$arrayupdatemesas = array();
+						foreach ($omesas as $dato) {
+							$arrayupdatemesas[] = $dato->id;
+						}
+
+						DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));$opedido->estado = "T";
+						$opedido->importeFinal = $newimporte;
+						$opedido->descuento = $newdescuento;
+						$opedido->save();
+						return json_encode('true');
+					}else{
+						return json_encode('No puedes cerrar la mesa, tienes pedidos por entregar');
+					}
+				}else{
 					$opedido = Pedido::find($idpedido);
 					$newimporte = $opedido->tickets()->sum('importe');
 					$newdescuento = $opedido->tickets()->sum('idescuento');
@@ -1065,9 +1084,8 @@ Route::group(array('before' => 'auth'), function (){
 					DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));$opedido->estado = "T";
 					$opedido->importeFinal = $newimporte;
 					$opedido->descuento = $newdescuento;
-					$opedido->save();return json_encode('true');
-				}else{
-					return json_encode('No puedes cerrar la mesa, tienes pedidos por entregar');
+					$opedido->save();
+					return json_encode('true');
 				}
 			} else {
 				return json_encode('No puedes cerrar la mesa, tienes pedidos por cobrar.');
