@@ -10,7 +10,8 @@ class CajasController extends BaseController {
 		$usuarios = Usuario::where('id_restaurante', '=', Auth::user()->id_restaurante)->lists('id');
 		$platoscontrol = DetPedido::select('usuario.login', 'mesa.nombre as mesa', 'detallepedido.id', 
 								'detallepedido.estado', 'producto.nombre', 'detallepedido.cantidad',
-								'detallepedido.fechaInicio')
+								'detallepedido.fechaInicio', 'detallepedido.fechaProceso', 
+								'detallepedido.fechaDespacho', 'detallepedido.fechaDespachado')
 								->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 								->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 								->join('detmesa', 'detmesa.pedido_id', '=', 'pedido.id')
@@ -124,7 +125,8 @@ class CajasController extends BaseController {
 		$usuarios = Usuario::where('id_restaurante', '=', Auth::user()->id_restaurante)->lists('id');
 		$platoscontrol = DetPedido::select('usuario.login', 'mesa.nombre as mesa', 'detallepedido.id', 
 								'detallepedido.estado', 'producto.nombre', 'detallepedido.cantidad',
-								'detallepedido.fechaInicio')
+								'detallepedido.fechaInicio', 'detallepedido.fechaProceso', 
+								'detallepedido.fechaDespacho', 'detallepedido.fechaDespachado')
 								->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 								->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 								->join('detmesa', 'detmesa.pedido_id', '=', 'pedido.id')

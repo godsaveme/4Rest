@@ -1,5 +1,7 @@
 @extends('layouts.cajamaster')
 @section('content')
+<audio id="sonido_recibirpedido" src="/sound/mozo.mp3"> </audio>
+<audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
 <div id="tabstrip">
   <ul id="tabscaja">
     @for ($i=0; $i < count($salones); $i++)

@@ -1,5 +1,9 @@
 @extends('layouts.cajamaster')
 @section('content')
+<audio id="sonido_recibirpedido" src="/sound/mozo.mp3"> </audio>
+<audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
+<audio id="sonido_recibirpedido" src="/sound/mozo.mp3"> </audio>
+<audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
 <div class="row" style="position:; height:100px; background-color:white; z-index:99">
     <div class="col-xs-12 col-sm-12 col-12 col-lg-12" style="position:fixed; top:auto; z-index:99">
             <div class="panel panel-danger">

@@ -202,37 +202,53 @@
             <div class="panel-heading">
             	Control Pedidos
             </div>
-            <ul class="list-group list-group-flush" id="lista_controlpedidos">
-            	@if (isset($platoscontrol))
-            		@foreach ($platoscontrol as $platocontrol)
-            			<li class="list-group-item {{$platocontrol->estado}}" data-iddetped="{{$platocontrol->id}}" data-estado="{{$platocontrol->estado}}" style="line-height: 30px">
-            				@if ($platocontrol->estado == 'C')
-            					{{HTML::image('images/I.png', 'alt', array('height'=>30, 'width'=>30))}}
-            				@else
+            <div id="lista_controlpedidos">
+            	<table class="table">
+            			@if (isset($platoscontrol))
+            			@foreach ($platoscontrol as $platocontrol)
+            			<tr class="{{$platocontrol->estado}}" data-iddetped="{{$platocontrol->id}}" data-estado="{{$platocontrol->estado}}">
+            				<td style="line-height: 30px; background: silver;">
             					{{HTML::image('images/'.$platocontrol->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}}
-            				@endif
-            				&nbsp;{{$platocontrol->mesa}} / {{$platocontrol->nombre}} x {{$platocontrol->cantidad}} / ({{$platocontrol->login}}) <time class="timeago pull-right" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
-            			</li>
-            		@endforeach
-            	@endif
-            </ul>
+		            			@if ($platocontrol->estado == 'I')
+		            				<time class="timeago" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00" style="color:red"></time>
+		            			@elseif($platocontrol->estado == 'P')
+		            				<time class="timeago" datetime="{{str_replace(' ','T', $platocontrol->fechaProceso)}}-05:00" style="color:red"></time>
+		            			@elseif($platocontrol->estado == 'E')
+		            				<time class="timeago" datetime="{{str_replace(' ','T', $platocontrol->fechaDespacho)}}-05:00" style="color:red"></time>
+		            			@endif
+            				</td>
+            				<td style="line-height: 30px">
+            					&nbsp;{{$platocontrol->mesa}} / {{$platocontrol->nombre}} x {{$platocontrol->cantidad}} / ({{$platocontrol->login}}) <time class="timeago pull-right" datetime="{{str_replace(' ','T', $platocontrol->fechaInicio)}}-05:00"></time>
+            				</td>
+            			</tr>
+            			@endforeach
+            			@endif
+            	</table>
+            </div>
         </div>
     </div>
 
     <script id="refresh_listcontrolpedidos" type="text/x-kendo-template">
+    <table class="table" id="lista_controlpedidos">
     	#for (var i in listaplatos) {#
-    		<li class="list-group-item #=listaplatos[i]['estado']#" 
-    		data-iddetped="#=listaplatos[i]['id']#" 
-    		data-estado="#=listaplatos[i]['estado']#" style="line-height: 30px">
-    		#if (listaplatos[i]['estado'] == 'C') {#
-    			<img width="30" height="30" alt="alt" src="/images/I.png">
-    		#}else{#
-    			<img width="30" height="30" alt="alt" src="/images/#=listaplatos[i]['estado']#.png">
-    		#}#
-			&nbsp;#=listaplatos[i]['mesa']# / #=listaplatos[i]['nombre']# x #=listaplatos[i]['cantidad']# / 
+    	<tr class="#=listaplatos[i]['estado']#" data-iddetped="#=listaplatos[i]['id']#" data-estado="#=listaplatos[i]['estado']#">
+			<td style="line-height: 30px; background: silver;">
+				<img width="30" height="30" alt="alt" src="/images/#=listaplatos[i]['estado']#.png">
+	    		#if (listaplatos[i]['estado'] == 'I') {#
+	    			<time class="timeago" datetime="#=(listaplatos[i]['fechaInicio']).replace(" ", "T")#-05:00" style="color:red"></time>
+	    		#}else if (listaplatos[i]['estado'] == 'P'){#
+	    			<time class="timeago" datetime="#=(listaplatos[i]['fechaProceso']).replace(" ", "T")#-05:00" style="color:red"></time>
+	    		#}else if(listaplatos[i]['estado'] == 'E'){#
+	    			<time class="timeago" datetime="#=(listaplatos[i]['fechaDespacho']).replace(" ", "T")#-05:00" style="color:red"></time>
+	    		#}#
+			</td>
+			<td style="line-height: 30px">
+				&nbsp;#=listaplatos[i]['mesa']# / #=listaplatos[i]['nombre']# x #=listaplatos[i]['cantidad']# / 
 			(#=listaplatos[i]['login']#) <time class="timeago pull-right" datetime="#=(listaplatos[i]['fechaInicio']).replace(" ", "T")#-05:00"></time>
-        	</li>
+			</td>
+        </tr>
     	#}#
+    </table>
     </script>
 </div>
 

@@ -71,6 +71,19 @@ function socketconection(cliente){
                 console.log(results);
         });
     });
+
+    cliente.on('TiemposMozos', function(idrestaurante){
+        mysqlconect.query(
+            "SELECT max(TIMESTAMPDIFF(MINUTE , fechaDespacho, NOW())) AS TiempoEspera FROM detallepedido INNER JOIN pedido ON pedido.id = detallepedido.pedido_id INNER JOIN usuario ON usuario.id = pedido.usuario_id WHERE usuario.id_restaurante = ? AND cast(detallepedido.FechaInicio AS DATE) BETWEEN  cast(now() AS DATE) AND cast(now() AS DATE) AND detallepedido.estado = ?",
+             [idrestaurante,'E'], function selectUsuario(err, results, fields) {
+                if (err) {
+                    console.log("Error: " + err.message);
+                    throw err;
+                }
+            io.sockets.emit("NotificacionDemoraMozos", results);
+                console.log(results);
+        });
+    });
 }
 
 server.listen(app.get('port'), function(){

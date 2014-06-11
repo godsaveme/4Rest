@@ -192,7 +192,7 @@ function verficiaresperapedidos() {
         socket.emit('TiemposCocina', $('#area').attr('data-ida'), $('#usuario').text());
     }
 }
-setInterval(verficiaresperapedidos,1000);
+setInterval(verficiaresperapedidos,60000);
 
 socket.on("NotificacionDemora", notificaciondemora);
 

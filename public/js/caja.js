@@ -24,13 +24,31 @@ function checkbox (){
   });
 }
 
+function verificartiempomozos() {
+    var contadorespera = $('#lista_controlpedidos .E').length;
+    if(contadorespera > 0){
+        socket.emit('TiemposMozos', $('#area').attr('data-idlocal'));
+    }
+}
+setInterval(verificartiempomozos,6000);
+
+socket.on("NotificacionDemoraMozos", notificaciondemoramozos);
+
+function notificaciondemoramozos(data){
+    if (data[0]['TiempoEspera'] >= 2){
+        document.getElementById('sonido_demora').play();
+    }else{
+        document.getElementById('sonido_demora').pause();
+    }
+}
+
 //control pedidos
 $("#windowscontrolpedidos").kendoWindow({
   				actions: ["Pin","Minimize","Maximize", "Close"],
   				visible: false,
   				title: 'Notificaiones Pedidos',
   				resizable: false,
-  				width: '450px',
+  				width: '500px',
   				animation: false,
   				position: { top: 50 , left: 100}
 });
@@ -155,6 +173,7 @@ function notificacionespedidos(data){
                             producto: data['producto'] 
                         }, "info");
 		$('#windowsnotificaciones').data("kendoWindow").open();
+		document.getElementById('sonido_recibirpedido').play();
 	}
 }
 $('#btn_notificaciones').on('click', function(event) {
@@ -232,8 +251,7 @@ $('#btn_salirmesa').on('click', function(event) {
 	});
 
 //actulizar estados
-
-$('#productosenviados').on('click', '.list-group-item', function(event) {
+$('#productosenviados').on('click', '.E', function(event) {
 	event.preventDefault();
 	/* Act on the event */
 	var oitem = $(this);
@@ -242,8 +260,7 @@ $('#productosenviados').on('click', '.list-group-item', function(event) {
      }
 });
 
-
-$('#lista_controlpedidos').on('click', '.list-group-item', function(event) {
+$('#lista_controlpedidos').on('click', '.E', function(event) {
 	event.preventDefault();
 	/* Act on the event */
 	var oitem = $(this);
@@ -260,6 +277,7 @@ function actulizarestados(estado, iddetalle){
         data:{estado: estado, iddetallep: iddetalle},
         success: function(data){
         	socket.emit('NotificarPedidos', data, data['areapro']);
+        	verificartiempomozos();
         }
     });
 }
