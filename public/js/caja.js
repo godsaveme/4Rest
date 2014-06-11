@@ -30,11 +30,12 @@ function verificartiempomozos() {
         socket.emit('TiemposMozos', $('#area').attr('data-idlocal'));
     }
 }
-setInterval(verificartiempomozos,6000);
+setInterval(verificartiempomozos,60000);
 
 socket.on("NotificacionDemoraMozos", notificaciondemoramozos);
 
 function notificaciondemoramozos(data){
+	console.log(data[0]['TiempoEspera']);
     if (data[0]['TiempoEspera'] >= 2){
         document.getElementById('sonido_demora').play();
     }else{
