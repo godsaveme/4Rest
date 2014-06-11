@@ -57,4 +57,8 @@ class Usuario extends Eloquent implements UserInterface, RemindableInterface {
 	public function areaproduccion() {
 		return $this->belongsTo('Areadeproduccion', 'id_tipoareapro');
 	}
+
+	public function pedidos(){
+		return $this->hasMany('Pedido','usuario_id');
+	}
 }

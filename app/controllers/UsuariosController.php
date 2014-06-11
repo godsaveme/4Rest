@@ -121,6 +121,24 @@
 				$restaurante = Restaurante::find($idrestaurante);
 				return View::make('usuarios.reportesmozos', compact('restaurante'));
 			}else{
+				return Redirect::to('/web');
+			}
+		}
+
+		public function getTicketsmozo($id=NULL){
+			if (isset($id)) {
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$tickestfacturados = Ticket::select('ticketventa.id', 'ticketventa.numero', 'ticketventa.importe','ticketventa.idescuento')
+									->join('pedido', 'pedido.id','=', 'ticketventa.pedido_id')
+									->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+									->where('usuario.id', '=', $id)
+									->whereBetween('ticketventa.created_at', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+									->get();
+				var_dump($tickestfacturados);
+				die();
+			}else{
+				return Redirect::to('/web');
 			}
 		}
 	}

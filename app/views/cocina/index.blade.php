@@ -6,7 +6,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-			<ul class="small-block-grid-4 medium-block-grid-4 large-block-grid-4" id="contaitnerplatos">
+			<ul class="small-block-grid-3 medium-block-grid-4 large-block-grid-4" id="contaitnerplatos">
 				@foreach ($pedidos as $datos)
 					<li>
 			            <div class="panel panel-info">

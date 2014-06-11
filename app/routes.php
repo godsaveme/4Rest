@@ -1046,25 +1046,31 @@ Route::group(array('before' => 'auth'), function (){
 	Route::post('cerrarmesa', function () {
 		if (Request::ajax()) {
 			$idpedido = Input::get('idpedido');
+			$despachado = DetPedido::where('pedido_id', '=', $idpedido)->where('estado', '!=', 'D' )
+							->where('estado', '!=', 'A')->get();
 			$odetallepedidos = Detpedidotick::where('pedido_id', '=', $idpedido)
 			                  ->where('ticket_id', '=', NULL, 'AND')->get();
 			$contelementos = count($odetallepedidos);
 			if ($contelementos == 0) {
-				$opedido = Pedido::find($idpedido);
-				$newimporte = $opedido->tickets()->sum('importe');
-				$newdescuento = $opedido->tickets()->sum('idescuento');
-				$omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
-				$arrayupdatemesas = array();
-				foreach ($omesas as $dato) {
-					$arrayupdatemesas[] = $dato->id;
-				}
+				if (count($despachado) == 0) {
+					$opedido = Pedido::find($idpedido);
+					$newimporte = $opedido->tickets()->sum('importe');
+					$newdescuento = $opedido->tickets()->sum('idescuento');
+					$omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
+					$arrayupdatemesas = array();
+					foreach ($omesas as $dato) {
+						$arrayupdatemesas[] = $dato->id;
+					}
 
-				DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));$opedido->estado = "T";
-				$opedido->importeFinal = $newimporte;
-				$opedido->descuento = $newdescuento;
-				$opedido->save();return json_encode('true');
+					DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));$opedido->estado = "T";
+					$opedido->importeFinal = $newimporte;
+					$opedido->descuento = $newdescuento;
+					$opedido->save();return json_encode('true');
+				}else{
+					return json_encode('No puedes cerrar la mesa, tienes pedidos por entregar');
+				}
 			} else {
-				return json_encode('No puedes cerrar la mesa, tienes pedidos por cobrar');
+				return json_encode('No puedes cerrar la mesa, tienes pedidos por cobrar.');
 			}
 		}
 	});
@@ -1849,7 +1855,7 @@ Route::group(array('before' => 'auth'), function (){
 			->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 			->join('areadeproduccion', 'areadeproduccion.id', '=', 'detallepedido.idarea')
 			->join('restaurante', 'restaurante.id', '=', 'areadeproduccion.id_restaurante')
-    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 00:00:00'))
+    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
     		->where('restaurante.id','=', $restauranteid)
     		->groupby('producto_id')
     		->get();
@@ -1881,7 +1887,7 @@ Route::group(array('before' => 'auth'), function (){
 			->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 			->join('areadeproduccion', 'areadeproduccion.id', '=', 'detallepedido.idarea')
 			->join('restaurante', 'restaurante.id', '=', 'areadeproduccion.id_restaurante')
-    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 00:00:00'))
+    		->whereBetween('fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
     		->where('restaurante.id','=', $restauranteid)
     		->where('producto_id', '=', $productoid)
     		->get();
@@ -1889,31 +1895,92 @@ Route::group(array('before' => 'auth'), function (){
     	}
     });
 
-	Route::get('corregircajas', function(){
-		$tickets = Ticket::whereNull('mozoid')->get();
-		$usuarios = Usuario::all();
-		foreach ($tickets as $tickete) {
-			foreach ($usuarios as $user) {
-				if(trim($tickete->mozo) == $user->login){
-					$tickete->mozoid = $user->id;
-					$tickete->save();
+	//rutas 10/06/2014
+	function invenDescSort($item1,$item2)
+		{
+		    if ($item1['mfactu'] == $item2['mfactu']) return 0;
+		    return ($item1['mfactu'] < $item2['mfactu']) ? 1 : -1;
+		}
+
+	Route::post('reporteventasmozos', function(){
+		if (Request::ajax()) {
+			$restauranteid = Input::get('idrestaurante');
+			$fechaInicio = Input::get('fechainicio');
+			$fechaFin = Input::get('fechafin');
+			$mozos = Usuario::where('id_restaurante', '=', $restauranteid)
+					->where('usuario.colaborador', '=', 2)->get();
+			$arraydatos = array();
+			foreach ($mozos as $mozo) {
+				$ventas = Ticket::selectraw('SUM(importe) AS importe, avg(importe) AS promedioventas,
+						usuario.login,COUNT(DISTINCT ticketventa.id) AS totaltickets')
+						->join('pedido','pedido.id','=' ,'ticketventa.pedido_id')
+						->join('usuario' ,'usuario.id' ,'=' ,'pedido.usuario_id')
+						->whereBetween('ticketventa.created_at', 
+							array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+						->where('usuario.id' , '=' , $mozo->id)
+						->first();
+				$productos = DetPedido::selectraw('usuario.id, SUM(detallepedido.cantidad) AS totalproductos,
+							COUNT(DISTINCT pedido.id) AS totalpedidos')
+							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
+							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->where('usuario.id' , '=' , $mozo->id)
+							->first();
+				$tiempos = Detpedido::selectraw("usuario.id, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+							AS tiempomozopromedio,TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+							AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+							AS tiempomozomaximo")
+							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
+							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->where('usuario.id' , '=' , $mozo->id)
+							->first();
+				$ticketsanulados = Ticket::selectraw('COUNT(ticketventa.id) AS totaltanulados')
+							->join('pedido','pedido.id','=' ,'ticketventa.pedido_id')
+							->join('usuario' ,'usuario.id' ,'=' ,'pedido.usuario_id')
+							->whereBetween('ticketventa.created_at', 
+								array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->where('usuario.id' , '=' , $mozo->id)
+							->where('ticketventa.estado', '=', 1)
+							->first();
+				$pedidosanulados = Pedido::selectraw('COUNT(pedido.id) AS pedidosanulados')
+							->join('usuario' ,'usuario.id' ,'=' ,'pedido.usuario_id')
+							->whereBetween('pedido.fechaInicio', 
+								array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->where('usuario.id' , '=' , $mozo->id)
+							->where('pedido.estado', '=', 'A')
+							->first();
+
+				$productosanulados = DetPedido::selectraw('SUM(detallepedido.cantidad) AS productosanulados')
+							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
+							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->where('usuario.id' , '=' , $mozo->id)
+							->where('detallepedido.estado', '=', 'A')
+							->first();
+				if($productos->totalproductos > 0){
+					$arraydatos[] = array(
+								'mozoid'=>$productos->id,
+								'mozo'=> $ventas->login,
+								'mfactu' => $ventas->importe,
+								'promt'=>round($ventas->promedioventas, 2),
+								'peds' => $productos->totalpedidos,	
+								'pedsa'=>$pedidosanulados->pedidosanulados,
+								'cprods'=>$productos->totalproductos,
+								'panul'=> number_format($productosanulados->productosanulados, 0, '.', ''),
+								'ctickets'=>$ventas->totaltickets,
+								'tanul'=>number_format($ticketsanulados->totalanulados, 0, '.', ''), 
+								'tprom'=>$tiempos->tiempomozopromedio,
+								'tmin'=>$tiempos->tiempomozominimo,
+								'tmax'=>$tiempos->tiempomozomaximo
+								);
 				}
 			}
+
+			usort($arraydatos,'invenDescSort');
+			return  Response::json($arraydatos);
 		}
 	});
 
-	Route::get('corregircajeros', function(){
-		$tickets = Ticket::whereNull('cajeroid')->get();
-		$usuarios = Usuario::all();
-		foreach ($tickets as $tickete) {
-			foreach ($usuarios as $user) {
-				if(trim($tickete->cajero) == $user->login){
-					$tickete->cajeroid = $user->id;
-					$tickete->save();
-				}
-			}
-		}
-	});
-
-
+	//fin rutas
 });
