@@ -149,6 +149,7 @@ function actulizarestados(estado, iddetalle){
         data:{estado: estado, iddetallep: iddetalle},
         success: function(data){
             notificarpedidos(data, 1, data['areapro']);
+            verficiaresperapedidos();
         }
     });
 }
@@ -183,4 +184,22 @@ function restarplatospanel(id, canti){
                 flag.remove();
             }
         }
+}
+
+function verficiaresperapedidos() {
+    var contadorespera = $('#contaitnerplatos .I').length;
+    if(contadorespera > 0){
+        socket.emit('TiemposCocina', $('#area').attr('data-ida'), $('#usuario').text());
+    }
+}
+setInterval(verficiaresperapedidos,1000);
+
+socket.on("NotificacionDemora", notificaciondemora);
+
+function notificaciondemora(data){
+    if (data[0]['TiempoEspera'] >= 2){
+        document.getElementById('sonido_demora').play();
+    }else{
+        document.getElementById('sonido_demora').pause();
+    }
 }

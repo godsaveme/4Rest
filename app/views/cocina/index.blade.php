@@ -4,7 +4,7 @@
  {{HTML::style('css/jquery.countup.css')}}
  @stop
 @section('content')
-<audio id="sonido_recibirpedido" src="/sound/campana.mp3"> </audio>
+<audio id="sonido_recibirpedido" src="/sound/cocina.mp3"> </audio>
 <audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
 	<div class="row">
 		<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">

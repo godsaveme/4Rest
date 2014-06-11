@@ -9,6 +9,14 @@ var app = express();
 var server = http.createServer(app);
 io = io.listen(server);
 
+var mysql =  require('mysql');
+var mysqlconect =  mysql.createConnection({
+    host : '127.0.0.1',
+    user : 'root',
+    password: 'root',
+    database: 'db_4rest'
+    });
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 
@@ -49,6 +57,19 @@ function socketconection(cliente){
 
     cliente.on('AbrirMesa', function(idmesa, area){
         io.sockets.in(area).emit('AbrirMesa',idmesa);
+    });
+
+    cliente.on('TiemposCocina', function(idarea, usuario){
+        mysqlconect.query(
+            "SELECT max(TIMESTAMPDIFF(MINUTE , FechaInicio, NOW())) AS TiempoEspera FROM detallepedido WHERE cast(FechaInicio AS DATE) BETWEEN cast(NOW() AS DATE) AND cast(NOW() AS DATE) AND estado = ? AND idarea = ?",
+             ['I',idarea], function selectUsuario(err, results, fields) {
+                if (err) {
+                    console.log("Error: " + err.message);
+                    throw err;
+                }
+            io.sockets.in(usuario).emit("NotificacionDemora", results);
+                console.log(results);
+        });
     });
 }
 
