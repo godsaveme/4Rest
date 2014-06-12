@@ -791,6 +791,11 @@ Route::group(array('before' => 'auth'), function (){
 			$subtotal = 0;
 			$newtotal = 0;
 			$parsetotal = $total - $itotal;
+
+			$conteteoproductosporpagar = Detpedidotick::where('pedido_id', '=',$idpedido)->whereNull('ticket_id')->get();
+			if(count($conteteoproductosporpagar) == 0){
+				return Response::json('false');
+			}
 			if ($parsetotal >= 0) {
 				if ($tipo == 1) {
 					foreach ($cobrar as $dato) {

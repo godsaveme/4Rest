@@ -251,7 +251,7 @@
     </table>
     </script>
 </div>
-
+ <span id="popupNotification"></span>
 <div class="caja_izquierda">
 @if (isset($detcaja))
 	<div id="space"></div>

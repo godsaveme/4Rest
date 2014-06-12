@@ -1290,21 +1290,25 @@ $('#btn_cobraraceptar').on('click', function(event) {
 				$('#buscar_cliente').val('');
 				$('#infomesa').data('partircuenta', 0);
 				$('#infomesa').data('cliente',onewcliente);
-				//$('.modalwindowscuenta').data("kendoWindow").close();
+				$('.modalwindowscuenta').data("kendoWindow").close();
 				$('.cont_inputcaja input').val('');
-				alert('Operacion Completada Correctamente');
+				popupNotification.show('Operacion Completada Correctamente', "success");
 				obtncobrar.css('display', 'block');
 			}else{
-				alert('Operacion No completada');
+				popupNotification.show('Operacion No completada', "error");
 				obtncobrar.css('display', 'block');
 			}
 		})
 		.fail(function() {
+			obtncobrar.css('display', 'block');
+			popupNotification.show('No tienes nada por cobrar', "error");
 			console.log("error");
 		})
 		.always(function() {
 			console.log("complete");
 		});
+	}else{
+		obtncobrar.css('display', 'block');
 	}
 });
 //fincuenta
@@ -1702,13 +1706,11 @@ $('#btn_movermesa').on('click', function(event) {
 
 $('#btn_cancelarmesa').on('click', function(event) {
 	event.preventDefault();
-	/* Act on the event */
 	$(".windowsmovermesa").data("kendoWindow").close();
 });
 
 $('#btn_aceptarmesa').on('click', function(event) {
 	event.preventDefault();
-	/* Act on the event */
 	if ($('#infomozo').attr('data-idpedido') > 0) {
 		var newidmesa = $('#selectmesa').find('option:selected').val();
 		$.ajax({

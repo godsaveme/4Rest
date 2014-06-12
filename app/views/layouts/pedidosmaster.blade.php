@@ -102,6 +102,7 @@
             </div>
         </div>
 </div>
+ <span id="popupNotification"></span>
 <!--TODO: Add JavaScript referneces-->
     <script src="js/vendor/jquery.js"></script>
     <script src="js/kendo.all.min.js"></script>

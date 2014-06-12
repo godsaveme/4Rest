@@ -64,6 +64,12 @@ $("#btn_controlpedidos").on('click', function(event) {
 
 
 //notificaciones
+
+var popupNotification = $("#popupNotification").kendoNotification({position: {
+        top: 20,
+        right: 20
+    }}).data("kendoNotification");
+
 $("#windowsnotificaciones").kendoWindow({
   				actions: ["Pin","Minimize","Maximize", "Close"],
   				visible: false,
@@ -173,7 +179,7 @@ function notificacionespedidos(data){
                             mozo: data['usuario'],
                             producto: data['producto'] 
                         }, "info");
-		$('#windowsnotificaciones').data("kendoWindow").open();
+		popupNotification.show('Platos por recoger', "warning");
 		document.getElementById('sonido_recibirpedido').play();
 	}
 }
