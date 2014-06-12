@@ -68,7 +68,7 @@ $("#btn_controlpedidos").on('click', function(event) {
 var popupNotification = $("#popupNotification").kendoNotification({position: {
         top: 20,
         right: 20
-    }}).data("kendoNotification");
+    }}).data("kendoNotification");	
 
 $("#windowsnotificaciones").kendoWindow({
   				actions: ["Pin","Minimize","Maximize", "Close"],

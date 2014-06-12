@@ -1,4 +1,11 @@
 @extends('layouts.cajamaster')
+@section('escalahtml')
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<meta name="viewport" content="width=device-width" />
+@stop
+@section('modulo')
+	Cocina
+	@show
  @section('css')
  {{HTML::style('css/foundation.css')}}
  {{HTML::style('css/jquery.countup.css')}}
