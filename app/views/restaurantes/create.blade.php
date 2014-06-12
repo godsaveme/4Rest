@@ -15,7 +15,7 @@
 
 <div class="panel-body">
 
-        {{ Form::open(array('id'=>'form_resto','url' => 'restaurantes/store' , 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal')) }}
+        {{ Form::open(array('id'=>'form_resto','url' => 'restaurantes/store' , 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal' )) }}
         <fieldset>
             <legend>Datos Generales</legend>
           <div class="form-group">
@@ -248,7 +248,5 @@
 </div> <!-- del panel body -->
 
 @endif
-
-
 
 @stop

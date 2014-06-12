@@ -30,19 +30,28 @@ class RestaurantesController extends BaseController {
 	 */
 	public function postStore()
 	{
+		DB::beginTransaction();	
+		 try {
+		 		//$error = 'ERROR';
+		 		//throw new Exception($error);
+				$restaurante = Restaurante::create(Input::all());
+				if(Input::hasFile('imagen'))
+				{
+				$path = $restaurante->id.'_'.Input::file('imagen')->getClientOriginalName();
+				Input::file('imagen')->move('images/restaurantes/',$path);
+				//$restaurante = Restaurante::find($restaurante->id);
+				$restaurante->imagen = $path;
+				$restaurante->save();
+				}
 
-		$restaurante = Restaurante::create(Input::all());
-		if(Input::hasFile('imagen'))
-		{
-		$path = $restaurante->id.'_'.Input::file('imagen')->getClientOriginalName();
-		Input::file('imagen')->move('images/restaurantes/',$path);
-		//$restaurante = Restaurante::find($restaurante->id);
-		$restaurante->imagen = $path;
-		$restaurante->save();
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
 		}
 
-
-		return Redirect::to('restaurantes');
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/restaurantes'));
 	}
 
 	/**
@@ -77,6 +86,9 @@ class RestaurantesController extends BaseController {
 	public function postUpdate($id)
 	{
 
+		DB::beginTransaction();	
+
+		try {
 		$restaurante = Restaurante::find($id);
 
 		$restaurante->nombreComercial = Input::get('nombreComercial');
@@ -95,7 +107,7 @@ class RestaurantesController extends BaseController {
 		$restaurante->save();
 		//$restaurante->nombreComercial = Input::get('nombreComercial');
 
-				if(Input::hasFile('imagen'))
+		if(Input::hasFile('imagen'))
 		{
 		$path = $restaurante->id.'_'.Input::file('imagen')->getClientOriginalName();
 		Input::file('imagen')->move('images/restaurantes/',$path);
@@ -104,7 +116,13 @@ class RestaurantesController extends BaseController {
 		$restaurante->save();
 		}
 
-		return Redirect::to('restaurantes');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/restaurantes'));
 	}
 
 	/**
@@ -115,15 +133,22 @@ class RestaurantesController extends BaseController {
 	 */
 	public function postDestroy($id)
 	{
-		$e= true;
+
+		DB::beginTransaction();	
+
 		try {
+
 		$restaurante = Restaurante::find($id);
 		$restaurante->delete();
+
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
+
 	}
 
 	public function getCrearcarta(){

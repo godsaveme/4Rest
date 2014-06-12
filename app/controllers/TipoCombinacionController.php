@@ -30,8 +30,17 @@ class TipoCombinacionController extends BaseController {
 	 */
 	public function postStore()
 	{
+		DB::beginTransaction();	
+
+		try {
 		$tipodecombinacion = TipoComb::create(Input::all());
-		return Redirect::to('tipocombinacions');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/tipocombinacions'));
 	}
 
 	/**
@@ -65,10 +74,18 @@ class TipoCombinacionController extends BaseController {
 	 */
 	public function postUpdate($id)
 	{
-		//
+		DB::beginTransaction();	
+
+		try {
 		$tipocomb = TipoComb::find($id);
 		$tipocomb->Update(Input::all());
-		return Redirect::to('tipocombinacions');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/tipocombinacions'));
 
 	}
 
@@ -81,15 +98,18 @@ class TipoCombinacionController extends BaseController {
 	public function postDestroy($id)
 	{
 		//
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
-		$tipocomb = TipoComb::find($id);
-		$tipocomb->delete();
+			$tipocomb = TipoComb::find($id);
+			$tipocomb->delete();
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 }

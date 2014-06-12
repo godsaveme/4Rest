@@ -13,7 +13,7 @@
 </strong></div>
 
 <div class="panel-body">
-{{Form::open(array('id'=>'form_resto','url'=>'', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal'))}}
+{{Form::open(array('id'=>'form_resto','url'=>'/sabores/storedet', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal'))}}
 <fieldset>
 	<legend></legend>
   <div class="form-group">
@@ -72,6 +72,8 @@
        </div>
      </div>
  </script>
+
+
 
  <script type="text/javascript">
  var ds= new kendo.data.DataSource({
@@ -258,7 +260,7 @@ function id_repeat(data,dataItem){
 
 <script type="text/javascript">
 
-	var validator = $("#form_resto").kendoValidator().data("kendoValidator");
+	/*var validator = $("#form_resto").kendoValidator().data("kendoValidator");
 
 	$('#form_resto').submit(function(event) {
 
@@ -297,10 +299,9 @@ function id_repeat(data,dataItem){
 
 		}
 
-	});
+	});*/
 
 </script>
-
 
 <style scoped>
                 .k-autocomplete {

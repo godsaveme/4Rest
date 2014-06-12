@@ -48,8 +48,16 @@ class SaboresController extends \BaseController {
 		//$x = Input::all();
 		//print_r($x);
 		//die();
+		DB::beginTransaction();	
+		 try {
 		Sabor::create(Input::all());
-		return Redirect::to('sabores');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/sabores'));
 	}
 
 	public function postStoredet()
@@ -75,11 +83,11 @@ class SaboresController extends \BaseController {
 
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(false);
-		}
+			return Response::json(array('estado' => false));
 
+		}
 		DB::commit();
-		return Response::json(true);
+		return Response::json(array('estado' => true, 'route' => '/sabores/indexdet'));
 
 
 	}
@@ -126,13 +134,20 @@ class SaboresController extends \BaseController {
 	 */
 	public function postUpdate($id)
 	{
-		//
-		$sabor = Sabor::find($id);
-		//var_dump(Input::all());
-		//die();
-		$sabor->update(Input::all());
-		//	$sabor->save();
-		return Redirect::to('sabores');
+		DB::beginTransaction();	
+		try {
+			$sabor = Sabor::find($id);
+			//var_dump(Input::all());
+			//die();
+			$sabor->update(Input::all());
+			//	$sabor->save();
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/sabores'));
 	}
 
 	public function postUpdatedet()
@@ -156,14 +171,13 @@ class SaboresController extends \BaseController {
 				
 			}
 		
-
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(false);
-		}
+			return Response::json(array('estado' => false));
 
+		}
 		DB::commit();
-		return Response::json(true);
+		return Response::json(array('estado' => true, 'route' => '/sabores/indexdet'));
 	}
 
 	/**

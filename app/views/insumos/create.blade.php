@@ -30,30 +30,7 @@
             {{Form::text('descripcion', '', array('class' => 'form-control','placeholder'=>'ej. Azucar rubia de Pomalca.', 'required', 'validationMessage'=>'Por favor entre una descripción.'))}} 
             </div>
         </div>
-<div class="form-group">
-    <div class="col-md-3">
-                {{Form::label('costo', 'Costo S/ #.##',array('class'=>'control-label'))}}            
-                {{Form::text('costo', '', array('class' => 'form-control','placeholder'=>'#.##', 'required', 'validationMessage'=>'Por favor entre un precio.') )}}
-            </div>
-            <div class="col-md-4">
-                {{Form::label('stock', 'Stock', array('class'=>'control-label'))}}
-                {{Form::text('stock', '',array('class' => 'form-control'))}}
-            </div>
 
-          <div class="col-md-2">
-            {{Form::label('stockMin', 'Stock Min', array('class'=>'control-label'))}}
-            {{Form::text('stockMin', '', array('class' => 'form-control','placeholder'=>'#.##','min'=>'0'))}}
-          </div>
-          <div class="col-md-2">
-            {{Form::label('stockMax', 'Stock Max', array('class'=>'control-label'))}}
-            {{Form::text('stockMax', '', array('class' => 'form-control','placeholder'=>'#.##','min'=>'0'))}}
-          </div>
-          <div class="col-md-1">
-            &nbsp;
-          </div>
-
-
-        </div>
         <div class="form-group">
                         <div class="col-md-4">
             {{Form::label('Unidades', 'Unidades', array('class'=>'control-label'))}}

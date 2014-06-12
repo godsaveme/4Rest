@@ -91,11 +91,11 @@ class CombinacionController extends BaseController {
 
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(false);
+			return Response::json(array('estado' => false));
 		}
 
 		DB::commit();
-		return Response::json(true);
+		return Response::json(array('estado' => true, 'route' => '/combinacions'));
 	}
 
 	/**
@@ -206,11 +206,11 @@ class CombinacionController extends BaseController {
 
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(false);
+			return Response::json(array('estado' => false));
 		}
 
 		DB::commit();
-		return Response::json(true);
+		return Response::json(array('estado' => true, 'route' => '/combinacions'));
 	}
 
 	/**

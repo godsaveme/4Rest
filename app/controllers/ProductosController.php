@@ -75,11 +75,13 @@ class ProductosController extends BaseController {
 					 }
 
 				 
-				 } catch (Exception $e) {
-				 		DB::rollback();
-				 }
+				} catch (Exception $e) {
+					DB::rollback();
+					return Response::json(array('estado' => false));
+
+				}
 		DB::commit();
-		 return Redirect::to('productos');
+		return Response::json(array('estado' => true, 'route' => '/productos'));
 	}
 	/**
 	 * Display the specified resource.
@@ -122,33 +124,41 @@ class ProductosController extends BaseController {
 	 */
 	public function postEdit()
 	{
-		$producto = Producto::find(Input::get('id'));
-		$producto->update(Input::all());
-		$producto->save();
-		$insertedId = $producto->id;
+		DB::beginTransaction();	
+		try {
+				$producto = Producto::find(Input::get('id'));
+				$producto->update(Input::all());
+				$producto->save();
+				$insertedId = $producto->id;
 
-		if (!empty(Input::get('precio'))) {
-				
-			 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
-				 	if(!empty($prod_comb_normal)){
-				 	//var_dump($prod_comb_normal->precio);
-				 	//die();
-				 	$prod_comb_normal->precio = Input::get('precio');
-				 	$prod_comb_normal->save();
+				if (!empty(Input::get('precio'))) {
+						
+					 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+						 	if(!empty($prod_comb_normal)){
+						 	//var_dump($prod_comb_normal->precio);
+						 	//die();
+						 	$prod_comb_normal->precio = Input::get('precio');
+						 	$prod_comb_normal->save();
+						 }else{
+						 			$precio = new Precio;
+									 $precio->producto_id = $insertedId;
+									 $precio->combinacion_id = 1;
+									 $precio->precio=Input::get('precio');
+									 $precio->save();
+						 }
 				 }else{
-				 			$precio = new Precio;
-							 $precio->producto_id = $insertedId;
-							 $precio->combinacion_id = 1;
-							 $precio->precio=Input::get('precio');
-							 $precio->save();
+				 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+				 	if(!empty($prod_comb_normal)){
+				 	$prod_comb_normal->delete();
+				 	}
 				 }
-		 }else{
-		 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
-		 	if(!empty($prod_comb_normal)){
-		 	$prod_comb_normal->delete();
-		 	}
-		 }
-		return Redirect::to('productos');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/productos'));
 	}
 
 	/**
@@ -157,17 +167,20 @@ class ProductosController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function getDestroy($id)
+	public function postDestroy($id)
 	{
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
 		$producto = Producto::find($id);
 		$producto->delete();
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 
 	}
 

@@ -30,6 +30,9 @@ class FamiliasController extends BaseController {
 	 */
 	public function postStore()
 	{
+		DB::beginTransaction();	
+
+		try {
 		//Familia::create(Input::all());
 		$familia = Familia::create(Input::all());
 		//$familia = new Familia;
@@ -48,7 +51,13 @@ class FamiliasController extends BaseController {
 		//print_r($path);
 		//die();
 		
-		return Redirect::to('familias');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/familias'));
 	}
 
 	/**
@@ -83,24 +92,34 @@ class FamiliasController extends BaseController {
 	 */
 	public function postUpdate($id)
 	{
-		$familia = Familia::find($id);
-		$familia->nombre = Input::get('nombre');
-		$familia->descripcion = Input::get('descripcion');
-		$familia->save();
-		if(Input::hasFile('image'))
-		{
-		$path = $familia->id.'_'.Input::file('image')->getClientOriginalName();
-		Input::file('image')->move('images/familias/',$path);
 
-		$familia = Familia::find($familia->id);
-		$familia->imagen = $path;
-		$familia->save();
-		}
-		//$path = Input::file('image')->getRealPath();
-		//print_r($path);
-		//die();
+		DB::beginTransaction();	
+
+		try {
+			$familia = Familia::find($id);
+			$familia->nombre = Input::get('nombre');
+			$familia->descripcion = Input::get('descripcion');
+			$familia->save();
+			if(Input::hasFile('image'))
+			{
+			$path = $familia->id.'_'.Input::file('image')->getClientOriginalName();
+			Input::file('image')->move('images/familias/',$path);
+
+			$familia = Familia::find($familia->id);
+			$familia->imagen = $path;
+			$familia->save();
+			}
+			//$path = Input::file('image')->getRealPath();
+			//print_r($path);
+			//die();
 		
-		return Redirect::to('familias');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/familias'));
 	}
 
 	/**
@@ -109,17 +128,20 @@ class FamiliasController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function getDestroy($id)
+	public function postDestroy($id)
 	{
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
 		$familia = Familia::find($id);
 		$familia->delete();
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 
 	}
 

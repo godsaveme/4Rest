@@ -1,6 +1,5 @@
 function ON_READY() {
 
-
     $('#id_restaurante').change(function(){
          $.ajax({
                 type: 'POST',
@@ -153,6 +152,78 @@ function ON_READY() {
                     
 
         /*fin agregar combi*/
+
+        /*FORM PARA ENVIAR*/
+              //if(typeof(ds) != "undefined"){ alert("si existe"); }
+              //else{ alert("no existe"); }
+
+          var validator = $("#form_resto").kendoValidator().data("kendoValidator");
+
+          $('#form_resto').submit(function(event) {
+
+            if (validator.validate()) {
+
+              event.preventDefault();
+
+              $(this).find(':submit').attr('disabled','disabled');
+
+              var $form = $(this),
+                $arrForm = $form.serializeArray();
+
+              if(typeof(ds) != "undefined"){ 
+
+                    $arrForm.push({name: 'wordlist', value: JSON.stringify(ds.data())});
+
+                    //var form_resto = $('#form_resto').serializeArray();
+                    //form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())});
+
+
+               
+
+                    if (ds.total() > 0) {
+
+                      var $action = $(this).attr('action');
+
+                    var $response = $.post($action, $arrForm);
+
+                    $response.done(function( data ) {
+                            console.log(data);
+                                if (data.estado){
+                                  alert('Operación agregada correctamente');
+                                $(location).attr('href', data.route);
+                              }else{
+                                alert('Operación no agregada. Error.');
+                              }
+                            });
+                  }else{
+                    alert('Se requiere por lo menos agregar un item a la cesta');
+                    $(this).find(':submit').removeAttr('disabled');
+                  };
+
+              }else{ 
+
+                  var $action = $(this).attr('action');
+
+                  var $response = $.post($action, $arrForm);
+
+                  $response.done(function( data ) {
+                          console.log(data.route);
+                              if (data.estado){
+                                alert('Operación agregada correctamente');
+                              $(location).attr('href', data.route);
+                            }else{
+                              alert('Operación no agregada. Error.');
+                            }
+                          });
+
+              }
+
+            }
+
+          });
+
+
+        /*FIN FORM PARA ENVIAR*/
 
 
 
@@ -453,7 +524,8 @@ function ON_LOAD(){
     var r=confirm("¿Realmente desea eliminar?");
     if (r==true)
     {
-          event.preventDefault();
+          //event.preventDefault();
+          
           var jqxhr = $.post( path);
 
                 jqxhr.done(function(data) {
@@ -469,11 +541,13 @@ function ON_LOAD(){
 
 
 
-
+      return false;
     }
     else
     {
-      event.preventDefault();
+
+      //event.preventDefault();
+      return false;
     }
 
   }
@@ -501,4 +575,6 @@ function ON_LOAD(){
     event.preventDefault();
     $('#window').data("kendoWindow").open();
   } 
+
+
 

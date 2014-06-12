@@ -13,7 +13,7 @@
 </strong></div>
 
 <div class="panel-body">
-{{Form::open(array('id'=>'form_resto','url'=>'combinacions/store', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal'))}}
+{{Form::open(array('id'=>'form_resto','url'=>'/combinacions/update', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal'))}}
 <fieldset>
 	<legend></legend>
   <div class="form-group">
@@ -345,7 +345,7 @@ function id_repeat(data,dataItem){
 
 <script type="text/javascript">
 
-	var validator = $("#form_resto").kendoValidator().data("kendoValidator");
+	/*var validator = $("#form_resto").kendoValidator().data("kendoValidator");
 
 	$('#form_resto').submit(function(event) {
 
@@ -377,7 +377,7 @@ function id_repeat(data,dataItem){
 
 		}
 
-	});
+	});*/
 
 </script>
 

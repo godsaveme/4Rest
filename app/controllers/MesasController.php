@@ -31,8 +31,17 @@ class MesasController extends BaseController {
 	 */
 	public function postStore()
 	{
+		DB::beginTransaction();	
+		 try {
 		Mesa::create(Input::all());
-		return Redirect::to('mesas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+		}
+
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/mesas'));
+
 	}
 
 	/**
@@ -67,7 +76,8 @@ class MesasController extends BaseController {
 	 */
 	public function postUpdate($id)
 	{
-		//
+		DB::beginTransaction();	
+		 try {
 		$mesa = Mesa::find($id);
 		$mesa->nombre = Input::get('nombre');
 		$mesa->descripcion = Input::get('descripcion');
@@ -75,7 +85,13 @@ class MesasController extends BaseController {
 		$mesa->habilitado = Input::get('habilitado');
 		$mesa->save();
 
-		return Redirect::to('mesas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+		}
+
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/mesas'));
 	}
 
 	/**
@@ -86,15 +102,19 @@ class MesasController extends BaseController {
 	 */
 	public function postDestroy($id)
 	{
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
+
 		$mesa = Mesa::find($id);
 		$mesa->delete();
 		} catch (Exception $e) {
-			return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 }

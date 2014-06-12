@@ -33,26 +33,30 @@ class PersonasController extends BaseController {
 	public function postStore()
 	{
 		DB::beginTransaction();	
-			try {
+		try {
 				$persona = Persona::create(Input::all());
 				DB::commit();
-			} catch (Exception $e) {
-					DB::rollback();
-			}
-		
-		return Redirect::to('personas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/personas'));
 	}
 
 	public function postStoreem()
 	{
 		DB::beginTransaction();	
-			try {
-				$persona = Persona::create(Input::all());
-			} catch (Exception $e) {
-						DB::rollback();
-			}
+		try {
+			$persona = Persona::create(Input::all());
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
 		DB::commit();
-		return Redirect::to('personas/empresas');
+		return Response::json(array('estado' => true, 'route' => '/personas/empresas'));
 	}
 
 
@@ -81,19 +85,38 @@ class PersonasController extends BaseController {
 
 	public function postEdit()
 	{
+		DB::beginTransaction();	
+
+		try {
 		$persona = Persona::find(Input::get('id'));
 		$persona->update(Input::all());
 		$persona->save();
-		return Redirect::to('personas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/personas'));
 	}
 
 	public function postUpdateem()
 	{
+		DB::beginTransaction();	
+
+		try {
 		$persona = Persona::find(Input::get('id'));
 		$persona->update(Input::all());
 		$persona->save();
 
-		return Redirect::to('personas/empresas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/personas/empresas'));
+
 	}
 
 	public function postDestroy($id)

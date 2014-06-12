@@ -30,8 +30,17 @@ class NotasController extends BaseController {
 	 */
 	public function postCreate()
 	{
+		DB::beginTransaction();	
+
+		try {
 		Notas::create(Input::all());
-		return Redirect::to('notas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/notas'));
 	}
 
 	/**
@@ -54,9 +63,18 @@ class NotasController extends BaseController {
 	 */
 	public function postEdit()
 	{
+		DB::beginTransaction();	
+
+		try {
 		$nota = Notas::find(Input::get('id'));
 		$nota->update(Input::all());
-		return Redirect::to('notas');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/notas'));
 	}
 
 	/**

@@ -31,9 +31,17 @@ class SalonesController extends BaseController {
 	 */
 	public function postStore()
 	{
-		//
-		Salon::create(Input::all());
-		return Redirect::to('salones');
+		DB::beginTransaction();	
+		try {
+			Salon::create(Input::all());
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+		}
+
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/salones'));
 	}
 
 	/**
@@ -68,13 +76,21 @@ class SalonesController extends BaseController {
 	 */
 	public function postUpdate($id)
 	{
+		DB::beginTransaction();	
+		try {
 		$salon = Salon::find($id);
 		$salon->nombre = Input::get('nombre');
 		$salon->descripcion = Input::get('descripcion');
 		$salon->restaurante_id = Input::get('restaurante_id');
 		$salon->habilitado = Input::get('habilitado');
 		$salon->save();
-		return Redirect::to('salones');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+		}
+
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/salones'));
 	}
 
 	/**
@@ -85,15 +101,18 @@ class SalonesController extends BaseController {
 	 */
 	public function postDestroy($id)
 	{
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
-		$salon = Salon::find($id);
-		$salon->delete();
+			$salon = Salon::find($id);
+			$salon->delete();
 		} catch (Exception $e) {
-		return false;
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 }

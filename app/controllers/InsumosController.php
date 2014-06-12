@@ -34,9 +34,17 @@ class InsumosController extends BaseController {
 	 */
 	public function postStore()
 	{
-		//
+		DB::beginTransaction();	
+
+		try {
 		 Insumo::create(Input::all());
-		 return Redirect::to('insumos');
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/insumos'));
 	}
 
 	/**
@@ -76,11 +84,19 @@ class InsumosController extends BaseController {
 	 */
 	public function postUpdate($id)
 	{
-		//
-		$insumo = Insumo::find($id);
-		$insumo->update(Input::all());
-		$insumo->save();
-		return Redirect::to('insumos');
+		DB::beginTransaction();	
+
+		try {
+			$insumo = Insumo::find($id);
+			$insumo->update(Input::all());
+			$insumo->save();
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(array('estado' => false));
+
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/insumos'));
 	}
 
 	/**
@@ -91,16 +107,18 @@ class InsumosController extends BaseController {
 	 */
 	public function postDestroy($id)
 	{
-		//
-		$e= true;
+		DB::beginTransaction();	
+
 		try {
 		$insumo = Insumo::find($id);
 		$insumo->delete();
 		} catch (Exception $e) {
-			return json_encode($e);
+			DB::rollback();
+			return Response::json(false);
 		}
-		
-		return json_encode($e);
+
+		DB::commit();
+		return Response::json(true);
 	}
 
 }

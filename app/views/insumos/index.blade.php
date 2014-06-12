@@ -25,8 +25,6 @@
                     <col style="width:50px" />
                     <col style="width:110px" />
                     <col style="width:70px" />
-                    <col style="width:70px" />
-                    <col style="width:70px" />
                     <col style="width:120px" />
                     <col style="width:130px" />
                 </colgroup>
@@ -36,8 +34,6 @@
       <th data-field="descripcion">Descripción</th>
       <th data-field="estado">Habilitado</th>
       <th data-field="familia">Tipo de Insumo</th>
-      <th data-field="stock">Stock</th>
-      <th data-field="costo">Costo</th>
       <th data-field="unMed">Und. Med.</th>
       <th data-field="editar">Editar</th>
       <th data-field="eliminar">Eliminar</th>
@@ -49,9 +45,7 @@
     <td>{{$insumo->nombre}}</td>
     <td>{{$insumo->descripcion}}</td>
     <td> @if($insumo->estado==1)Sí @else No @endif</td>
-    <td>{{$insumo->tipoins->nombre}}</td>
-    <td>{{$insumo->stock}}</td>
-    <td>{{$insumo->costo}}</td>
+    <td> @if(!empty($insumo->tipoins->nombre)) {{$insumo->tipoins->nombre}} @else - @endif </td>
     <td>{{$insumo->unidadMedida}}</td>
       <td><a href="insumos/edit/{{$insumo->id}}" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
