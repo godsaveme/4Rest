@@ -16,9 +16,9 @@ class SaboresController extends \BaseController {
 		return Response::view('sabores.index', compact('sabores'));
 	}
 
-	public function getIndexDet(){
-		$prod_sabor = Producto::sabores();
-		return Response::view('sabores.indexDet', compact('$prod_sabor'));
+	public function getIndexdet(){
+		$prod_sabor = Producto::has('sabores')->get();
+		return Response::view('sabores.indexdet', compact('prod_sabor'));
 	}
 
 	/**
@@ -31,6 +31,10 @@ class SaboresController extends \BaseController {
 		//
 		$insumos = Insumo::lists('nombre','id');
 		return Response::view('sabores.create',compact('insumos'));
+	}
+
+	public function getCreatedet(){
+		return Response::view('sabores.createdet');
 	}
 
 	/**
@@ -46,6 +50,38 @@ class SaboresController extends \BaseController {
 		//die();
 		Sabor::create(Input::all());
 		return Redirect::to('sabores');
+	}
+
+	public function postStoredet()
+	{
+		DB::beginTransaction();	
+		 try {
+		//var_dump(Input::get('producto_id'));
+		//var_dump(Input::all());
+		//die();
+		$wl = Input::get('wordlist');
+		$sabores = json_decode($wl);
+
+			if(count($sabores) > 0){
+				foreach ($sabores as $sabor) {
+					$detsabor = new DetSabor;
+					$detsabor->producto_id = Input::get('producto_id');
+					$detsabor->sabor_id = $sabor->id;
+					$detsabor->save();
+				}
+				
+			}
+		
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+
+
 	}
 
 	/**
@@ -73,6 +109,15 @@ class SaboresController extends \BaseController {
 		return Response::view('sabores.edit',compact('sabor','insumos'));
 	}
 
+	public function getEditdet($id)
+	{
+		$producto = Producto::find($id);
+		$sabores = $producto->sabores->toJson();
+		//var_dump($sabores);
+		//die();
+		return Response::view('sabores.editdet', compact('producto','sabores'));
+	}
+
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -90,6 +135,37 @@ class SaboresController extends \BaseController {
 		return Redirect::to('sabores');
 	}
 
+	public function postUpdatedet()
+	{
+		DB::beginTransaction();	
+		try {
+		//var_dump(Input::get('producto_id'));
+		//var_dump(Input::all());
+		//die();
+		Producto::find(Input::get('producto_id'))->sabores()->detach();
+		$wl = Input::get('wordlist');
+		$sabores = json_decode($wl);
+
+			if(count($sabores) > 0){
+				foreach ($sabores as $sabor) {
+					$detsabor = new DetSabor;
+					$detsabor->producto_id = Input::get('producto_id');
+					$detsabor->sabor_id = $sabor->id;
+					$detsabor->save();
+				}
+				
+			}
+		
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+	}
+
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -105,6 +181,24 @@ class SaboresController extends \BaseController {
 
 		$sabor = Sabor::find($id);
 		$sabor->delete();
+
+		} catch (Exception $e) {
+			DB::rollback();
+			return Response::json(false);
+		}
+
+		DB::commit();
+		return Response::json(true);
+	}
+
+	public function postDestroydet($id)
+	{
+		//
+		DB::beginTransaction();	
+
+		try {
+
+		Producto::find($id)->sabores()->detach();
 
 		} catch (Exception $e) {
 			DB::rollback();

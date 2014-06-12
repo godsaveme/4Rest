@@ -6,14 +6,14 @@
 @stop 
 @section('sub-content')
   @parent
-<a id="cntnr1" style="opacity: 0;" href="{{URL('sabores/create')}}" class='pull-right btn btn-primary'><i class="fa fa-edit"></i> Crear Sabor a Producto</a>
+<a id="cntnr1" style="opacity: 0;" href="{{URL('sabores/createdet')}}" class='pull-right btn btn-primary'><i class="fa fa-edit"></i> Crear Sabor a Producto</a>
 
 <div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> Productos con Sabores
 </strong></div>
 
-<?php var_dump($prod_sabor);
-die(); ?>
-                    
+
+
+
 
 <div id="cntnrGrid" style="opacity: 0;">
 
@@ -31,27 +31,23 @@ die(); ?>
                 </colgroup>
       <thead>
         <tr>
-          <th data-field="nombre">Nombre</th>
-          <th data-field="descripcion">Descripción</th>
-          <th data-field="sucursal">Insumo Referencia</th>
-          <th data-field="habilitado">Habilitado</th>
+          <th data-field="nombre">Nombre Producto</th>
+          <th data-field="descripcion">Sabores Relacionados</th>
           <th data-field="editar">Editar</th>
           <th data-field="eliminar">Eliminar</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($prod_sabor as $dato)
+        @foreach($prod_sabor as $ps)
         <tr>
-          <td>{{$sabor->nombre}}</td>
-          <td>{{$sabor->descripcion}}</td>
-          <td> @if(isset($sabor->insumo->nombre)) {{$sabor->insumo->nombre}} @endif</td>
-          <td>@if($sabor->habilitado==1){{  "Sí" }}@else{{"No"}}@endif</td>
-          <td><a href="sabores/edit/{{$sabor->id}}" type="button" class="k-button">
+          <td>{{$ps->nombre}}</td>
+          <td> @foreach($ps->sabores as $dato) {{$dato->nombre.', '}} @endforeach  </td>
+          <td><a href="/sabores/editdet/{{$ps->id}}" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                 <span class="k-icon k-i-pencil"></span>
         Editar
       </a></td>
-          <td><a onclick="onDestroy('sabores/destroy/{{$sabor->id}}','sabores');" href="#" type="button" class="k-button">
+          <td><a onclick="onDestroy('/sabores/destroydet/{{$ps->id}}','/sabores/indexdet');" href="#" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-remove"></span> -->
         <span class="k-icon k-i-close"></span>
       Eliminar

@@ -101,7 +101,7 @@ Route::group(array('before' => 'auth'), function (){
 	}
 	);
 
-		/*route javi*/
+				/*route javi*/
 	Route::get('buscarinsumos', function () {
 		if (Request::ajax()) {
  				$valor = $_REQUEST["filter"]["filters"][0]["value"];
@@ -149,6 +149,52 @@ Route::group(array('before' => 'auth'), function (){
 		return Response::json($arrProd);
 	}
 	);
+
+	Route::get('bus_sabor_', function () {
+		$valor = $_REQUEST["filter"]["filters"][0]["value"];
+		//$productos = Producto::where('nombre','like',$valor.'%')->lists('id','nombre','descripcion');
+		$sabores = Sabor::where('nombre','like','%'.$valor.'%')->get();
+		//var_dump($productos);
+		//die();
+		 $arrSab = array();
+		 foreach ($sabores as $dato) {
+
+				$arrSab[] = array('id' => $dato->id,'nombre' => $dato->nombre, 'descripcion' => $dato->descripcion, 'cantidad' => '1' );
+
+		 }
+		return Response::json($arrSab);
+	}
+	);
+
+	Route::post('compr_prod_sabr', function(){
+		if (Request::ajax()) {
+			$producto_id = Input::get('productoid');
+			//var_dump($producto_id);
+			//die();
+
+			//$prods = Producto::whereHas('sabores', function($q)
+			//		{
+			//		    $q->where('id', '=', 21);
+
+			//		})->get();
+
+			$prods = Sabor::whereHas('productos', function($q)
+					{
+						$q->where('id', '=', Input::get('productoid'));
+
+					})->get();
+
+			//var_dump($prods);
+			//die();
+
+			if (count($prods) > 0) {
+				return Response::json(true);
+
+			}else{
+				return Response::json(false);
+			}
+		}
+	});
 
 	Route::post('compr_login', function(){
 		if(Request::ajax()){

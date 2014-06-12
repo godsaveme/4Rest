@@ -269,9 +269,13 @@
                         @if (Request::is('notas/create')) <span class="text-muted pull-right">CREAR</span> @endif
                 @if (Request::is('notas/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
         </li>
-        <li class="list-group-item @if (Request::is('sabores') || Request::is('sabores/*')) active @endif">{{ HTML::link('sabores', 'Sabores'); }}
+        <li class="list-group-item @if (Request::is('sabores/create') || Request::is('sabores/edit/*') || Request::is('sabores')) active @endif">{{ HTML::link('sabores', 'Sabores'); }}
                 @if (Request::is('sabores/create')) <span class="text-muted pull-right">CREAR</span> @endif
                 @if (Request::is('sabores/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
+        </li>
+        <li class="list-group-item @if (Request::is('sabores/createdet') || Request::is('sabores/editdet/*') || Request::is('sabores/indexdet')) active @endif">{{ HTML::link('sabores/indexdet', 'Agregar sabor a producto'); }}
+                @if (Request::is('sabores/createdet')) <span class="text-muted pull-right">CREAR</span> @endif
+                @if (Request::is('sabores/editdet/*')) <span class="text-muted pull-right">EDITAR</span> @endif
         </li>
         </ul>
       </div>

@@ -30,6 +30,10 @@ class Producto extends Eloquent {
 		return $this->belongsToMany('Sabor', 'detsabores','producto_id', 'sabor_id');
 	}
 
+	public function detsabores(){
+		return $this->hasMany('Detsabores', 'producto_id');
+	}
+
 	public function pedidos(){
 		return $this->belongsToMany('Pedido', 'detallepedido', 'producto_id','pedido_id')
 				->withPivot('importeFinal', 'cantidad','combinacion_id', 'pedido_id');

@@ -11,4 +11,8 @@ class Sabor extends Eloquent {
 		return $this->belongsTo('Insumo');
 	}
 
+	public function productos(){
+		return $this->belongsToMany('Producto','detsabores','sabor_id','producto_id');
+	}
+
 }

@@ -88,8 +88,8 @@
 	</div>
 
 	<div class="form-group">
-		<div class="col-md-5">
-			{{Form::select('Slc_Fam', $familias, '', array('class'=>'form-control'))}}
+		<div class="col-md-3">
+			{{Form::label('productos', 'Seleccione Productos',array('class'=>'control-label'))}} 
 		</div>
 		<div class=" col-md-7">
 			{{Form::input('text', 'txtProd', '', array('id' => 'txtProd', 'placeholder' => 'Productos..'))}}
@@ -104,32 +104,30 @@
 	<div class="form-group">
 		<div class="col-md-12">
 <script type="text/x-kendo-tmpl" id="template">
-     <div>
-       <dl>
-         <dt>Nombre</dt> <dd>#:nombre#</dd>
-         <dt>Descripción</dt> <dd>#:descripcion#</dd>
-         <dt>Cantidad</dt> <dd>#:cantidad#</dd>
-       </dl>
-       <div>
+    <div class="producto">
+
+       <p> <strong>Nombre:</strong> #:nombre#</p>
+         <p> <strong>Descripción:</strong> #:descripcion#</p>
+         <p> <strong>Cantidad:</strong> #:cantidad#</p>
+       
+       <h3>
            <a class="k-button k-edit-button" href="\\#"><span class="k-icon k-edit"></span></a>
            <a class="k-button k-delete-button" href="\\#"><span class="k-icon k-delete"></span></a>
-       </div>
+       </h3>
      </div>
  </script>
 
  <script type="text/x-kendo-tmpl" id="editTemplate">
-     <div>
-       <dl>
-          <dt>Nombre</dt>
-         <dd>#:nombre#</dd>
-         <dt>Descripción</dt>
-         <dd>#:descripcion#</dd>
-         <dd><input type="text" data-bind="value:cantidad" data-role="numerictextbox" data-type="number" min="1" name="descripcion" required="required" /></dd>
-       </dl>
-       <div>
+     <div class="producto">
+       
+          <p> <strong>Nombre:</strong> #:nombre#</p>
+         <p> <strong>Descripción:</strong> #:descripcion#</p>
+         <p> <strong>Cantidad:</strong> <input type="text" data-bind="value:cantidad" data-role="numerictextbox" data-type="number" min="1" name="descripcion" required="required" /></p>
+       
+       <h3>
            <a class="k-button k-update-button" href="\\#"><span class="k-icon k-update"></span></a>
            <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
-       </div>
+       </h3>
      </div>
  </script>
 
@@ -156,7 +154,7 @@
  $("#listView").kendoListView({
     template: kendo.template($("#template").html()),
     editTemplate: kendo.template($("#editTemplate").html()),
-    //selectable: true,
+    selectable: true,
     dataSource: ds
  });
  </script>
@@ -246,6 +244,7 @@
                         filter: "contains",
                         minLength: 2,
                         template: kendo.template($("#prod_templ").html()),
+                        //headerTemplate: kendo.template($("#header_templ").html()),
                         dataSource: {
                             type: "json",
                             serverFiltering: true,
@@ -254,10 +253,11 @@
                             }
                         },
                         select: onSelect,
+                        change: onChange,
                         height:200
                     });
 
-
+  var auto_PRODx = $('#txtProd').data('kendoAutoComplete');
 
 function onSelect(e){
    var dataItem = this.dataItem(e.item.index());
@@ -272,8 +272,12 @@ function onSelect(e){
 
    if (flag == false) {
    		ds.add({id: dataItem.id, nombre: dataItem.nombre, descripcion: dataItem.descripcion, cantidad: dataItem.cantidad});
+      //event.preventDefault();
+      //alert(auto_PRODx.value());
+      //auto_PRODx.value('hola');
    }else{
-   		alert('Producto Repetido');
+   		alert('Producto Repetido. Seleccione otro.');
+
    };
 
    //$('#txtProd').val('');
@@ -291,6 +295,12 @@ function onSelect(e){
    //ds.sync();
    //console.log($('#persona_id').val());
 };
+
+function onChange(e){
+    //var value = this.value();
+    //alert(value);
+    this.value('');
+}
 
 function id_repeat(data,dataItem){
 
@@ -357,5 +367,46 @@ function id_repeat(data,dataItem){
 	});
 
 </script>
+
+<style scoped>
+                .k-autocomplete {
+                    display: block;
+                    clear: left;
+                    width: 400px;
+                    vertical-align: middle;
+                }
+
+                .producto {
+            float: left;
+            position: relative;
+            width: 135px;
+            height: 180px;
+            margin: 0 10px;
+            padding: 0;
+        }
+          .producto h3{
+            margin: 0;
+            padding: 3px 5px 0 0;
+            max-width: 96px;
+            overflow: hidden;
+            line-height: 1.1em;
+            font-size: .9em;
+            font-weight: normal;
+            text-transform: uppercase;
+            color: #999;
+          }
+
+          .k-listview:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .k-numerictextbox{
+          width: 100px;
+        }
+            </style>
 
 @stop
