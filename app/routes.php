@@ -1249,6 +1249,7 @@ Route::group(array('before' => 'auth'), function (){
 		}
 	});
 	/*finpedidos movil*/
+	
 	Route::get('getproductos', function(){
 		if (Request::ajax()) {
 			$familia_id = Input::get('familia_id');
@@ -1272,32 +1273,56 @@ Route::group(array('before' => 'auth'), function (){
 			$codigo = Input::get('codigo');
 			$iddetallepedido = Input::get('iddetalle');
 			$usuario = Codigousuario::where('codigo', '=', $codigo)->first();
+			$idusuarioauto = Input::get('usuarioautoriza');
+			$motivo = Input::get('motivo');
+			$flaganulacion = 0;
 			if(count($usuario)>0){
 				$detpedido = DetPedido::find($iddetallepedido);
 				$pedido= Pedido::find($detpedido->pedido_id);
 				$detalles = $pedido->productos()->get();
-				$oproducto = $detpedido->producto;
-					$oprecuenta = Detpedidotick::where('nombre', '=', $oproducto->nombre)
+					if(isset($detpedido->combinacion_id)){
+						$oprecuenta = Detpedidotick::where('combinacion_id', '=', $detpedido->combinacion_id)
 					             ->where('pedido_id', '=', $detpedido->pedido_id, 'AND')
 					             ->whereNull('ticket_id')
 					             ->first();
+					}else{
+						$oprecuenta = Detpedidotick::where('producto_id', '=', $detpedido->producto_id)
+					             ->where('pedido_id', '=', $detpedido->pedido_id, 'AND')
+					             ->whereNull('ticket_id')
+					             ->first();
+					}
 					if (isset($oprecuenta)) {
 						if ($oprecuenta->cantidad > 1) {
-						$newcantidad = $oprecuenta->cantidad - $detpedido->cantidad;
-						$newprecio = $oprecuenta->preciou*$newcantidad;
-						$oprecuenta->cantidad = $newcantidad;
-						$oprecuenta->precio = $newprecio;
-						$oprecuenta->save();
+							$newcantidad = $oprecuenta->cantidad - $detpedido->cantidad;
+							$newprecio = $oprecuenta->preciou*$newcantidad;
+							$oprecuenta->cantidad = $newcantidad;
+							$oprecuenta->precio = $newprecio;
+							$oprecuenta->save();
+							$flaganulacion = 1;
 						} else {
-							Detpedidotick::where('nombre', '=', $oproducto->nombre)
-						             ->where('pedido_id', '=', $detpedido->pedido_id, 'AND')
-						             ->whereNull('ticket_id')
-						             ->delete();
+							$oprecuenta->delete();
+							$flaganulacion = 1;
 						}
 					}
-				$detpedido->estado = 'A';
-				$detpedido->codigocancelacion= $usuario->usuario_id;
-				$detpedido->save();
+
+					if($flaganulacion == 1){
+						$odetanulacion = Detalleanulacion::create(array('motivo'=> $motivo,
+																		'usuario_id'=>$idusuarioauto));
+						if(isset($detpedido->combinacion_id)){
+							$actulizando = DetPedido::where('combinacion_id', '=', $detpedido->combinacion_id)
+					    				->where('combinacion_c', '=', $detpedido->combinacion_c)
+					    				->where('pedido_id', '=', $detpedido->pedido_id)
+					    				->update(array('estado'=> 'A', 'detalleanulacion_id'=>$odetanulacion->id));
+						}else{
+							$detpedido->estado = 'A';
+							$detpedido->detalleanulacion_id = $odetanulacion->id;
+							$detpedido->codigocancelacion = $usuario->usuario_id;
+							$detpedido->save();
+						}
+					}else{
+						return  Response::json('false - flaganulacion');
+					}
+
 				$odetalles = $pedido->productos()->where('detallepedido.estado', '!=', 'A')->get(); 
 				if(count($odetalles) == 0){
 					$pedido->estado = 'A';
@@ -1868,40 +1893,6 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/familias', 'FamiliasController');
 	Route::controller('/restaurantes', 'RestaurantesController');
 	/*FIN RUTAS JAVIER*/
-	Route::get('restaurandoproductos', function (){
-        $productos = Producto::all();
-        foreach ($productos as $producto) {
-            $precio = $producto->precios()->where('combinacion_id', '=', 1)->first();
-            if (count($precio)>0) {
-                $precuentapro= Detpedidotick::where('nombre','=', $producto->nombre)
-                        ->where('preciou', '=', $precio->precio)
-                        ->where('producto_id', '=', NULL)
-                        ->get();
-                foreach ($precuentapro as $deta) {
-                    $deta->producto_id = $producto->id;
-                    $deta->save();
-                }
-            }
-        }
-    });
-
-	Route::get('restaurandocombinaciones', function (){
-        $productos = Combinacion::all();
-
-        foreach ($productos as $producto) {
-            $precio = $producto->precio;
-            if ($precio>0) {
-                $precuentapro= Detpedidotick::where('nombre','=', $producto->nombre)
-                        ->where('preciou', '=', $producto->precio)
-                        ->where('producto_id', '=', NULL)
-                        ->get();
-                foreach ($precuentapro as $deta) {
-                    $deta->combinacion_id = $producto->id;
-                    $deta->save();
-                }
-            }
-        }
-    });
 
     Route::post('reportetiempos', function(){
     	if (Request::ajax()) {

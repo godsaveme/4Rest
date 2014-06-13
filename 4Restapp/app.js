@@ -43,10 +43,7 @@ function socketconection(cliente){
     });
 
     cliente.on('Enviaracocina', function(mesa, pedido, cocinas, usuario){
-        totalcocinas = cocinas.length;
-        for (i=0;i< totalcocinas;i++) {
-            io.sockets.in(cocinas[i]['cocina']).emit('Recibirpedidos',cocinas, mesa, pedido);
-        }
+            io.sockets.emit('Recibirpedidos',cocinas, mesa, pedido);
             io.sockets.emit('ActulizarPedidosMesa', pedido,usuario);
             io.sockets.emit('ActualizarControlpedidos');
     });

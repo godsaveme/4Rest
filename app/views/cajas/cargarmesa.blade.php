@@ -678,7 +678,16 @@
 
 
 <div class="windowseliminarproductos" style="display:none;">
+        <div class="form-group" style="width: 90%">
+            <label>Selecciona Persona que autoriza</label>
+            {{Form::select('idautorizado',$usuariosautorizados , '', array('class'=>'form-control', 'id'=>'idautorizado'))}}
+        </div>
         <div class="form-group" style="width: 95%">
+            <label>Motivo</label>
+            <input type="text" class="form-control" id="input_motivo" style="width: 95%" placeholder="Ejm. Error del mozo...">
+        </div>
+        <div class="form-group" style="width: 95%">
+            <label>Ingrese Codigo</label>
             <input type="password" class="form-control" id="codigo" style="width: 95%" placeholder="Ingrese Código">
         </div>
         <div class="form-group">

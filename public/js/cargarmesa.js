@@ -1453,7 +1453,6 @@ $('#btn_cerrarmesa').on('click', function(event) {
 //fincerrarmesa
 
 //cliente
-
 $(".windowsselecionacliente").kendoWindow({
   				actions: ["Close"],
   				visible: false,
@@ -1633,7 +1632,7 @@ $(".windowseliminarproductos").kendoWindow({
   				resizable: false,
   				draggable: false,
   				animation: false,
-  				width: '300px',
+  				width: '350px',
   				position: { top: 20 , left: 20}
 });
 
@@ -1651,7 +1650,8 @@ $('#btn_aceptarcodigo').on('click', function(event) {
 		url: '/postcancelarorden',
 		type: 'POST',
 		dataType: 'json',
-		data: {codigo: $('#codigo').val() , iddetalle: $("#infomesa").data('cancelarorden')},
+		data: {codigo: $('#codigo').val() , iddetalle: $("#infomesa").data('cancelarorden'),
+				usuarioautoriza: $('#idautorizado').val(), motivo: $('#input_motivo').val()},
 	})
 	.done(function(data) {
 		if(data == 'true'){

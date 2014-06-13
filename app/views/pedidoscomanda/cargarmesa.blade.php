@@ -674,14 +674,7 @@
 
 
 <div class="windowseliminarproductos" style="display:none;">
-        <div class="form-group" style="width: 95%">
-            <input type="password" class="form-control" id="codigo" style="width: 95%" placeholder="Ingrese Código">
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-primary pull-right" id="btn_aceptarcodigo" >Aceptar</button>
-            <button type="button" class="btn btn-default pull-right" style="margin-right: 10px" 
-            id="btn_cancelarcodigo">Cancelar</button>
-        </div>
+    <p>No puedes eliminar productos</p>
 </div>
 
 <style>

@@ -224,10 +224,15 @@ class CajasController extends BaseController {
 				$omesasa = $salon->mesas()->where('estado', '=', 'L')->lists('nombre', 'id');
 					$listamesas[$salon->nombre] = $omesasa;
 			}
+			$autorizados = Usuariosautorizados::all()->lists('usuario_id');
+			$usuariosautorizados = Usuario::selectraw("usuario.id, Concat(persona.nombres,' ' , persona.apPaterno) as nombre")
+									->join('persona','persona.id', '=', 'usuario.persona_id')
+									->wherein('usuario.id', $autorizados)
+									->lists('nombre', 'id');
 			return View::make('cajas.cargarmesa', compact('mesa', 'Opedido', 'combinacionesp', 
 															'platosp', 'placombinacionp', 'familias', 
 															'tiposcomb', 'platosfamilia', 'combinaciones', 
-															'infomozo', 'detcaja', 'listamesas','platoscontrol'));
+															'infomozo', 'detcaja', 'listamesas','platoscontrol', 'usuariosautorizados'));
 		} else {
 			return Redirect::to('/cajas');
 		}
