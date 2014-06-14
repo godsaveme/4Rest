@@ -78,18 +78,23 @@
 <div class="form-group">
     <div class="col-md-3">
       {{Form::label('id_restaurante', 'Local', array('class'=>'control-label'))}}
-      {{Form::select('id_restaurante',  array('' => "Seleccione ... ") +$restaurantes, $usuario->id_restaurante, array('class' => 'form-control'))}}
+      {{Form::select('id_restaurante',  array('0' => "Seleccione ... ") +$restaurantes, $usuario->id_restaurante, array('class' => 'form-control'))}}
     </div>
 
     <div class="col-md-4">
       {{Form::label('id_tipoareapro', 'Área', array('class'=>'control-label'))}}
-      {{Form::select('id_tipoareapro', array('' => "Seleccione ... "), $usuario->id_tipoareapro, array('select-areap'=>$usuario->id_tipoareapro , 'class'=>'form-control'))}}
+      {{Form::select('id_tipoareapro', array('0' => "Seleccione ... "), $usuario->id_tipoareapro, array('select-areap'=>$usuario->id_tipoareapro , 'class'=>'form-control'))}}
     </div>
             <div class="col-md-4">
       {{Form::label('lblColaborador', 'Colaborador', array('class'=>'control-label'))}}
       {{Form::select('colaborador', array('0' => "Seleccione ... ") + $colaboradores,$usuario->colaborador, array('class'=>'form-control'))}}
     </div>
 </div>
+
+<div class="bs-callout bs-callout-info">
+    <h4>Local, Área y Colaborador requerido.</h4>
+    <p>Deben estar seleccionadas estas variables para que el Usuario sea modificado.</p>
+  </div>
 
 <div class="form-group">
     <div class="col-md-4">

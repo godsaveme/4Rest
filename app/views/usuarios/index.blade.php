@@ -44,7 +44,7 @@
         <tr>
           <td>{{$dato->nombres.' '.$dato->apPaterno.' '.$dato->apMaterno}}</td>
           <td>{{$usuario->login}}</td>
-          <td>{{$perfil->nombre}}</td>
+          <td> @if(!empty($perfil->nombre)) {{$perfil->nombre}} @else - @endif </td>
           <td>@if($usuario->estado==1){{  "Sí" }}@elseif($usuario->estado==0){{"No"}}@else {{'No tiene estado asignado'}} @endif</td>
           <td><a href="usuarios/edit/{{$usuario->id}}" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->

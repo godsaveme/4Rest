@@ -1,6 +1,8 @@
 function ON_READY() {
 
     $('#id_restaurante').change(function(){
+
+      console.log('change');
          $.ajax({
                 type: 'POST',
                 url: '/buscarareasp',
@@ -9,18 +11,33 @@ function ON_READY() {
                 beforeSend: function(){
                 },
                 success: function (data) {
-                  var areas = '<option value="">Seleccionar..</option>';        
-                    for(datos in data){
-                        areas += '<option value="'+data[datos].id+'">';
-                        areas += data[datos].nombre;
-                        areas += '</option>';
-                    }
-                    $('#id_tipoareapro').html(areas);
+                  
+                  console.log(data.length);
+
+                  var areas = '<option value="0">Seleccione..</option>';    
+                  if (data.length > 0) {
+
+                    $('#id_tipoareapro').removeAttr('disabled');
+                      for(datos in data){
+                          areas += '<option value="'+data[datos].id+'">';
+                          areas += data[datos].nombre;
+                          areas += '</option>';
+
+                          $('#id_tipoareapro').html(areas);
+                      }
+                    } else{    
+                      $('#id_tipoareapro').html(areas);
+                      $('#id_tipoareapro').attr('disabled','disabled');
+                    };
                 }
         });
        });
 
+    //console.log($('#id_restaurante').val());
+//if(typeof(ds) != "undefined"){ 
     if($('#id_restaurante').val()){
+
+      console.log('val');
         $.ajax({
                 type: 'POST',
                 url: '/buscarareasp',
@@ -29,7 +46,7 @@ function ON_READY() {
                 beforeSend: function(){
                 },
                 success: function (data) {
-                  var areas = '<option value="">Seleccionar..</option>';        
+                  var areas = '<option value="0">Seleccione..</option>';        
                     for(datos in data){
                         areas += '<option value="'+data[datos].id+'">';
                         areas += data[datos].nombre;
@@ -37,7 +54,7 @@ function ON_READY() {
                     }
                     $('#id_tipoareapro').html(areas);
                     $('#id_tipoareapro option').filter(function(){
-                    return $(this).val() == $('#id_tipoareapro').attr('select-areap');
+                        return $(this).val() == $('#id_tipoareapro').attr('select-areap');
                     }).prop('selected', true);
                 }
         });
@@ -187,12 +204,11 @@ function ON_READY() {
                     var $response = $.post($action, $arrForm);
 
                     $response.done(function( data ) {
-                            console.log(data);
                                 if (data.estado){
                                   alert('Operación agregada correctamente');
                                 $(location).attr('href', data.route);
                               }else{
-                                alert('Operación no agregada. Error.');
+                                alert('Operación no agregada. Error. ');
                               }
                             });
                   }else{
@@ -207,12 +223,12 @@ function ON_READY() {
                   var $response = $.post($action, $arrForm);
 
                   $response.done(function( data ) {
-                          console.log(data.route);
                               if (data.estado){
                                 alert('Operación agregada correctamente');
                               $(location).attr('href', data.route);
                             }else{
-                              alert('Operación no agregada. Error.');
+                              alert('Operación no agregada. Error: ' + data.msg);
+                              $(location).attr('href', data.route);
                             }
                           });
 

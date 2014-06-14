@@ -31,30 +31,50 @@
 		 */
 		public function postCreate()
 		{
+		DB::beginTransaction();	
+		 try {
 			$persona = Usuario::where('persona_id', '=', Input::get('persona_id'))->get();
 			$user = Usuario::where('login','=',Input::get('login'))->get();
 			//var_dump(Input::all());
+			//die();
 			//var_dump($user);
 			//var_dump($user);
 
 			//die();
-			if(count($persona) > 0){
+
+			if( Input::get('password') != Input::get('rpt_pass') ){
 
 				Input::flash();
-				return Redirect::to('usuarios/create')->withErrors('Esta Persona ya tiene un Usuario');
+				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => '  Las contraseñas no coinciden.') );
+
+			}elseif(count($persona) > 0){
+
+				
+				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => '  Persona con Usuario.'));
+				//return Redirect::to('usuarios/create')->withErrors('Esta Persona ya tiene un Usuario');
 
 			}elseif(count($user) > 0){
 
-				return Redirect::to('usuarios/create')->withErrors('Este nombre de usuario está en uso');
+				Input::flash();
+				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => ' Nombre de Usuario repetido.'));
+				//return Redirect::to('usuarios/create')->withErrors('Este nombre de usuario está en uso');
 
 			}else{
 
 				$input = Input::all();
 		    	$input['password'] = Hash::make($input['password']);
 		    	Usuario::create($input);
-		    	return Redirect::to('usuarios')->with('success','');
+		    	//return Redirect::to('usuarios')->with('success','');
 
 			}
+
+		} catch (Exception $e) { //'Falta Local, Área o Colaborador.'
+			DB::rollback();
+			return Response::json(array('estado' => false , 'msg' => 'Falta Local, Área, Colaborador o Persona/Empresa escogida por la lista desplegable.'));
+		}
+
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/usuarios'));
 		}
 
 		/**
@@ -90,10 +110,18 @@
 		 */
 		public function postEdit()
 		{
-			$usuario = Usuario::find(Input::get('id'));
-			$usuario->update(Input::all());
-			$usuario->save();
-			return Redirect::to('usuarios');
+			DB::beginTransaction();	
+		 	try {
+				$usuario = Usuario::find(Input::get('id'));
+				$usuario->update(Input::all());
+				$usuario->save();
+			} catch (Exception $e) {
+				DB::rollback();
+				return Response::json(array('estado' => false , 'msg' => 'Falta Local, Área o Colaborador.'));
+			}
+
+			DB::commit();
+			return Response::json(array('estado' => true, 'route' => '/usuarios'));
 		}
 
 		/**

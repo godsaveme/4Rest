@@ -33,6 +33,8 @@ class TipoCombinacionController extends BaseController {
 		DB::beginTransaction();	
 
 		try {
+				//$error = 'ERROR';
+		 		//throw new Exception($error);
 		$tipodecombinacion = TipoComb::create(Input::all());
 		} catch (Exception $e) {
 			DB::rollback();

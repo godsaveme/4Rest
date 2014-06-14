@@ -50,7 +50,16 @@
           </div>
     <div class="col-md-5">
       {{Form::input('password', 'password','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor entre una contraseña' ))}}
+    </div>
+
+</div>
+<div class="form-group">
+    <div class="col-md-3">
+      {{Form::label('rpt_pass', 'Repita su Contraseña', array('class'=>'control-label'))}}
           </div>
+    <div class="col-md-5">
+      {{Form::input('password', 'rpt_pass','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor repita su contraseña' ))}}
+    </div>
 
 </div>
 <div class="form-group">
@@ -68,25 +77,32 @@
       {{Form::label('usuario', 'Persona/Empresa', array('class' => 'control-label'))}}
       </div>
       <div class="col-md-5">
-      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre/ruc/dni/rs'))}}
-    </div>
+      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre/ruc/dni/rs', 'required', 'validationMessage'=>'Por favor ingrese una Persona/Empresa'))}}
+      </div>
+       <div class="col-md-4 control-label check_1"><i class="fa fa-check fa-5"></i> <span class="text-warning">Debe seleccionar una Persona/Empresa de la lista desplegable.</span></div>
+    
   </div>
 
 <div class="form-group">
     <div class="col-md-3">
       {{Form::label('id_restaurante', 'Local', array('class'=>'control-label'))}}
-      {{Form::select('id_restaurante',  array('0' => "Seleccione ... ") +$restaurantes, '',array('class' => 'form-control'))}}
+      {{Form::select('id_restaurante',  array('0' => "Seleccione.. ") +$restaurantes, '',array('class' => 'form-control' , ''))}}
     </div>
 
     <div class="col-md-4">
       {{Form::label('id_tipoareapro', 'Área', array('class'=>'control-label'))}}
-      {{Form::select('id_tipoareapro', array('' => "Seleccione ... "),'', array('class'=>'form-control'))}}
+      {{Form::select('id_tipoareapro', array('0' => "Seleccione ... "),'', array('class'=>'form-control','disabled'))}}
     </div>
         <div class="col-md-4">
       {{Form::label('lblColaborador', 'Colaborador', array('class'=>'control-label'))}}
-      {{Form::select('colaborador', array('0' => "Seleccione ... ") + $colaboradores,'', array('class'=>'form-control'))}}
+      {{Form::select('colaborador', array('0' => "Seleccione.. ") + $colaboradores,'', array('class'=>'form-control'))}}
     </div>
 </div>
+
+<div class="bs-callout bs-callout-info">
+    <h4>Local, Área y Colaborador requerido.</h4>
+    <p>Deben estar seleccionadas estas variables para que el Usuario sea creado.</p>
+  </div>
 
 <div class="form-group">
     <div class="col-md-4">
@@ -132,5 +148,14 @@ function onSelect(e){
    //console.log($('#persona_id').val());
 };
 </script>
+
+<style scoped>
+                .k-autocomplete {
+                    display: block;
+                    clear: left;
+                    width: 318px;
+                    vertical-align: middle;
+                }
+</style>                
 
 @stop
