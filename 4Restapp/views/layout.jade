@@ -1,0 +1,25 @@
+doctype
+//if IE 8
+	|<html class="no-js lt-ie9">
+//if gt IE 8
+	|<!--> <html class="no-js"> <!--
+head
+	//- TODO: Check if it's the good charset
+	meta(charset='utf-8')
+	meta(http-equiv='X-UA-Compatible', content='IE=edge')
+	title Clientes Kango
+	meta(name='description', content='')
+	meta(name='viewport', content='width=device-width,initial-scale=1')
+	//- TODO : Place favicon.ico and apple-touch-icon.png in the root directory
+	block css
+		link(rel='stylesheet', href='/dev/css/bootstrap.min.css')
+		link(rel="stylesheet", href="/dev/css/bootstrap-theme.min.css")
+		link(rel="stylesheet", href="/dev/css/clienteskango.css")
+body
+	//- Add your site or application content here
+	block content
+	block bottom-script
+		script(src="/dev/js/jquery.js")
+		script(src="/dev/socket.io/socket.io.js")
+		script(src="/dev/js/bootstrap.min.js")
+		script(src="/dev/js/clientes.js")

@@ -68,7 +68,16 @@ $("#btn_controlpedidos").on('click', function(event) {
 var popupNotification = $("#popupNotification").kendoNotification({position: {
         top: 20,
         right: 20
-    }}).data("kendoNotification");	
+    }}).data("kendoNotification");
+
+var notificacionmesa = $("#notificaciones_mesas").kendoNotification({position: {
+        top: 20,
+        right: 20,
+        width: "300",
+        hideOnClick: true,
+        autoHideAfter: 0,
+        stacking: "down",
+    }}).data("kendoNotification");
 
 $("#windowsnotificaciones").kendoWindow({
   				actions: ["Pin","Minimize","Maximize", "Close"],
@@ -94,6 +103,37 @@ socket.on('NotificacionPedidos',notificacionespedidos);
 socket.on('ActualizarControlpedidos',actulizarcontrolpedidos);
 socket.on('ActulizarestadoAll', actulizarestadosall);
 socket.on('ActulizarPedidosMesa',actulizarpedidosmesa);
+socket.on('NotificacionMesa',notificaionesmesas);
+socket.on('PrecuentaMesa',precuentamesa);
+socket.on('SupervisorMesa', supervisormesa);
+//notificaciones mesas clientes
+
+function supervisormesa(mesa, results,estado){
+	if(estado == 0){
+		notificacionmesa.show('Supervisor a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}else{
+		notificacionmesa.show('Supervisor a ' + mesa + 'fue atentida por' + results[0]['login'] , "warning");
+		document.getElementById('sonido_mesas').play();
+	}
+}
+
+function precuentamesa(mesa, mozo){
+	notificacionmesa.show('Enviar precuenta' + mesa + 'atendido por:  ' + mozo, "warning");
+ 	document.getElementById('sonido_mesas').play();
+}
+
+function notificaionesmesas(mesa, results,estado){
+	if(estado == 0){
+		notificacionmesa.show('Enviar mozo a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}else{
+		notificacionmesa.show('Mandar a ' + results[0]['login'] + ' a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}
+
+}
+//finnotificaciones
 
 //actulizarpedidosmesa
 function actulizarpedidosmesa(idpedido, usuario){

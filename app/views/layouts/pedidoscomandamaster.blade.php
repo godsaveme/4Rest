@@ -109,7 +109,9 @@
     	<!-- /.navbar-collapse -->
 </div>
 </nav>
-
+<audio id="sonido_mesas" src="/sound/cocina.mp3"> </audio>
+ <span id="popupNotification"></span>
+ <span id="notificaciones_mesas"></span>
 <div class="caja_derecha">
 <div class="panel panel-info panel_combinaciones" style="display:none">
 			<div class="panel-heading text-center">

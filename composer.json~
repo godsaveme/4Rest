@@ -8,7 +8,7 @@
 		"way/generators": "dev-master",
 		"thujohn/pdf": "dev-master",
 		"intervention/image": "1.*",
-		"nesbot/Carbon": "*"
+		"dinesh/barcode": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

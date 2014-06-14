@@ -1,0 +1,41 @@
+extends layout 
+block content
+  .site-wrapper
+    .site-wrapper-inner
+      .cover-container
+        .inner.cover(id="mensajes")
+         .alert_usuario
+          .alert.alert-info(id="alerta_cliente")
+           button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+           strong Necesitamos un poco de tiempo, nuestro tiempo de respuesta es de 2 minutos
+      .cover-container(id="home")
+        .inner.cover
+          h2.cover-heading Bienvenido a #{nombreComercial} estas sentado en: 
+           span(id="nmesa") #{mesa}
+        .inner.cover
+         a(href="#messages" data-mesa ="#{mesa}" data-codigom = "#{codigomesa}" data-toggle="tab" data-placement="bottom" title="Llamar al mozo" class="pull-left" id="llamar_mozo")
+          span.round-tabs.two
+           i.glyphicon.glyphicon-bell
+         a(href="#messages" data-codigom = "#{codigomesa}"  data-toggle="tab" data-placement="bottom" title="Pedir la cuenta" class="pull-right" id="pedir_cuenta")
+          span.round-tabs.four
+           i.glyphicon.glyphicon-usd
+        .clearfix
+        .inner.cover
+         a(href="#messages" data-codigom = "#{codigomesa}"  data-toggle="tab" data-placement="top" title="Llamar a supervisor" id="llamar_supervisor")
+          span.round-tabs.three
+           i.glyphicon.glyphicon-eye-open
+        .mastfoot
+         ul.nav.masthead-nav
+              li.active
+                a(href='#') Intrucciones
+         .inner
+          p
+          | Kango Café
+      .cover-container(id="precuenta" style="display: none")
+        .inner.cover
+          h2.cover-heading #{mesa} - Precuenta - 
+           span(id="montohead") S/. 0.00
+           a(href="#messages" class="pull-right" id="regresar_cliente") Volver
+        .inner.cover
+         table.table
+          tbody(id="itemsprecuenta")

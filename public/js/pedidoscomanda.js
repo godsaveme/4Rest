@@ -30,6 +30,24 @@ function checkbox (){
     });
   });
 }
+function verificartiempomozos() {
+    var contadorespera = $('#lista_controlpedidos .E').length;
+    if(contadorespera > 0){
+        socket.emit('TiemposMozos', $('#area').attr('data-idlocal'));
+    }
+}
+setInterval(verificartiempomozos,60000);
+
+socket.on("NotificacionDemoraMozos", notificaciondemoramozos);
+
+function notificaciondemoramozos(data){
+	console.log(data[0]['TiempoEspera']);
+    if (data[0]['TiempoEspera'] >= 2){
+        document.getElementById('sonido_demora').play();
+    }else{
+        document.getElementById('sonido_demora').pause();
+    }
+}
 //control pedidos
 $("#windowscontrolpedidos").kendoWindow({
   				actions: ["Pin","Minimize","Maximize", "Close"],
@@ -80,6 +98,37 @@ socket.on('NotificacionPedidos',notificacionespedidos);
 socket.on('ActualizarControlpedidos',actulizarcontrolpedidos);
 socket.on('ActulizarestadoAll', actulizarestadosall);
 socket.on('ActulizarPedidosMesa',actulizarpedidosmesa);
+socket.on('NotificacionMesa',notificaionesmesas);
+socket.on('PrecuentaMesa',precuentamesa);
+socket.on('SupervisorMesa', supervisormesa);
+//notificaciones mesas clientes
+
+function supervisormesa(mesa, results,estado){
+	if(estado == 0){
+		notificacionmesa.show('Supervisor a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}else{
+		notificacionmesa.show('Supervisor a ' + mesa + 'fue atentida por' + results[0]['login'] , "warning");
+		document.getElementById('sonido_mesas').play();
+	}
+}
+
+function precuentamesa(mesa, mozo){
+	notificacionmesa.show('Enviar precuenta' + mesa + 'atendido por:  ' + mozo, "warning");
+ 	document.getElementById('sonido_mesas').play();
+}
+
+function notificaionesmesas(mesa, results,estado){
+	if(estado == 0){
+		notificacionmesa.show('Enviar mozo a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}else{
+		notificacionmesa.show('Mandar a ' + results[0]['login'] + ' a ' + mesa, "warning");
+		document.getElementById('sonido_mesas').play();
+	}
+
+}
+//finnotificaciones
 
 //actulizarpedidosmesa
 function actulizarpedidosmesa(idpedido, usuario){
@@ -298,6 +347,7 @@ function actulizarestados(estado, iddetalle){
         data:{estado: estado, iddetallep: iddetalle},
         success: function(data){
         	socket.emit('NotificarPedidos', data, data['areapro']);
+        	verificartiempomozos();
         }
     });
 }
