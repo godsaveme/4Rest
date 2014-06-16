@@ -1,7 +1,6 @@
+var host = window.location.host;
 function ON_READY() {
-
     $('#id_restaurante').change(function(){
-
       console.log('change');
          $.ajax({
                 type: 'POST',
@@ -109,10 +108,7 @@ function ON_READY() {
           });
       
      });
-
-
         /*agregar combi*/
-
           $('body').on('click', 'input[name^="foobar"]', function(event) {
             
             var checkboxes = $(this).prop('checked');
@@ -177,11 +173,8 @@ function ON_READY() {
           var validator = $("#form_resto").kendoValidator().data("kendoValidator");
 
           $('#form_resto').submit(function(event) {
-
             if (validator.validate()) {
-
               event.preventDefault();
-
               $(this).find(':submit').attr('disabled','disabled');
 
               var $form = $(this),
@@ -192,17 +185,10 @@ function ON_READY() {
                     $arrForm.push({name: 'wordlist', value: JSON.stringify(ds.data())});
 
                     //var form_resto = $('#form_resto').serializeArray();
-                    //form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-
-               
-
+                    //form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())})
                     if (ds.total() > 0) {
-
                       var $action = $(this).attr('action');
-
                     var $response = $.post($action, $arrForm);
-
                     $response.done(function( data ) {
                                 if (data.estado){
                                   alert('Operación agregada correctamente');
@@ -269,13 +255,6 @@ function ON_READY() {
 
   });
 
-        /*$('#FechaInicio').kendoDatePicker({
-          format: "dd/MM/yy"
-        });
-
-                $('#FechaTermino').kendoDatePicker({
-          format: "dd/MM/yy"
-        });*/
 
   $('#precio').removeClass('');
 
@@ -509,7 +488,34 @@ function ON_READY() {
     },
   });
 
+  $('#btn_generarqr').on('click',function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    $.ajax({
+      url: '/codigoqrmesas',
+      type: 'POST',
+      dataType: 'json',
+      data: {tipo: 1},
+    })
+    .done(function(data) {
+      var urldescarga = 'http://'+host+'/imagesqr/'+data['urlnombre'];
+      $('#imagencodigoqr').html(data['imagen']);
+      $('#input_codigo').val(data['codigo']);
+      $('#btn_imagenqr').attr({
+        href: urldescarga,
+        download: data['urlnombre']
+      });
+      $('#btn_imagenqr').css('display', 'block');
 
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+    
+  });  
 };
 
 $(document).ready(ON_READY);
@@ -591,6 +597,3 @@ function ON_LOAD(){
     event.preventDefault();
     $('#window').data("kendoWindow").open();
   } 
-
-
-

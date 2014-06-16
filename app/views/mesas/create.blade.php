@@ -70,6 +70,30 @@
 
 </div>
 
+<div class="form-group">
+    <div class="col-md-3">
+        {{Form::label('mesa', 'Código', array('class'=>'control-label'))}}
+    </div>
+    <div class="col-md-7">
+        <div class="input-group">
+          <span class="input-group-addon">http://192.168.1.247/dev/clientes/</span>
+          <input type="text" name="mesa" class="form-control" placeholder="Código" id="input_codigo">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="btn_generarqr">Generar</button>
+          </span>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset-4" id="imagencodigoqr">
+    </div>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        <a href="#" download="quiquesiervos.pdf" class="btn btn-default" type="button" id="btn_imagenqr"
+        style="display:none">Guardar Imagen</a>
+    </div>
+</div>
+
 <!--{{ Form::file('imagen') }}-->
 <div class="form-group">
     <div class="col-md-4">
@@ -149,7 +173,31 @@
         @endif
     </div>
 </div>
+<div class="form-group">
+    <div class="col-md-3">
+        {{Form::label('mesa', 'Código', array('class'=>'control-label'))}}
+    </div>
+    <div class="col-md-7">
+        <div class="input-group">
+          <span class="input-group-addon">http://192.168.1.247/dev/clientes/</span>
+          <input type="text" name="mesa" class="form-control" value="{{$mesa->mesa}}" placeholder="Código" id="input_codigo">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="btn_generarqr">Generar</button>
+          </span>
+        </div>
+    </div>
+</div>
 
+<div class="form-group">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset-4" id="imagencodigoqr">
+        @if (isset($codigo))
+            {{$qrcode}}
+        @endif
+    </div>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        <a href="{{URL::to('/imagesqr/'.$nombrepng)}}" download="{{$nombrepng}}" class="btn btn-default" type="button" id="btn_imagenqr" @if (!isset($codigo)) style="display:none" @endif>Guardar Imagen</a>
+    </div>
+</div>
 
 <div class="form-group">
     <div class="col-md-4">

@@ -65,7 +65,12 @@ class MesasController extends BaseController {
 	{
 		$mesa = Mesa::find($id);
 		$salones = Salon::all()->lists('nombre','id');
-        return View::make('mesas.create', compact('mesa','salones'));
+		$codigo = $mesa->mesa;
+		$qrcode = DNS2D::getBarcodeHtml("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, "black");
+		$qrcodepath = DNS2D::getBarcodePngPath("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, array(0,0,0));
+		$nombrepng = substr($qrcodepath, 2);
+		File::move(public_path().'/'.$nombrepng, public_path()."/imagesqr/".$nombrepng);
+        return View::make('mesas.create', compact('mesa','salones', 'qrcode', 'codigo','nombrepng'));
 	}
 
 	/**
@@ -83,8 +88,8 @@ class MesasController extends BaseController {
 		$mesa->descripcion = Input::get('descripcion');
 		$mesa->salon_id = Input::get('salon_id');
 		$mesa->habilitado = Input::get('habilitado');
+		$mesa->mesa = Input::get('mesa');
 		$mesa->save();
-
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(array('estado' => false));

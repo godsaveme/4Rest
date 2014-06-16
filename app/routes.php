@@ -2042,6 +2042,22 @@ Route::group(array('before' => 'auth'), function (){
 			return  Response::json($arraydatos);
 		}
 	});
-
+	
+	Route::post('codigoqrmesas', function(){
+		if (Request::ajax()) {
+			$tipo = Input::get('tipo');
+			if($tipo==1){
+				$codigo = uniqid();
+				$qrcode = DNS2D::getBarcodeHtml("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, "black");
+				$qrcodepath = DNS2D::getBarcodePngPath("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, array(0,0,0));
+				$nombrepng = substr($qrcodepath, 2);
+				File::move(public_path().'/'.$nombrepng, public_path()."/imagesqr/".$nombrepng);
+				$datos = array('codigo' =>$codigo, 'imagen'=> $qrcode, 'urlnombre'=>$nombrepng);
+				return Response::json($datos);
+			}else{
+				return Response::json('false');
+			}
+		}
+	});
 	//fin rutas
 });

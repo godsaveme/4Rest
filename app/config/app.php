@@ -107,7 +107,9 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
-		'Thujohn\Pdf\PdfServiceProvider'
+		'Thujohn\Pdf\PdfServiceProvider',
+		'Dinesh\Barcode\BarcodeServiceProvider',
+		'Intervention\Image\ImageServiceProvider'
 	),
 
 	/*
@@ -173,7 +175,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'PDF' 			  => 'Thujohn\Pdf\PdfFacade'
+		'PDF' 			  => 'Thujohn\Pdf\PdfFacade',
+		'Image' 		  => 'Intervention\Image\Facades\Image'
 
 	),
 
