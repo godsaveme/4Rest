@@ -382,7 +382,6 @@ function tiempoenmesa(){
 		.done(function(data) {
 			console.log(data);
 			if(data['tiempo'].length > 0){
-				alert('1');
 				$('#mesa_'+idpedido).text(data['tiempo']);
 			}
 		})
