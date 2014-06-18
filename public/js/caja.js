@@ -114,6 +114,7 @@ function supervisormesa(mesa, results,estado, idrest,codigomesa){
 			notificacionmesa.show('Supervisor a ' + mesa, "warning");
 			document.getElementById('sonido_mesas').play();
 			$('#'+codigomesa).css('background', 'url(/images/alert-supervisor.jpg)');
+			$('#'+codigomesa).css('background-size', 'cover');
 		}else{
 			notificacionmesa.show('Supervisor a ' + mesa + 'fue atentida por' + results[0]['login'] , "warning");
 			document.getElementById('sonido_mesas').play();
