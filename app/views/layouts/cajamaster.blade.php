@@ -108,8 +108,12 @@
 		          </ul>
 		        </li>
 		        <li>
-		          <?php $nombrearea= Areadeproduccion::find(Auth::user()->id_tipoareapro); ?>
+		        @if (isset($monitor))
+		        <a href="javascript:void(0)" id="area" data-idlocal="{{$area->id_restaurante}}" data-ida ="{{$area->id}}">{{$area->nombre}}</a>
+		        @else
+		        <?php $nombrearea= Areadeproduccion::find(Auth::user()->id_tipoareapro); ?>
 		          <a href="javascript:void(0)" id="area" data-idlocal="{{$nombrearea->id_restaurante}}" data-ida ="{{$nombrearea->id}}">{{$nombrearea->nombre}}</a>
+		        @endif
 		        </li>
          	@endif
 	      </ul>

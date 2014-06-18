@@ -14,7 +14,7 @@ $( document ).ready(function() {
 				$('#mensajes').append($('#alerta_cliente').clone());
 			}else{
 				socket.emit('LlamarMozo', $('#llamar_mozo').attr('data-mesa'),
-							$('#llamar_mozo').attr('data-codigom'));
+							$('#llamar_mozo').attr('data-codigom'), $('#nmesa').attr('data-idres'));
 			}
 		})
 		.fail(function() {
@@ -72,7 +72,7 @@ $( document ).ready(function() {
 				$('#itemsprecuenta').html(contenidoprecuenta);
 				$('#precuenta').css('display', 'block');
 				$('#home').css('display', 'none');
-				socket.emit('PedirCuenta', $('#nmesa').text(), data['productos'][0]['login']);
+				socket.emit('PedirCuenta', $('#nmesa').text(), data['productos'][0]['login'], $('#nmesa').attr('data-idres'));
 			}else if(data['dato'] == 2){
 				$('#mensajes').append($('#alerta_cliente').clone());
 				$('#itemsprecuenta').html(contenidoprecuenta);
@@ -105,7 +105,7 @@ $( document ).ready(function() {
 				$('#mensajes').append($('#alerta_cliente').clone());
 			}else{
 				socket.emit('LlamarSupervisor', $('#llamar_mozo').attr('data-mesa'),
-				$('#llamar_mozo').attr('data-codigom'));
+				$('#llamar_mozo').attr('data-codigom'), $('#nmesa').attr('data-idres'));
 			}
 		})
 		.fail(function() {

@@ -49,6 +49,7 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/tickets', 'TicketsController');
 	Route::controller('/detallepedidos', 'DetallepediController');
 	Route::controller('/sabores', 'SaboresController');
+	Route::controller('/monitores','MonitorController');
 
 
 	Route::post('provincias', function () {
@@ -229,14 +230,14 @@ Route::group(array('before' => 'auth'), function (){
 			$orden = Input::get('orden');
 			$arraydatoscocina = array();
 			DetPedido::whereraw("detallepedido.pedido_id =".$pedido." and detallepedido.estado = 'I' 
-						and idarea = ".Auth::user()->id_tipoareapro)
+						and idarea = ".$id_area)
 						->update(array('detallepedido.cocinaonline' => 1));
 			$detallepedido = DetPedido::select('detallepedido.estado', 'detallepedido.ordenCocina', 'detallepedido.cantidad', 
 				'producto.id as productoid', 'producto.nombre', 'detallepedido.cantidad', 
 				'detallepedido.id', 'detallepedido.pedido_id', 'detallepedido.detalle_id')
 				->join('producto', 'detallepedido.producto_id', '=', 'producto.id')
 				->whereraw("detallepedido.pedido_id =".$pedido." and detallepedido.cocinaonline
-                             = 1 and idarea = ".Auth::user()->id_tipoareapro." and 
+                             = 1 and idarea = ".$id_area." and 
                              detallepedido.ordenCocina = ".$orden)
 				->groupBy('detallepedido.id')
 				->get();

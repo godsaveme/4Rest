@@ -88,7 +88,7 @@
 <div class="form-group">
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset-4" id="imagencodigoqr">
     </div>
-    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset-1">
         <a href="#" download="quiquesiervos.pdf" class="btn btn-default" type="button" id="btn_imagenqr"
         style="display:none">Guardar Imagen</a>
     </div>
@@ -194,7 +194,7 @@
             {{$qrcode}}
         @endif
     </div>
-    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset-1">
         <a href="{{URL::to('/imagesqr/'.$nombrepng)}}" download="{{$nombrepng}}" class="btn btn-default" type="button" id="btn_imagenqr" @if (!isset($codigo)) style="display:none" @endif>Guardar Imagen</a>
     </div>
 </div>

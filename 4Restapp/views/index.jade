@@ -11,7 +11,7 @@ block content
       .cover-container(id="home")
         .inner.cover
           h2.cover-heading Bienvenido a #{nombreComercial} estas sentado en: 
-           span(id="nmesa") #{mesa}
+           span(id="nmesa" data-idres="#{idrest}") #{mesa}
         .inner.cover
          a(href="#messages" data-mesa ="#{mesa}" data-codigom = "#{codigomesa}" data-toggle="tab" data-placement="bottom" title="Llamar al mozo" class="pull-left" id="llamar_mozo")
           span.round-tabs.two

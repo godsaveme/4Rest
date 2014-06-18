@@ -39,7 +39,7 @@ app.get('/clientes/?:codigomesa?', function(request, response) {
     var codigomesa = request.params.codigomesa;
     if (codigomesa) {
         mysqlconect.query(
-            "SELECT mesa.id, restaurante.nombreComercial, mesa.nombre FROM mesa INNER JOIN salon ON salon.id = mesa.salon_id INNER JOIN restaurante ON restaurante.id = salon.restaurante_id WHERE mesa.mesa = ?",
+            "SELECT mesa.id, restaurante.nombreComercial, mesa.nombre, restaurante.id as idrest FROM mesa INNER JOIN salon ON salon.id = mesa.salon_id INNER JOIN restaurante ON restaurante.id = salon.restaurante_id WHERE mesa.mesa = ?",
              [codigomesa], function selectUsuario(err, results, fields) {
                 if (err) {
                     console.log("Error: " + err.message);
@@ -47,7 +47,8 @@ app.get('/clientes/?:codigomesa?', function(request, response) {
                 }
             response.render('index', {nombreComercial: results[0]['nombreComercial'],
                                      mesa: results[0]['nombre'],
-                                    codigomesa: codigomesa});
+                                    codigomesa: codigomesa,
+                                    idrest: results[0]['idrest']});
         });
     }else{
         response.render('error');
@@ -176,7 +177,7 @@ function socketconection(cliente){
         });
     });
 
-    cliente.on('LlamarMozo', function(mesa, codigomesa) {
+    cliente.on('LlamarMozo', function(mesa, codigomesa,idrest) {
         mysqlconect.query(
         "SELECT usuario.login FROM usuario INNER JOIN pedido ON pedido.usuario_id  = usuario.id INNER JOIN detmesa ON detmesa.pedido_id = pedido.id INNER JOIN mesa ON mesa.id = detmesa.mesa_id WHERE mesa.mesa = ? AND pedido.estado != ? AND pedido.estado != ?",
          [codigomesa, 'T', 'A'], function selectUsuario(err, results, fields) {
@@ -185,19 +186,19 @@ function socketconection(cliente){
                 throw err;
             }
             if(results.length > 0){
-                io.sockets.emit('NotificacionMesa', mesa, results,1);
+                io.sockets.emit('NotificacionMesa', mesa, results,1,idrest);
                 
             }else{
-                io.sockets.emit('NotificacionMesa', mesa,results,0);
+                io.sockets.emit('NotificacionMesa', mesa,results,0,idrest);
             }
         });
     });
 
-    cliente.on('PedirCuenta', function(mesa, mozo) {
-        io.sockets.emit('PrecuentaMesa', mesa, mozo);
+    cliente.on('PedirCuenta', function(mesa, mozo,idrest) {
+        io.sockets.emit('PrecuentaMesa', mesa, mozo,idrest);
     });
 
-    cliente.on('LlamarSupervisor', function(mesa, codigomesa){
+    cliente.on('LlamarSupervisor', function(mesa, codigomesa, idrest){
         mysqlconect.query(
         "SELECT usuario.login FROM usuario INNER JOIN pedido ON pedido.usuario_id  = usuario.id INNER JOIN detmesa ON detmesa.pedido_id = pedido.id INNER JOIN mesa ON mesa.id = detmesa.mesa_id WHERE mesa.mesa = ? AND pedido.estado != ? AND pedido.estado != ?",
          [codigomesa, 'T', 'A'], function selectUsuario(err, results, fields) {
@@ -206,10 +207,10 @@ function socketconection(cliente){
                 throw err;
             }
             if(results.length > 0){
-                io.sockets.emit('SupervisorMesa', mesa, results,1);
+                io.sockets.emit('SupervisorMesa', mesa, results,1,idrest);
                 
             }else{
-                io.sockets.emit('SupervisorMesa', mesa,results,0);
+                io.sockets.emit('SupervisorMesa', mesa,results,0,idrest);
             }
         });
     });
