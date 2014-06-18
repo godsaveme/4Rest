@@ -346,10 +346,9 @@ function actulizarestados(estado, iddetalle){
 //fin actulizar estados
 
 //Tiemposenmesa
-var idpedido ;
 function tiempoenmesa(){
 	$('.tiempoenmesa').each(function(index, el) {
-		idpedido = $(this).attr('data-idpedido');
+		var idpedido = $(this).attr('data-idpedido');
 
 		$.ajax({
 			url: '/dev/tiempoenmesa',
@@ -359,7 +358,8 @@ function tiempoenmesa(){
 		})
 		.done(function(data) {
 			console.log(data);
-			if(data['respuesta'] == true){
+			if(data['tiempo'].length > 0){
+				alert('1');
 				$('#mesa_'+idpedido).text(data['tiempo']);
 			}
 		})
