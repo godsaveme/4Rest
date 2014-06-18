@@ -9,17 +9,21 @@
 					<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
 						<div class="form-group">
 							<label for="">Selecciona Area</label>
-							{{Form::select('restaurante_id', array('0'=> 'Seleciona Área') + $areas,'', array('class'=>'form-control'))}}
+							{{Form::select('restaurante_id', array('0'=> 'Seleciona Área') + $areas,'', array('class'=>'form-control', 'id'=>'select_areaid'))}}
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-						<button type="submit" class="btn btn-primary pull-right">Aceptar</button>
+						<a href="javascript:void(0)" class="btn btn-primary pull-right" id="btn_aceparea">Aceptar</a>
 					</div>
 				</div>
 			{{Form::close()}}
 		</div>
 	</div>
 </div>
+@stop
+
+@section('js')
+	{{HTML::script('js/monitoresgeneral.js')}}
 @stop

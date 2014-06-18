@@ -15,13 +15,19 @@
         <ul class="list-inline"> 
           @foreach ($arraymesas[$salones[$i]['id']] as $dato)
           <li >
-            <div class="btn_mesascajas img-circle {{$dato->estado}} text-center" data-id="{{$dato->id}}" data-estado = "{{$dato->estado}}">
+            <div id="{{$dato->mesa}}" class="btn_mesascajas img-circle {{$dato->estado}} text-center" data-id="{{$dato->id}}" data-estado = "{{$dato->estado}}"
+            @if (isset($arrayocupadas[$dato->id]))
+              @if($arrayocupadas['pagado_'.$dato->id]['pagado']<= 0)
+                style="background:#98FB98"
+              @endif
+            @endif
+            >
               {{$dato->nombre}}
               @if (isset($arrayocupadas[$dato->id]))
                   <br><br>
                   <span style="color:navy">{{$arrayocupadas[$dato->id]['login']}} / S/. {{$arrayocupadas[$dato->id]['consumo']}}</span>
                   <br><br>
-                 <time class="timeago" datetime="{{str_replace(' ','T', $arrayocupadas[$dato->id]['created_at'])}}-05:00" style="color:gold; background: #000; padding: 5px;"></time>
+                 <span class="tiempoenmesa" id="mesa_{{$arrayocupadas[$dato->id]['pedidoid']}}" style="color:gold; background: #000; padding: 5px;" data-idpedido="{{$arrayocupadas[$dato->id]['pedidoid']}}"></span>
               @endif    
             </div>
           </li>

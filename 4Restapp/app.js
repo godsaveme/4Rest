@@ -103,6 +103,28 @@ codigomesa = request.body.codigomesa;
     }
 });
 
+app.post('/tiempoenmesa', function(request, response){
+      var idpedido = request.body.idpedido;
+      if(idpedido){
+        mysqlconect.query(
+            "SELECT TIME_FORMAT(SEC_TO_TIME((TIMESTAMPDIFF(MINUTE , FechaInicio, now() ))*60), '%H:%i') AS tiempoenmesa FROM pedido WHERE id = ?",
+             [idpedido], function selectUsuario(err, results, fields) {
+                if (err) {
+                    console.log("Error: " + err.message);
+                    throw err;
+                }
+            if(results.length > 0){
+                response.setHeader('Content-Type', 'application/json');
+                response.send(JSON.stringify({respuesta : true, tiempo: results[0]['tiempoenmesa']}));
+            }else{
+                response.send(JSON.stringify({respuesta : false}));
+            }
+        });
+      }else{
+        response.send(JSON.stringify({respuesta : false})); 
+      }
+});
+
 app.post('/llamarsupervisor', function(request, response){
     codigomesa = request.body.codigomesa;
     if(request.session.llamarsupervisor){
@@ -186,16 +208,16 @@ function socketconection(cliente){
                 throw err;
             }
             if(results.length > 0){
-                io.sockets.emit('NotificacionMesa', mesa, results,1,idrest);
+                io.sockets.emit('NotificacionMesa', mesa, results,1,idrest,codigomesa);
                 
             }else{
-                io.sockets.emit('NotificacionMesa', mesa,results,0,idrest);
+                io.sockets.emit('NotificacionMesa', mesa,results,0,idrest,codigomesa);
             }
         });
     });
 
-    cliente.on('PedirCuenta', function(mesa, mozo,idrest) {
-        io.sockets.emit('PrecuentaMesa', mesa, mozo,idrest);
+    cliente.on('PedirCuenta', function(mesa, mozo,idrest,codigomesa) {
+        io.sockets.emit('PrecuentaMesa', mesa, mozo,idrest,codigomesa);
     });
 
     cliente.on('LlamarSupervisor', function(mesa, codigomesa, idrest){
@@ -207,10 +229,10 @@ function socketconection(cliente){
                 throw err;
             }
             if(results.length > 0){
-                io.sockets.emit('SupervisorMesa', mesa, results,1,idrest);
+                io.sockets.emit('SupervisorMesa', mesa, results,1,idrest, codigomesa);
                 
             }else{
-                io.sockets.emit('SupervisorMesa', mesa,results,0,idrest);
+                io.sockets.emit('SupervisorMesa', mesa,results,0,idrest,codigomesa);
             }
         });
     });

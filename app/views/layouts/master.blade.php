@@ -73,19 +73,20 @@
               </ul>
             </li>
 
-                          <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-share-square-o"></i> Ir a<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{URL('pedidos')}}"><i class="fa fa-tablet"></i>  Pedidos Tablet</a></li>
-                <li class="divider"></li>
-                <li><a href="{{URL('cajas')}}"><i class="fa fa-money"></i>  Caja</a></li>
-                <li><a href="{{URL('cajas/reportescaja')}}"><i class="fa fa-file-text-o"></i>  Reportes</a></li>
-                <li><a href="#"><i class="fa fa-users"></i>  Crear Usuario</a></li>
-                <li class="divider"></li>
-<!--                 <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li> -->
-                <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
-              </ul>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-share-square-o"></i> Ir a<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{URL('pedidos')}}"><i class="fa fa-tablet"></i>  Pedidos Tablet</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{{URL('cajas')}}"><i class="fa fa-money"></i>  Caja</a></li>
+                  <li><a href="{{URL('cajas/reportescaja')}}"><i class="fa fa-file-text-o"></i>  Reportes</a></li>
+                  <li><a href="{{URL('monitores')}}"> <i class="glyphicon glyphicon-eye-open"></i> Monitores</a></li>
+                  <li><a href="#"><i class="fa fa-users"></i>  Crear Usuario</a></li>
+                  <li class="divider"></li>
+  <!--                 <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li> -->
+                  <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
+                </ul>
             </li>
 <!--             <li><a href="">About</a></li>
             <li><a href="">Contact</a></li> -->

@@ -48,7 +48,7 @@ class CajasController extends BaseController {
 					}
 					$arraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
 					$ocupadas = Mesa::selectraw('mesa.estado , mesa.nombre , pedido.created_at, 
-										mesa.id , usuario.login, SUM(dettiketpedido.precio) as consumo')
+										mesa.id,pedido.id as pedidoid , usuario.login, SUM(dettiketpedido.precio) as consumo')
 										->leftJoin('detmesa', 'detmesa.mesa_id', '=', 'mesa.id')
 										->leftJoin('pedido', 'pedido.id','=', 'detmesa.pedido_id')
 										->leftJoin('usuario', 'pedido.usuario_id','=', 'usuario.id')
@@ -62,6 +62,16 @@ class CajasController extends BaseController {
 						foreach ($ocupadas as $ocupada) {
 							if($mesita->id == $ocupada->id){
 								$arrayocupadas[$ocupada->id] = $ocupada;
+								$arrayocupadas['pagado_'.$ocupada->id] = Mesa::selectraw('SUM(dettiketpedido.precio) as pagado')
+										->leftJoin('detmesa', 'detmesa.mesa_id', '=', 'mesa.id')
+										->leftJoin('pedido', 'pedido.id','=', 'detmesa.pedido_id')
+										->leftJoin('usuario', 'pedido.usuario_id','=', 'usuario.id')
+										->leftJoin('dettiketpedido', 'dettiketpedido.pedido_id','=', 'pedido.id')
+										->where('pedido.estado', '!=','T')
+										->where('pedido.estado', '!=','A')
+										->whereNull('dettiketpedido.ticket_id')
+										->where('mesa.id', '=', $ocupada->id)
+										->first();
 							}
 						}
 					}

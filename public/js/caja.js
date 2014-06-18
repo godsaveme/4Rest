@@ -108,33 +108,42 @@ socket.on('PrecuentaMesa',precuentamesa);
 socket.on('SupervisorMesa', supervisormesa);
 //notificaciones mesas clientes
 
-function supervisormesa(mesa, results,estado, idrest){
+function supervisormesa(mesa, results,estado, idrest,codigomesa){
 	if ($('#area').attr('data-idlocal') == idrest) {
 		if(estado == 0){
-		notificacionmesa.show('Supervisor a ' + mesa, "warning");
-		document.getElementById('sonido_mesas').play();
+			notificacionmesa.show('Supervisor a ' + mesa, "warning");
+			document.getElementById('sonido_mesas').play();
+			$('#'+codigomesa).css('background', 'url(/images/alert-supervisor.jpg)');
 		}else{
 			notificacionmesa.show('Supervisor a ' + mesa + 'fue atentida por' + results[0]['login'] , "warning");
 			document.getElementById('sonido_mesas').play();
+			$('#'+codigomesa).css('background', 'url(/images/alert-supervisor.jpg)');
+			$('#'+codigomesa).css('background-size', 'cover');
 		}
 	}
 }
 
-function precuentamesa(mesa, mozo,idrest){
+function precuentamesa(mesa, mozo,idrest,codigomesa){
 	if ($('#area').attr('data-idlocal') == idrest) {
 		notificacionmesa.show('Enviar precuenta' + mesa + 'atendido por:  ' + mozo, "warning");
 	 	document.getElementById('sonido_mesas').play();
+	 	$('#'+codigomesa).css('background', 'url(/images/alert-cuenta.jpg)');
+	 	$('#'+codigomesa).css('background-size', 'cover');
 	}
 }
 
-function notificaionesmesas(mesa, results,estado,idrest){
+function notificaionesmesas(mesa, results,estado,idrest,codigomesa){
 	if ($('#area').attr('data-idlocal') == idrest) {
 		if(estado == 0){
 			notificacionmesa.show('Enviar mozo a ' + mesa, "warning");
 			document.getElementById('sonido_mesas').play();
+			$('#'+codigomesa).css('background', 'url(/images/alert-mozo.jpg)');
+			$('#'+codigomesa).css('background-size', 'cover');
 		}else{
 			notificacionmesa.show('Mandar a ' + results[0]['login'] + ' a ' + mesa, "warning");
 			document.getElementById('sonido_mesas').play();
+			$('#'+codigomesa).css('background', 'url(/images/alert-mozo.jpg)');
+			$('#'+codigomesa).css('background-size', 'cover');
 		}
 	}
 }
@@ -335,3 +344,35 @@ function actulizarestados(estado, iddetalle){
 }
 
 //fin actulizar estados
+
+//Tiemposenmesa
+var idpedido ;
+function tiempoenmesa(){
+	$('.tiempoenmesa').each(function(index, el) {
+		idpedido = $(this).attr('data-idpedido');
+
+		$.ajax({
+			url: '/dev/tiempoenmesa',
+			type: 'POST',
+			dataType: 'json',
+			data: {idpedido: idpedido},
+		})
+		.done(function(data) {
+			console.log(data);
+			if(data['respuesta'] == true){
+				$('#mesa_'+idpedido).text(data['tiempo']);
+			}
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+}
+tiempoenmesa();
+setInterval(tiempoenmesa,60000);
+
+//fintiemposenmesa
