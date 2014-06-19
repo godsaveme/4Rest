@@ -1,0 +1,74 @@
+info: socket.io started
+Express server listening on port 3000
+debug: served static content /socket.io.js
+debug: client authorized
+info: handshake authorized WdHFIqKCLFj4jSw0MDOp
+debug: setting request GET /socket.io/1/websocket/WdHFIqKCLFj4jSw0MDOp
+debug: set heartbeat interval for client WdHFIqKCLFj4jSw0MDOp
+debug: client authorized for 
+debug: websocket writing 1::
+info: transport end (undefined)
+debug: set close timeout for client WdHFIqKCLFj4jSw0MDOp
+debug: cleared close timeout for client WdHFIqKCLFj4jSw0MDOp
+debug: cleared heartbeat interval for client WdHFIqKCLFj4jSw0MDOp
+debug: discarding transport
+debug: served static content /socket.io.js
+debug: client authorized
+info: handshake authorized G9hEjl3BKWIFumIGMDOq
+debug: setting request GET /socket.io/1/websocket/G9hEjl3BKWIFumIGMDOq
+debug: set heartbeat interval for client G9hEjl3BKWIFumIGMDOq
+debug: client authorized for 
+debug: websocket writing 1::
+info: transport end (undefined)
+debug: set close timeout for client G9hEjl3BKWIFumIGMDOq
+debug: cleared close timeout for client G9hEjl3BKWIFumIGMDOq
+debug: cleared heartbeat interval for client G9hEjl3BKWIFumIGMDOq
+debug: discarding transport
+debug: served static content /socket.io.js
+debug: client authorized
+info: handshake authorized Jh-jlHeZtvtJEuvhMDOr
+debug: setting request GET /socket.io/1/websocket/Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: client authorized for 
+debug: websocket writing 1::
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: emitting heartbeat for client Jh-jlHeZtvtJEuvhMDOr
+debug: websocket writing 2::
+debug: set heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: got heartbeat packet
+debug: cleared heartbeat timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: set heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+info: transport end (socket end)
+debug: set close timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: cleared close timeout for client Jh-jlHeZtvtJEuvhMDOr
+debug: cleared heartbeat interval for client Jh-jlHeZtvtJEuvhMDOr
+debug: discarding transport

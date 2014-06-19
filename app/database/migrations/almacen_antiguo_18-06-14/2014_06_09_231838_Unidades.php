@@ -13,7 +13,7 @@ class Unidades extends Migration {
 	public function up()
 	{
 		//
-		Schema::create('unidades', function(Blueprint $tabla) 
+		Schema::create('unidad', function(Blueprint $tabla) 
         {
             $tabla->increments('id');
             $tabla->string('nombre');
