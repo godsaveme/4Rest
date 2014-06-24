@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Almacen' => $baseDir . '/app/database/migrations/2014_05_26_180310_Almacen.php',
+    'Almacen' => $baseDir . '/app/models/Almacen.php',
     'AreadeProduccion' => $baseDir . '/app/database/migrations/migrationantiguo/2014_03_14_174745_areadeproduccion.php',
     'Areadeproduccion' => $baseDir . '/app/models/Areadeproduccion.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',

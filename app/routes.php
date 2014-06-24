@@ -211,6 +211,9 @@ Route::group(array('before' => 'auth'), function (){
 		}
 	});
 
+
+		Route::controller('/almacenes','AlmacenController');
+
 		/*FIN*/
 
 
