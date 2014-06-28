@@ -30,6 +30,7 @@ Route::group(array('before' => 'auth'), function (){
 			return Redirect::to('login');
 		}
 	});
+	
 	Route::controller('/usuarios', 'UsuariosController');
 	Route::controller('/insumos', 'InsumosController');
 	Route::controller('/productos', 'ProductosController');
@@ -1719,14 +1720,15 @@ Route::group(array('before' => 'auth'), function (){
 	Route::post('reportediariocaja', function(){
 		if (Request::ajax()) {
 			$idrest = Input::get('idrest');
-			$fecha = explode('/',Input::get('fecha'));
-			$newfecha = $fecha[2].'-'.sprintf('%02d', $fecha[0]).'-'.sprintf('%02d', $fecha[1]);
+			$fechaInicio = Input::get('fechainicio');
+    		$fechaFin = Input::get('fechafin');
 			$restaurante = Restaurante::find($idrest);
 			$cajas = $restaurante->cajas;
 			$arraydatos = array();
 			$contador = 0;
 			foreach ($cajas as $cdato) {
-				$cajones = $cdato->detallecaja()->where('FechaInicio', 'LIKE', $newfecha.'%')
+				$cajones = $cdato->detallecaja()
+							->whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->orderby('FechaInicio')
 							->get();
 				foreach ($cajones as $cajon) {
@@ -1771,8 +1773,8 @@ Route::group(array('before' => 'auth'), function (){
 						$newefec = $vale + $oefect;
 						$vale = round($newefec, 2);
 					}
-
-					$arraydatos[] = array('usuario'=>$usuario->login,
+					if($totaltickets> 0){
+						$arraydatos[] = array('usuario'=>$usuario->login,
 									'totaltickets' => $totaltickets, 
 									'totalanulados' => $totalanulados,
 									'totalefectivo'=>number_format($efectivo,2,'.', ''),
@@ -1793,6 +1795,30 @@ Route::group(array('before' => 'auth'), function (){
 									'gastos'=>$cajon->gastos,
 									'caja'=>$cajon->importetotal,
 									'cajaid'=>$cajon->id);
+					}else{
+						$arraydatos[] = array('usuario'=>$usuario->login,
+									'totaltickets' => $totaltickets, 
+									'totalanulados' => $totalanulados,
+									'totalefectivo'=>number_format($efectivo,2,'.', ''),
+									'totaltarjeta'=>number_format($tarjeta,2,'.', ''),
+									'totalvale'=>number_format($vale,2,'.', ''),
+									'totaldescuentos'=>0.00,
+									'fondodecaja'=>$cajon->montoInicial,
+									'totalventas'=>$cajon->ventastotales,
+									'turno'=>substr($cajon->fechaInicio, -8).'/'.
+											substr($cajon->fechaCierre, -8),
+									'arqueo'=>$cajon->arqueo,
+									'tproductos'=>$totalproductosvendidos,
+									'tinicial'=> 0,
+									'tfinal'=>0,
+									'id'=>$contador,
+									'ingresoscaja' =>$cajon->totalingresosacaja,
+									'dif'=>$cajon->diferencia,
+									'gastos'=>$cajon->gastos,
+									'caja'=>$cajon->importetotal,
+									'cajaid'=>$cajon->id);
+					}
+					
 					$contador++;
 				}
 			}
@@ -1903,20 +1929,19 @@ Route::group(array('before' => 'auth'), function (){
     		$fechaInicio = Input::get('fechainicio');
     		$fechaFin = Input::get('fechafin');
     		$restauranteid = Input::get('idrestaurante');
-    		$detalletiempos = DetPedido::selectraw("producto.nombre,producto_id, SUM(detallepedido.cantidad) as cantidad,
-				TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
-				AS tiempoesperaminimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i')
-				AS tiempococinaminimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
-				AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
-				AS tiempototaliminimo, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
-				AS tiempoesperapromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') 
-				AS tiempococinapromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
-				AS tiempomozopromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
-				AS tiempototalpromedio, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') 
-				AS tiempoesperamaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') 
-				AS tiempococinamaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
-				AS tiempomozomaximo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') 
-				AS tiempototalmaximo")
+    		$detalletiempos = DetPedido::selectraw("
+    			producto.nombre,producto_id, SUM(detallepedido.cantidad) AS cantidad,
+				TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaDespachado )))*60), '%H:%i') AS tiempototalpromedio,
+				TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') AS tiempoesperaminimo,
+				TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') AS tiempoesperapromedio, 
+				TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaInicio, fechaProceso )))*60), '%H:%i') AS tiempoesperamaximo,
+				TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') AS tiempococinaminimo,
+				TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') AS tiempococinapromedio,
+				TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaProceso,fechaDespacho )))*60), '%H:%i') AS tiempococinamaximo,
+				TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') AS tiempomozominimo, 
+				TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') AS tiempomozopromedio, 
+				TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') AS tiempomozomaximo
+    			")
 			->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 			->join('areadeproduccion', 'areadeproduccion.id', '=', 'detallepedido.idarea')
 			->join('restaurante', 'restaurante.id', '=', 'areadeproduccion.id_restaurante')
@@ -1984,14 +2009,16 @@ Route::group(array('before' => 'auth'), function (){
 							array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 						->where('usuario.id' , '=' , $mozo->id)
 						->first();
-				$productos = DetPedido::selectraw('usuario.id, SUM(detallepedido.cantidad) AS totalproductos,
+				$productos = Detpedidotick::selectraw('usuario.id, sum(dettiketpedido.cantidad) AS totalproductos,
 							COUNT(DISTINCT pedido.id) AS totalpedidos')
-							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
+							->join('pedido', 'pedido.id', '=', 'dettiketpedido.pedido_id')
+							->join('ticketventa', 'ticketventa.pedido_id', '=', 'pedido.id')
 							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
-							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+							->whereBetween('dettiketpedido.created_at', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->where('usuario.id' , '=' , $mozo->id)
+							->where('ticketventa.estado','=', 0)
 							->first();
-				$tiempos = Detpedido::selectraw("usuario.id, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+				$tiempos = DetPedido::selectraw("usuario.id, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
 							AS tiempomozopromedio,TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
 							AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
 							AS tiempomozomaximo")

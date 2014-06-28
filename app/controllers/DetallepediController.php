@@ -1,6 +1,6 @@
 <?php
 
-class DetallepediController extends \BaseController {
+class DetallepediController extends BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -8,7 +8,7 @@ class DetallepediController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function getIndex($idrestaurante = NULL)
+	public function getIndex($idrestaurante = 2)
 	{
 		if (isset($idrestaurante)) {
 			$restaurante = Restaurante::find($idrestaurante);

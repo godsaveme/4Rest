@@ -4,7 +4,51 @@ var datareporte = new kendo.data.DataSource({
 							    model: { id: "id" }
 							  }
 							});
-$("#datepicker").kendoDatePicker({change: reportediario, format: "dd/MM/yyyy"});
+
+var start = $("#fecha_inicio").kendoDatePicker({
+                        format: "yyyy-MM-dd",
+                        change: startChange
+                    }).data("kendoDatePicker");
+
+var end = $("#fecha_fin").kendoDatePicker({
+    format: "yyyy-MM-dd",
+    change: endChange
+}).data("kendoDatePicker");
+
+function startChange() {
+    var startDate = start.value(),
+    endDate = end.value();
+
+    if (startDate) {
+        startDate = new Date(startDate);
+        startDate.setDate(startDate.getDate());
+        end.min(startDate);
+    } else if (endDate) {
+        start.max(new Date(endDate));
+    } else {
+        endDate = new Date();
+        start.max(endDate);
+        end.min(endDate);
+    }
+}
+
+function endChange() {
+    var endDate = end.value(),
+    startDate = start.value();
+
+    if (endDate) {
+        endDate = new Date(endDate);
+        endDate.setDate(endDate.getDate());
+        start.max(endDate);
+    } else if (startDate) {
+        end.min(new Date(startDate));
+    } else {
+        endDate = new Date();
+        start.max(endDate);
+        end.min(endDate);
+    }
+}
+
 
 var viewModel_reportecajadiario = kendo.observable({
 	totalefectivo:function(){
@@ -136,26 +180,31 @@ var viewModel_reportecajadiario = kendo.observable({
 
 kendo.bind($("#reportediariocaja"), viewModel_reportecajadiario);
 
-function reportediario () {
-    $('#fecha_caja').text($("#datepicker").val());
-	datareporte.data([]);
-	$.ajax({
-		url: '/reportediariocaja',
-		type: 'POST',
-		dataType: 'json',
-		data: {idrest: $('#restauranteinfo').attr('data-id'), fecha: kendo.toString(this.value(), 'd')},
-	})
-	.done(function(data) {
-		datareporte.data(data);
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
-	
-}
+
+$('#btn_enviarfechas').on('click', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    datareporte.data([]);
+    $.ajax({
+        url: '/reportediariocaja',
+        type: 'POST',
+        dataType: 'json',
+        data: {idrest: $('#restauranteinfo').attr('data-id'), 
+                fechainicio: $('#fecha_inicio').val(), 
+                fechafin: $('#fecha_fin').val()},
+    })
+    .done(function(data) {
+        datareporte.data(data);
+        $('#text_fechainicio').text($('#fecha_inicio').val());
+        $('#text_fechafin').text($('#fecha_fin').val());
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+});
 
 $('body').on('click', '#btn_imprimircajadiario', function(event) {
     event.preventDefault();

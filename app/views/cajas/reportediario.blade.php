@@ -7,19 +7,23 @@
 	<div class="panel panel-primary" id="reportediariocaja">
             <div class="panel-heading">
             	<div class="row">
-            		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             			<h3 class="title" id="restauranteinfo" data-id="{{$restaurante->id}}">{{$restaurante->nombreComercial}}</h3>
             		</div>
-            		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            			<h4 class="title">Seleciona Fecha</h4>
-                		<input id="datepicker"/>
+            		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <h4 class="title">Seleciona Fecha</h4>
+                            <div class="form-group">
+                                <input id="fecha_inicio"/>
+                                <input id="fecha_fin"/>
+                                <a href="javascript:void(0)" id="btn_enviarfechas" class="btn btn-default">Buscar</a>
+                            </div>
             		</div>
             	</div>
             </div>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Fecha: <span id="fecha_caja">00/00/0000</span></th>
+                        <th>Fecha: <span id="text_fechainicio">0000-00-00</span> / <span id="text_fechafin">0000-00-00</span></th>
                         <th data-template="rangotickets" data-bind="source: this" id="rangoti">
                             <script id="rangotickets" type="text/x-kendo-template">
                                 Tickets #:rango()#

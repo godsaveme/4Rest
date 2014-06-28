@@ -1,11 +1,13 @@
 <?php
 class CajasController extends BaseController {
 	public $detcaja;
+	
 	public function __construct() {
 		$this->detcaja = Detcaja::where('estado', '=', 'A')
 						->where('usuario_id', '=', Auth::user()->id, 'AND')
 						->first();
 	}
+
 	public function getIndex($idcaja = NULL) {
 		$usuarios = Usuario::where('id_restaurante', '=', Auth::user()->id_restaurante)->lists('id');
 		$platoscontrol = DetPedido::select('usuario.login', 'mesa.nombre as mesa', 'detallepedido.id', 

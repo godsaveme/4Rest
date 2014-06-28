@@ -30,57 +30,56 @@
         <ul class="list-group">
 			<li class="list-group-item text-center">
 				<div class="row">
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
+					<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="border-right: 1px solid silver">
 						Producto
 					</div>
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver; color: blue" >
-						<span id="text_producto">Promedio</span>
+					<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="border-right: 1px solid silver;" >
+						<p id="text_producto">Tiempo</p>
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Te
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="border-left: 1px solid silver">
+								Tpro
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tc
+						</div>
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver" >
+						<p id="text_producto">Tiempo Espera</p>
+						<div class="row">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color: blue ">
+								Tmin
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tm
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
+								Tpro
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-								Tt
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color:red">
+								Tmax
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver" id="promedio">
-						Minimo
+						<p>Tiempo Preparación</p>
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Te
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color: blue">
+								Tmin
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tc
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
+								Tpro
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tm
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" >
-								Tt
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color: red">
+								Tmax
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="maximo" style="color:red">
-						Maximo
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="maximo" >
+						<p>Tiempo Mozo</p>
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Te
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color: blue">
+								Tmin
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tc
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
+								Tpro
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								Tm
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-								Tt
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color: red">
+								Tmax
 							</div>
 						</div>
 					</div>
@@ -91,56 +90,54 @@
 			<script id="reportetiempos_template" type="text/x-kendo-template">
 			<li class="list-group-item text-right">
 				<div class="row">
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-left">
+					<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left" style="border-right: 1px solid silver;">
 						<a href="javascript:void(0)" class="tiempo_productos"  data-idproducto = "#:producto_id#" style="color: blue">
 							#:kendo.toString(get("nombre"), "C")#
 							<span class="pull-right">#:cantidad#</span>
 						</a>
 					</div>
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="color:blue">
+					<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sub_maximo">
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="border-right: 1px solid silver; border-left: 1px solid silver">
+								#:tiempototalpromedio#
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<div class="row">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color: blue; border-left: 1px solid silver">
+								#:tiempoesperaminimo#
+							</div>
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
 								#:tiempoesperapromedio#
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempococinapromedio#
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempomozopromedio#
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempomozopromedio#
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color: red">
+								#:tiempoesperamaximo#
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 sub_promedio">
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver; border-left: 1px solid silver">
-								#:tiempoesperaminimo#
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; border-left: 1px solid silver; color:blue">
 								#:tiempococinaminimo#
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempomozominimo#
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
+								#:tiempococinapromedio#
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempototaliminimo#
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; color:red">
+								#:tiempococinamaximo#
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 sub_maximo" style="color:red">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 sub_promedio">
 						<div class="row">
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempoesperamaximo#
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver; border-left: 1px solid silver; color:blue">
+								#:tiempomozominimo#
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempococinamaximo#
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-right: 1px solid silver">
+								#:tiempomozopromedio#
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="border-right: 1px solid silver">
-								#:tiempomozomaximo#
-							</div>
-							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color:red">
 								#:tiempomozomaximo#
 							</div>
 						</div>

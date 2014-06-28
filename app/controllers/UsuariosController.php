@@ -169,4 +169,25 @@
 				return Redirect::to('/web');
 			}
 		}
+
+		public function getProductosmozo($id=NULL){
+			if (isset($id)) {
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$productos = Detpedidotick::selectraw('usuario.id,sum(dettiketpedido.cantidad) AS cantidad, 
+									dettiketpedido.nombre, dettiketpedido.created_at, dettiketpedido.producto_id , 
+									dettiketpedido.combinacion_id, sum(dettiketpedido.precio) AS precio')
+									->join('ticketventa', 'ticketventa.id', '=', 'dettiketpedido.ticket_id')
+									->join('pedido', 'pedido.id','=', 'ticketventa.pedido_id')
+									->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+									->where('usuario.id', '=', $id)
+									->whereBetween('dettiketpedido.created_at', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+									->groupby('producto_id, combinacion_id')
+									->orderby('precio', 'desc')
+									->get();
+				return View::make('usuarios.reporproductosmozos', compact('productos'));
+			}else{
+				return Redirect::to('/web');
+			}
+		}
 	}
