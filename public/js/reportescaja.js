@@ -225,7 +225,7 @@ $('body').on('click', '#btn_imprimircajadiario', function(event) {
                 anulados:$('#tanulados').text(),
                 emitidos: $('#temitidos').text(),
                 pvendidos: $('#pvendidos').text(),
-                fecha: $('#fecha_caja').text(),
+                fecha: $('#text_fechainicio').text()+'/'+$('#text_fechafin').text(),
                 rango: $('#rangoti').text()},
     })
     .done(function(data) {

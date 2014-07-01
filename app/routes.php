@@ -1923,7 +1923,6 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/familias', 'FamiliasController');
 	Route::controller('/restaurantes', 'RestaurantesController');
 	/*FIN RUTAS JAVIER*/
-
     Route::post('reportetiempos', function(){
     	if (Request::ajax()) {
     		$fechaInicio = Input::get('fechainicio');
