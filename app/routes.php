@@ -2000,13 +2000,14 @@ Route::group(array('before' => 'auth'), function (){
 					->where('usuario.colaborador', '=', 2)->get();
 			$arraydatos = array();
 			foreach ($mozos as $mozo) {
-				$ventas = Ticket::selectraw('SUM(importe) AS importe, avg(importe) AS promedioventas,
+				$ventas = Ticket::selectraw('SUM(ticketventa.importe) AS importe, avg(importe) AS promedioventas,
 						usuario.login,COUNT(DISTINCT ticketventa.id) AS totaltickets')
 						->join('pedido','pedido.id','=' ,'ticketventa.pedido_id')
 						->join('usuario' ,'usuario.id' ,'=' ,'pedido.usuario_id')
 						->whereBetween('ticketventa.created_at', 
 							array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 						->where('usuario.id' , '=' , $mozo->id)
+						->where('ticketventa.estado' , '=' , '0')
 						->first();
 				$productos = Detpedidotick::selectraw('usuario.id, sum(dettiketpedido.cantidad) AS totalproductos,
 							COUNT(DISTINCT pedido.id) AS totalpedidos')
@@ -2063,7 +2064,10 @@ Route::group(array('before' => 'auth'), function (){
 								'tanul'=>number_format($ticketsanulados->totalanulados, 0, '.', ''), 
 								'tprom'=>$tiempos->tiempomozopromedio,
 								'tmin'=>$tiempos->tiempomozominimo,
-								'tmax'=>$tiempos->tiempomozomaximo
+								'tmax'=>$tiempos->tiempomozomaximo,
+								'fechai'=>$fechaInicio,
+								'fechafin'=>$fechaFin,
+								'idrest'=> $restauranteid
 								);
 				}
 			}

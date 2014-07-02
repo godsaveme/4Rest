@@ -75,6 +75,12 @@ kendo.bind($("#reporte_mozos"), viewModel_reportemozos);
 $('#btn_enviarfechas').on('click',function(event) {
     event.preventDefault();
     /* Act on the event */
+    reportemozos();
+});
+
+reportemozos();
+
+function reportemozos(){
     $.ajax({
         url: '/reporteventasmozos',
         type: 'POST',
@@ -86,6 +92,8 @@ $('#btn_enviarfechas').on('click',function(event) {
     .done(function(data) {
         datareportemozos.data([]);
         datareportemozos.data(data);
+        $('#textf_inicio').text($('#fecha_inicio').val());
+        $('#textf_fin').text($('#fecha_fin').val());
     })
     .fail(function() {
         console.log("error");
@@ -93,5 +101,4 @@ $('#btn_enviarfechas').on('click',function(event) {
     .always(function() {
         console.log("complete");
     });
-    
-});
+}

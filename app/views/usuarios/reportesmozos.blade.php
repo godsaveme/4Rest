@@ -13,8 +13,8 @@
 	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 	            			<h4 class="title">Seleciona Fecha</h4>
 	            			<div class="form-group">
-		                		<input id="fecha_inicio"/>
-		                        <input id="fecha_fin"/>
+		                		<input id="fecha_inicio" value="{{$fechaInicio}}" />
+		                        <input id="fecha_fin" value="{{$fechaFin}}"/>
 		                        <a href="javascript:void(0)" id="btn_enviarfechas" class="btn btn-default">Buscar</a>
 	                        </div>
 	            	</div>
@@ -23,7 +23,7 @@
 	        <table class="table">
 	                <thead>
 	                    <tr>
-	                        <th><span id="textf_inicio">00/00/0000</span> - <span id="textf_fin">00/00/0000</span></th>
+	                        <th><span id="textf_inicio">00/00/0000</span> / <span id="textf_fin">00/00/0000</span></th>
 	                    </tr>
 	                </thead>
 	        </table>
@@ -48,11 +48,23 @@
                 <script id="reporte_mozostemplate" type="text/x-kendo-template">
                     <tr>    
                         <td>#=mozo#</td>
-                        <td class="text-right"><a href="javascript:void(0)" data-idusuario = "#=mozoid#">#=mfactu#</a></td>
+                        <td class="text-right">
+                        	<a href="/usuarios/ticketsmozo/#=mozoid#?idrest=#=idrest#&fechainicio=#=fechai#&fechafin=#=fechafin#">
+                        		#=mfactu#
+                        	</a>
+                        </td>
                         <td class="text-right">#=promt#</td>
                         <td class="text-right">#=peds#</td>
-                        <td class="text-right">#=pedsa#</td>
-                        <td class="text-right">#=cprods#</td>
+                        <td class="text-right">
+	                        <a href="/usuarios/pedidosanulados/#=mozoid#?idrest=#=idrest#&fechainicio=#=fechai#&fechafin=#=fechafin#">
+	                        	#=pedsa#
+	                        </a>
+                        </td>
+                        <td class="text-right">
+                        	<a href="/usuarios/productosmozo/#=mozoid#?idrest=#=idrest#&fechainicio=#=fechai#&fechafin=#=fechafin#">
+                        		#=cprods#
+                        	</a>
+                        </td>
                         <td class="text-right">#=panul#</td>
                         <td class="text-right">#=ctickets#</td>
                         <td class="text-right">#=tanul#</td>
