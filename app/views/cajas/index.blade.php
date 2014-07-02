@@ -28,11 +28,11 @@
               @endif
               <br>
               @if (isset($arrayocupadas[$dato->id]))
-                  <span style="color:navy">{{$arrayocupadas[$dato->id]['login']}}</span>
+                  <span style="color:navy; line-height: 30px">{{$arrayocupadas[$dato->id]['login']}}</span>
                   <br>
                   <span style="background:yellow">S/. {{$arrayocupadas[$dato->id]['consumo']}}</span> 
               @else
-                 <br>
+                 <br style="color:navy; line-height: 30px">
                  <br>
               @endif   
             </div>

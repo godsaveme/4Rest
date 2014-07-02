@@ -30,7 +30,7 @@
                   <br>
                   <span style="background:yellow">S/. {{$arrayocupadas[$dato->id]['consumo']}}</span> 
               @else
-                 <br>
+                 <br style="color:navy; line-height: 30px">
                  <br>
               @endif
             </div>
