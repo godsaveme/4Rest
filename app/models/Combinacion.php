@@ -2,7 +2,7 @@
 
 class Combinacion extends Eloquent {
 	protected $table = 'combinacion';
-	protected $fillable = array('nombre','precio','descripcion','TipoComb_id');
+	protected $fillable = array('nombre','precio','cantidad','descripcion','TipoComb_id');
 	protected $guarded = array();
 	public static $rules = array();
 

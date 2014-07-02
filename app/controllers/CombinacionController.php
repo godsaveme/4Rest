@@ -28,6 +28,8 @@ class CombinacionController extends BaseController {
 		//var_dump('fin');
 		$wl = Input::get('wordlist');
 		$prods = json_decode($wl);
+		//var_dump($prods);
+		//die();
 		//foreach ($prods as $prod) {
 		//	var_dump($prod->nombre);
 		//}
@@ -81,6 +83,7 @@ class CombinacionController extends BaseController {
 				$precio->producto_id = $prod->id;
 				$precio->combinacion_id = $insertedId;
 				$precio->cantidad = $prod->cantidad;
+				$precio->precio = $prod->precio;
 				$precio->save();
 			}
 
@@ -120,7 +123,13 @@ class CombinacionController extends BaseController {
 		$combinacion = Combinacion::find($id);
 		$tipodecombinacion = TipoComb::where('nombre','!=','Normal')->lists('nombre','id');
         $familias = Familia::lists('nombre','id');
-        return View::make('combinacions.edit',compact('tipodecombinacion','combinacion','familias'));
+        $productos = Combinacion::join('precio','precio.combinacion_id' ,'=','combinacion.id')
+ 							->join('producto','precio.producto_id','=','producto.id')
+ 							->join('familia','familia.id','=','producto.familia_id')
+ 							->where('combinacion.id','=',$combinacion->id)
+ 							->select('producto.id as id','producto.nombre as nombre','producto.descripcion as descripcion', 'precio.cantidad as cantidad', 'precio.precio as precio','familia.id as familiaid','familia.nombre as familianombre')
+ 							->get()->toJson();
+        return View::make('combinacions.edit',compact('tipodecombinacion','combinacion','familias', 'productos'));
 	}
 
 	/**
@@ -196,6 +205,7 @@ class CombinacionController extends BaseController {
 				$precio->producto_id = $prod->id;
 				$precio->combinacion_id = $insertedId;
 				$precio->cantidad = $prod->cantidad;
+				$precio->precio = $prod->precio;
 				$precio->save();
 			}
 

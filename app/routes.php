@@ -139,13 +139,16 @@ Route::group(array('before' => 'auth'), function (){
 	Route::get('bus_prod_', function () {
 		$valor = $_REQUEST["filter"]["filters"][0]["value"];
 		//$productos = Producto::where('nombre','like',$valor.'%')->lists('id','nombre','descripcion');
-		$productos = Producto::where('nombre','like','%'.$valor.'%')->get();
+		$productos = Producto::join('familia','familia.id','=','producto.familia_id')
+					->where('producto.nombre','like','%'.$valor.'%')
+					->select('producto.nombre as productoNombre','producto.id as productoID','producto.descripcion as productoDescr','familia.id as familiaID','familia.nombre as familiaNombre')
+					->get();
 		//var_dump($productos);
 		//die();
 		 $arrProd = array();
 		 foreach ($productos as $dato) {
 
-				$arrProd[] = array('id' => $dato->id,'nombre' => $dato->nombre, 'descripcion' => $dato->descripcion, 'cantidad' => '1' );
+				$arrProd[] = array('id' => $dato->productoID,'nombre' => $dato->productoNombre, 'descripcion' => $dato->productoDescr, 'cantidad' => '1.00', 'precio' => '1.00', 'familiaid' => $dato->familiaID, 'familianombre' =>  $dato->familiaNombre);
 
 		 }
 		return Response::json($arrProd);

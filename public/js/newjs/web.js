@@ -1,5 +1,8 @@
 var host = window.location.host;
 function ON_READY() {
+
+
+
     $('#id_restaurante').change(function(){
       console.log('change');
          $.ajax({
@@ -233,6 +236,8 @@ function ON_READY() {
       format: "c",
       decimals: 3
   });
+
+      
 
     $('#costo').kendoNumericTextBox({
       format: "c",

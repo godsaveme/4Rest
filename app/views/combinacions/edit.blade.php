@@ -12,6 +12,14 @@
 <div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> EDITAR COMBINACIÓN
 </strong></div>
 
+<div id="dialog">
+<form id="xFg" action="#">
+  <p>Cantidad: <input id="cantidad" type="number" min="1" value="1" required>  </p>
+  <p>Precio:  <input id="precioX" type="number" min="0" value="1" required> </p>
+  <input type="submit" id="btnAsignar" value="Enviar" class="k-button"><input type="button" id="btnCancelar" value="Cancelar" class="k-button">
+  </form>
+</div>
+
 <div class="panel-body">
 {{Form::open(array('id'=>'form_resto','url'=>'/combinacions/update', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal'))}}
 <fieldset>
@@ -108,7 +116,7 @@
 
 	<div class="form-group">
 		<div class="col-md-5">
-			{{Form::select('Slc_Fam', $familias, '', array('class'=>'form-control'))}}
+			{{Form::label('productos', 'Seleccione Productos',array('class'=>'control-label'))}} 
 		</div>
 		<div class=" col-md-7">
 			{{Form::input('text', 'txtProd', '', array('id' => 'txtProd', 'placeholder' => 'Productos..'))}}
@@ -120,68 +128,113 @@
 </div>
 	<div class="form-group">
 		<div class="col-md-12">
-<script type="text/x-kendo-tmpl" id="template">
-     <div>
-       <dl>
-         <dt>Nombre</dt> <dd>#:nombre#</dd>
-         <dt>Descripción</dt> <dd>#:descripcion#</dd>
-         <dt>Cantidad</dt> <dd>#:cantidad#</dd>
-       </dl>
-       <div>
-           <a class="k-button k-edit-button" href="\\#"><span class="k-icon k-edit"></span></a>
-           <a class="k-button k-delete-button" href="\\#"><span class="k-icon k-delete"></span></a>
-       </div>
-     </div>
- </script>
-
- <script type="text/x-kendo-tmpl" id="editTemplate">
-     <div>
-       <dl>
-          <dt>Nombre</dt>
-         <dd>#:nombre#</dd>
-         <dt>Descripción</dt>
-         <dd>#:descripcion#</dd>
-         <dd><input type="text" data-bind="value:cantidad" data-role="numerictextbox" data-type="number" min="1" name="descripcion" required="required" /></dd>
-       </dl>
-       <div>
-           <a class="k-button k-update-button" href="\\#"><span class="k-icon k-update"></span></a>
-           <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
-       </div>
-     </div>
- </script>
 
  <script type="text/javascript">
- var ds= new kendo.data.DataSource({
 
- 		data:   <?php echo Combinacion::join('precio','precio.combinacion_id' ,'=','combinacion.id')
- 							->join('producto','precio.producto_id','=','producto.id')
- 							->where('combinacion.id','=',$combinacion->id)
- 							->select('producto.id as id','producto.nombre as nombre','producto.descripcion as descripcion', 'precio.cantidad as cantidad')
- 							->get()->toJson(); ?>,
+$(document).ready(function($) {
+
+//precio readonly se calcula por los grids
+  $("#precio").data("kendoNumericTextBox").readonly();
+
+                  $("#precioX").kendoNumericTextBox({
+                        format: "c",
+                        decimals: 3
+                    });
+                   $("#cantidad").kendoNumericTextBox({
+                        format: "# Und."
+                    });
+
+                  var ntbprecio = $("#precioX").data("kendoNumericTextBox");
+                  var ntbcantidad = $("#cantidad").data("kendoNumericTextBox");
+
+ }); 
+
+ var ds= new kendo.data.DataSource({
+        data: {{$productos}},
+        pageSize: 10,
+        change: onChangeDs,
+        group: { field: "familianombre", aggregates: [
+                                        { field: "cantidad", aggregate: "average" },
+                                        { field: "precio", aggregate: "average" }
+                                        ]
+                },
+       // aggregate: [ { field: "familiaid", aggregate: "average" }],
+                        
         schema: {
             model: {
                 id: "id",
                 fields: {
-                    id: { type: "number" },
-                    nombre: { type: "string" },
-                    descripcion: { type: "string" },
-                    familia: {type: "string"},
-                    cantidad: {type: "string"}
+                    id: { type: "number", editable:false, nullable: false, validation:{required:true} },
+                    nombre: { type: "string", editable: false },
+                    descripcion: { type: "string" },                    
+                    cantidad: {type: "number", validation: {min:1, required:true}},
+                    precio: {type: "number", validation: {min:0, required:true}},
+                    familiaid: {type: "number"},
+                    familianombre: {type: "string"}
                 }
             }
         }
- });   
+ });
+
+ function onChangeDs(e){
+  //alert('entro');
+              //var data = this.data();
+                var view = this.view();
+              var $sumPrecio = 0;
+              var sumCantidad;
+              console.log($sumPrecio);
+              if ( view.length > 0 ) {
+                      for (var i = 0; i < view.length; i++) {
+                        console.log(view[i].aggregates.precio.average);
+                        $sumPrecio = $sumPrecio + + (view[i].aggregates.cantidad.average*view[i].aggregates.precio.average);
+                        //sumCantidad += view[i].aggregates.precio.average;
+                      };
+            }
+              var ntbprecioComb = $("#precio").data("kendoNumericTextBox");
+              ntbprecioComb.value($sumPrecio.toFixed(2));
+              console.log($sumPrecio);
+ } 
+
  </script>
 
- <div id="listView"></div>
+ <div id="gridProdComb"></div>
  <script>
- $("#listView").kendoListView({
-    template: kendo.template($("#template").html()),
-    editTemplate: kendo.template($("#editTemplate").html()),
+ $(document).ready(function($) {
+        $("#gridProdComb").kendoGrid({
+    dataSource: ds,                            
+    height: 525,
+    groupable: {
+    messages: {
+      empty: "Agrupar jalando un campo aquí."
+    }
+  },
+    sortable: true,
     //selectable: true,
-    dataSource: ds
- });
+    scrollable: true,
+    sortable: true,
+    //filterable: true,
+    resizable: true,
+    pageable: {
+      refresh: true,
+      pageSizes: true
+    },
+    columns: [
+                            { field: "nombre", title: "Nombre Producto", groupable: false },
+                            { field: "descripcion", title: "Descripción", groupable:false },
+                            { field: "cantidad", title: "Cantidad", format: "{0:0.00}",width: "90px", groupable:false },
+                            { field: "precio", title: "Precio" , format: "{0:c}", width: "90px", groupable:false},
+                            { field: "familianombre", title: "Nombre de la Familia" , groupHeaderTemplate: "Familia:  <a href='javascript:void(0)' class='familyname'>#= value#</a>." },
+                            //{ field: "familiaid", title: "ID Fam", }
+                            { command: ["destroy"], title: "&nbsp;", groupable:false}],
+    editable: "inline"
+  });
+});
  </script>
+
+ 
+
+
+ 
 		</div>
 	</div>
 
@@ -255,11 +308,55 @@
 </script>
 
 <script type="text/x-kendo-template" id="prod_templ">
-  <h2>#: data.nombre #</h2>
-  <article>
-    <img src="">
-    <p>descripción del producto</p>
-  </article>
+  <h4>#: data.nombre #</h4>
+
+    <p>Familia: #: data.familianombre #</p>
+
+</script>
+
+<script type="text/javascript">
+
+    var validatorxFg = $("#xFg").kendoValidator().data("kendoValidator");
+
+
+
+
+$(document).ready(function($) {
+
+                  var ntbprecio = $("#precioX").data("kendoNumericTextBox");
+                  var ntbcantidad = $("#cantidad").data("kendoNumericTextBox");
+
+       $('#xFg').submit(function(event) {
+
+
+        if (validatorxFg.validate()) {
+     
+
+    event.preventDefault();
+
+    var data = ds.data();
+    var familianombre = $('#btnAsignar').data("familyname");
+
+
+   for(var i = 0; i < data.length; i++) {
+
+      if ( data[i].familianombre == familianombre ) {
+          data[i].set("cantidad", ntbcantidad.value());
+          data[i].set("precio", ntbprecio.value());
+          //ds.sync();
+      } else{
+
+      };
+
+    }
+
+    }
+
+    $("#dialog").data('kendoWindow').close();
+
+  });
+
+}); //del document    
 </script>
 
 <script type="text/javascript">
@@ -269,6 +366,7 @@
                         filter: "contains",
                         minLength: 2,
                         template: kendo.template($("#prod_templ").html()),
+                        //headerTemplate: kendo.template($("#header_templ").html()),
                         dataSource: {
                             type: "json",
                             serverFiltering: true,
@@ -277,108 +375,179 @@
                             }
                         },
                         select: onSelect,
+                        change: onChange,
                         height:200
                     });
 
-
+  var auto_PRODx = $('#txtProd').data('kendoAutoComplete');
 
 function onSelect(e){
    var dataItem = this.dataItem(e.item.index());
 
    var ds_Prod = ds.data();
-   //$('#persona_id').val(dataItem.id);
-   //$('#persona_id').text(dataItem.id);
 
    var flag = true;
+
+   var $cant__ = 1.00;
+   var $price__ = 1.00;
 
    flag = id_repeat(ds_Prod,dataItem);
 
    if (flag == false) {
-   		ds.add({id: dataItem.id, nombre: dataItem.nombre, descripcion: dataItem.descripcion, cantidad: dataItem.cantidad});
+
+
+             for(var i = 0; i < ds_Prod.length; i++) {
+
+                if ( dataItem.familianombre == ds_Prod[i].familianombre) {
+                    $cant__ = ds_Prod[i].cantidad;
+                    $price__ = ds_Prod[i].precio; 
+                    break;
+                }
+              }
+
+      ds.add({id: dataItem.id, nombre: dataItem.nombre, descripcion: dataItem.descripcion, cantidad: $cant__, precio: $price__, familiaid: dataItem.familiaid, familianombre: dataItem.familianombre});
+
    }else{
-   		alert('Producto Repetido');
+      alert('Producto Repetido. Seleccione otro.');
+
    };
 
-   //$('#txtProd').val('');
-
-
-   
-
-   //listView.refresh();
-   //console.log(dataItem.id);
-   //console.log(dataItem.nombre);
-   //console.log(dataItem.descripcion);
-   //console.log(ds.get(1));
-   
-   //console.log(ds_Prod[0].id);
-   //ds.sync();
-   //console.log($('#persona_id').val());
 };
+
+function onChange(e){
+
+    this.value('');
+}
 
 function id_repeat(data,dataItem){
 
-	var flag = true;
+  var flag = true;
 
-	console.log(data.length);
+  //console.log(data.length);
 
-	if (data.length != 0) {
+  if (data.length != 0) {
 
-		var lastElem = dataItem; // ultimo elemento
-		
-			for (var i = data.length - 1; i >= 0; i--) {
-				if (lastElem.id == data[i].id ) {
-					flag = true;
-					return flag;
-				}else{
-					flag = false;
-				};
-			};
-			return flag;
-		
-	}else{
-		flag = false;
-		return flag
-	};
+    var lastElem = dataItem; // ultimo elemento
+    
+      for (var i = data.length - 1; i >= 0; i--) {
+        if (lastElem.id == data[i].id ) {
+          flag = true;
+          return flag;
+        }else{
+          flag = false;
+        };
+      };
+      return flag;
+    
+  }else{
+    flag = false;
+    return flag
+  };
 
 }
+
+$(document).ready(function($) {
+    $("#precio").data("kendoNumericTextBox").value({{$combinacion->precio}});
+ });
 </script>
 
-<script type="text/javascript">
 
-	/*var validator = $("#form_resto").kendoValidator().data("kendoValidator");
+<style scoped>
+                .k-autocomplete {
+                    display: block;
+                    clear: left;
+                    width: 400px;
+                    vertical-align: middle;
+                }
+              span.k-numerictextbox {
+                    display: block;
+                    clear: left;
+                    width: 200px;
+                    vertical-align: middle;
+                }
 
-	$('#form_resto').submit(function(event) {
+                .producto {
+            float: left;
+            position: relative;
+            width: 135px;
+            height: 180px;
+            margin: 0 10px;
+            padding: 0;
+        }
+          .producto h3{
+            margin: 0;
+            padding: 3px 5px 0 0;
+            max-width: 96px;
+            overflow: hidden;
+            line-height: 1.1em;
+            font-size: .9em;
+            font-weight: normal;
+            text-transform: uppercase;
+            color: #999;
+          }
 
-		if (validator.validate()) {
+          .k-listview:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
 
-			event.preventDefault();
+        .k-numerictextbox{
+          width: 100px;
+        }
 
-			$(this).find(':submit').attr('disabled','disabled');
-
-			var $form = $(this),
-				$arrForm = $form.serializeArray();
-			$arrForm.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-			//var form_resto = $('#form_resto').serializeArray();
-			//form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-			var $response = $.post("/combinacions/update", $arrForm);
-
-			$response.done(function( data ) {
-							console.log(data);
-	    						if (data){
-	    							alert('Combinación agregada correctamente');
-									window.location = "/combinacions";
-								}else{
-									alert('Combinación no agregada. Error');
-								}
-	  					});
+        .familyname{
+        -moz-user-select: none; 
+        -o-user-select: none; 
+        -webkit-user-select: none; 
+        -ie-user-select: none; 
+        user-select: none; 
+        }
+            </style>
 
 
-		}
+            <script>
+                $(document).ready(function() {
 
-	});*/
 
-</script>
+
+
+                    var window = $("#dialog");
+                                //.bind("click", function() {
+                                //    window.data("kendoWindow").open();
+
+                                //});
+
+                    if (!window.data("kendoWindow")) {
+                        window.kendoWindow({
+                            width: "300px",
+                            animation: false,
+                            title: "Asigna Precio y Cantidad",
+                            modal:true,
+                            actions: [
+                                "Pin",
+                                "Close"
+                            ]
+                        });
+                    }
+                    window.data('kendoWindow').close();
+                    $('body').on('click', '#btnCancelar', function(event) {
+                      event.preventDefault();
+                      window.data('kendoWindow').close();
+                    });
+
+                        $('body').on('click', '.familyname', function(event) {
+                        event.preventDefault();
+                        window.data('kendoWindow').center();
+                        window.data('kendoWindow').open();
+                        $('#btnAsignar').data('familyname', $(this).html());
+                        console.log($('#btnAsignar').data('familyname'));
+
+                      });
+
+                });
+            </script>
 
 @stop
