@@ -1,8 +1,45 @@
+var socket = io.connect('http://'+window.location.host+':3000');
+socket.on("Recibirpedidos", recibirpedido);
+socket.on('ActulizarestadoAll', actulizarestadosall);
+function recibirpedido(){
+	location.reload();
+}
+
 $('#btn_aceparea').on('click',function(event) {
 		event.preventDefault();
-		/* Act on the event */
 		window.location.href = '/monitores/area/'+$('#select_areaid').val();
 });
+
+$.fn.timeago.defaults = {
+    selector: 'time.timeago',
+    attr: 'datetime',
+    dir: 'up',
+    lang: {
+      units: {
+      second: "''",
+      seconds: "''s",
+      minute: "'",
+      minutes: "'s",
+      hour: "h",
+      hours: "hs",
+      day: "d",
+      days: "ds",
+      month: "m",
+      months: "ms",
+      year: "y",
+      years: "ys"
+    },
+    prefixes: {
+      lt: "-",
+      about: " ",
+      over: "+",
+      almost: " ",
+      ago: " "
+    },
+    suffix: ""
+    }
+  };
+
 
 $('body').timeago();
 
@@ -36,3 +73,27 @@ function tiempoenmesa(){
 tiempoenmesa();
 setInterval(tiempoenmesa,60000);
 //fintiemposenmesa
+
+//actulizarestados todos
+	function actulizarestadosall(data){
+		var estado = data['estado'];
+		var preestado = '';
+		if(data['estado'] == 'P'){
+			prestado = 'I';
+		}else if (data['estado'] == 'E'){
+			prestado = 'P';
+		}else if (data['estado'] == 'D') {
+			prestado = 'E';
+		};	
+		var oitempedido = $('.'+prestado).filter(function(index) {
+			return $(this).attr('data-iddetped') == data['iddetallep'];
+		});
+		oitempedido.removeClass(prestado);
+		oitempedido.addClass(data['estado']);
+		oitempedido.attr('data-estado', data['estado']);
+		if(estado == 'C'){
+			estado = 'I';
+		}
+		oitempedido.find('img').attr('src', '/images/'+estado+'.png');
+	}
+//finactulizarestados todos

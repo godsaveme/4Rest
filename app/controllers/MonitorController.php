@@ -138,6 +138,7 @@ class MonitorController extends \BaseController {
 					->where('salon.restaurante_id', '=',$id)->get();
 			$arrayproductos = array();
 			$arrayconsumos = array();
+			$arrayprecuentas = array();
 			foreach ($mesas as $mesa) {
 			$arrayproductos['mesa_'.$mesa->id] = DetPedido::select('detallepedido.id','producto.nombre', 'detallepedido.estado', 'detallepedido.fechaInicio', 
 												'detallepedido.fechaProceso','detallepedido.fechaDespacho', 'detallepedido.fechaDespachado',
@@ -147,6 +148,7 @@ class MonitorController extends \BaseController {
 												->join('detmesa', 'pedido.id', '=', 'detmesa.pedido_id')
 												->where('pedido.estado', '!=','A')
 												->where('pedido.estado', '!=', 'T')
+												->where('detallepedido.estado', "!=", 'A')
 												->where('detmesa.mesa_id', '=', $mesa->id)
 												->get();
 			}
@@ -163,7 +165,18 @@ class MonitorController extends \BaseController {
 													->groupby('idpedido')
 													->first();
 			}
-			return View::make('monitores.monitorgeneral', compact('mesas', 'restaurante', 'arrayproductos','arrayconsumos'));
+			foreach ($mesas as $mesa) {
+				$arrayprecuentas['mesa_'.$mesa->id] =Detpedidotick::join('pedido', 'pedido.id', '=', 'dettiketpedido.pedido_id')
+													->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+													->join('detmesa', 'detmesa.pedido_id', '=', 'pedido.id')
+													->where('pedido.estado', '!=', 'A')
+													->where('pedido.estado', '!=', 'T')
+													->where('detmesa.mesa_id', '=', $mesa->id)
+													->whereNull('dettiketpedido.ticket_id')
+													->count();
+			}
+			return View::make('monitores.monitorgeneral', 
+				compact('mesas', 'restaurante', 'arrayproductos','arrayconsumos', 'arrayprecuentas'));
 		}else{
 			return Redirect::to('monitores');
 		}
