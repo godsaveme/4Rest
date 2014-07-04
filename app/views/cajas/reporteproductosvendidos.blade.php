@@ -8,17 +8,27 @@
         			<h3 class="title" id="restauranteinfo" data-id="{{$restaurante->id}}">{{$restaurante->nombreComercial}}</h3>
         		</div>
         		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-        			<h4 class="title">Fecha: {{substr($detacaja->fechaInicio,0,10)}} </h4>
                     @if (!isset($diario))
+                        <h4 class="title">Fecha: {{substr($detacaja->fechaInicio,0,10)}}</h4>
                        <h4 class="title">Horario: {{substr($detacaja->fechaInicio,-8)}} / {{substr($detacaja->fechaCierre,-8)}}</h4>
+                    @else 
+                        <h4 class="title">Fecha: {{$fechaInicio}} / {{$fechaFin}}</h4>
                     @endif
         		</div>
         	</div>
         </div>
-         <table class="table">
+         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Nº</th>
+                    <th class="text-right"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center">T. Cantidad: {{$totalcantidad}}</th>
+                    <th class="text-center">V.Total: {{number_format($montototal,2,'.','')}}</th>
+                    <th class="text-center">Desc.: {{Input::get('descuento')}} </th>
+                    <th class="text-center">V. Neta: {{number_format($importeneto,2,'.','')}}</th>
+                </tr>
+                <tr>
+                    <th class="text-right">Nº</th>
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Cantidad</th>
                     <th class="text-center">Promedio</th>
@@ -29,7 +39,7 @@
             <tbody>
             @foreach ($productos as $producto)
                 <tr>
-                    <td>{{$contador++}}</td>
+                    <td class="text-right">{{$contador++}}</td>
                     <td><a href="/cajas/detalleprovendidos/{{$detacaja->id}}/{{$producto->famiid}}/{{$flag}}">{{$producto->fnombre}}</a></td>
                     <td class="text-right">{{$producto->cantidadpro}}</td>
                     <td class="text-right">{{number_format($producto->preciot/$producto->cantidadpro,2,'.', '')}}</td>
@@ -44,7 +54,7 @@
                 </tr>
             @foreach ($combinaciones as $combinacion)
                 <tr>
-                    <td>{{$contador++}}</td>
+                    <td class="text-right">{{$contador++}}</td>
                     <td><a href="/cajas/detallecombinaciones/{{$detacaja->id}}/{{$producto->famiid}}/{{$flag}}">{{$combinacion->cnombre}}</a></td>
                     <td class="text-right">{{$combinacion->cantidadpro}}</td>
                     <td class="text-right">{{$combinacion->preciou}}</td>

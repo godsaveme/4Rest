@@ -8,14 +8,16 @@
         			<h3 class="title" id="restauranteinfo" data-id="{{$restaurante->id}}">{{$restaurante->nombreComercial}}</h3>
         		</div>
         		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-        			<h4 class="title">Fecha: {{substr($detacaja->fechaInicio,0,10)}} </h4>
                     @if (!isset($diario))
+                        <h4 class="title">Fecha: {{substr($detacaja->fechaInicio,0,10)}}</h4>
                        <h4 class="title">Horario: {{substr($detacaja->fechaInicio,-8)}} / {{substr($detacaja->fechaCierre,-8)}}</h4>
+                    @else 
+                        <h4 class="title">Fecha: {{$fechaInicio}} / {{$fechaFin}}</h4>
                     @endif
-        		</div>
+                </div>
         	</div>
         </div>
-         <table class="table">
+         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Nº</th>
@@ -25,6 +27,12 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">{{number_format($totalgastos, 2, '.', '')}}</td> 
+                </tr>
             @foreach ($gastos as $gasto)
                 <tr>
                     <td>{{$contador++}}</td>

@@ -82,7 +82,7 @@
                         <td class="text-right">#: kendo.toString(get("arqueo"), "C") #</th>
                         <td class="text-right">#: kendo.toString(get("dif"), "C") #</th>
                         <td class="text-right">
-                            <a href="/cajas/reporteproductoscaja/#:cajaid#">
+                            <a href="/cajas/reporteproductoscaja/#:cajaid#?descuento=#:totaldescuentos#">
                                 #: tproductos #
                             </a>
                         </td>
@@ -112,7 +112,7 @@
                         </tr>
                         <tr>
                             <th style="width:200px">
-                                <a href="/cajas/reportedescuentos/#:identificador()#/1">
+                                <a href="/cajas/reportedescuentos/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#">
                                 Total Descuentos
                                 </a>
                             </th>
@@ -130,7 +130,7 @@
                         </tr>
                         <tr>
                             <th style="width:200px">
-                                <a href="/cajas/reportegastos/#:identificador()#/1">
+                                <a href="/cajas/reportegastos/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#">
                                 Total Gastos
                                 </a>
                             </th>
@@ -150,7 +150,7 @@
                         </tr>
                         <tr>
                             <th style="width:200px">
-                                <a href="/cajas/reportestickets/#:identificador()#/1">
+                                <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#">
                                     Tickets Emitidos
                                 </a>
                             </th>
@@ -162,7 +162,7 @@
                         </tr>
                         <tr>
                             <th style="width:200px" >
-                                <a href="/cajas/reporteproductoscaja/#:identificador()#/1">
+                                <a href="/cajas/reporteproductoscaja/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&descuento=#:totaldescuento()#">
                                     Productos Vendidos
                                 </a>
                             </th>

@@ -51,7 +51,7 @@ Route::group(array('before' => 'auth'), function (){
 	Route::controller('/detallepedidos', 'DetallepediController');
 	Route::controller('/sabores', 'SaboresController');
 	Route::controller('/monitores','MonitorController');
-
+	Route::controller('/reportes','ReportesController');
 
 	Route::post('provincias', function () {
 	$patron = '';
@@ -2094,6 +2094,20 @@ Route::group(array('before' => 'auth'), function (){
 			}else{
 				return Response::json('false');
 			}
+		}
+	});
+
+	Route::post('reporteventassemanales', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$productos = DB::table('reportesfamiliasxsemana')
+						->where('idrest', '=', $idrest)
+						->where('semana','=', $semana)
+						->where('ayear', '=', $year)
+						->get();
+			return Response::json($productos);
 		}
 	});
 	//fin rutas

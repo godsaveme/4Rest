@@ -129,9 +129,44 @@ class MonitorController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function getMonitorgeneral($id = NULL)
 	{
-		//
+		if (isset($id)) {
+			$restaurante = Restaurante::find($id);
+			$mesas = Mesa::select('mesa.id','mesa.nombre')
+					->join('salon', 'salon.id', '=', 'mesa.salon_id')
+					->where('salon.restaurante_id', '=',$id)->get();
+			$arrayproductos = array();
+			$arrayconsumos = array();
+			foreach ($mesas as $mesa) {
+			$arrayproductos['mesa_'.$mesa->id] = DetPedido::select('detallepedido.id','producto.nombre', 'detallepedido.estado', 'detallepedido.fechaInicio', 
+												'detallepedido.fechaProceso','detallepedido.fechaDespacho', 'detallepedido.fechaDespachado',
+												'detallepedido.cantidad')
+												->join('producto', 'producto.id','=', 'detallepedido.producto_id')
+												->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
+												->join('detmesa', 'pedido.id', '=', 'detmesa.pedido_id')
+												->where('pedido.estado', '!=','A')
+												->where('pedido.estado', '!=', 'T')
+												->where('detmesa.mesa_id', '=', $mesa->id)
+												->get();
+			}
+
+			foreach ($mesas as $mesa) {
+				$arrayconsumos['mesa_'.$mesa->id] = Detpedidotick::selectraw('pedido.id as idpedido, sum(dettiketpedido.precio) as preciot,
+													usuario.login, pedido.fechaInicio')
+													->join('pedido', 'pedido.id', '=', 'dettiketpedido.pedido_id')
+													->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
+													->join('detmesa', 'detmesa.pedido_id', '=', 'pedido.id')
+													->where('pedido.estado', '!=', 'A')
+													->where('pedido.estado', '!=', 'T')
+													->where('detmesa.mesa_id', '=', $mesa->id)
+													->groupby('idpedido')
+													->first();
+			}
+			return View::make('monitores.monitorgeneral', compact('mesas', 'restaurante', 'arrayproductos','arrayconsumos'));
+		}else{
+			return Redirect::to('monitores');
+		}
 	}
 
 	/**

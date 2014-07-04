@@ -404,6 +404,9 @@ class CajasController extends BaseController {
 			$detacaja = Detcaja::find($detallecaja_id);
 			$ventastotales = $detacaja->tickets()->sum('importe');
 			$restaurante = $detacaja->caja->restaurante;
+			$descuento = Input::get('descuento');
+			$totalcantidad= 0;
+			$montototal = 0;
 			$productos = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, familia.nombre as fnombre, familia.id as famiid')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
@@ -415,6 +418,11 @@ class CajasController extends BaseController {
 						->groupby('fnombre')
 						->orderby('preciot', 'Desc')
 						->get();
+			foreach ($productos as $producto) {
+				$totalcantidad = $totalcantidad + $producto->cantidadpro;
+				$montototal = $montototal + $producto->preciot;
+			}
+
 			$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
@@ -425,22 +433,32 @@ class CajasController extends BaseController {
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();
+			foreach ($combinaciones as $combinacion) {
+				$totalcantidad = $totalcantidad + $combinacion->cantidadpro;
+				$montototal = $montototal + $combinacion->preciot;
+			}
+			$importeneto = $montototal - $descuento;
 			$contador = 1;
 			$flag = '';
 			return View::make('cajas.reporteproductosvendidos', 
-				compact('productos', 'detacaja', 'restaurante', 'contador', 'combinaciones', 'flag', 'ventastotales'));
+				compact('productos', 'detacaja', 'restaurante', 'contador', 'combinaciones', 
+						'flag', 'ventastotales', 'totalcantidad', 'montototal', 'importeneto'));
 		}elseif (isset($detallecaja_id) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detallecaja_id);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
+				$descuento = Input::get('descuento');
 				$ventastotales = 0;
-				$newfecha = substr($detacaja->fechaInicio,0,10);
-				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+				$totalcantidad= 0;
+				$montototal = 0;
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$cajones = Detcaja::whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
-				$ocajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+				$ocajones = Detcaja::whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->get();
@@ -460,6 +478,10 @@ class CajasController extends BaseController {
 						->groupby('fnombre')
 						->orderby('preciot', 'Desc')
 						->get();
+				foreach ($productos as $producto) {
+				$totalcantidad = $totalcantidad + $producto->cantidadpro;
+				$montototal = $montototal + $producto->preciot;
+				}
 				$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
 						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
@@ -470,10 +492,16 @@ class CajasController extends BaseController {
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();
+				foreach ($combinaciones as $combinacion) {
+				$totalcantidad = $totalcantidad + $combinacion->cantidadpro;
+				$montototal = $montototal + $combinacion->preciot;
+				}
 				$contador = 1;
 				$diario = 1;
+				$importeneto = $montototal - $descuento;
 				return View::make('cajas.reporteproductosvendidos', 
-				compact('ventastotales','productos', 'detacaja', 'restaurante', 'combinaciones','contador', 'diario','flag'));
+				compact('ventastotales','productos', 'detacaja', 'restaurante', 'combinaciones','contador', 'diario','flag',
+						'fechaInicio', 'fechaFin', 'totalcantidad', 'montototal','importeneto'));
 			}else{
 				return Redirect::to('/web');
 			}
@@ -608,23 +636,41 @@ class CajasController extends BaseController {
 			$restaurante = $detacaja->caja->restaurante;
 			$tickets = $detacaja->tickets;
 			$contador = 1;
+			$montototal = 0;
+			$cantidadtickets = 0;
+			$totaldescuentos = 0;
+			foreach ($tickets as $ticket) {
+				$montototal = $montototal + $ticket->importe;
+				$cantidadtickets++;
+				$totaldescuentos = $totaldescuentos + $ticket->idescuento;
+			}
 			return View::make('cajas.reportetickets', compact('tickets','detacaja', 
-						'contador','restaurante'));
+						'contador','restaurante', 'montototal','cantidadtickets', 'totaldescuentos'));
 		}elseif (isset($detcajaid) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detcajaid);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
-				$newfecha = substr($detacaja->fechaInicio,0,10);
-				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$cajones = Detcaja::whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
 				$tickets = Ticket::wherein('ticketventa.detcaja_id', $cajones)->get();
+				$montototal = 0;
+				$cantidadtickets = 0;
+				$totaldescuentos = 0;
+				foreach ($tickets as $ticket) {
+				$montototal = $montototal + $ticket->importe;
+				$cantidadtickets++;
+				$totaldescuentos = $totaldescuentos + $ticket->idescuento;
+				}
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.reportetickets', compact('tickets','detacaja', 
-						'contador','restaurante', 'diario'));
+						'contador','restaurante', 'diario','montototal','cantidadtickets', 'totaldescuentos',
+						'fechaInicio', 'fechaFin'));
 			}else{
 				return Redirect::to('/web');
 			}
@@ -639,22 +685,34 @@ class CajasController extends BaseController {
 			$restaurante = $detacaja->caja->restaurante;
 			$gastos = $detacaja->gastos()->get();
 			$contador = 1;
-			return View::make('cajas.reportegastos', compact('gastos','detacaja', 'contador','restaurante'));
+			$totalgastos = 0;
+			foreach ($gastos as $gasto) {
+				$totalgastos = $totalgastos + $gasto->importetotal;
+			}
+			return View::make('cajas.reportegastos', 
+				compact('gastos','detacaja', 'contador','restaurante','totalgastos'));
 		}elseif (isset($detcajaid) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detcajaid);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
-				$newfecha = substr($detacaja->fechaInicio,0,10);
-				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$cajones = Detcaja::whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
 				$gastos = Regitrodegastos::wherein('detallecaja_id', $cajones)
 							 ->get();
+				$totalgastos = 0;
+				foreach ($gastos as $gasto) {
+					$totalgastos = $totalgastos + $gasto->importetotal;
+				}
 				$contador = 1;
 				$diario = 1;
-				return View::make('cajas.reportegastos', compact('gastos','detacaja', 'contador','restaurante', 'diario'));
+				return View::make('cajas.reportegastos', 
+					compact('gastos','detacaja', 'contador','restaurante', 'diario','totalgastos', 
+							'fechaInicio', 'fechaFin'));
 			}else{
 				return Redirect::to('/web');
 			}
@@ -671,15 +729,22 @@ class CajasController extends BaseController {
 						->where('ticketventa.importe', '>=', 0)
 						->where('ticketventa.idescuento', '!=', 0)->get();
 			$contador = 1;
+			$montototal = 0;
+			$totaldescuentos = 0;
+			foreach ($descuentos as $descuento) {
+				$montototal = $montototal + $descuento->importe;
+				$totaldescuentos = $totaldescuentos + $descuento->idescuento;
+			}
 			return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
-							'contador','restaurante'));
+							'contador','restaurante', 'montototal', 'totaldescuentos'));
 		}elseif (isset($detcajaid) && isset($flag)) {
 			if($flag == 1){
 				$detacaja = Detcaja::find($detcajaid);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
-				$newfecha = substr($detacaja->fechaInicio,0,10);
-				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
+				$fechaInicio = Input::get('fechainicio');
+				$fechaFin = Input::get('fechafin');
+				$cajones = Detcaja::whereBetween('FechaInicio', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
@@ -687,10 +752,17 @@ class CajasController extends BaseController {
 							->where('ticketventa.estado','=',0)
 							->where('ticketventa.importe', '>=', 0)
 							 ->where('ticketventa.idescuento', '!=', 0, 'AND')->get();
+				$montototal = 0;
+				$totaldescuentos = 0;
+				foreach ($descuentos as $descuento) {
+					$montototal = $montototal + $descuento->importe;
+					$totaldescuentos = $totaldescuentos + $descuento->idescuento;
+				}
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
-								'contador','restaurante', 'diario'));
+								'contador','restaurante', 'diario','fechaInicio', 'fechaFin','montototal',
+								'totaldescuentos'));
 			}else{
 				return Redirect::to('/web');
 			}

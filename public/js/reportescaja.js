@@ -175,6 +175,14 @@ var viewModel_reportecajadiario = kendo.observable({
 
         return identifier;
     },
+    fechainicio:function(){
+        var fecha = $('#fecha_inicio').val();
+        return fecha;
+    },
+    fechafin:function(){
+        var fecha = $('#fecha_fin').val();
+        return fecha;
+    },
     datosreporte: datareporte
 });
 

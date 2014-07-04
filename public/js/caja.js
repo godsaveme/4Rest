@@ -374,5 +374,4 @@ function tiempoenmesa(){
 }
 tiempoenmesa();
 setInterval(tiempoenmesa,60000);
-
 //fintiemposenmesa
