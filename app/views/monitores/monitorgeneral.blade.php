@@ -19,7 +19,7 @@
 			            <div class="panel panel-info">
 			                <div class="panel-heading" style="line-height: 30px;
 			                @if($arrayprecuentas['mesa_'.$mesa->id] < 1)
-			                	background: background:#98FB98
+			                	background:#98FB98
 			                @endif
 			                ">
 			                {{substr($mesa->nombre,-2)}} / {{$arrayconsumos['mesa_'.$mesa->id]['login']}}
