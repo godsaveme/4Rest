@@ -284,6 +284,9 @@
 					<a href="/cajas/listarventas">Ventas Totales</a>
 					</li>
 					<li class="list-group-item list_menu">
+					<a href="/monitores/monitorgeneral/{{Auth::user()->id_restaurante}}" target="_blank">Monitor</a>
+					</li>
+					<li class="list-group-item list_menu">
 					<a href="/cajas/cerrarcaja/{{$detcaja->id}}">Cerrar Caja</a>
 					</li>
 				</ul>

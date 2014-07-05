@@ -23,9 +23,7 @@ class MonitorController extends \BaseController {
 	public function postIndex()
 	{
 		$idrestaurante = Input::get('restaurante_id');
-		$restaurante = Restaurante::find($idrestaurante);
-		$areas = Areadeproduccion::where('id_restaurante', '=',$idrestaurante)->lists('nombre', 'id');
-		return View::make('monitores.elegirarea', compact('areas', 'restaurante'));
+		return Redirect::to('/monitores/monitorgeneral/'.$idrestaurante);
 	}
 
 	/**
