@@ -79,9 +79,25 @@
                   <li><a href="{{URL('pedidos')}}"><i class="fa fa-tablet"></i>  Pedidos Tablet</a></li>
                   <li class="divider"></li>
                   <li><a href="{{URL('cajas')}}"><i class="fa fa-money"></i>  Caja</a></li>
-                  <li><a href="{{URL('cajas/reportescaja')}}"><i class="fa fa-file-text-o"></i>  Reportes</a></li>
+                  <li>
+                    <a href="{{URL('cajas/reportescaja')}}">
+                      <i class="fa fa-file-text-o"></i> 
+                      Reportes
+                    </a>
+                  </li>
                   <li><a href="{{URL('monitores')}}"> <i class="glyphicon glyphicon-eye-open"></i> Monitores</a></li>
-                  <li><a href="#"><i class="fa fa-users"></i>  Crear Usuario</a></li>
+                  <li>
+                    <a href="/usuarios/reportemozos/2"> 
+                      <i class="fa fa-users"></i>
+                      Reporte Mozos Elias Aguirre
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/usuarios/reportemozos/3"> 
+                      <i class="fa fa-users"></i>
+                      Reporte Mozos Woyke
+                    </a>
+                  </li>
                   <li class="divider"></li>
   <!--                 <li class="dropdown-header">Nav header</li>
                   <li><a href="#">Separated link</a></li> -->

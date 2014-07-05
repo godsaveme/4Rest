@@ -13,8 +13,8 @@
             		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <h4 class="title">Seleciona Fecha</h4>
                             <div class="form-group">
-                                <input id="fecha_inicio"/>
-                                <input id="fecha_fin"/>
+                                <input id="fecha_inicio" placeholder ="Fecha Inicio"/>
+                                <input id="fecha_fin" placeholder="Fecha Fin"/>
                                 <a href="javascript:void(0)" id="btn_enviarfechas" class="btn btn-default">Buscar</a>
                             </div>
             		</div>

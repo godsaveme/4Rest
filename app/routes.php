@@ -1740,7 +1740,8 @@ Route::group(array('before' => 'auth'), function (){
 					$totalanulados = $cajon->tickets()->where('ticketventa.estado', '=', 1)->count();
 					$totaldescuentos = $cajon->tickets()->where('ticketventa.estado','=',0)
 							->where('ticketventa.importe', '>=', 0)->sum('idescuento');
-					$tickets = $cajon->tickets()->where('ticketventa.estado', '=', 0)->get();
+					$tickets = $cajon->tickets()->where('ticketventa.estado', '=', 0)
+								->where('ticketventa.importe', '>=', 0)->get();
 					$ticketinicial = $cajon->tickets()->orderby('id', 'asc')->first();
 					$ticketfinal = $cajon->tickets()->orderby('id', 'desc')->first();
 					$efectivo = 0;
