@@ -116,7 +116,7 @@ app.post('/tiempoenmesa', function(request, response){
             if(results.length > 0){
                 response.setHeader('Content-Type', 'application/json');
                 response.send(JSON.stringify({respuesta : true, tiempo: results[0]['tiempoenmesa']}));
-            }else
+            }else{
                 response.setHeader('Content-Type', 'application/json');
                 response.send(JSON.stringify({respuesta : false}));
             }
