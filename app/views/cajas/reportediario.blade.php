@@ -92,6 +92,38 @@
                 </script>
                 </tbody>
             </table>
+            <table class="table table-bordered">
+                <thead>
+                    <th>Turno</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">Turno</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Hora</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Responsable</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="center-block" style="width:400px">
                 <h3>Total</h3>
                 <a href="javascript:void(o)" class="btn btn-primary pull-right" id ="btn_imprimircajadiario"> Imprimir</a>

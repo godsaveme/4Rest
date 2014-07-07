@@ -353,29 +353,35 @@ class CajasController extends BaseController {
 		$tarjeta = 0;
 		$vale = 0;
 		foreach ($tickets as $tickete) {
-			$oefect = $tickete->tipopago()
-			->where('formadepago_id', '=', 1)
-			->sum('importe');
-			if ($oefect > $tickete->importe){
-				$oefect = $tickete->importe;
+			if($tickete->estado == 0){
+				$oefect = $tickete->tipopago()
+				->where('formadepago_id', '=', 1)
+				->sum('importe');
+				if ($oefect > $tickete->importe){
+					$oefect = $tickete->importe;
+				}
+				$newefec = $efectivo + $oefect;
+				$efectivo = round($newefec, 2);
 			}
-			$newefec = $efectivo + $oefect;
-			$efectivo = round($newefec, 2);
 		}
 
 		foreach ($tickets as $tickete) {
-			$oefect = $tickete->tipopago()->where('formadepago_id', '=', 2)->sum('importe');
-			if ($oefect > $tickete->importe) {
-				$oefect = $tickete->importe;
+			if($tickete->estado == 0){
+				$oefect = $tickete->tipopago()->where('formadepago_id', '=', 2)->sum('importe');
+				if ($oefect > $tickete->importe) {
+					$oefect = $tickete->importe;
+				}
+				$newefec = $tarjeta + $oefect;
+				$tarjeta = round($newefec, 2);
 			}
-			$newefec = $tarjeta + $oefect;
-			$tarjeta = round($newefec, 2);
 		}
 
 		foreach ($tickets as $tickete) {
-			$oefect = $tickete->tipopago()->where('formadepago_id', '=', 3)->sum('importe');
-			$newefec = $vale + $oefect;
-			$vale = round($newefec, 2);
+			if($tickete->estado == 0){
+				$oefect = $tickete->tipopago()->where('formadepago_id', '=', 3)->sum('importe');
+				$newefec = $vale + $oefect;
+				$vale = round($newefec, 2);
+			}
 		}
 		return View::make('cajas.ventastotales', compact('detcaja', 'efectivo', 'tarjeta', 'vale'));
 	}
