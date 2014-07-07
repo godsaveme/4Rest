@@ -1096,6 +1096,7 @@ Route::group(array('before' => 'auth'), function (){
 							$ovale = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
 						}
 						$datoscaja->save();
+						DB::commit();
 						return json_encode('True');
 					} else {
 						return json_encode('Ingrese un monto válido');
@@ -1105,7 +1106,6 @@ Route::group(array('before' => 'auth'), function (){
 				DB::rollback();
 				return json_encode($e);
 			}
-			DB::commit();
 		}
 	});
 
