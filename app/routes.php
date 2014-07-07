@@ -1075,17 +1075,6 @@ Route::group(array('before' => 'auth'), function (){
 	                                </div>
 	                                </body>
 	                                </html>';
-	                    $headers = array('Content-Type' => 'application/pdf', );
-						$pdfPath = TIKET_DIR.$token.'.pdf';
-						$tamaño = 125+$newtamaño;
-						$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
-						$html2pdf->WriteHTML($html);
-						$html2pdf->Output($pdfPath, 'F');
-						$cmd = "lpr -P".$infocaja->impresora." ";
-						$cmd .= $pdfPath;
-						$response = shell_exec($cmd);
-						File::delete($pdfPath);
-						
 						if ($iefectivo > 0) {
 						$oefectivo = Detformadpago::create(array('importe' => $iefectivo, 'ticket_id' => $tickete->id, 'formadepago_id' => 1));
 						}
@@ -1096,16 +1085,26 @@ Route::group(array('before' => 'auth'), function (){
 							$ovale = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
 						}
 						$datoscaja->save();
-						DB::commit();
-						return json_encode('True');
 					} else {
 						return json_encode('Ingrese un monto válido');
 					}
 				}
 			}catch (Exception $e){
 				DB::rollback();
-				return json_encode($e);
+				return Response::json($e);
 			}
+			$headers = array('Content-Type' => 'application/pdf', );
+						$pdfPath = TIKET_DIR.$token.'.pdf';
+						$tamaño = 125+$newtamaño;
+						$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
+						$html2pdf->WriteHTML($html);
+						$html2pdf->Output($pdfPath, 'F');
+						$cmd = "lpr -P".$infocaja->impresora." ";
+						$cmd .= $pdfPath;
+						$response = shell_exec($cmd);
+						File::delete($pdfPath);
+			DB::commit();
+			return json_encode('True');
 		}
 	});
 
