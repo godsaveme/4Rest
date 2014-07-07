@@ -298,7 +298,7 @@ class CajasController extends BaseController {
 	public function getCerrarcaja($detallecaja_id = NULL) {
 		if (isset($detallecaja_id)) {
 			$detcaja = $this->detcaja;
-			$totalventas = $detcaja->tickets()->sum('importe');
+			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
 			$totalgastos = $detcaja->gastos()->sum('importetotal');
 			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal');
 			$importetotal = number_format($totalventas+$detcaja->montoInicial-$totalgastos, 2, '.', '');

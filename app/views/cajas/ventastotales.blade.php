@@ -32,7 +32,7 @@
                          {{number_format($tarjeta,2, '.','')}}
                         </td>
                         <td>
-                         #: totalPrice()#
+                        {{number_format($efectivo + $tarjeta, 2, '.','')}}
                         </td>
 				    </tr>
 				</script>
