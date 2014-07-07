@@ -31,7 +31,7 @@
 		 */
 		public function postCreate()
 		{
-		DB::beginTransaction();	
+		 DB::beginTransaction();	
 		 try {
 			$persona = Usuario::where('persona_id', '=', Input::get('persona_id'))->get();
 			$user = Usuario::where('login','=',Input::get('login'))->get();
