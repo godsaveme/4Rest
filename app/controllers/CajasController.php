@@ -646,9 +646,11 @@ class CajasController extends BaseController {
 			$cantidadtickets = 0;
 			$totaldescuentos = 0;
 			foreach ($tickets as $ticket) {
-				$montototal = $montototal + $ticket->importe;
-				$cantidadtickets++;
-				$totaldescuentos = $totaldescuentos + $ticket->idescuento;
+				if ($ticket->estado == 0 && $ticket->importe >= 0) {
+					$montototal = $montototal + $ticket->importe;
+					$cantidadtickets++;
+					$totaldescuentos = $totaldescuentos + $ticket->idescuento;
+				}
 			}
 			return View::make('cajas.reportetickets', compact('tickets','detacaja', 
 						'contador','restaurante', 'montototal','cantidadtickets', 'totaldescuentos'));
