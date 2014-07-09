@@ -93,37 +93,199 @@
                 </tbody>
             </table>
             <table class="table table-bordered">
-                <thead>
-                    <th>Turno</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                </thead>
-                <tbody>
+            <tbody data-template="reportecaja_template" 
+            data-bind="source: this">
+            <script id="reportecaja_template" type="text/x-kendo-template">
                     <tr>
-                        <td class="text-right">Turno</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
+                        <td colspan="3">Turno</td>
+                        <td class="text-center" style="font-weight: bold">1</td>
+                        <td class="text-center" style="font-weight: bold">2</td>
+                        <td class="text-center" style="font-weight: bold">3</td>
+                        <td class="text-center" style="font-weight: bold">4</td>
                     </tr>
                     <tr>
-                        <td class="text-right">Hora</td>
+                        <td colspan="3" style="font-weight: bold">Hora</td>
+                        <td>#:turno(0)#</td>
+                        <td>#:turno(1)#</td>
+                        <td>#:turno(2)#</td>
+                        <td>#:turno(3)#</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="font-weight: bold">Responsable</td>
+                        <td>#:responsable(0)#</td>
+                        <td>#:responsable(1)#</td>
+                        <td>#:responsable(2)#</td>
+                        <td>#:responsable(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Venta</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=1">
+                                #:(parseFloat(totalventas()) + parseFloat(totaldescuento())).toFixed(2)#
+                            </a>
+                        </td>
+                        <td></td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(0)#">
+                                #:(parseFloat(venta(0)) + parseFloat(descuentos(0))).toFixed(2)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(1)#">
+                                #:(parseFloat(venta(1)) + parseFloat(descuentos(1))).toFixed(2)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(2)#">
+                                #:(parseFloat(venta(2)) + parseFloat(descuentos(2))).toFixed(2)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(3)#">
+                                #:(parseFloat(venta(3)) + parseFloat(descuentos(3))).toFixed(2)#
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Efectivo</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=2">
+                                #:totalefectivo()#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            #: (parseFloat(totalefectivo())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
+                        </td>
+                        <td class="text-right">#:efectivo(0)#</td>
+                        <td class="text-right">#:efectivo(1)#</td>
+                        <td class="text-right">#:efectivo(2)#</td>
+                        <td class="text-right">#:efectivo(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Tarjeta</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=3">
+                                #:totaltarjeta()#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            #: (parseFloat(totaltarjeta())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
+                        </td>
+                        <td class="text-right">#:tarjeta(0)#</td>
+                        <td class="text-right">#:tarjeta(1)#</td>
+                        <td class="text-right">#:tarjeta(2)#</td>
+                        <td class="text-right">#:tarjeta(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Descuentos</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=4">
+                                #:totaldescuento()#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            #: (parseFloat(totaldescuento())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
+                        </td>
+                        <td class="text-right">#:descuentos(0)#</td>
+                        <td class="text-right">#:descuentos(1)#</td>
+                        <td class="text-right">#:descuentos(2)#</td>
+                        <td class="text-right">#:descuentos(3)#</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Promociones</td>
+                        <td class="text-right"></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="text-right">Responsable</td>
+                        <td style="font-weight: bold">Vales Personal</td>
+                        <td class="text-ight"></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
-                </tbody>
+                    <tr>
+                        <td style="font-weight: bold">Descuento Autorizado</td>
+                        <td class="text-right">#:totalvale()#</td>
+                        <td></td>
+                        <td class="text-right">#:descuentoautorizado(0)#</td>
+                        <td class="text-right">#:descuentoautorizado(1)#</td>
+                        <td class="text-right">#:descuentoautorizado(2)#</td>
+                        <td class="text-right">#:descuentoautorizado(3)#</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Productos Vendidos</td>
+                        <td class="text-right">
+                            <a href="/cajas/reporteproductoscaja/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&descuento=#:totaldescuento()#">
+                                #:totalproductos()#
+                            </a>
+                        </td>
+                        <td></td>
+                        <td class="text-right">#:producto(0)#</td>
+                        <td class="text-right">#:producto(1)#</td>
+                        <td class="text-right">#:producto(2)#</td>
+                        <td class="text-right">#:producto(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Tickets Emitidos</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=1">
+                                #:ticketemitidos()#
+                            </a>
+                        </td>
+                        <td></td>
+                        <td class="text-right">#:ticket(0)#</td>
+                        <td class="text-right">#:ticket(1)#</td>
+                        <td class="text-right">#:ticket(2)#</td>
+                        <td class="text-right">#:ticket(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Tickets Anulados</td>
+                        <td class="text-right">#:anulados()#</td>
+                        <td></td>
+                        <td class="text-right">#:anulado(0)#</td>
+                        <td class="text-right">#:anulado(1)#</td>
+                        <td class="text-right">#:anulado(2)#</td>
+                        <td class="text-right">#:anulado(3)#</td>
+                    </tr>
+                    <tr>
+                    <td colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Fondo Caja</td>
+                        <td class="text-right"></td>
+                        <td></td>
+                        <td class="text-right">#:fondocaja(0)#</td>
+                        <td class="text-right">#:fondocaja(1)#</td>
+                        <td class="text-right">#:fondocaja(2)#</td>
+                        <td class="text-right">#:fondocaja(3)#</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Diferencia</td>
+                        <td class="text-right">#:diferencias()#</td>
+                        <td></td>
+                        <td class="text-right">#:diferencia(0)#</td>
+                        <td class="text-right">#:diferencia(1)#</td>
+                        <td class="text-right">#:diferencia(2)#</td>
+                        <td class="text-right">#:diferencia(3)#</td>
+                    </tr>
+                </script>
+            </tbody>
             </table>
+
             <div class="center-block" style="width:400px">
                 <h3>Total</h3>
                 <a href="javascript:void(o)" class="btn btn-primary pull-right" id ="btn_imprimircajadiario"> Imprimir</a>

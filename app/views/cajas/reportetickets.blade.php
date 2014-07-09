@@ -40,14 +40,16 @@
                     <td></td>
                 </tr>
             @foreach ($tickets as $tickete)
-                @if($tickete->importe >= 0)
                     <tr>
                         <td class="text-right">{{$contador++}}</td>
-                        <td> <a href="/tickets/show/{{$tickete->id}}">{{$tickete->numero}}</a></td>
-                        <td class="text-right">
-                        @if($tickete->estado == 1)
-                         -
+                        <td>
+                        @if($tickete->importe >= 0)
+                            <a href="/tickets/show/{{$tickete->id}}">{{$tickete->numero}}</a>
+                        @else
+                            <a href="">{{$tickete->numero}}</a>
                         @endif
+                        </td>
+                        <td class="text-right">
                         {{$tickete->importe}}
                         </td>
                         <td class="text-right">{{$tickete->idescuento}}</td>
@@ -61,7 +63,6 @@
                         <td class="text-center">{{$tickete->mozo}}</td>
                         <td class="text-center">{{$tickete->cajero}}</td>
                     </tr>
-                @endif
             @endforeach
             </tbody>
         </table>

@@ -115,7 +115,7 @@ var viewModel_reportecajadiario = kendo.observable({
         }
         return montoinicial;
     },
-    diferencia: function(){
+    diferencias: function(){
     	var sum = 0;
         var data = datareporte.data();
         for (var i = data.length - 1; i >= 0; i--) {
@@ -182,6 +182,211 @@ var viewModel_reportecajadiario = kendo.observable({
     fechafin:function(){
         var fecha = $('#fecha_fin').val();
         return fecha;
+    },
+    turno:function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.turno;
+            }else{
+                dato = '-';
+            }  
+        }else{
+            dato = '-';
+        }
+        console.log(data.length);
+        return dato;
+    },
+    responsable: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.usuario;
+            }else{
+                dato = '-';
+            }
+        }else{
+            dato = '-';
+        }
+        return dato;
+    },
+    venta:function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totalventas;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+    },
+    efectivo:function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totalefectivo;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+    },
+    tarjeta: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totaltarjeta;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    },
+    descuentos: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totaldescuentos;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    }, 
+    descuentoautorizado: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totalvale;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    },
+    cajaid: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.cajaid;
+            }else{
+                dato = 0;
+            }
+        }else{
+            dato = 0;
+        }
+        return dato;
+
+    },
+    fondocaja: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.fondodecaja;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    },
+    diferencia: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.dif;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    },
+    producto: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.tproductos;
+            }else{
+                dato = 0;
+            }
+        }else{
+            dato = 0;
+        }
+        return dato;
+
+    },
+    ticket: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totaltickets;
+            }else{
+                dato = 0;
+            }
+        }else{
+            dato = 0;
+        }
+        return dato;
+
+    },
+    anulado: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totalanulados;
+            }else{
+                dato = 0;
+            }
+        }else{
+            dato = 0;
+        }
+        return dato;
+
     },
     datosreporte: datareporte
 });
