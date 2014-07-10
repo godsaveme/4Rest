@@ -6,48 +6,8 @@ var datareporte = new kendo.data.DataSource({
 							});
 
 var start = $("#fecha_inicio").kendoDatePicker({
-                        format: "yyyy-MM-dd",
-                        change: startChange
+                        format: "yyyy-MM-dd"
                     }).data("kendoDatePicker");
-
-var end = $("#fecha_fin").kendoDatePicker({
-    format: "yyyy-MM-dd",
-    change: endChange
-}).data("kendoDatePicker");
-
-function startChange() {
-    var startDate = start.value(),
-    endDate = end.value();
-
-    if (startDate) {
-        startDate = new Date(startDate);
-        startDate.setDate(startDate.getDate());
-        end.min(startDate);
-    } else if (endDate) {
-        start.max(new Date(endDate));
-    } else {
-        endDate = new Date();
-        start.max(endDate);
-        end.min(endDate);
-    }
-}
-
-function endChange() {
-    var endDate = end.value(),
-    startDate = start.value();
-
-    if (endDate) {
-        endDate = new Date(endDate);
-        endDate.setDate(endDate.getDate());
-        start.max(endDate);
-    } else if (startDate) {
-        end.min(new Date(startDate));
-    } else {
-        endDate = new Date();
-        start.max(endDate);
-        end.min(endDate);
-    }
-}
 
 
 var viewModel_reportecajadiario = kendo.observable({
@@ -404,12 +364,12 @@ $('#btn_enviarfechas').on('click', function(event) {
         dataType: 'json',
         data: {idrest: $('#restauranteinfo').attr('data-id'), 
                 fechainicio: $('#fecha_inicio').val(), 
-                fechafin: $('#fecha_fin').val()},
+                fechafin: $("#fecha_inicio").val()},
     })
     .done(function(data) {
         datareporte.data(data);
         $('#text_fechainicio').text($('#fecha_inicio').val());
-        $('#text_fechafin').text($('#fecha_fin').val());
+        $('#text_fechafin').text($("#fecha_inicio").val());
     })
     .fail(function() {
         console.log("error");

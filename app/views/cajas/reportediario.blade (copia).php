@@ -14,6 +14,7 @@
                             <h4 class="title">Seleciona Fecha</h4>
                             <div class="form-group">
                                 <input id="fecha_inicio" placeholder ="Fecha Inicio"/>
+                                <input id="fecha_fin" placeholder="Fecha Fin"/>
                                 <a href="javascript:void(0)" id="btn_enviarfechas" class="btn btn-default">Buscar</a>
                             </div>
             		</div>
@@ -32,14 +33,67 @@
                 </thead>
             </table>
             <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Turno</th>
+                        <th>F. Caja</th>
+                        <th>In. Caja</th>
+                        <th>Efec</th>
+                        <th>Tarj</th>
+                        <th>Vale</th>
+                        <th>Desc</th>
+                        <th>Ventas</th>
+                        <th>Gastos</th>
+                        <th>Caja</th>
+                        <th>Arque.</th>
+                        <th>Dif.</th>
+                        <th>Pro. V</th>
+                        <th>T. Emi</th>
+                        <th>T. Anu.</th>
+                    </tr>
+                </thead>
                 <tbody data-template="reportediario_template" data-bind="source: datosreporte">
                 <script id="reportediario_template" type="text/x-kendo-template">
+	                <tr>
+	                    <td class="text-left">
+                            <a href="/cajas/reportestickets/#:cajaid#">
+                                #: kendo.toString(get("usuario"), "C")#
+                            </a>
+                        </td>
+	                    <td class="text-left">#: kendo.toString(get("turno"), "C") #</td>	
+	                    <td class="text-right">#: kendo.toString(get("fondodecaja"), "C") #</td>
+	                    <td class="text-right">#: kendo.toString(get("ingresoscaja"), "C") #</td>
+	                    <td class="text-right">#: kendo.toString(get("totalefectivo"), "C") #</td>
+	                    <td class="text-right">#: kendo.toString(get("totaltarjeta"), "C") #</td>
+	                    <td class="text-right">#: kendo.toString(get("totalvale"), "C") #</td>
+	                    <td class="text-right">
+                            <a href="/cajas/reportedescuentos/#:cajaid#">
+                                #: kendo.toString(get("totaldescuentos"), "C") #
+                            </a>
+                        </td>
+                        <td class="text-right">#: kendo.toString(get("totalventas"), "C") #</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportegastos/#:cajaid#">
+                            #: kendo.toString(get("gastos"), "C")#
+                            </a>
+                        </td>
+                        <td class="text-right">#: kendo.toString(get("caja"), "C") #</td>
+                        <td class="text-right">#: kendo.toString(get("arqueo"), "C") #</th>
+                        <td class="text-right">#: kendo.toString(get("dif"), "C") #</th>
+                        <td class="text-right">
+                            <a href="/cajas/reporteproductoscaja/#:cajaid#?descuento=#:totaldescuentos#">
+                                #: tproductos #
+                            </a>
+                        </td>
+                        <td class="text-right">#: totaltickets #</td>
+                        <td class="text-right">#: totalanulados#</td>
+	                </tr>
                 </script>
                 </tbody>
             </table>
             <table class="table table-bordered">
-            <tbody data-template="reportecaja_template" 
-            data-bind="source: this">
+            <tbody data-template="reportediario_template" data-bind="source: datosreporte">
             <script id="reportecaja_template" type="text/x-kendo-template">
                     <tr>
                         <td colspan="3" style="font-weight: bold;">Turno</td>
