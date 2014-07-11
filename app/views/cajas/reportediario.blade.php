@@ -71,22 +71,22 @@
                         </td>
                         <td style="width: 10%"></td>
                         <td class="text-right">
-                            <a href="/cajas/reportestickets/#:cajaid(0)#">
+                            <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=1">
                                 #:(parseFloat(venta(0)) + parseFloat(descuentos(0))).toFixed(2)#
                             </a>
                         </td>
                         <td class="text-right">
-                            <a href="/cajas/reportestickets/#:cajaid(1)#">
+                            <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=1">
                                 #:(parseFloat(venta(1)) + parseFloat(descuentos(1))).toFixed(2)#
                             </a>
                         </td>
                         <td class="text-right">
-                            <a href="/cajas/reportestickets/#:cajaid(2)#">
+                            <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=1">
                                 #:(parseFloat(venta(2)) + parseFloat(descuentos(2))).toFixed(2)#
                             </a>
                         </td>
                         <td class="text-right">
-                            <a href="/cajas/reportestickets/#:cajaid(3)#">
+                            <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=1">
                                 #:(parseFloat(venta(3)) + parseFloat(descuentos(3))).toFixed(2)#
                             </a>
                         </td>
@@ -101,10 +101,26 @@
                         <td class="text-right">
                             #: (parseFloat(totalefectivo())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
                         </td>
-                        <td class="text-right">#:efectivo(0)#</td>
-                        <td class="text-right">#:efectivo(1)#</td>
-                        <td class="text-right">#:efectivo(2)#</td>
-                        <td class="text-right">#:efectivo(3)#</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=2">
+                                #:efectivo(0)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=2">
+                                #:efectivo(1)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=2">
+                                #:efectivo(2)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=2">
+                                #:efectivo(3)#
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Tarjeta</td>
@@ -116,10 +132,26 @@
                         <td class="text-right">
                             #: (parseFloat(totaltarjeta())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
                         </td>
-                        <td class="text-right">#:tarjeta(0)#</td>
-                        <td class="text-right">#:tarjeta(1)#</td>
-                        <td class="text-right">#:tarjeta(2)#</td>
-                        <td class="text-right">#:tarjeta(3)#</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=3">
+                            #:tarjeta(0)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=3">
+                            #:tarjeta(1)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=3">
+                            #:tarjeta(2)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=3">
+                            #:tarjeta(3)#
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Descuentos</td>
@@ -131,10 +163,29 @@
                         <td class="text-right">
                             #: (parseFloat(totaldescuento())*100/(parseFloat(totalventas()) + parseFloat(totaldescuento()))).toFixed(2) # %
                         </td>
-                        <td class="text-right">#:descuentos(0)#</td>
-                        <td class="text-right">#:descuentos(1)#</td>
-                        <td class="text-right">#:descuentos(2)#</td>
-                        <td class="text-right">#:descuentos(3)#</td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=4">
+                            #:descuentos(0)#
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=4">
+                            #:descuentos(1)#
+                            </a>
+
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=4">
+                            #:descuentos(2)#
+                            </a>
+
+                        </td>
+                        <td class="text-right">
+                            <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=4">
+                            #:descuentos(3)#
+                            </a>
+
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="7">

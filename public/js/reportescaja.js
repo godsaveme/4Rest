@@ -11,6 +11,7 @@ var start = $("#fecha_inicio").kendoDatePicker({
 
 
 var viewModel_reportecajadiario = kendo.observable({
+     datosreporte: datareporte,
 	totalefectivo:function(){
 		var sum = 0;
         var data = datareporte.data();
@@ -140,7 +141,7 @@ var viewModel_reportecajadiario = kendo.observable({
         return fecha;
     },
     fechafin:function(){
-        var fecha = $('#fecha_fin').val();
+        var fecha = $('#fecha_inicio').val();
         return fecha;
     },
     turno:function(a){
@@ -347,8 +348,7 @@ var viewModel_reportecajadiario = kendo.observable({
         }
         return dato;
 
-    },
-    datosreporte: datareporte
+    }
 });
 
 kendo.bind($("#reportediariocaja"), viewModel_reportecajadiario);

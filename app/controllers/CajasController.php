@@ -640,7 +640,37 @@ class CajasController extends BaseController {
 		if(isset($detcajaid) && !isset($flag)){
 			$detacaja = Detcaja::find($detcajaid);
 			$restaurante = $detacaja->caja->restaurante;
-			$tickets = $detacaja->tickets;
+			
+			$tipoconsulta = Input::get('tipoc');
+				switch ($tipoconsulta) {
+					case 1: //todos
+						$tickets = $detacaja->tickets;
+					break;
+					case 2://efectivo
+						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
+									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
+									'ticketventa.idescuento')
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 1)
+						->get();
+					break;
+					case 3://tarjetas
+						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
+									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
+									'ticketventa.idescuento')
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 2)
+						->get();
+					break;
+					case 4://descuentos
+						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
+									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
+									'ticketventa.idescuento')
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 3)
+						->get();
+					break;
+				}
 			$contador = 1;
 			$montototal = 0;
 			$cantidadtickets = 0;

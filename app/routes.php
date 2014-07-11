@@ -2028,9 +2028,10 @@ Route::group(array('before' => 'auth'), function (){
 							->where('usuario.id' , '=' , $mozo->id)
 							->where('ticketventa.estado','=', 0)
 							->first();
-				$tiempos = DetPedido::selectraw("usuario.id, TIME_FORMAT(SEC_TO_TIME((avg(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
-							AS tiempomozopromedio,TIME_FORMAT(SEC_TO_TIME((min(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
-							AS tiempomozominimo, TIME_FORMAT(SEC_TO_TIME((max(TIMESTAMPDIFF(MINUTE , fechaDespacho, fechaDespachado)))*60), '%H:%i') 
+				$tiempos = DetPedido::selectraw("usuario.id, 
+							SEC_TO_TIME((avg(TIMESTAMPDIFF(SECOND , fechaDespacho, fechaDespachado)))) 
+							AS tiempomozopromedio,SEC_TO_TIME((min(TIMESTAMPDIFF(SECOND , fechaDespacho, fechaDespachado))))
+							AS tiempomozominimo, SEC_TO_TIME((max(TIMESTAMPDIFF(SECOND , fechaDespacho, fechaDespachado)))) 
 							AS tiempomozomaximo")
 							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
@@ -2065,7 +2066,7 @@ Route::group(array('before' => 'auth'), function (){
 								'mozoid'=>$productos->id,
 								'mozo'=> $ventas->login,
 								'mfactu' => $ventas->importe,
-								'promt'=>round($ventas->promedioventas, 2),
+								'promt'=>number_format($ventas->promedioventas, 2, '.',''),
 								'peds' => $productos->totalpedidos,	
 								'pedsa'=>$pedidosanulados->pedidosanulados,
 								'cprods'=>$productos->totalproductos,
@@ -2110,6 +2111,21 @@ Route::group(array('before' => 'auth'), function (){
 			$year = Input::get('year');
 			$semana = Input::get('semana');
 			$productos = DB::table('reportesfamiliasxsemana')
+						->where('idrest', '=', $idrest)
+						->where('semana','=', $semana)
+						->where('ayear', '=', $year)
+						->orderby('total', 'Desc')
+						->get();
+			return Response::json($productos);
+		}
+	});
+
+	Route::post('reporteventasunidadessemanales', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$productos = DB::table('vistaunidadessemanasreporte')
 						->where('idrest', '=', $idrest)
 						->where('semana','=', $semana)
 						->where('ayear', '=', $year)

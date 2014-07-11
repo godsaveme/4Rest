@@ -7,10 +7,10 @@
 	<div class="panel panel-primary" id="reportesemanal">
         <div class="panel-heading">
         	<div class="row">
-        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
         			<h3 class="title" id="restauranteinfo" data-id="{{$restaurante->id}}">{{$restaurante->nombreComercial}}</h3>
         		</div>
-        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        		<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <h4 class="title">Seleciona Fecha</h4>
                         <div class="form-group">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -30,47 +30,75 @@
                                     @endfor
                                 </select>
                             </div>
-                            <a href="javascript:void(0)" id="btn_summitinfo" class="btn btn-default">Buscar</a>
+                            <a href="javascript:void(0)" id="btn_summitinfo" class="btn btn-default">
+                            En Soles
+                            </a>
+                            <a href="javascript:void(0)" id="btn_summitinfo2" class="btn btn-default">
+                            En Unidades
+                            </a>
                         </div>
         		</div>
         	</div>
         </div>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th class="text-center">Producto</th>
-                    <th class="text-center">Total</th>
-                    <th class="text-center">Lunes</th>
-                    <th class="text-center">Martes</th>
-                    <th class="text-center">Miercoles</th>
-                    <th class="text-center">Jueves</th>
-                    <th class="text-center">Viernes</th>
-                    <th class="text-center">Sabado</th>
-                    <th class="text-center">Domingo</th>
-                </tr>
-            </thead>
-            <tbody data-template="reporteventasemanal_template" data-bind="source: datosreporte">
-                <script id="reporteventasemanal_template" type="text/x-kendo-template">
-                    <tr>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-bordered">
+                    <thead data-template="reportecajasemanas_totales" data-bind="source: this">
+                    <script id="reportecajasemanas_totales" type="text/x-kendo-template">
+                        <tr>
+                            <th rowspan="3" valign="middle" class="text-center">Familia</th>
+                            <th rowspan="2" colspan="2" valign="middle" class="text-center">Venta Total</th>
+                            <th colspan="7" valign="middle" class="text-center">Venta Diaria (Detalle en Soles)</th>
+                        </tr>
+                        <tr>
+                            <th valign="middle" class="text-center">Lunes</th>
+                            <th valign="middle" class="text-center">Martes</th>
+                            <th valign="middle" class="text-center">Miercoles</th>
+                            <th valign="middle" class="text-center">Jueves</th>
+                            <th valign="middle" class="text-center">Viernes</th>
+                            <th valign="middle" class="text-center">Sabado</th>
+                            <th valign="middle" class="text-center">Domingo</th>
+                        </tr>
+                        <tr>
+                            <th valign="middle" class="text-right" id="valor_x">#:ventatotal()#</th>
+                            <th valign="middle" class="text-right">100 %</th>
+                            <th valign="middle" class="text-right">#:ventalunes()#</th>
+                            <th valign="middle" class="text-right">#:ventamartes()#</th>
+                            <th valign="middle" class="text-right">#:ventamiercoles()#</th>
+                            <th valign="middle" class="text-right">#:ventajueves()#</th>
+                            <th valign="middle" class="text-right">#:ventaviernes()#</th>
+                            <th valign="middle" class="text-right">#:ventasabado()#</th>
+                            <th valign="middle" class="text-right">#:ventadomingo()#</th>
+                        </tr>
+                    </script>
+                    </thead>
+                    <tbody data-template="reporteventasemanal_template" data-bind="source: datosreporte">
+                    <script id="reporteventasemanal_template" type="text/x-kendo-template">
+                        <tr>
                         <td>
                             #if(fnombre){#
                                 #:fnombre#
                             #}else{#
-                                Evento
+                                Eventos
                             #}#
                         </td>
-                        <td>#:total#</td>
-                        <td>#:Lunes#</td>
-                        <td>#:Martes#</td>
-                        <td>#:Miercoles#</td>
-                        <td>#:Jueves#</td>
-                        <td>#:Viernes#</td>
-                        <td>#:Sabado#</td>
-                        <td>#:Domingo#</td>
-                    </tr>
-                </script>
-            </tbody>
-        </table>
+                        <td class="text-right">#:total#</td>
+                        <td class="text-right">
+                        #:(parseFloat(total)* 100 / parseFloat(totalventasporcentaje())).toFixed(2)# %
+                        </td>
+                        <td class="text-right">#:Lunes#</td>
+                        <td class="text-right">#:Martes#</td>
+                        <td class="text-right">#:Miercoles#</td>
+                        <td class="text-right">#:Jueves#</td>
+                        <td class="text-right">#:Viernes#</td>
+                        <td class="text-right">#:Sabado#</td>
+                        <td class="text-right">#:Domingo#</td>
+                        </tr>
+                    </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 @stop
