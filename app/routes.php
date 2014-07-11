@@ -803,6 +803,10 @@ Route::group(array('before' => 'auth'), function (){
                         <br>
                         <br>
                         <hr>
+                        <p>[  ]&nbsp;Boleta&nbsp;&nbsp;&nbsp;&nbsp;[  ] Factura</p>
+                        <p>[  ]&nbsp;Registrate y acumula K-Puntos. <br>
+                        	DNI / RUC ...................................
+                        </p>
                         </body>
                         </html>';
                 $headers = array('Content-Type' => 'application/pdf', );
