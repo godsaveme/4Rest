@@ -2024,7 +2024,8 @@ Route::group(array('before' => 'auth'), function (){
 						->whereBetween('ticketventa.created_at', 
 							array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 						->where('usuario.id' , '=' , $mozo->id)
-						->where('ticketventa.estado' , '=' , '0')
+						->where('ticketventa.estado' , '=' , 0)
+						->where('ticketventa.importe' , '>=' , 0)
 						->first();
 				$productos = Detpedidotick::selectraw('usuario.id, sum(dettiketpedido.cantidad) AS totalproductos,
 							COUNT(DISTINCT pedido.id) AS totalpedidos')
