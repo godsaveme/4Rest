@@ -409,7 +409,10 @@ Route::group(array('before' => 'auth'), function (){
 	);
 	Route::post('traermozos', function () {
 		$idres = Input::get('idres');
-		$mozos = Usuario::where('colaborador', '=', '2')->where('id_restaurante', '=', Auth::user()->id_restaurante, 'AND')->get();
+		$mozos = Usuario::where('colaborador', '=', '2')
+				->where('estado', '=', 1)
+				->where('id_restaurante', '=', Auth::user()->id_restaurante, 'AND')
+				->get();
 		return $mozos->toJson();
 	}
 	);

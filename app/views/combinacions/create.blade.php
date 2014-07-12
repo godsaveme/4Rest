@@ -79,7 +79,6 @@
 	<div class="form-group">
 	  <div class="col-md-3">
 	  	{{Form::label('slctDias', 'Seleccionar Días',array('class'=>'control-label'))}} 
-	  	
 	  </div>
 	  <div class="col-md-9">
 	  	<label>{{Form::checkbox('tdia', 1 , '',array('id' => 'tdia'))}} <strong>Todos los días </strong></label> <br>
@@ -102,6 +101,11 @@
 		<div class=" col-md-7">
 			{{Form::input('text', 'txtProd', '', array('id' => 'txtProd', 'placeholder' => 'Productos..'))}}
 		</div>
+    <div class=" col-md-2">
+       <a href="/productos/create" class='btn btn-info' target="_blank">
+       <i class="fa fa-edit"></i> Crear PLato
+       </a>
+    </div>
 	</div>
 
 
