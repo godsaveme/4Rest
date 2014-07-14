@@ -1753,6 +1753,8 @@ Route::group(array('before' => 'auth'), function (){
 					$totalanulados = $cajon->tickets()->where('ticketventa.estado', '=', 1)->count();
 					$totaldescuentos = $cajon->tickets()->where('ticketventa.estado','=',0)
 							->where('ticketventa.importe', '>=', 0)->sum('idescuento');
+					$totalventas1 = $cajon->tickets()->where('ticketventa.estado','=',0)
+							->where('ticketventa.importe', '>=', 0)->sum('importe');
 					$tickets = $cajon->tickets()->where('ticketventa.estado', '=', 0)
 								->where('ticketventa.importe', '>=', 0)->get();
 					$ticketinicial = $cajon->tickets()->orderby('id', 'asc')->first();
@@ -1799,7 +1801,7 @@ Route::group(array('before' => 'auth'), function (){
 									'totalvale'=>number_format($vale,2,'.', ''),
 									'totaldescuentos'=>$totaldescuentos,
 									'fondodecaja'=>$cajon->montoInicial,
-									'totalventas'=>$cajon->ventastotales,
+									'totalventas'=>$totalventas1,
 									'turno'=>substr($cajon->fechaInicio, -8,-3).'/'.
 											substr($cajon->fechaCierre, -8,-3),
 									'arqueo'=>$cajon->arqueo,
@@ -2118,7 +2120,8 @@ Route::group(array('before' => 'auth'), function (){
 			$idrest = Input::get('idrest');
 			$year = Input::get('year');
 			$semana = Input::get('semana');
-			$productos = DB::table('reportesfamiliasxsemana')
+			$tipocom = 1;
+			$productos = DB::table('vistatiposcombinacion3')
 						->where('idrest', '=', $idrest)
 						->where('semana','=', $semana)
 						->where('ayear', '=', $year)
