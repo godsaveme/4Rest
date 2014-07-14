@@ -1,8 +1,13 @@
 var datareporte = new kendo.data.DataSource({
 							  data: [ ]
 							});
+$('#restauranteinfo').data('hola', 'nada');
 
 var viewModel_reporteventasemanal = kendo.observable({
+	sesion: function(){
+		var sesion = $('#restauranteinfo').data('hola');
+		return sesion;
+	},
 	ventatotal:function(){
 		var ventasemana = 0;
 		var data = datareporte.data();
@@ -116,7 +121,9 @@ $('#btn_summitinfo2').on('click',function(event) {
 		url: '/reporteventasunidadessemanales',
 		type: 'POST',
 		dataType: 'json',
-		data: {year: $('#year').val(), semana: $('#semana').val(), idrest: $('#restauranteinfo').attr('data-id')},
+		data: {year: $('#year').val(), 
+				semana: $('#semana').val(), 
+				idrest: $('#restauranteinfo').attr('data-id')},
 	})
 	.done(function(data) {
 		datareporte.data(data);
@@ -138,3 +145,31 @@ function totalventasporcentaje(){
         };
         return ventasemana.toFixed(2);
 }
+
+$('body').on('click', '.familias', function(event) {
+	event.preventDefault();
+	/* Act on the event */
+	var tipocombinacion = $(this).attr('data-id');
+	datareporte.data([]);
+	$.ajax({
+		url: '/reporteventassemanasfamilias',
+		type: 'POST',
+		dataType: 'json',
+		data: {	year: $('#year').val(), 
+				semana: $('#semana').val(), 
+				idrest: $('#restauranteinfo').attr('data-id'),
+				tipocomb: tipocombinacion
+			},
+	})
+	.done(function(data) {
+		datareporte.data(data);
+		$('#restauranteinfo').data('hola', 'hola');
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+	
+});

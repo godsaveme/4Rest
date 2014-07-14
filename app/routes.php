@@ -2121,12 +2121,9 @@ Route::group(array('before' => 'auth'), function (){
 			$year = Input::get('year');
 			$semana = Input::get('semana');
 			$tipocom = 1;
-			$productos = DB::table('vistatiposcombinacion3')
-						->where('idrest', '=', $idrest)
-						->where('semana','=', $semana)
-						->where('ayear', '=', $year)
-						->orderby('total', 'Desc')
-						->get();
+			$productos = DB::select( DB::raw("select * from vistatiposcombinacion3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						order by total desc"));
 			return Response::json($productos);
 		}
 	});
@@ -2145,5 +2142,19 @@ Route::group(array('before' => 'auth'), function (){
 			return Response::json($productos);
 		}
 	});
+
+	Route::post('reporteventassemanasfamilias', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$tipocom = Input::get('tipocomb');
+			$productos = DB::select( DB::raw("select * from ventafamilias3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						 and tipocombid = ".$tipocom." order by total desc"));
+			return Response::json($productos);
+		}
+	});
+
 	//fin rutas
 });

@@ -77,7 +77,9 @@
                         <tr>
                         <td>
                             #if(fnombre){#
-                                #:fnombre#
+                                <a href="javascript:void(0)" class="familias" data-id="#:tipocombid#">
+                                    #:fnombre#
+                                </a>
                             #}else{#
                                 Eventos
                             #}#
