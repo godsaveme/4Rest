@@ -215,12 +215,8 @@ Route::group(array('before' => 'auth'), function (){
 		}
 	});
 
-
 		Route::controller('/almacenes','AlmacenController');
-
 		/*FIN*/
-
-
 
 	Route::post('buscarareasp', function () {
 		if (Request::ajax()) {
@@ -2128,21 +2124,6 @@ Route::group(array('before' => 'auth'), function (){
 		}
 	});
 
-	Route::post('reporteventasunidadessemanales', function (){
-		if (Request::ajax()) {
-			$idrest = Input::get('idrest');
-			$year = Input::get('year');
-			$semana = Input::get('semana');
-			$productos = DB::table('vistaunidadessemanasreporte')
-						->where('idrest', '=', $idrest)
-						->where('semana','=', $semana)
-						->where('ayear', '=', $year)
-						->orderby('total', 'Desc')
-						->get();
-			return Response::json($productos);
-		}
-	});
-
 	Route::post('reporteventassemanasfamilias', function (){
 		if (Request::ajax()) {
 			$idrest = Input::get('idrest');
@@ -2152,6 +2133,57 @@ Route::group(array('before' => 'auth'), function (){
 			$productos = DB::select( DB::raw("select * from ventafamilias3 where 
 						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
 						 and tipocombid = ".$tipocom." order by total desc"));
+			return Response::json($productos);
+		}
+	});
+
+	Route::post('reporteventassemanasproductos', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$famiid = Input::get('famiid');
+			$productos = DB::select( DB::raw("select * from ventaspoductos3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						 and famiid = ".$famiid." order by total desc"));
+			return Response::json($productos);
+		}
+	});
+
+	Route::post('reporteventasunidadessemanales', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$productos = DB::select( DB::raw("select * from vistatiposcombinacionunidades3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						order by total desc"));
+			return Response::json($productos);
+		}
+	});
+
+	Route::post('reporteventassemanasfamiliasuni', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$tipocom = Input::get('tipocomb');
+			$productos = DB::select( DB::raw("select * from ventafamiliasunidades3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						 and tipocombid = ".$tipocom." order by total desc"));
+			return Response::json($productos);
+		}
+	});
+
+	Route::post('reporteventassemanasproductosuni', function (){
+		if (Request::ajax()) {
+			$idrest = Input::get('idrest');
+			$year = Input::get('year');
+			$semana = Input::get('semana');
+			$famiid = Input::get('famiid');
+			$productos = DB::select( DB::raw("select * from ventaspoductosunidades3 where 
+						idrest = ".$idrest." and semana = ".$semana." and ayear = ".$year."
+						 and famiid = ".$famiid." order by total desc"));
 			return Response::json($productos);
 		}
 	});

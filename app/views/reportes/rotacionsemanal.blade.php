@@ -36,6 +36,14 @@
                             <a href="javascript:void(0)" id="btn_summitinfo2" class="btn btn-default">
                             En Unidades
                             </a>
+                            <a href="javascript:void(0)" id="btn_regresar" class="btn btn-default" 
+                            style="display: none">
+                            Regresar
+                            </a>
+                            <a href="javascript:void(0)" id="btn_regresar2" class="btn btn-default" 
+                            style="display: none">
+                            Regresar
+                            </a>
                         </div>
         		</div>
         	</div>
@@ -77,9 +85,21 @@
                         <tr>
                         <td>
                             #if(fnombre){#
-                                <a href="javascript:void(0)" class="familias" data-id="#:tipocombid#">
+                                #if (sesion()== 0) {#
+                                    <a href="javascript:void(0)" class="familias" data-id="#:tipocombid#">
+                                        #:fnombre#
+                                    </a>
+                                #}else if (sesion() == 1){#
+                                    #if (combinacion_id) {#
+                                        #:fnombre#
+                                    #}else{#
+                                        <a href="javascript:void(0)" class="familias" data-id="#:famiid#">
+                                        #:fnombre#
+                                        </a>
+                                    #}#
+                                #}else if (sesion() == 2){#
                                     #:fnombre#
-                                </a>
+                                #}#
                             #}else{#
                                 Eventos
                             #}#
