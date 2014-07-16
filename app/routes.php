@@ -2084,11 +2084,37 @@ Route::group(array('before' => 'auth'), function (){
 								'tmax'=>$tiempos->tiempomozomaximo,
 								'fechai'=>$fechaInicio,
 								'fechafin'=>$fechaFin,
-								'idrest'=> $restauranteid
+								'idrest'=> $restauranteid,
+								'selector'=> 1
 								);
 				}
 			}
-
+			$eventos = Ticket::join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
+						->where('ticketventa.estado', '=', 0)
+						->whereBetween('ticketventa.created_at', 
+								array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+						->wherenull('dettiketpedido.combinacion_id')
+						->wherenull('dettiketpedido.producto_id')
+						->sum('ticketventa.importe');
+			$arraydatos[] = array(
+								'mozoid'=>'-',
+								'mozo'=> 'Eventos',
+								'mfactu' => $eventos,
+								'promt'=>'-',
+								'peds' => '-',	
+								'pedsa'=>'-',
+								'cprods'=>'-',
+								'panul'=> '-',
+								'ctickets'=>'-',
+								'tanul'=>'-', 
+								'tprom'=>'-',
+								'tmin'=>'-',
+								'tmax'=>'-',
+								'fechai'=>'-',
+								'fechafin'=>'-',
+								'idrest'=> '-',
+								'selector'=> 0
+								);
 			usort($arraydatos,'invenDescSort');
 			return  Response::json($arraydatos);
 		}

@@ -306,6 +306,7 @@
   	{{HTML::script('js/jquery.plugin.js'); }}
   	{{HTML::script('js/jquery.tooltipster.min.js')}}
   	{{HTML::script('js/kendo.all.min.js')}}
+  	{{HTML::script('js/kendo/kendo.culture.es-PE.min.js')}}
   	{{HTML::script('js/icheck.min.js')}}
   	{{HTML::script('js/timeago.js')}}
   	{{HTML::script('js/jquery.countup.js')}}

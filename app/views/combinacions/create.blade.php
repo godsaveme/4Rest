@@ -123,7 +123,6 @@ $(document).ready(function($) {
 
 //precio readonly se calcula por los grids
   $("#precio").data("kendoNumericTextBox").readonly();
-
                   $("#precioX").kendoNumericTextBox({
                         format: "c",
                         decimals: 3
@@ -489,16 +488,7 @@ function id_repeat(data,dataItem){
 
             <script>
                 $(document).ready(function() {
-
-
-
-
                     var window = $("#dialog");
-                                //.bind("click", function() {
-                                //    window.data("kendoWindow").open();
-
-                                //});
-
                     if (!window.data("kendoWindow")) {
                         window.kendoWindow({
                             width: "300px",
@@ -516,16 +506,13 @@ function id_repeat(data,dataItem){
                       event.preventDefault();
                       window.data('kendoWindow').close();
                     });
-
                         $('body').on('click', '.familyname', function(event) {
                         event.preventDefault();
                         window.data('kendoWindow').center();
                         window.data('kendoWindow').open();
                         $('#btnAsignar').data('familyname', $(this).html());
                         console.log($('#btnAsignar').data('familyname'));
-
                       });
-
                 });
             </script>
 

@@ -1,8 +1,5 @@
 var host = window.location.host;
 function ON_READY() {
-
-
-
     $('#id_restaurante').change(function(){
       console.log('change');
          $.ajax({

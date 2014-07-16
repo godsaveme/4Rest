@@ -67,6 +67,76 @@ var datareportemozos = new kendo.data.DataSource({
                           });
 
 var viewModel_reportemozos = kendo.observable({
+    ventatotal:function(){
+        var venta = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            venta += parseFloat(data[i]['mfactu']);
+        };
+        return venta.toFixed(2);
+    },
+    totalatenciones:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['peds'] != '-'){
+                suma += parseFloat(data[i]['peds']);
+            }
+        };
+        return suma;
+    },
+    totalproductos:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['cprods'] != '-'){
+                suma += parseFloat(data[i]['cprods']);
+            }
+        };
+        return suma;
+    },
+    totaltickets:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['ctickets'] != '-'){
+                suma += parseFloat(data[i]['ctickets']);
+            }
+        };
+        return suma;
+
+    },
+    pedidosanulados:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['pedsa'] != '-'){
+                suma += parseFloat(data[i]['pedsa']);
+            }
+        };
+        return suma;
+
+    },
+    productosanulados:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['panul'] != '-'){
+                suma += parseFloat(data[i]['panul']);
+            }
+        };
+        return suma;
+    },
+    ticketsanulados:function(){
+        var suma = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            if(data[i]['tanul'] != '-'){
+                suma += parseFloat(data[i]['tanul']);
+            }
+        };
+        return suma;
+    },
     datosreporte: datareportemozos
 });
 
@@ -101,4 +171,14 @@ function reportemozos(){
     .always(function() {
         console.log("complete");
     });
+}
+
+
+function ventatotalpor(){
+        var venta = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            venta += parseFloat(data[i]['mfactu']);
+        };
+        return venta.toFixed(2);
 }
