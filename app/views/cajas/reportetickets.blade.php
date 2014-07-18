@@ -24,6 +24,7 @@
                     <th class="text-center">Numero</th>
                     <th class="text-center">Importe</th>
                     <th class="text-center">Descuento</th>
+                    <th class="text-center">Cliente</th>
                     <th class="text-center">Estado</th>
                     <th class="text-center">Mozo</th>
                     <th class="text-center">Cajero</th>
@@ -35,6 +36,7 @@
                     <td></td>
                     <td class="text-right">{{number_format($montototal, 2, '.', '')}}</td>
                     <td class="text-right">{{number_format($totaldescuentos, 2, '.', '')}}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -53,6 +55,7 @@
                         {{$tickete->importe}}
                         </td>
                         <td class="text-right">{{$tickete->idescuento}}</td>
+                        <td class="text-left">{{$tickete->cliente}}</td>
                         <td class="text-center">
                         @if ($tickete->estado == 0)
                             Conforme

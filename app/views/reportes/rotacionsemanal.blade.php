@@ -68,15 +68,31 @@
                             <th valign="middle" class="text-center">Domingo</th>
                         </tr>
                         <tr>
-                            <th valign="middle" class="text-right" id="valor_x">#:ventatotal()#</th>
+                            <th valign="middle" class="text-right" id="valor_x">
+                            #:kendo.toString(parseFloat(ventatotal()),"n")#
+                            </th>
                             <th valign="middle" class="text-right">100 %</th>
-                            <th valign="middle" class="text-right">#:ventalunes()#</th>
-                            <th valign="middle" class="text-right">#:ventamartes()#</th>
-                            <th valign="middle" class="text-right">#:ventamiercoles()#</th>
-                            <th valign="middle" class="text-right">#:ventajueves()#</th>
-                            <th valign="middle" class="text-right">#:ventaviernes()#</th>
-                            <th valign="middle" class="text-right">#:ventasabado()#</th>
-                            <th valign="middle" class="text-right">#:ventadomingo()#</th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventalunes()),"n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventamartes()),"n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventamiercoles()),"n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventajueves()),"n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventaviernes()), "n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventasabado()),"n")#
+                            </th>
+                            <th valign="middle" class="text-right">
+                            #:kendo.toString(parseFloat(ventadomingo()),"n")#
+                            </th>
                         </tr>
                     </script>
                     </thead>
@@ -104,17 +120,61 @@
                                 Eventos
                             #}#
                         </td>
-                        <td class="text-right">#:total#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(total),"n")#
+                        </td>
                         <td class="text-right">
                         #:(parseFloat(total)* 100 / parseFloat(totalventasporcentaje())).toFixed(2)# %
                         </td>
-                        <td class="text-right">#:Lunes#</td>
-                        <td class="text-right">#:Martes#</td>
-                        <td class="text-right">#:Miercoles#</td>
-                        <td class="text-right">#:Jueves#</td>
-                        <td class="text-right">#:Viernes#</td>
-                        <td class="text-right">#:Sabado#</td>
-                        <td class="text-right">#:Domingo#</td>
+                        <td class="text-right">
+                        #if (Lunes != '-') {#
+                            #:kendo.toString(parseFloat(Lunes), "n")#
+                        #}else{#
+                            #:Lunes#
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Martes != '-') {#
+                             #:kendo.toString(parseFloat(Martes),"n")#
+                        #}else{#
+                            #:Martes#
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Miercoles != '-') {#
+                             #:kendo.toString(parseFloat(Miercoles),"n")#
+                        #}else{#
+                            #:Miercoles#
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Jueves != '-') {#
+                        #:kendo.toString(parseFloat(Jueves), "n")#
+                        #}else{#
+                            Jueves
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Viernes != '-') {#
+                        #:kendo.toString(parseFloat(Viernes), "n")#
+                        #}else{#
+                            Viernes
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Sabado != '-') {#
+                        #:kendo.toString(parseFloat(Sabado), "n")#
+                        #}else{#
+                            Sabado
+                        #}#
+                        </td>
+                        <td class="text-right">
+                        #if (Domingo != '-') {#
+                        #:kendo.toString(parseFloat(Domingo),"n")#
+                        #}else{#
+                            Domingo
+                        #}#
+                        </td>
                         </tr>
                     </script>
                     </tbody>

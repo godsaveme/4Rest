@@ -66,28 +66,28 @@
                         <td style="font-weight: bold;">Venta</td>
                         <td class="text-right" style="width: 10%">
                             <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=1">
-                                #:(parseFloat(totalventas()) + parseFloat(totaldescuento())).toFixed(2)#
+                                #:kendo.toString((parseFloat(totalventas()) + parseFloat(totaldescuento())),"n2")#
                             </a>
                         </td>
                         <td style="width: 10%"></td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=1">
-                                #:(parseFloat(venta(0)) + parseFloat(descuentos(0))).toFixed(2)#
+                                #:kendo.toString((parseFloat(venta(0)) + parseFloat(descuentos(0))),"n2")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=1">
-                                #:(parseFloat(venta(1)) + parseFloat(descuentos(1))).toFixed(2)#
+                                #:kendo.toString((parseFloat(venta(1)) + parseFloat(descuentos(1))),"n2")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=1">
-                                #:(parseFloat(venta(2)) + parseFloat(descuentos(2))).toFixed(2)#
+                                #:kendo.toString((parseFloat(venta(2)) + parseFloat(descuentos(2))),"n2")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=1">
-                                #:(parseFloat(venta(3)) + parseFloat(descuentos(3))).toFixed(2)#
+                                #:kendo.toString((parseFloat(venta(3)) + parseFloat(descuentos(3))),"n2")#
                             </a>
                         </td>
                     </tr>
@@ -95,7 +95,7 @@
                         <td style="font-weight: bold">Efectivo</td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=2">
-                                #:totalefectivo()#
+                                #:kendo.toString(parseFloat(totalefectivo()),"n2")#
                             </a>
                         </td>
                         <td class="text-right">
@@ -103,22 +103,22 @@
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=2">
-                                #:efectivo(0)#
+                                #:kendo.toString(parseFloat(efectivo(0)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=2">
-                                #:efectivo(1)#
+                                #:kendo.toString(parseFloat(efectivo(1)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=2">
-                                #:efectivo(2)#
+                                #:kendo.toString(parseFloat(efectivo(2)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=2">
-                                #:efectivo(3)#
+                                #:kendo.toString(parseFloat(efectivo(3)),"n")#
                             </a>
                         </td>
                     </tr>
@@ -126,7 +126,7 @@
                         <td style="font-weight: bold">Tarjeta</td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=3">
-                                #:totaltarjeta()#
+                                #:kendo.toString(parseFloat(totaltarjeta()),"n")#
                             </a>
                         </td>
                         <td class="text-right">
@@ -134,22 +134,22 @@
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=3">
-                            #:tarjeta(0)#
+                            #:kendo.toString(parseFloat(tarjeta(0)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=3">
-                            #:tarjeta(1)#
+                            #:kendo.toString(parseFloat(tarjeta(1)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=3">
-                            #:tarjeta(2)#
+                            #:kendo.toString(parseFloat(tarjeta(2)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=3">
-                            #:tarjeta(3)#
+                            #:kendo.toString(parseFloat(tarjeta(3)),"n")#
                             </a>
                         </td>
                     </tr>
@@ -157,7 +157,7 @@
                         <td style="font-weight: bold">Descuentos</td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=4">
-                                #:totaldescuento()#
+                                #:kendo.toString(parseFloat(totaldescuento()),"n2")#
                             </a>
                         </td>
                         <td class="text-right">
@@ -165,24 +165,24 @@
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(0)#?tipoc=4">
-                            #:descuentos(0)#
+                            #:kendo.toString(parseFloat(descuentos(0)),"n")#
                             </a>
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(1)#?tipoc=4">
-                            #:descuentos(1)#
+                            #:kendo.toString(parseFloat(descuentos(1)),"n")#
                             </a>
 
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(2)#?tipoc=4">
-                            #:descuentos(2)#
+                            #:kendo.toString(parseFloat(descuentos(2)),"n")#
                             </a>
 
                         </td>
                         <td class="text-right">
                             <a href="/cajas/reportestickets/#:cajaid(3)#?tipoc=4">
-                            #:descuentos(3)#
+                            #:kendo.toString(parseFloat(descuentos(3)),"n")#
                             </a>
 
                         </td>
@@ -211,12 +211,20 @@
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Descuento Autorizado</td>
-                        <td class="text-right">#:totalvale()#</td>
+                        <td class="text-right">#:kendo.toString(parseFloat(totalvale()), "n")#</td>
                         <td></td>
-                        <td class="text-right">#:descuentoautorizado(0)#</td>
-                        <td class="text-right">#:descuentoautorizado(1)#</td>
-                        <td class="text-right">#:descuentoautorizado(2)#</td>
-                        <td class="text-right">#:descuentoautorizado(3)#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(descuentoautorizado(0)), "n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(descuentoautorizado(1)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(descuentoautorizado(2)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(descuentoautorizado(3)),"n")#
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="7">
@@ -282,12 +290,22 @@
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Tickets Anulados</td>
-                        <td class="text-right">#:anulados()#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(anulados()),"n")#
+                        </td>
                         <td></td>
-                        <td class="text-right">#:anulado(0)#</td>
-                        <td class="text-right">#:anulado(1)#</td>
-                        <td class="text-right">#:anulado(2)#</td>
-                        <td class="text-right">#:anulado(3)#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(anulado(0)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(anulado(1)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(anulado(2)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(anulado(3)),"n")#
+                        </td>
                     </tr>
                     <tr>
                     <td colspan="7"></td>
@@ -296,19 +314,37 @@
                         <td style="font-weight: bold">Fondo Caja</td>
                         <td class="text-right"></td>
                         <td></td>
-                        <td class="text-right">#:fondocaja(0)#</td>
-                        <td class="text-right">#:fondocaja(1)#</td>
-                        <td class="text-right">#:fondocaja(2)#</td>
-                        <td class="text-right">#:fondocaja(3)#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(fondocaja(0)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(fondocaja(1)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(fondocaja(2)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(fondocaja(3)),"n")#
+                        </td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Diferencia</td>
-                        <td class="text-right">#:diferencias()#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(diferencias()),"n")#
+                        </td>
                         <td></td>
-                        <td class="text-right">#:diferencia(0)#</td>
-                        <td class="text-right">#:diferencia(1)#</td>
-                        <td class="text-right">#:diferencia(2)#</td>
-                        <td class="text-right">#:diferencia(3)#</td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(diferencia(0)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(diferencia(1)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(diferencia(2)),"n")#
+                        </td>
+                        <td class="text-right">
+                        #:kendo.toString(parseFloat(diferencia(3)),"n")#
+                        </td>
                     </tr>
                 </script>
             </tbody>
@@ -322,15 +358,21 @@
                     <script id="totalreportediariocaja" type="text/x-kendo-template">
                         <tr>
                             <th style="width:200px">Total Efectivo</th>
-                            <th style="width:100px" class="text-right" id="totalefectivo">#:totalefectivo()#</th>
+                            <th style="width:100px" class="text-right" id="totalefectivo">
+                            #:kendo.toString(parseFloat(totalefectivo()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Tarjeta</th>
-                            <th style="width:100px" class="text-right" id="totaltarjeta">#:totaltarjeta()#</th>
+                            <th style="width:100px" class="text-right" id="totaltarjeta">
+                            #:kendo.toString(parseFloat(totaltarjeta()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Vale</th>
-                            <th style="width:100px" class="text-right" id="totalvale">#:totalvale()#</th>
+                            <th style="width:100px" class="text-right" id="totalvale">
+                            #:kendo.toString(parseFloat(totalvale()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">
@@ -339,16 +381,20 @@
                                 </a>
                             </th>
                             <th style="width:100px" class="text-right" id="totalvale">
-                                #:totaldescuento()#
+                                #:kendo.toString(parseFloat(totaldescuento()),"n")#
                             </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Ventas</th>
-                            <th style="width:100px" class="text-right" id="totalventas">#:totalventas()#</th>
+                            <th style="width:100px" class="text-right" id="totalventas">
+                            #:kendo.toString(parseFloat(totalventas()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Abonos Caja</th>
-                            <th style="width:100px" class="text-right" id="totalabonosacaja">#:totalabonosacaja()#</th>
+                            <th style="width:100px" class="text-right" id="totalabonosacaja">
+                            #:kendo.toString(parseFloat(totalabonosacaja()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">
@@ -356,19 +402,25 @@
                                 Total Gastos
                                 </a>
                             </th>
-                            <th style="width:100px" class="text-right" id="totalgastos">#:totalgastos()#</th>
+                            <th style="width:100px" class="text-right" id="totalgastos">
+                            #:kendo.toString(parseFloat(totalgastos()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Caja</th>
-                            <th style="width:100px" class="text-right" id="totalcaja">#: (parseFloat(montoinicial()) + parseFloat(totalventas()) + parseFloat(totalabonosacaja()) -  parseFloat(totalgastos())).toFixed(2)#</th>
+                            <th style="width:100px" class="text-right" id="totalcaja">
+                            #: kendo.toString((parseFloat(montoinicial()) + parseFloat(totalventas()) + parseFloat(totalabonosacaja()) -  parseFloat(totalgastos())),"n")#</th>
                         </tr>
                         <tr>
                             <th style="width:200px" >Arqueo</th>
-                            <th style="width:100px" id="arqueo" class="text-right">#:(parseFloat(montoinicial()) + parseFloat(totalventas()) + parseFloat(totalabonosacaja()) -  parseFloat(totalgastos()) - parseFloat(diferencia())).toFixed(2)#</th>
+                            <th style="width:100px" id="arqueo" class="text-right">
+                            #:kendo.toString((parseFloat(montoinicial()) + parseFloat(totalventas()) + parseFloat(totalabonosacaja()) -  parseFloat(totalgastos()) - parseFloat(diferencia())),"n")#</th>
                         </tr>
                         <tr>
                             <th style="width:200px" >Diferencia</th>
-                            <th style="width:100px" id="diferencia" class="text-right">#:diferencia()#</th>
+                            <th style="width:100px" id="diferencia" class="text-right">
+                            #:kendo.toString(parseFloat(diferencia()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px">
@@ -376,11 +428,15 @@
                                     Tickets Emitidos
                                 </a>
                             </th>
-                            <th style="width:100px" id="temitidos" class="text-right">#:ticketemitidos()#</th>
+                            <th style="width:100px" id="temitidos" class="text-right">
+                            #:kendo.toString(parseFloat(ticketemitidos()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px" >Tickets Anulados</th>
-                            <th style="width:100px" id="tanulados" class="text-right">#:anulados()#</th>
+                            <th style="width:100px" id="tanulados" class="text-right">
+                            #:kendo.toString(parseFloat(anulados()),"n")#
+                            </th>
                         </tr>
                         <tr>
                             <th style="width:200px" >

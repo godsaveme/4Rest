@@ -16,10 +16,10 @@ $.fn.timeago.defaults = {
     dir: 'up',
     lang: {
       units: {
-      second: "''",
-      seconds: "''s",
-      minute: "'",
-      minutes: "'s",
+      second: "s",
+      seconds: "s",
+      minute: "m",
+      minutes: "m",
       hour: "h",
       hours: "hs",
       day: "d",
