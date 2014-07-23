@@ -1008,7 +1008,7 @@ $('body').on('click', '#btn_cobrar', function(event) {
 	/* Act on the event */
 	if($('#infomozo').attr('data-idpedido') != 0){
 		precuenta(1, 0);
-		$('.k-window').css('min-width','85%');
+		$('.k-window').css('min-width','98%');
 		$('.modalwindowscuenta').data("kendoWindow").open();
 		$('.top span').removeClass('k-widget k-numerictextbox screen k-numeric-wrap k-state-default k-expand-padding');
 	}
