@@ -993,7 +993,7 @@ onewcliente['dni'] = '-';
 $('#infomesa').data('cliente', onewcliente);
 
 $(".modalwindowscuenta").kendoWindow({
-  				actions: ["Close"],
+  				actions: [],
   				visible: false,
   				modal: true,
   				title: 'Cuenta - ' + $('#infomesa').text() ,
@@ -1023,8 +1023,12 @@ $("#resultado").kendoNumericTextBox({
 
 $(".btn_calcu").on('click', function(event) {
 	event.preventDefault();
-	vlr = $(this).val();
+	vlr1 = $(this).val();
+	vlr = vlr1.split('S/. ').join('');
     atual = $("#resultado").siblings('input').val();
+    if(atual == ""){
+    	atual = 0;
+    }
     if(vlr=="C"){
         $("#resultado").siblings('input').val("");
         $("#resultado").val("");
@@ -1033,6 +1037,7 @@ $(".btn_calcu").on('click', function(event) {
             $("#resultado").siblings('input').val(eval(atual));
             $("#resultado").val(eval(atual));
         }else{
+        	var resultado = parseFloat(atual) + parseFloat(vlr);
         	if(atual == '' & vlr == 0){
         		$("#resultado").siblings('input').val('0.');
         		$("#resultado").val('0.');
@@ -1048,18 +1053,11 @@ $(".btn_calcu").on('click', function(event) {
             		$("#resultado").val(atual + vlr);
         		}
         	}else{
-        		$("#resultado").siblings('input').val(atual + vlr);
-            	$("#resultado").val(atual + vlr);
+        		$("#resultado").siblings('input').val(resultado.toFixed(2));
+            	$("#resultado").val(resultado.toFixed(2));
         	}
         }
     }
-});
-
-$('.btn_montorapido').on('click', function(event){
-	event.preventDefault();
-	var newmonto = parseFloat($(this).attr('data-valor'));
-	$("#resultado").siblings('input').val(newmonto.toFixed(2));
-    $("#resultado").val(newmonto.toFixed(2));
 });
 
 $('#btn_montoexacto').on('click', function(event){
@@ -1139,8 +1137,14 @@ function importepagado(){
 		var newefectivo = newresta;
 		if(newefectivo > 0){
 			$('#input_iefectivo').val(newefectivo.toFixed(2));
+			alert(importepagado);
+			importepagado = importepagado + parseFloat(itarjeta);
+			$('#input_ipagado').val(importepagado.toFixed(2));
 		}else{
 			$('#input_iefectivo').val('0.00');
+			alert(importepagado);
+			importepagado = importepagado + parseFloat(itarjeta);
+			$('#input_ipagado').val(importepagado.toFixed(2));
 		}
 	}else{
 		importepagado = parseFloat(iefectivo) + parseFloat(itarjeta);
@@ -1176,11 +1180,11 @@ $('#btn_efectivo').on('click', function(event) {
 	var itarjeta = validarvalores($('#input_itarjeta').val());
 	var newsubtotal = parseFloat(itarjeta) + parseFloat(newvalor);
 	console.log('iefectivo:' +iefectivo);
-	$('#input_ipagado').val(newsubtotal.toFixed(2));
 	$('#input_iefectivo').val(parseFloat(newvalor).toFixed(2));
 	$("#resultado").siblings('input').val("");
     $("#resultado").val("");
 	calcularvuelto();
+	$('#infomesa').data('contable',1);
 });
 
 $('#btn_tarjeta').on('click', function(event) {
@@ -1192,11 +1196,11 @@ $('#btn_tarjeta').on('click', function(event) {
 	var itarjeta = validarvalores($('#input_itarjeta').val());
 	var newsubtotal = parseFloat(iefectivo) + parseFloat(newvalor);
 	console.log('itarjeta:'+itarjeta);
-	$('#input_ipagado').val(newsubtotal.toFixed(2));
 	$('#input_itarjeta').val(parseFloat(newvalor).toFixed(2));
 	$("#resultado").siblings('input').val("");
     $("#resultado").val("");
 	calcularvuelto();
+	$('#infomesa').data('contable',1);
 });
 $('#btn_vale').on('click', function(event) {
 	event.preventDefault();
@@ -1206,6 +1210,20 @@ $('#btn_vale').on('click', function(event) {
 	$("#resultado").siblings('input').val("");
     $("#resultado").val("");
 	calcularvuelto();
+	$('#infomesa').data('contable',0);
+	$('#infomesa').data('vale',1);
+});
+
+$('#btn_valepersonal').on('click', function(event) {
+	event.preventDefault();
+	/* Act on the event */
+	var newvalor = validarvalores($('#resultado').val());
+	$('#input_ivale').val(parseFloat(newvalor).toFixed(2));
+	$("#resultado").siblings('input').val("");
+    $("#resultado").val("");
+	calcularvuelto();
+	$('#infomesa').data('contable',0);
+	$('#infomesa').data('vale',2);
 });
 
 $('#btn_cobrarclose').on('click', function(event) {
@@ -1213,6 +1231,8 @@ $('#btn_cobrarclose').on('click', function(event) {
 	/* Act on the event */
 	$('.modalwindowscuenta').data("kendoWindow").close();
 	$('.cont_inputcaja input').val('');
+	$('.datos_cliente input').val('');
+	$('#infomesa').data('cliente',onewcliente);
 });
 
 $('.cont_inputcaja input').val('');
@@ -1262,11 +1282,27 @@ $('#btn_cobraraceptar').on('click', function(event) {
 			}
 		}
 
-		$.ajax({
+		if($('#infomesa').data('contable') == 1){
+			cobrar_contable(obtncobrar,newtipo,newcuenta);
+		}else if ($('#infomesa').data('contable') == 0){
+			cobrar_nocontable(obtncobrar,newtipo,newcuenta);
+		}
+	}else{
+		obtncobrar.css('display', 'block');
+	}
+});
+
+function cobrar_contable(obtncobrar,newtipo,newcuenta){
+	if(validarvalores($('#input_ivale').val()) > 0 ){
+		obtncobrar.css('display', 'block');
+		popupNotification.show('Operacion no permitida, no puedes usar vale personal o desccuento autorizado, parte cuenta si necesitas cobrar con vale', "error");
+		return false;
+	}
+	$.ajax({
 			url: '/cobrarmesa',
 			type: 'POST',
 			dataType: 'json',
-			data: {tipo: newtipo, 
+			data: { tipo: newtipo, 
 					cobrar: newcuenta, 
 					pedidoid: $('#infomozo').attr('data-idpedido'),
 					itotal: validarvalores($('#input_itotal').val()),
@@ -1301,16 +1337,77 @@ $('#btn_cobraraceptar').on('click', function(event) {
 		})
 		.fail(function() {
 			obtncobrar.css('display', 'block');
+			popupNotification.show('Operacion no completada', "error");
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+}
+
+function cobrar_nocontable(obtncobrar,newtipo,newcuenta){
+	if(validarvalores($('#input_iefectivo').val()) > 0 && validarvalores($('#input_itarjeta').val()) > 0){
+		obtncobrar.css('display', 'block');
+		popupNotification.show('Operacion no permitida, solo puedes usar una forma de pago.', "error");
+		return false;
+	}else if(validarvalores($('#input_itotal').val()) > 0){
+		obtncobrar.css('display', 'block');
+		popupNotification.show('Operacion no permitida, tienes que descontar el valor total, caso contrario parte cuenta.', "error");
+		return false;
+	}else if($('#infomesa').data('cliente').nombres == '-' && $('#infomesa').data('cliente').dni == '-'){
+		obtncobrar.css('display', 'block');
+		popupNotification.show('Operacion no permitida, tienes que elegir una persona.', "error");
+		return false;
+	}
+	$.ajax({
+			url: '/cobrarvale',
+			type: 'POST',
+			dataType: 'json',
+			data: { tipo: newtipo, 
+					cobrar: newcuenta, 
+					pedidoid: $('#infomozo').attr('data-idpedido'),
+					itotal: validarvalores($('#input_itotal').val()),
+					iefectivo:validarvalores($('#input_iefectivo').val()),
+					itarjeta: validarvalores($('#input_itarjeta').val()),
+					dtarjeta: $('#input_dtarjeta').val(),
+					ivale: validarvalores($('#input_ivale').val()),
+					idescuento:validarvalores($('#input_idescuento').val()),
+					descuento:validarvalores($('#input_descuento').val()) ,
+					ipagado:validarvalores($('#input_ipagado').val()),
+					mesa: $('#infomesa').text(), mozo: $('#infomozo').text(),
+					vuelto: validarvalores($('#input_ivuelto').val()),
+					cliente: $('#infomesa').data('cliente'),
+					caja_id: $('#infomesa').attr('data-cajaid'),
+					detcajaid: $('#infomesa').attr('data-detcajaid'),
+					idmozo: $('#infomozo').attr('data-idmozo'),
+					tipovale: $('#infomesa').data('vale')
+					}
+		})
+		.done(function(data) {
+			if(data =='True'){
+				$('#buscar_cliente').val('');
+				$('#infomesa').data('partircuenta', 0);
+				$('#infomesa').data('cliente',onewcliente);
+				$('.modalwindowscuenta').data("kendoWindow").close();
+				$('.cont_inputcaja input').val('');
+				popupNotification.show('Operacion Completada Correctamente', "success");
+				obtncobrar.css('display', 'block');
+			}else{
+				popupNotification.show('Operacion No completada', "error");
+				obtncobrar.css('display', 'block');
+			}
+		})
+		.fail(function() {
+			obtncobrar.css('display', 'block');
 			popupNotification.show('No tienes nada por cobrar', "error");
 			console.log("error");
 		})
 		.always(function() {
 			console.log("complete");
 		});
-	}else{
-		obtncobrar.css('display', 'block');
-	}
-});
+}
+
+
 //fincuenta
 
 $(".modalwindowspartircuenta").kendoWindow({
@@ -1498,6 +1595,9 @@ $("#buscar_cliente").kendoAutoComplete({
             		newcliente['nombres'] = filtro[i]['nombres'];
 		            newcliente['direccion'] = filtro[i]['direccion'];
 		            newcliente['dni'] = filtro[i]['dni'];
+		            $('#input_nombrec').val(filtro[i]['nombres']);
+		            $('#input_documento').val(filtro[i]['dni']);
+		            $('#input_addres').val(filtro[i]['direccion']);
             	}
             };
             $('#infomesa').data('cliente',newcliente);
@@ -1508,6 +1608,10 @@ $("#buscar_cliente").kendoAutoComplete({
 $('#btn_nuevocliente').on('click', function(event) {
 	event.preventDefault();
 	$(".windowsregistrarcliente").data("kendoWindow").open();
+	$("#cont_cliperona input").val('');
+	$("#cont_cliempresa input").val('');
+	previewpersona();
+	previewempresa();
 });
 
 var template = kendo.template($("#template").html());
@@ -1605,13 +1709,15 @@ $('.registrarcliente').on('click',function(event) {
             newcliente['nombres'] = data[0]['nombres'];
             newcliente['direccion'] = data[0]['direccion'];
             newcliente['dni'] = data[0]['dni'];
+            $('#input_nombrec').val(data[0]['nombres']);
+            $('#input_documento').val(data[0]['dni']);
+            $('#input_addres').val(data[0]['direccion']);
 		$('#infomesa').data('cliente',newcliente);
 		$(".windowsregistrarcliente").data("kendoWindow").close();
 		$(".windowsregistrarcliente input").val('');
-		console.log($('#infomesa').data('cliente'));
 		previewpersona();
 		previewempresa();
-		alert('Operacion Completada');
+		popupNotification.show('Operacion Completada', "success");
 	})
 	.fail(function() {
 		console.log("error");

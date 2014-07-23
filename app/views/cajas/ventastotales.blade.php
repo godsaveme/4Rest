@@ -2,83 +2,89 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="panel panel-primary" id="listadeventas">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Lista de Gastos</h3>
+                <h3 class="panel-title">Lista de Ventas</h3>
             </div>
-            <table class="table">
+            @if($total >= 0)
+                <h3 class="text-center">Total: S/. {{$total}}</h3>  
+            @else
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Cantidad</th>
-                        <th>Total Efectivo</th>
-                        <th>Total Vale</th>
-                        <th>Total Tarjeta</th>
-                        <th>Total Ventas</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Total Efectivo</th>
+                        <th class="text-center">&nbsp;</th>
+                        <th class="text-center">Total Tarjeta</th>
+                        <th class="text-center">Total Ventas</th>
                     </tr>
                 </thead>
-                <tbody data-template="totalventas_template" data-bind="source: this">
-				<script id="totalventas_template" type="text/x-kendo-template">
-				    <tr>
-				        <td>
-				           #: total()#
-				        </td>
-				        <td>
-				         {{number_format($efectivo, 2, '.','')}}
-				        </td>
-                        <td>
-                         {{number_format($vale,2, '.','')}}
+                <tbody>
+                    <tr>
+                        <td class="text-right">
+                           &nbsp;
                         </td>
-                         <td>
+                        <td class="text-right">
+                         {{number_format($efectivo, 2, '.','')}}
+                        </td>
+                        <td class="text-right">
+                         &nbsp;
+                        </td>
+                         <td class="text-right">
                          {{number_format($tarjeta,2, '.','')}}
                         </td>
-                        <td>
+                        <td class="text-right">
                         {{number_format($efectivo + $tarjeta, 2, '.','')}}
                         </td>
-				    </tr>
-				</script>
+                    </tr>
                 </tbody>
             </table>
-            <table class="table">
+            <hr>
+            @endif
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Nº</th>
-                        <th>Subtotal</th>
-                        <th>IGV</th>
-                        <th>Importe Total</th>
-                        <th>Descuento</th>
-                        <th>Copia</th>
-                        <th>Anular</th>
-                        <th>Generar</th>
+                        <th class="text-center">Nº</th>
+                        <th class="text-center">Subtotal</th>
+                        <th class="text-center">IGV</th>
+                        <th class="text-center">Importe Total</th>
+                        <th class="text-center">Descuento</th>
+                        <th class="text-center">Copia</th>
+                        <th class="text-center">Anular</th>
+                        <th class="text-center">Generar</th>
                     </tr>
                 </thead>
-                <tbody data-template="listaventas_template" data-bind="source: listagastos">
-                <script id="listaventas_template" type="text/x-kendo-template">
-				    <tr>
-				    	<td data-bind="text: numero">
-				        </td>
-				        <td>
-				         #: kendo.toString(get("subtotal"), "C") #
-				        </td>
-				        <td>
-				        #: kendo.toString(get("IGV"), "C") #
-				        </td>
-				        <td >
-				        #: kendo.toString(get("importe"), "C") #
-				        </td>
-				        <td >
-				        #: kendo.toString(get("idescuento"), "C") #
-				        </td>
+                <tbody>
+                @foreach ($tickets as $ticket)
+                    <tr>
                         <td>
+                            <a href="/tickets/show/{{$ticket->id}}">
+                                {{$ticket->numero}}
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            {{$ticket->subtotal}}
+                        </td>
+                        <td class="text-right">
+                            {{$ticket->IGV}}
+                        </td>
+                        <td class="text-right">
+                            {{$ticket->importe}}
+                        </td>
+                        <td class="text-right">
+                            {{$ticket->idescuento}}
+                        </td>
+                        <td class="text-center">
                             <button type="button" class="btn btn-primary btn-sm btn_imprimicopiatick" data-idtick="#:get("id")#">Imprimir</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <button type="button" class="btn btn-primary btn-sm btn_anular" data-idtick="#:get("id")#">Anular</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <button type="button" class="btn btn-primary btn-sm btn_generarticket" data-idtick="#:get("id")#">Generar</button>
                         </td>
-				    </tr>
-				</script>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>

@@ -43,20 +43,21 @@
                 </div>
                 <div class="col-md-4">
                   {{Form::label('txtRuc', 'RUC', array('class'=>'control-label'))}}
-                  {{Form::text('ruc', '', array('id'=>'txtRuc','class' => 'form-control','placeholder'=>'11 dígitos.', 'required' , 'validationMessage'=>'Número de RUC incompleto (11 dígitos)', 'pattern'=>'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'))}}
+                  {{Form::text('ruc', '', array('id'=>'txtRuc','class' => 'form-control','placeholder'=>'11 dígitos.', 'required' , 'validationMessage'=>'Número de RUC incompleto (11 dígitos)', 'pattern'=>'[0-9]'))}}
                 </div>
           </div>
           <div class="form-group">
-                    <div class="col-md-2">
-                  {{Form::label('serie', 'Serie', array('class'=>'control-label'))}}
-                  {{Form::text('serie', '', array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'ej. BKF-5351','required', 'validationMessage'=>'Por favor entre una Serie. '))}}
+                <div class="col-md-4">
+                  {{Form::label('numerovale', 'Numero de Vale', array('class'=>'control-label'))}}
+                  {{Form::text('numerovale', '', array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'123456','required', 'validationMessage'=>'Por favor entre un numero de vale. ', 'pattern'=>'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'))}}
                 </div>
                 <div class="col-md-4">
-                  {{Form::label('numerodeticket', 'Número de Ticket', array('class'=>'control-label'))}}
-                  {{Form::text('numerodeticket', '', array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'8 dígitos','required', 'validationMessage'=>'Por favor entre un número de Ticket. (8 dígitos)', 'pattern'=>'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'))}}
+                  {{Form::label('numerodescuentoautorizado', 'Número de Descuento Autorizado', array('class'=>'control-label'))}}
+                  {{Form::text('numerodescuentoautorizado', '', array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'12345','required', 'validationMessage'=>'Por favor ingrese un numero.', 'pattern'=>'[0-9]'))}}
                 </div>
-                 <div class="col-md-6">
-                  &nbsp;
+                 <div class="col-md-4">
+                  {{Form::label('impresoranocontable', 'Impresora N/Contables', array('class'=>'control-label'))}}
+                  {{Form::text('impresoranocontable', '', array('class' => 'form-control','placeholder'=>'impresorabarra'))}}
                 </div>
           </div>
           </fieldset>
@@ -166,16 +167,17 @@
                 </div>
           </div>
           <div class="form-group">
-                    <div class="col-md-2">
-                  {{Form::label('serie', 'Serie', array('class'=>'control-label'))}}
-                  {{Form::text('serie', $restaurante->serie, array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'ej. BKF-5351','required', 'validationMessage'=>'Por favor entre una Serie. '))}}
+                <div class="col-md-4">
+                  {{Form::label('numerovale', 'Numero de Vale', array('class'=>'control-label'))}}
+                  {{Form::text('numerovale', '', array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'123456','required', 'validationMessage'=>'Por favor entre un numero de vale. ', 'pattern'=>'[0-9]'))}}
                 </div>
                 <div class="col-md-4">
-                  {{Form::label('numerodeticket', 'Número de Ticket', array('class'=>'control-label'))}}
-                  {{Form::text('numerodeticket', $restaurante->numerodeticket, array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'8 dígitos','required', 'validationMessage'=>'Por favor entre un número de Ticket. (8 dígitos)', 'pattern'=>'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'))}}
+                  {{Form::label('numerodescuentoautorizado', 'Número de Descuento Autorizado', array('class'=>'control-label'))}}
+                  {{Form::text('numerodescuentoautorizado', '', array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'12345','required', 'validationMessage'=>'Por favor ingrese un numero.', 'pattern'=>'[0-9]'))}}
                 </div>
-                 <div class="col-md-6">
-                  &nbsp;
+                 <div class="col-md-4">
+                  {{Form::label('impresoranocontable', 'Impresora N/Contables', array('class'=>'control-label'))}}
+                  {{Form::text('impresoranocontable', '', array('class' => 'form-control','placeholder'=>'impresorabarra'))}}
                 </div>
           </div>
           </fieldset>

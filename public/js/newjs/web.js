@@ -524,32 +524,17 @@ $(document).ready(ON_READY);
 $(window).load(ON_LOAD);
 
 function ON_LOAD(){
-
-
-/*  setTimeout(function(){
-    kendo.ui.progress($('body'), false);
-  },700);*/
-
-
   $("#loading").hide();
   $("#cntnrGrid").css({'opacity':1});
   $("#cntnr1").css({'opacity':1});
   $("#cntnr2").css({'opacity':1});
-  //$("#gridRest").css({'opacity':1});
-  //$("#gridSalones").css({'opacity':1});
-  //$("#gridFam").css({'opacity':1});
-  //$("#gridProd").css({'opacity':1});
-// hide loading overlay
-    //
   }
 
   function onDestroy(path,route)
   {
     var r=confirm("¿Realmente desea eliminar?");
     if (r==true)
-    {
-          //event.preventDefault();
-          
+    {          
           var jqxhr = $.post( path);
 
                 jqxhr.done(function(data) {
@@ -557,9 +542,7 @@ function ON_LOAD(){
                       alert('Item eliminado. Actualizando...');	
                       window.location = route;
                     }else{
-			//window.location = "/restaurantes/";
                       alert('No se puede eliminar. Consulte con el administrador del sistema.');
-                      //window.location = route;
                     };
               });
 

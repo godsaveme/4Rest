@@ -295,16 +295,83 @@ class CajasController extends BaseController {
 			return Redirect::to('/cajas');
 		}
 	}
+
+	public function getRegistraringreso($iddetalle = NULL) {
+		if (isset($iddetalle)) {
+			$detcaja = $this->detcaja;
+			return View::make('cajas.registraringreso', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+		} else {
+			return Redirect::to('/cajas');
+		}
+	}
+
+	public function postRegistraringreso() {
+		$reglas = array(
+			'detallecaja_id' => array(
+				'required',
+				'numeric',
+			),
+			'importetotal' => array(
+				'required',
+				'regex:/^[0-9]{1,3}([0-9]{3})*\.[0-9]+$/',
+			),
+			'descripcion' => array(
+				'required',
+			),
+			'numerodecomprobante' => array(),
+			'seriecomprobante' => array(),
+			'numerocargo' => array(),
+		);
+		$validator = Validator::make(Input::all(), $reglas);
+		if ($validator->fails()) {
+			return Redirect::to('/cajas/registraringreso/'.Input::get('detallecaja_id'))->withErrors($validator)->withInput();
+		} else {
+			$tiposdegastos = Ingresocaja::create(Input::all());
+			return Redirect::to('/cajas');
+		}
+	}
+
 	public function getCerrarcaja($detallecaja_id = NULL) {
 		if (isset($detallecaja_id)) {
 			$detcaja = $this->detcaja;
 			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)
 							->where('ticketventa.importe', '>=', 0)->sum('importe');
+			$efectivo = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 1)
+						->where('ticketventa.estado', '=', 0)
+						->where('ticketventa.importe', '>=', 0)
+						->sum('ticketventa.importe');
+			$tarjetas = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 2)
+						->where('ticketventa.estado', '=', 0)
+						->where('ticketventa.importe', '>=', 0)
+						->sum('ticketventa.importe');
+			$descuentosautorizados = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 3)
+						->where('ticketventa.estado', '=', 0)
+						->where('ticketventa.importe', '>=', 0)
+						->sum('ticketventa.idescuento');
+			$valespersonal = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 4)
+						->where('ticketventa.estado', '=', 0)
+						->where('ticketventa.importe', '>=', 0)
+						->sum('ticketventa.idescuento');
+			$promociones = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 5)
+						->where('ticketventa.estado', '=', 0)
+						->where('ticketventa.importe', '>=', 0)
+						->sum('ticketventa.idescuento');
 			$totalgastos = $detcaja->gastos()->sum('importetotal');
 			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal');
-			$importetotal = number_format($totalventas+$detcaja->montoInicial-$totalgastos, 2, '.', '');
+			$importetotal = number_format($totalventas+$detcaja->montoInicial+$totalingresoscaja -$totalgastos, 2, '.', '');
 			return View::make('cajas.cerrarcaja', compact('importetotal', 'totalventas', 
-							'odetcaja', 'totalgastos', 'detcaja', 'totalingresoscaja'));
+							'odetcaja', 'totalgastos', 'detcaja', 'totalingresoscaja','efectivo',
+							'tarjetas', 'descuentosautorizados', 'valespersonal', 'promociones'));
 		} else {
 			return Redirect::to('/cajas');
 		}
@@ -347,45 +414,91 @@ class CajasController extends BaseController {
 		$detcaja = $this->detcaja;
 		return View::make('cajas.listargastos', compact('detcaja'));
 	}
+
+	public function getListaringresos() {
+		$detcaja = $this->detcaja;
+		$listaingresos = $detcaja->abonocaja()->get();
+		$contador = 1;
+		$totalingresos = $detcaja->abonocaja()->count();
+		$totalsoles = $detcaja->abonocaja()->sum('importetotal');
+		return View::make('cajas.listaringresos', compact('detcaja', 'listaingresos', 'totalsoles',
+							'totalingresos', 'contador'));
+	}
+
 	public function getListarventas() {
 		$detcaja = $this->detcaja;
-		$tickets = $detcaja->tickets()->get();
-		$efectivo = 0;
-		$tarjeta = 0;
-		$vale = 0;
-		foreach ($tickets as $tickete) {
-			if($tickete->estado == 0){
-				$oefect = $tickete->tipopago()
-				->where('formadepago_id', '=', 1)
-				->sum('importe');
-				if ($oefect > $tickete->importe){
-					$oefect = $tickete->importe;
+		$tipoconsulta = Input::get('tipoc');
+		$total = -1;
+		switch ($tipoconsulta) {
+					case 1: //todos
+						$tickets = $detcaja->tickets()->get();
+						$efectivo = $detcaja->tickets()
+										->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+										->where('Detformadepago.formadepago_id', '=', 1)
+										->where('ticketventa.estado', '=', 0)
+										->where('ticketventa.importe', '>=', 0)
+										->sum('ticketventa.importe');
+						$tarjeta = $detcaja->tickets()
+										->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+										->where('Detformadepago.formadepago_id', '=', 2)
+										->where('ticketventa.estado', '=', 0)
+										->where('ticketventa.importe', '>=', 0)
+										->sum('ticketventa.importe');
+					break;
+					case 2://efectivo
+						$tickets = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 1)
+						->get();
+						$total = $detcaja->tickets()
+								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+								->where('Detformadepago.formadepago_id', '=', 1)
+								->sum('ticketventa.importe');
+					break;
+					case 3://tarjetas
+						$tickets = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 2)
+						->get();
+						$total = $detcaja->tickets()
+								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+								->where('Detformadepago.formadepago_id', '=', 2)
+								->sum('ticketventa.importe');
+					break;
+					case 4://descuentos
+						$tickets = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 3)
+						->get();
+						$total = $detcaja->tickets()
+								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+								->where('Detformadepago.formadepago_id', '=', 3)
+								->sum('ticketventa.idescuento');
+					break;
+					case 5://descuentos
+						$tickets = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 4)
+						->get();
+						$total = $detcaja->tickets()
+								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+								->where('Detformadepago.formadepago_id', '=', 4)
+								->sum('ticketventa.idescuento');
+					break;
+					case 6://descuentos
+						$tickets = $detcaja->tickets()
+						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+						->where('Detformadepago.formadepago_id', '=', 5)
+						->get();
+						$total = $detcaja->tickets()
+								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
+								->where('Detformadepago.formadepago_id', '=', 5)
+								->sum('ticketventa.idescuento');
+					break;
 				}
-				$newefec = $efectivo + $oefect;
-				$efectivo = round($newefec, 2);
-			}
-		}
-
-		foreach ($tickets as $tickete) {
-			if($tickete->estado == 0){
-				$oefect = $tickete->tipopago()->where('formadepago_id', '=', 2)->sum('importe');
-				if ($oefect > $tickete->importe) {
-					$oefect = $tickete->importe;
-				}
-				$newefec = $tarjeta + $oefect;
-				$tarjeta = round($newefec, 2);
-			}
-		}
-
-		foreach ($tickets as $tickete) {
-			if($tickete->estado == 0){
-				$oefect = $tickete->tipopago()->where('formadepago_id', '=', 3)->sum('importe');
-				$newefec = $vale + $oefect;
-				$vale = round($newefec, 2);
-			}
-		}
-		return View::make('cajas.ventastotales', compact('detcaja', 'efectivo', 'tarjeta', 'vale'));
+		return View::make('cajas.ventastotales', compact('detcaja', 'efectivo', 'tarjeta', 'vale','tickets', 'total'));
 	}
+
 	public function getReportescaja() {
 		$restaurantes = Restaurante::all()->lists('nombreComercial', 'id');
 		return View::make('cajas.reportes', compact('restaurantes'));
@@ -650,7 +763,7 @@ class CajasController extends BaseController {
 					case 2://efectivo
 						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento', 'ticketventa.cliente')
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 1)
 						->get();
@@ -658,7 +771,7 @@ class CajasController extends BaseController {
 					case 3://tarjetas
 						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento','ticketventa.cliente')
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 2)
 						->get();
@@ -666,7 +779,7 @@ class CajasController extends BaseController {
 					case 4://descuentos
 						$tickets = $detacaja->tickets()->select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento','ticketventa.cliente')
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 3)
 						->get();
@@ -704,7 +817,7 @@ class CajasController extends BaseController {
 					case 2://efectivo
 						$tickets = Ticket::select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento', 'ticketventa.id', 'ticketventa.cliente')
 						->wherein('ticketventa.detcaja_id', $cajones)
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 1)
@@ -713,7 +826,7 @@ class CajasController extends BaseController {
 					case 3://tarjetas
 						$tickets = Ticket::select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento', 'ticketventa.id', 'ticketventa.cliente')
 						->wherein('ticketventa.detcaja_id', $cajones)
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 2)
@@ -722,7 +835,7 @@ class CajasController extends BaseController {
 					case 4://descuentos
 						$tickets = Ticket::select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
-									'ticketventa.idescuento')
+									'ticketventa.idescuento', 'ticketventa.id', 'ticketventa.cliente')
 						->wherein('ticketventa.detcaja_id', $cajones)
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 3)

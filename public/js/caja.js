@@ -66,7 +66,7 @@ $("#btn_controlpedidos").on('click', function(event) {
 //notificaciones
 
 var popupNotification = $("#popupNotification").kendoNotification({position: {
-        top: 20,
+        bottom: 20,
         right: 20
     }}).data("kendoNotification");
 

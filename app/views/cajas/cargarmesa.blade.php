@@ -378,68 +378,80 @@
 </div>
 <div class="modalwindowscuenta modal-content" style="width: 100%;display:none;">
     <div class="modal-body">
-        <div class="pull-left" style="width: 40%">
+        <div class="pull-left" style="width: 37%">
             <div class="btn-group btn-group-lg">
               <button type="button" class="btn btn-primary" id="btn_efectivo">Efectivo</button>
               <button type="button" class="btn btn-primary" id="btn_tarjeta">Tarjeta</button>
-              <button type="button" class="btn btn-primary" id="btn_vale">Vale</button>
+              <button style="border-radius:0px 6px 6px 0px" type="button" class="btn btn-primary" id="dLabel" data-toggle="dropdown" role="button">
+              Vale <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li role="presentation">
+                    <a href="javascript:void(0)" id="btn_vale" tabindex="-1" role="menuitem">
+                    Descuento Autorizado
+                    </a>
+                    <a href="javascript:void(0)" id="btn_valepersonal" tabindex="-1" role="menuitem">
+                    Vale Personal
+                    </a>
+                </li>
+              </ul>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon" >I. Total S/. </span>
-                  <input type="text" id="input_itotal" class="form-control cobrarm input_num" placeholder="S/. 0.00">
+                  <span class="input-group-addon" style="width: 120px;text-align: left">Total </span>
+                  <input type="text" id="input_itotal" class="form-control cobrarm input_num text-right" placeholder="S/. 0.00">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon ">I. Efec. S/.</span>
-                  <input type="text" id="input_iefectivo" class="form-control input_num" placeholder="S/. 0.00" value="0.00">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">Efectivo</span>
+                  <input type="text" id="input_iefectivo" class="form-control text-right input_num" placeholder="S/. 0.00" value="0.00">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon">I. Tarj. S/.</span>
-                  <input type="text" id="input_itarjeta"  class="form-control input_num" placeholder="S/. 0.00" value="0.00">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">Tarjeta</span>
+                  <input type="text" id="input_itarjeta"  class="form-control text-right input_num" placeholder="S/. 0.00" value="0.00">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon"   >Dig. Tarje. </span>
-                  <input type="text" class="form-control" id="input_dtarjeta" placeholder="#-#-#-#">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">#s Tarjeta </span>
+                  <input type="text" class="form-control text-right" id="input_dtarjeta" placeholder="#-#-#-#">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon" >I. Vale &nbsp;S/. </span>
-                  <input type="text" class="form-control input_num" id="input_ivale" placeholder="S/. 0.00">
+                  <span class="input-group-addon" style="width: 120px; text-align: left" >Des. Personal</span>
+                  <input type="text" class="form-control text-right input_num" id="input_ivale" placeholder="S/. 0.00">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon">I. Paga S/. </span>
-                  <input type="text" class="form-control input_num" id="input_ipagado" placeholder="S/. 0.00">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">Importe Pagado</span>
+                  <input type="text" class="form-control text-right input_num" id="input_ipagado" placeholder="S/. 0.00">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon">Descuento</span>
-                  <input type="text" class="form-control input_num" id="input_descuento"  placeholder="% Descuento">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">% Descuento Pro.</span>
+                  <input type="text" class="form-control text-right input_num" id="input_descuento"  placeholder="% Descuento">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon">I. Descuen</span>
-                  <input type="text" class="form-control" id="input_idescuento"  placeholder="S/. Descuento">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">Importe Prom.</span>
+                  <input type="text" class="form-control text-right" id="input_idescuento"  placeholder="S/. Descuento">
                 </div>
             </div>
             <div class="cont_inputcaja">
                 <div class="input-group">
-                  <span class="input-group-addon">Vuelto &nbsp;S/. </span>
-                  <input type="text" class="form-control input_num" id="input_ivuelto"  placeholder="S/. 0.00">
+                  <span class="input-group-addon" style="width: 120px; text-align: left">Vuelto &nbsp;S/. </span>
+                  <input type="text" class="form-control text-right input_num" id="input_ivuelto"  placeholder="S/. 0.00">
                 </div>
             </div>
         </div>
-        <div class="pull-left" style="width: 50%">
+        <div class="pull-left" style="width: 60%">
             <form class="form-inline" role="form">
               <div class="form-group">
                 <input type="email" id="buscar_cliente" class="form-control" placeholder="Ingrese DNI/RUC/TEXTO">
@@ -454,46 +466,36 @@
                     <input type="text" value="" id="resultado" class="screen">
                 </div>
                 <div class="keys">
-                    <input class="btn_calcu" type="button" value="1" id="1">
-                    <input class="btn_calcu" type="button" value="2" id="2">
-                    <input class="btn_calcu" type="button" value="3" id="3">
-                    <input class="btn_calcu operator" type="button" value="+" id="+">
-                    <input class="btn_calcu" type="button" value="4" id="4">
-                    <input class="btn_calcu" type="button" value="5" id="5">
-                    <input class="btn_calcu" type="button" value="6" id="6">
-                    <input class="btn_calcu operator" type="button" value="-" id="-">
-                    <input class="btn_calcu" type="button" value="7" id="7">
-                    <input class="btn_calcu" type="button" value="8" id="8">
-                    <input class="btn_calcu" type="button" value="9" id="9">
-                    <input class="btn_calcu operator" type="button" value="*" id="*">
-                    <input class="btn_calcu" type="button" value="0" id="0">
-                    <input class="btn_calcu" type="button" value="." id=".">
-                    <input class="btn_calcu eval" type="button" value="=" id="=">
-                    <input class="btn_calcu operator" type="button" value="/" id="/">
+                    <input class="btn_calcu" type="button" value="S/. 0.10" id="1">
+                    <input class="btn_calcu" type="button" value="S/. 0.20" id="2">
+                    <input class="btn_calcu" type="button" value="S/. 0.50" id="3">
+                    <input class="btn_calcu" type="button" value="S/. 1.00" id="4">
+                    <input class="btn_calcu" type="button" value="S/. 2.00" id="5">
+                    <input class="btn_calcu" type="button" value="S/. 5.00" id="6">
+                    <input class="btn_calcu" type="button" value="S/. 10" id="7">
+                    <input class="btn_calcu" type="button" value="S/. 20" id="8">
+                    <input class="btn_calcu" type="button" value="S/. 50" id="9">
+                    <input class="btn_calcu" type="button" value="S/. 100" id="0">
+                    <input class="btn_calcu" type="button" value="S/. 200" id="20">
+                    <input class="btn_calcu eval" type="button" value="M.E." id="btn_montoexacto">
                 </div>
             </div>
-            <div style="float: left; margin-left: 10px; width: 100px">
-            <ul class="list-group">
-                <li class="list-group-item btn_montorapido" data-valor ="10.00">
-                {{HTML::image('images/10s.jpg','2 Soles',array('style'=>'width: 100%; cursor: pointer;'))}}
-                </li>
-                <li class="list-group-item btn_montorapido" data-valor ="20.00">
-                {{HTML::image('images/20s.jpg','2 Soles',array('style'=>'width: 100%;cursor: pointer;'))}}
-                </li>
-                <li class="list-group-item btn_montorapido" data-valor ="50.00">
-                {{HTML::image('images/50s.jpg','2 Soles',array('style'=>'width: 100%;cursor: pointer;'))}}
-                </li>
-                <li class="list-group-item btn_montorapido" data-valor ="100.00">
-                {{HTML::image('images/100s.jpg','2 Soles',array('style'=>'width: 100%;cursor: pointer;'))}}
-                </li>
-                <li class="list-group-item btn_montorapido" data-valor ="200.00">
-                {{HTML::image('images/200s.jpg','2 Soles',array('style'=>'width: 100%;cursor: pointer;'))}}
-                </li>
-                <li class="list-group-item">
-                    <button type="button" class="btn btn-primary"  id="btn_montoexacto"
-                style="margin-top: -8px"> M. Exact</button>
-                </li>
-            </ul>
+            <div style="margin-left : 10px;float: left; " class="datos_cliente">
+                <div style="width:250px; border: 1px dashed black; padding: 5px; overflow: hidden">
+                    <h4 class="text-center">Datos Cliente</h4>
+                    <div class="form-group">
+                        <label for="first_name">Nombre/Rz.Social Cliente</label>
+                        <input type="text" name="first_name" id="input_nombrec" class="form-control input-sm" placeholder="-" style="width:230px" disabled="disabled">
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name">DNI / RUC</label>
+                        <input type="text" name="first_name" id="input_documento" class="form-control input-sm" placeholder="-" style="width:230px" disabled="disabled">
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name">Dirección</label>
+                        <input type="text" name="first_name" id="input_addres" class="form-control input-sm" placeholder="-" style="width:230px" disabled="disabled">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -571,12 +573,12 @@
                                     </div>
                                     <div class="col-xs-10 col-sm-10 col-md-10">
                                         <div class="form-group">
-                                            <input type="text" name="last_name" id="input_apPaterno" class="form-control input-sm" placeholder="Apellido Materno">
+                                            <input type="text" name="last_name" id="input_apPaterno" class="form-control input-sm" placeholder="Apellido Paterno">
                                         </div>
                                     </div>
                                     <div class="col-xs-10 col-sm-10 col-md-10">
                                         <div class="form-group">
-                                            <input type="text" name="last_name" id="input_apMaterno" class="form-control input-sm" placeholder="Apellido Paterno">
+                                            <input type="text" name="last_name" id="input_apMaterno" class="form-control input-sm" placeholder="Apellido Materno">
                                         </div>
                                     </div>
                                     <div class="col-xs-10 col-sm-10 col-md-10">

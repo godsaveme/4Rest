@@ -151,28 +151,28 @@
                         #if (Jueves != '-') {#
                         #:kendo.toString(parseFloat(Jueves), "n")#
                         #}else{#
-                            Jueves
+                            #:Jueves#
                         #}#
                         </td>
                         <td class="text-right">
                         #if (Viernes != '-') {#
                         #:kendo.toString(parseFloat(Viernes), "n")#
                         #}else{#
-                            Viernes
+                            #:Viernes#
                         #}#
                         </td>
                         <td class="text-right">
                         #if (Sabado != '-') {#
                         #:kendo.toString(parseFloat(Sabado), "n")#
                         #}else{#
-                            Sabado
+                            #:Sabado#
                         #}#
                         </td>
                         <td class="text-right">
                         #if (Domingo != '-') {#
                         #:kendo.toString(parseFloat(Domingo),"n")#
                         #}else{#
-                            Domingo
+                            #:Domingo#
                         #}#
                         </td>
                         </tr>

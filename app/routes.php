@@ -850,7 +850,7 @@ Route::group(array('before' => 'auth'), function (){
 				$subtotal = 0;
 				$newtotal = 0;
 				$parsetotal = $total - $itotal;
-
+				$impresora= $infocaja->impresora;
 				$conteteoproductosporpagar = Detpedidotick::where('pedido_id', '=',$idpedido)->whereNull('ticket_id')->get();
 				if(count($conteteoproductosporpagar) == 0){
 					return Response::json('false');
@@ -921,163 +921,7 @@ Route::group(array('before' => 'auth'), function (){
 												   'cajeroid'=>Auth::user()->id));
 						Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
 						$odetallestickete = $tickete->detallest;
-						
-						$token = sha1(microtime().'tk');
-						$html = '<!doctype html>
-	                                <html lang="es">
-	                                <head>
-	                                <meta charset="UTF-8">
-	                                </head>
-	                                <style>
-	                                    body{
-	                                    	 width: 220px;
-	                                         font-family: sans-serif;
-	                                         font-size: 10px;
-	                                         color: #000;
-	                                    }
-	                                    table{
-	                                        width: 100%;
-	                                        font-size: 11px;
-	                                        border-bottom: 1px solid #000;
-	                                    }
-	                                    .importetotal{
-	                                        font-size: 14px;
-	                                        text-align: right;
-	                                        font-weight: 900;
-	                                        width: 100%;
-	                                    }
-	                                    .titulos{
-	                                        border-bottom: 1px solid #000;
-	                                    }
-	                                    .head{
-	                                        font-size: 16px;
-	                                        font-weight: 900;
-	                                    }
-	                                    .subhead{
-	                                        font-size: 14px;
-	                                        font-weight: 900;
-	                                    }
-	                                    p {
-	                                        padding: 0;
-	                                        margin: 2px;
-	                                    }
-	                                    .datos{
-	                                        width: 52px;
-	                                    }
-	                                    .productos td{
-										line-height: 15px;
-										text-align: left;
-									    }
-									   .container{
-										height:auto;
-									   }
-									   .encabezado, .subencabezado{
-									   	text-align: center;
-									   	font-weight: 900;
-									   	margin-left:-20px;
-									   	width: 100%;
-									   }
-									   .subencabezado{
-									   	font-size: 11px;
-									   }
-	                                </style>
-	                                <body>
-	                                <div class="container">
-	                                <div class="encabezado">
-	                                <strong>KANGO CAFE</strong><br>
-	                                <strong>'.$restaurante->razonSocial.'</strong><br>
-	                                </div>
-	                                <div class="subencabezado">
-	                                <strong>RUC Nº '.$restaurante->ruc.'</strong><br>
-	                                <strong>'.$restaurante->direccion.'&nbsp;-&nbsp;'.$restaurante->provincia.'
-	                                 &nbsp;-&nbsp;'.$restaurante->departamento.'</strong><br>
-	                                <strong>Ticket:&nbsp;'.sprintf('%07d', $tickete->numero).' &nbsp;&nbsp;Serie:&nbsp;'.$tickete->serie.'</strong><br>
-	                                <strong>Fecha:'.date('d-m-Y').'&nbsp;&nbsp;Hora:'.date('H:i:s').'</strong>
-	               					</div>
-	                                <br>
-	                                <table>
-	                                    <tr>
-	                                        <td style="width: 120px">Descripcion</td>
-	                                        <td style="width: 25px;text-align: right">P.Uni.</td>
-	                                        <td style="width: 15px; text-align: right">Cant.</td>
-	                                        <td style="width: 50px;text-align: right">S/.</td>
-	                                    </tr>
-	                                </table>
-	                                <table style="width:220px">';
-						$newtamaño = 4*count($odetallestickete);
-						foreach ($odetallestickete as $predato) {
-							$html .= '<tr class="productos">
-	                                    <td style="width: 115px">'.substr($predato['nombre'], 0, 14).'.</td>
-	                                    <td style="width: 25px;text-align: right">'.$predato['preciou'].'</td>
-	                                    <td style="width: 15px; text-align: right">'.$predato['cantidad'].'</td>
-	                                    <td style="width: 55px;text-align: right">'.$predato['precio'].'</td>
-	                                </tr>';
-						}
-						$html .= '</table>
-	                                <table style="border: none">
-	                                    <tr>
-	                                    <td style="width: 110px">Descuento S/.</td>
-	                                    <td style="width:110px; text-align: right">-'.$tickete->idescuento.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">&nbsp;</td>
-	                                    <td style="width:110px; text-align: right">&nbsp;</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Subtotal S/.</td>
-	                                    <td style="width:110px; text-align: right">'.$tickete->subtotal.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">IGV S/.</td>
-	                                    <td style="width:110px; text-align: right">'.$tickete->IGV.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Total S/.</td>
-	                                    <td style="width:110px; text-align: right;font-weight: bold;">'.$tickete->importe.'</td>
-	                                    </tr>
-	                                </table>
-	                                <br>
-	                                <table style="border: none">
-	                                    <tr>
-	                                        <td class="datos">Cliente</td>
-	                                        <td>'.$cliente['nombres'].'</td>
-	                                    </tr>
-	                                    <tr>
-	                                        <td class="datos">DNI/RUC</td>
-	                                        <td>'.$cliente['dni'].'</td>
-	                                    </tr>
-	                                    <tr>
-	                                        <td class="datos">Dirección</td>
-	                                        <td>'.$cliente['direccion'].'</td>
-	                                    </tr>
-	                                </table>
-	                                <br>
-	                                <br>
-	                                <table style="border: none">
-	                                    <tr>
-	                                    <td style="width: 110px">Importe Pagado S/.</td>
-	                                    <td style="width:110px; text-align: right">'.$tickete->ipagado.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Vuelto S/. </td>
-	                                    <td style="width:110px; text-align: right">'.$tickete->vuelto.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Mesa Atendida</td>
-	                                    <td style="width:110px;">: '.$nombremesa.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Atendido por</td>
-	                                    <td style="width:110px;">: '.$nombremozo.'</td>
-	                                    </tr>
-	                                    <tr>
-	                                    <td style="width: 110px">Cajero:</td>
-	                                    <td style="width:110px;">: '.Auth::user()->login.'</td>
-	                                    </tr>
-	                                </table>
-	                                </div>
-	                                </body>
-	                                </html>';
+
 						if ($iefectivo > 0) {
 						$oefectivo = Detformadpago::create(array('importe' => $iefectivo, 'ticket_id' => $tickete->id, 'formadepago_id' => 1));
 						}
@@ -1086,6 +930,10 @@ Route::group(array('before' => 'auth'), function (){
 						}
 						if ($ivale > 0) {
 							$ovale = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
+						}
+
+						if($idescuento > 0){
+							$promocion =  Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 5));
 						}
 						$datoscaja->save();
 					} else {
@@ -1096,16 +944,136 @@ Route::group(array('before' => 'auth'), function (){
 				DB::rollback();
 				return Response::json($e);
 			}
-			$headers = array('Content-Type' => 'application/pdf', );
-						$pdfPath = TIKET_DIR.$token.'.pdf';
-						$tamaño = 125+$newtamaño;
-						$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
-						$html2pdf->WriteHTML($html);
-						$html2pdf->Output($pdfPath, 'F');
-						$cmd = "lpr -P".$infocaja->impresora." ";
-						$cmd .= $pdfPath;
-						$response = shell_exec($cmd);
-						File::delete($pdfPath);
+			$cajero = Auth::user()->login;
+			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
+			DB::commit();
+			return json_encode('True');
+		}
+	});
+	
+	Route::post('cobrarvale', function () {
+		if (Request::ajax()) {
+			DB::beginTransaction();
+			try{
+				$tipo = Input::get('tipo');
+				$cobrar = Input::get('cobrar');
+				$itotal = Input::get('itotal');
+				$iefectivo = Input::get('iefectivo');
+				$itarjeta = Input::get('itarjeta');
+				$dtarjeta = Input::get('dtarjeta');
+				$ivale = Input::get('ivale');
+				$idescuento = Input::get('idescuento');
+				$descuento = Input::get('descuento');
+				$ipagado = Input::get('ipagado');
+				$vuelto = Input::get('vuelto');
+				$total = $ipagado+$idescuento+$ivale;
+				$idpedido = Input::get('pedidoid');
+				$nombremesa = Input::get('mesa');
+				$nombremozo = Input::get('mozo');
+				$cliente = Input::get('cliente');
+				$caja_id = Input::get('caja_id');
+				$infocaja = Caja::find($caja_id);
+				$detcajaid = Input::get('detcajaid');
+				$idmozo = Input::get('idmozo');
+				$arrayudateprecuenta = array();
+				$subtotal = 0;
+				$newtotal = 0;
+				$parsetotal = $total - $itotal;
+				$tipovale = Input::get('tipovale');
+				$conteteoproductosporpagar = Detpedidotick::where('pedido_id', '=',$idpedido)->whereNull('ticket_id')->get();
+				if(count($conteteoproductosporpagar) == 0){
+					return Response::json('false');
+				}
+				if ($parsetotal >= 0) {
+					if ($tipo == 1) {
+						foreach ($cobrar as $dato) {
+							if ($dato['cobrar'] == 1) {
+								$itemprecuenta = Detpedidotick::find($dato['proid']);
+								$subtotal = $itemprecuenta->preciou*$dato['cantidad'];
+								$newtotal = $newtotal+$subtotal;
+								if ($dato['modificar'] == 1) {
+									$newcantidad = $itemprecuenta->cantidad-$dato['cantidad'];
+									$newprecio = $itemprecuenta->preciou*$newcantidad;
+									$itemprecuenta->cantidad = $newcantidad;
+									$itemprecuenta->precio = $newprecio;
+									$arraycreaprecuenta = array('nombre' => $dato['nombre'], 
+														'cantidad' => $dato['cantidad'], 
+														'precio' => $dato['precio'], 
+														'combinacion_id' => $itemprecuenta->combinacion_id, 
+														'preciou' => $dato['preciou'], 
+														'pedido_id' => $itemprecuenta->pedido_id, 
+														'producto_id'=>$itemprecuenta->producto_id);
+									$inserteditem = Detpedidotick::create($arraycreaprecuenta);
+									$arrayudateprecuenta[] = $inserteditem->id;
+									$itemprecuenta->save();
+								} else {
+									$arrayudateprecuenta[] = $itemprecuenta->id;
+								}
+							}
+						}
+					} else {
+						foreach ($cobrar as $dato) {
+							$itemprecuenta = Detpedidotick::find($dato['proid']);
+							$subtotal = $itemprecuenta->precio;
+							$newtotal = $newtotal+$subtotal;
+							$arrayudateprecuenta[] = $dato['proid'];
+						}
+					}
+					$newparse = round($total,2) - round($newtotal,2);
+					if ($newparse >= 0) {
+						$restaurante = Restaurante::find(Auth::user()->id_restaurante);
+						$impresora = $restaurante->impresoranocontable;
+						$datoscaja = Caja::find($caja_id);
+						if($tipovale == 1){
+							$newnumero = $restaurante->numerodescuentoautorizado + 1;
+							$restaurante->numerodescuentoautorizado = sprintf('%07d', $newnumero);
+						}else if($tipovale == 2){
+							$newnumero = $restaurante->numerovale + 1;
+							$restaurante->numerovale = sprintf('%07d', $newnumero);
+						}
+						$newdescuento = $idescuento+$ivale;
+						$osubtotal = $itotal/1.18;
+						$igv = $itotal - $osubtotal;
+						$tickete = Ticket::create(array('descuento' => $descuento, 
+												   'idescuento' => number_format($newdescuento, 2), 
+												   'importe' => $itotal, 
+												   'numero' => $newnumero, 
+												   'serie' => $datoscaja->serie, 
+												   'detcaja_id' => $detcajaid, 
+												   'caja_id' => $caja_id, 
+												   'pedido_id' => $idpedido, 
+												   'vuelto' => $vuelto, 
+												   'IGV' => number_format($igv, 2), 
+												   'subtotal' => number_format($osubtotal, 2), 
+												   'ipagado' => $ipagado,
+												   'cliente' =>$cliente['nombres'],
+												   'documento'=>$cliente['dni'],
+												   'direccion'=>$cliente['direccion'],
+												   'mesa'=>$nombremesa,
+												   'mozo'=>$nombremozo,
+												   'cajero'=>Auth::user()->login,
+												   'mozoid'=>$idmozo,
+												   'cajeroid'=>Auth::user()->id));
+						Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
+						$odetallestickete = $tickete->detallest;
+						if($tipovale == 1){
+							$promocion =  Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
+						}else if($tipovale == 2){
+							$promocion =  Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 4));
+						}
+						$restaurante->save();
+					} else {
+						return json_encode('Ingrese un monto válido');
+					}
+				}
+			}catch (Exception $e){
+				DB::rollback();
+				return Response::json($e);
+			}
+			$cajero = Auth::user()->login;
+			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
 			DB::commit();
 			return json_encode('True');
 		}
@@ -1201,16 +1169,6 @@ Route::group(array('before' => 'auth'), function (){
 			$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
 			$listadegastos = $detcaja->gastos()->get();
 			return Response::json($listadegastos);
-		}
-	});
-
-	Route::get('listadeventas', function () {
-		if (Request::ajax()) {
-			$detcaja = Detcaja::where('estado', '=', 'A')
-					 ->where('usuario_id', '=', Auth::user()->id, 'AND')
-					 ->first();
-			$listadeventas = $detcaja->tickets()->get();
-			return Response::json($listadeventas);
 		}
 	});
 
@@ -1360,174 +1318,15 @@ Route::group(array('before' => 'auth'), function (){
 			$idticket = Input::get('idtick');
 			$tickete = Ticket::find($idticket);
 			$infocaja = $tickete->caja;
+			$cliente = array('nombres'=> $tickete->cliente, 'dni'=> $tickete->dni, 'direccion' => $tickete->direction);
+			$cajero = $tickete->cajero;
+			$nombremesa = $tickete->mesa ;
+			$nombremozo = $tickete->mozo ;
+			$impresora= $infocaja->impresora;
 			$odetallestickete = $tickete->detallest;
 			$restaurante = Restaurante::find(Auth::user()->id_restaurante);
-			$token = sha1(microtime().'tk');
-			$html = '<!doctype html>
-                        <html lang="es">
-                        <head>
-                        <meta charset="UTF-8">
-                        </head>
-                        <style>
-                            body{
-                            	 width: 220px;
-                                 font-family: sans-serif;
-                                 font-size: 10px;
-                                 color: #000;
-                            }
-                            table{
-                                width: 100%;
-                                font-size: 11px;
-                                border-bottom: 1px solid #000;
-                            }
-                            .importetotal{
-                                font-size: 14px;
-                                text-align: right;
-                                font-weight: 900;
-                                width: 100%;
-                            }
-                            .titulos{
-                                border-bottom: 1px solid #000;
-                            }
-                            .head{
-                                font-size: 16px;
-                                font-weight: 900;
-                            }
-                            subhead{
-                                font-size: 14px;
-                                font-weight: 900;
-                            }
-                            p {
-                                padding: 0;
-                                margin: 2px;
-                            }
-                            .datos{
-                                width: 52px;
-                            }
-                            .productos td{
-							line-height: 15px;
-							text-align: left;
-						    }
-						   .container{
-							height:auto;
-						   }
-						   .encabezado, .subencabezado{
-						   	text-align: center;
-						   	font-weight: 900;
-						   	margin-left:-10px;
-						   	width: 100%
-						   }
-						   .subencabezado{
-						   	font-size: 11px;
-						   }
-                        </style>
-                        <body>
-                        <div class="container">
-                        <div class="encabezado">
-                        <strong>KANGO CAFE</strong><br>
-                        <strong>'.$restaurante->razonSocial.'</strong><br>
-                        </div>
-                        <div class="subencabezado">
-                        <strong>RUC Nº '.$restaurante->ruc.'</strong><br>
-                        <strong>'.$restaurante->direccion.'&nbsp;-&nbsp;'.$restaurante->provincia.'
-                        &nbsp;-&nbsp;'.$restaurante->departamento.'</strong><br>
-                        <strong>Ticket:&nbsp;'.sprintf('%07d', $tickete->numero).' &nbsp;&nbsp;Serie:&nbsp;'.$tickete->serie.'</strong><br>
-                        <strong>Fecha:'.date('d-m-Y').'&nbsp;&nbsp;Hora:'.date('H:i:s').'</strong>
-       					</div>
-                        <br>
-                        <table>
-                            <tr>
-                                <td style="width: 120px">Descripcion</td>
-                                <td style="width: 25px;text-align: right">P.Uni.</td>
-                                <td style="width: 15px; text-align: right">Cant.</td>
-                                <td style="width: 50px;text-align: right">S/.</td>
-                            </tr>
-                        </table>
-                        <table style="width:220px">';
-			$newtamaño = 4*count($odetallestickete);
-			foreach ($odetallestickete as $predato) {
-				$html .= '<tr class="productos">
-                            <td style="width: 115px">'.substr($predato['nombre'], 0, 14).'.</td>
-                            <td style="width: 25px;text-align: right">'.$predato['preciou'].'</td>
-                            <td style="width: 15px; text-align: right">'.$predato['cantidad'].'</td>
-                            <td style="width: 55px;text-align: right">'.$predato['precio'].'</td>
-                        </tr>';
-			}
-			$html .= '</table>
-                        <table style="border: none">
-                            <tr>
-                            <td style="width: 110px">Descuento S/.</td>
-                            <td style="width:110px; text-align: right">-'.$tickete->idescuento.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">&nbsp;</td>
-                            <td style="width:110px; text-align: right">&nbsp;</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Subtotal S/.</td>
-                            <td style="width:110px; text-align: right">'.$tickete->subtotal.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">IGV S/.</td>
-                            <td style="width:110px; text-align: right">'.$tickete->IGV.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Total S/.</td>
-                            <td style="width:110px; text-align: right;font-weight: bold;">'.$tickete->importe.'</td>
-                            </tr>
-                        </table>
-                        <br>
-                        <table style="border: none">
-                            <tr>
-                                <td class="datos">Cliente</td>
-                                <td>'.$tickete->cliente.'</td>
-                            </tr>
-                            <tr>
-                                <td class="datos">DNI/RUC</td>
-                                <td>'.$tickete->dni.'</td>
-                            </tr>
-                            <tr>
-                                <td class="datos">Dirección</td>
-                                <td>'.$tickete->direction.'</td>
-                            </tr>
-                        </table>
-                        <br>
-                        <br>
-                        <table style="border: none">
-                            <tr>
-                            <td style="width: 110px">Importe Pagado S/.</td>
-                            <td style="width:110px; text-align: right">'.$tickete->ipagado.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Vuelto S/. </td>
-                            <td style="width:110px; text-align: right">'.$tickete->vuelto.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Mesa Atendida</td>
-                            <td style="width:110px;">:'.$tickete->mesa.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Atendido por</td>
-                            <td style="width:110px;">:'.$tickete->mozo.'</td>
-                            </tr>
-                            <tr>
-                            <td style="width: 110px">Cajero:</td>
-                            <td style="width:110px;">: '.$tickete->cajero.'</td>
-                            </tr>
-                        </table>
-                        </div>
-                        </body>
-                        </html>';
-            $headers = array('Content-Type' => 'application/pdf', );
-			$pdfPath = TIKET_DIR.$token.'.pdf';
-			$tamaño = 125+$newtamaño;
-			$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
-			$html2pdf->WriteHTML($html);
-			$html2pdf->Output($pdfPath, 'F');
-			$cmd = "lpr -P".$infocaja->impresora." ";
-			$cmd .= $pdfPath;
-			$response = shell_exec($cmd);
-			File::delete($pdfPath);
+			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
 			return Response::json('true');
 		}
 	});

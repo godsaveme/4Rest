@@ -275,13 +275,16 @@
 					<a href="/cajas/registrargasto/{{$detcaja->id}}"> Registrar Gasto</a>
 					</li>
 					<li class="list-group-item list_menu">
+					<a href="/cajas/registraringreso/{{$detcaja->id}}"> Registrar Ingreso</a>
+					</li>
+					<li class="list-group-item list_menu">
 					<a href="/cajas/listargastos">Lista de Gastos</a>
 					</li>
 					<li class="list-group-item list_menu">
 					<a href="/eventos/listareventoscaja">Lista de Eventos</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/cajas/listarventas">Ventas Totales</a>
+					<a href="/cajas/listarventas?tipoc=1">Ventas Totales</a>
 					</li>
 					<li class="list-group-item list_menu">
 						<a href="/combinacions/create" target="_blank">Crear Menú</a>
