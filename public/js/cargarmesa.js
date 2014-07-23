@@ -1000,7 +1000,7 @@ $(".modalwindowscuenta").kendoWindow({
   				resizable: false,
   				draggable: false,
   				animation: false,
-  				position: { top: 20 , left: 100}
+  				position: { top: 20 , left: 20}
 });
 
 $('body').on('click', '#btn_cobrar', function(event) {
@@ -1008,7 +1008,7 @@ $('body').on('click', '#btn_cobrar', function(event) {
 	/* Act on the event */
 	if($('#infomozo').attr('data-idpedido') != 0){
 		precuenta(1, 0);
-		$('.k-window').css('min-width','75%');
+		$('.k-window').css('min-width','85%');
 		$('.modalwindowscuenta').data("kendoWindow").open();
 		$('.top span').removeClass('k-widget k-numerictextbox screen k-numeric-wrap k-state-default k-expand-padding');
 	}
