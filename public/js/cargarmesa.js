@@ -1137,12 +1137,10 @@ function importepagado(){
 		var newefectivo = newresta;
 		if(newefectivo > 0){
 			$('#input_iefectivo').val(newefectivo.toFixed(2));
-			alert(importepagado);
 			importepagado = importepagado + parseFloat(itarjeta);
 			$('#input_ipagado').val(importepagado.toFixed(2));
 		}else{
 			$('#input_iefectivo').val('0.00');
-			alert(importepagado);
 			importepagado = importepagado + parseFloat(itarjeta);
 			$('#input_ipagado').val(importepagado.toFixed(2));
 		}
