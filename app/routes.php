@@ -21,7 +21,7 @@ Route::post('login', function () {
 	}
 });
 
-Route::group(array('before' => 'auth'), function (){
+	Route::group(array('before' => 'auth'), function (){
 	Route::get('logout', function () {
 		if (Auth::check()) {
 			Auth::logout();return 
@@ -1054,7 +1054,8 @@ Route::group(array('before' => 'auth'), function (){
 												   'mozo'=>$nombremozo,
 												   'cajero'=>Auth::user()->login,
 												   'mozoid'=>$idmozo,
-												   'cajeroid'=>Auth::user()->id));
+												   'cajeroid'=>Auth::user()->id,
+												   'contable'=>2));
 						Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
 						$odetallestickete = $tickete->detallest;
 						if($tipovale == 1){
@@ -1322,9 +1323,13 @@ Route::group(array('before' => 'auth'), function (){
 			$cajero = $tickete->cajero;
 			$nombremesa = $tickete->mesa ;
 			$nombremozo = $tickete->mozo ;
-			$impresora= $infocaja->impresora;
 			$odetallestickete = $tickete->detallest;
 			$restaurante = Restaurante::find(Auth::user()->id_restaurante);
+			if ($tickete->contable == 1) {
+				$impresora= $infocaja->impresora;
+			}else if ($tickete->contable == 2) {
+				$impresora = $restaurante->impresoranocontable;
+			}
 			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
 										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
 			return Response::json('true');
