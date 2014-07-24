@@ -75,13 +75,14 @@
                             {{$ticket->idescuento}}
                         </td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-primary btn-sm btn_imprimicopiatick" data-idtick="#:get("id")#">Imprimir</button>
+                            <button type="button" class="btn btn-primary btn-sm btn_imprimicopiatick" 
+                            data-idtick="{{$ticket->id}}">Imprimir</button>
                         </td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-primary btn-sm btn_anular" data-idtick="#:get("id")#">Anular</button>
+                            <button type="button" class="btn btn-primary btn-sm btn_anular" data-idtick="{{$ticket->id}}">Anular</button>
                         </td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-primary btn-sm btn_generarticket" data-idtick="#:get("id")#">Generar</button>
+                            <button type="button" class="btn btn-primary btn-sm btn_generarticket" data-idtick="{{$ticket->id}}#">Generar</button>
                         </td>
                     </tr>
                 @endforeach

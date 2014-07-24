@@ -12,7 +12,7 @@
 			@endif
 			{{Form::open(array('url' => '/cajas/registraringreso', 'method' => 'post', 'role'=>'form'))}}
 				{{Form::hidden('detallecaja_id', $iddetalle)}}
-				<legend>Registrar Gasto</legend>
+				<legend>Registrar Ingreso</legend>
 				<div class="col-xs-4">
 					<label>Importe</label>
 					{{Form::input('text', 'importetotal', '', array('class'=>'form-control text-right', 'placeholder'=> 'S/. 0.00'))}}
