@@ -22,27 +22,27 @@
             {{Form::text('nombre', '', array('class' => 'form-control','placeholder'=>'ej. Azúcar','autofocus', 'required', 'validationMessage'=>'Por favor entre un nombre.'))}}
             </div>
         </div>
-<div class="form-group">
-    <div class="col-md-3">
-            {{Form::label('descripcion', 'Descripcion',array('class'=>'control-label'))}}
-                </div>
-    <div class="col-md-5">
-            {{Form::text('descripcion', '', array('class' => 'form-control','placeholder'=>'ej. Azucar rubia de Pomalca.', 'required', 'validationMessage'=>'Por favor entre una descripción.'))}} 
+        <div class="form-group">
+            <div class="col-md-3">
+                    {{Form::label('descripcion', 'Descripcion',array('class'=>'control-label'))}}
+                        </div>
+            <div class="col-md-5">
+                    {{Form::text('descripcion', '', array('class' => 'form-control','placeholder'=>'ej. Azucar rubia de Pomalca.', 'required', 'validationMessage'=>'Por favor entre una descripción.'))}} 
             </div>
         </div>
 
         <div class="form-group">
-                        <div class="col-md-4">
+            <div class="col-md-4">
             {{Form::label('Unidades', 'Unidades', array('class'=>'control-label'))}}
                 {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'), '', array('class' => 'form-control'))}}  
             </div>
             <div class="col-md-4">
-            {{Form::label('tipoins', 'Tipo de Insumo', array('class' => 'control-label'))}}
-                {{Form::select('tipoins_id',$tipoins, '', array('class' => 'form-control'))}}
-            </div>
-            <div class="col-md-4">
                 {{Form::label('estado','estado',array('class' => 'control-label'))}}
                 {{Form::select('estado',array('1' => 'Activo', '0' => 'Inactivo'),1, array('class' => 'form-control'))}}
+            </div>
+            <div class="col-md-4">
+                {{Form::label('ultimocosto','Ultimo Costo',array('class' => 'control-label'))}}
+                {{Form::text('ultimocosto', '', array('class' => 'form-control','placeholder'=>'0.00', 'required', 'validationMessage'=>'Por favor ingrese ultimo costo.'))}}
             </div>
         </div>
         <div class="form-group">

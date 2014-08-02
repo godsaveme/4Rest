@@ -41,24 +41,16 @@
 				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => '  Las contraseñas no coinciden.') );
 
 			}elseif(count($persona) > 0){
-
-				
 				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => '  Persona con Usuario.'));
-				//return Redirect::to('usuarios/create')->withErrors('Esta Persona ya tiene un Usuario');
-
 			}elseif(count($user) > 0){
 
 				Input::flash();
 				return Response::json(array('estado' => false, 'route' => '/usuarios/create' , 'msg' => ' Nombre de Usuario repetido.'));
-				//return Redirect::to('usuarios/create')->withErrors('Este nombre de usuario está en uso');
-
 			}else{
 
 				$input = Input::all();
 		    	$input['password'] = Hash::make($input['password']);
 		    	Usuario::create($input);
-		    	//return Redirect::to('usuarios')->with('success','');
-
 			}
 
 		} catch (Exception $e) { //'Falta Local, Área o Colaborador.'

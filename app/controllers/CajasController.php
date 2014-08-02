@@ -392,7 +392,7 @@ class CajasController extends BaseController {
 			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
 			$totalgastos = $detcaja->gastos()->sum('importetotal');
 			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal');
-			$importetotal = round($totalventas,2) + round($detcaja->montoInicial,2) - round($totalgastos,2);
+			$importetotal = round($totalventas,2) + round($detcaja->montoInicial,2) + round($detcaja->totalingresoscaja,2) - round($totalgastos,2);
 			$arqueo = Input::get('arqueo');
 			$diferencia = round($importetotal,2) - round($arqueo,2);
 			$caja = $detcaja->caja;
@@ -410,6 +410,7 @@ class CajasController extends BaseController {
 			return Redirect::to('/cajas');
 		}
 	}
+	
 	public function getListargastos() {
 		$detcaja = $this->detcaja;
 		return View::make('cajas.listargastos', compact('detcaja'));

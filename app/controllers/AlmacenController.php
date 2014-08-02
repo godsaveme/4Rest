@@ -35,19 +35,14 @@ class AlmacenController extends \BaseController {
 	{
 		DB::beginTransaction();	
 		try {
-			//var_dump(Input::all());
-			//die();
 			Almacen::create(Input::all());
-
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(array('estado' => false));
 		}
-
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/almacenes'));
 	}
-
 
 	/**
 	 * Display the specified resource.
@@ -85,8 +80,6 @@ class AlmacenController extends \BaseController {
 	{
 		DB::beginTransaction();	
 		try {
-			//var_dump(Input::all());
-			//die();
 			$almacen_id = Input::get('almacen_id');
 			$almacen = Almacen::find(Input::get('almacen_id'));
 			$almacen->update(Input::all());

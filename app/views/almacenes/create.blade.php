@@ -40,13 +40,20 @@
 
 <div class="form-group">
     <div class="col-md-3">
-        {{Form::label('restaurante', 'restaurante', array('class' => 'control-label'))  }}
+        {{Form::label('restaurante', 'Restaurante', array('class' => 'control-label'))  }}
     </div>
     <div class="col-md-5">
-        {{Form::select('restaurante_id', $restaurantes,'',array('class' => 'form-control') ) }}
+        {{Form::select('restaurante_id', $restaurantes,'',array('class' => 'form-control', 'id'=>'id_restaurante') ) }}
     </div>
 </div>
-
+<div class="form-group">
+    <div class="col-md-3">
+        {{Form::label('id_tipoareapro', 'Restaurante', array('class' => 'control-label'))  }}
+    </div>
+    <div class="col-md-5">
+        {{Form::select('id_tipoareapro', array('0' => "Seleccione ... "),'', array('class'=>'form-control','disabled'))}}
+    </div>
+</div>
 
 <div class="form-group">
     <div class="col-md-3">

@@ -11,7 +11,6 @@ class InsumosController extends BaseController {
 	{
 		$insumos = Insumo::all();
         return View::make('insumos.index', array('insumos' => $insumos));
-        //return View::make('insumos.index');
 	}
 
 

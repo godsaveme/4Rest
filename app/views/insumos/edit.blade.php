@@ -37,13 +37,14 @@
                 {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'),  $insumo->unidadMedida, array('class' => 'form-control'))}}  
             </div>
             <div class="col-md-4">
-            {{Form::label('tipoins', 'Tipo de Insumo', array('class' => 'control-label'))}}
-                {{Form::select('tipoins_id',$tipoins,  $insumo->tipoins_id, array('class' => 'form-control'))}}
-            </div>
-            <div class="col-md-4">
                 {{Form::label('estado','estado',array('class' => 'control-label'))}}
                 {{Form::select('estado',array('1' => 'Activo', '0' => 'Inactivo'), $insumo->estado, array('class' => 'form-control'))}}
             </div>
+            <div class="col-md-4">
+                {{Form::label('ultimocosto','Ultimo Costo',array('class' => 'control-label'))}}
+                {{Form::text('ultimocosto', $insumo->ultimocosto, array('class' => 'form-control','placeholder'=>'0.00', 'required', 'validationMessage'=>'Por favor ingrese ultimo costo.'))}}
+            </div>
+
         </div>
         <div class="form-group">
     <div class="col-md-4">

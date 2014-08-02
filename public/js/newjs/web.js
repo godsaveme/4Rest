@@ -1,7 +1,60 @@
 var host = window.location.host;
 function ON_READY() {
+//recetas
+    $('#form_receta').submit(function(event) {
+      event.preventDefault();
+      var insumos = {};
+      var preproductos = {};
+      var dsinsumos= ds.data();
+      var dspro = dsprods.data();
+      var producto_id = $('#producto_id').val();
+      for (var i = 0; i < dsinsumos.length; i++) {
+        var newdata = {};
+        newdata['cantidad'] = dsinsumos[i].cantidad;
+        newdata['insumo_id'] = dsinsumos[i].id;
+        newdata['precio'] = dsinsumos[i].costo;
+        newdata['producto_id'] = producto_id;
+        insumos[i] = newdata; 
+      }
+
+      for (var i = 0; i < dspro.length; i++) {
+        var newdata = {};
+        newdata['cantidad'] = dspro[i].cantidad;
+        newdata['preproducto_id'] = dspro[i].id;
+        newdata['producto_id'] = producto_id;
+        preproductos[i] = newdata;
+      };
+
+      if (dsinsumos.length > 0) {
+        $.ajax({
+          url: '/recetas/create',
+          type: 'POST',
+          dataType: 'json',
+          data: {producto_id: producto_id, insumos: insumos, costo: $('#costop').text(), preproductos: preproductos},
+        })
+        .done(function(data) {
+          if (data.estado){
+            alert('Operación agregada correctamente');
+            $(location).attr('href', data.route);
+          }else{
+            alert('Operación no agregada. Error: ' + data.msg);
+            $(location).attr('href', data.route);
+          }
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          console.log("complete");
+        });
+        
+      }else{
+        alert('No se ha seleccionado ningun insumo.');
+      }
+    });
+
+//fin recetas
     $('#id_restaurante').change(function(){
-      console.log('change');
          $.ajax({
                 type: 'POST',
                 url: '/buscarareasp',
@@ -158,11 +211,7 @@ function ON_READY() {
           //
           if($('#lun2').prop('checked') &&  $('#mar3').prop('checked') &&  $('#mie4').prop('checked') &&  $('#jue5').prop('checked') && $('#vie6').prop('checked') &&  $('#sab7').prop('checked') && $('#dom1').prop('checked')){
             $('#tdia').prop('checked', true );
-          }
-
-
-
-                    
+          }                    
 
         /*fin agregar combi*/
 
@@ -181,13 +230,9 @@ function ON_READY() {
                 $arrForm = $form.serializeArray();
 
               if(typeof(ds) != "undefined"){ 
-
                     $arrForm.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-                    //var form_resto = $('#form_resto').serializeArray();
-                    //form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())})
                     if (ds.total() > 0) {
-                      var $action = $(this).attr('action');
+                    var $action = $(this).attr('action');
                     var $response = $.post($action, $arrForm);
                     $response.done(function( data ) {
                                 if (data.estado){
@@ -209,7 +254,7 @@ function ON_READY() {
                   var $response = $.post($action, $arrForm);
 
                   $response.done(function( data ) {
-                              if (data.estado){
+                            if (data.estado){
                                 alert('Operación agregada correctamente');
                               $(location).attr('href', data.route);
                             }else{
@@ -472,7 +517,25 @@ function ON_READY() {
     },
   });
 
-                $("#gridSabores").kendoGrid({
+  $("#gridSabores").kendoGrid({
+    dataSource: {
+      pageSize: 10
+    },
+                            
+    height: 525,
+    sortable: true,
+    selectable: true,
+    scrollable: true,
+    sortable: true,
+    filterable: true,
+    resizable: true,
+    pageable: {
+      refresh: true,
+      pageSizes: true
+    },
+  });
+
+  $('#gridRece').kendoGrid({
     dataSource: {
       pageSize: 10
     },

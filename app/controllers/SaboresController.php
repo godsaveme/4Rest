@@ -64,9 +64,6 @@ class SaboresController extends \BaseController {
 	{
 		DB::beginTransaction();	
 		 try {
-		//var_dump(Input::get('producto_id'));
-		//var_dump(Input::all());
-		//die();
 		$wl = Input::get('wordlist');
 		$sabores = json_decode($wl);
 

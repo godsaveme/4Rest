@@ -36,7 +36,7 @@
   {{HTML::script('js/newjs/web.js')}}
   @show
 
-@yield('js')
+  @yield('js')
 
 </head>
 <body>
@@ -208,6 +208,10 @@
                 @if (Request::is('insumos/create')) <span class="text-muted pull-right">CREAR</span> @endif
                 @if (Request::is('insumos/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
         </li>
+        <li class="list-group-item @if (Request::is('recetas') || Request::is('recetas/*')) active @endif">{{ HTML::link('recetas', 'Recetas'); }}
+                @if (Request::is('recetas/create')) <span class="text-muted pull-right">CREAR</span> @endif
+                @if (Request::is('recetas/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
+        </li>
         </ul>
       </div>
     </div>
@@ -300,12 +304,33 @@
   </div>
 </div>
 
-
-
-                    </div>
-                    </div>
-
+<div class="panel-group" id="accordion6">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion6" href="#collapseOne6">
+          <i class="glyphicon glyphicon-inbox"></i> Almacen<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+        </a>
+      </h4>
     </div>
+    <div id="collapseOne6" class="panel-collapse collapse @if (Request::is('almacenes') || Request::is('almacenes/*') || Request::is('almacenes') || Request::is('almacenes/*')) in @endif">
+       <div class="panel-body pb-menu">
+      <ul class="list-group">
+        <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes', 'Almacen') }}
+                @if (Request::is('almacenes/create')) <span class="text-muted pull-right">CREAR</span> @endif
+                @if (Request::is('almacenes/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+</div>
+
+</div>
 
 
 <script type="text/javascript">

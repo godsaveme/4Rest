@@ -77,7 +77,6 @@
 
  <script type="text/javascript">
  var ds= new kendo.data.DataSource({
-
         schema: {
             model: {
                 id: "id",
@@ -168,40 +167,29 @@ function onSelectProd(e){
       };
 
    });
-
-  
-
-
 };
 
-
-
-
-                      $("#txtSabor").kendoAutoComplete({
-                        dataTextField: "nombre",
-                        filter: "contains",
-                        minLength: 2,
-                        template: kendo.template($("#sabor_templ").html()),
-                        dataSource: {
-                            type: "json",
-                            serverFiltering: true,
-                            transport: {
-                                read: "/bus_sabor_"
-                            }
-                        },
-                        select: onSelectSabor,
-                        height:200
-                    });
+$("#txtSabor").kendoAutoComplete({
+    dataTextField: "nombre",
+    filter: "contains",
+    minLength: 2,
+    template: kendo.template($("#sabor_templ").html()),
+    dataSource: {
+        type: "json",
+        serverFiltering: true,
+        transport: {
+            read: "/bus_sabor_"
+        }
+    },
+    select: onSelectSabor,
+    height:200
+});
 
 
 
 function onSelectSabor(e){
    var dataItem = this.dataItem(e.item.index());
-
    var ds_Prod = ds.data();
-   //$('#persona_id').val(dataItem.id);
-   //$('#persona_id').text(dataItem.id);
-
    var flag = true;
 
    flag = id_repeat(ds_Prod,dataItem);
@@ -212,20 +200,6 @@ function onSelectSabor(e){
    		alert('Producto Repetido');
    };
 
-   //$('#txtProd').val('');
-
-
-   
-
-   //listView.refresh();
-   //console.log(dataItem.id);
-   //console.log(dataItem.nombre);
-   //console.log(dataItem.descripcion);
-   //console.log(ds.get(1));
-   
-   //console.log(ds_Prod[0].id);
-   //ds.sync();
-   //console.log($('#persona_id').val());
 };
 
 function id_repeat(data,dataItem){
@@ -255,51 +229,6 @@ function id_repeat(data,dataItem){
 
 }
 
-
-</script>
-
-<script type="text/javascript">
-
-	/*var validator = $("#form_resto").kendoValidator().data("kendoValidator");
-
-	$('#form_resto').submit(function(event) {
-
-		if (validator.validate()) {
-
-			event.preventDefault();
-
-			$(this).find(':submit').attr('disabled','disabled');
-
-			var $form = $(this),
-				$arrForm = $form.serializeArray();
-			$arrForm.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-			//var form_resto = $('#form_resto').serializeArray();
-			//form_resto.push({name: 'wordlist', value: JSON.stringify(ds.data())});
-
-      if (ds.total() > 0) {
-
-
-
-			var $response = $.post("/sabores/storedet", $arrForm);
-
-			$response.done(function( data ) {
-							console.log(data);
-	    						if (data){
-	    							alert('Operación agregada correctamente');
-									window.location = "/sabores/indexdet";
-								}else{
-									alert('Operación no agregada. Error.');
-								}
-	  					});
-    }else{
-      alert('Se requiere por lo menos agregar un sabor');
-      $(this).find(':submit').removeAttr('disabled');
-    };
-
-		}
-
-	});*/
 
 </script>
 
@@ -338,7 +267,7 @@ function id_repeat(data,dataItem){
             clear: both;
             visibility: hidden;
         }
-            </style>
+</style>
           
 
 @stop

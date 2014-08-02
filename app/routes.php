@@ -52,7 +52,7 @@ Route::post('login', function () {
 	Route::controller('/sabores', 'SaboresController');
 	Route::controller('/monitores','MonitorController');
 	Route::controller('/reportes','ReportesController');
-
+	Route::controller('/recetas', 'RecetasController');
 	Route::post('provincias', function () {
 	$patron = '';
 		if (Request::ajax()) {
@@ -104,14 +104,24 @@ Route::post('login', function () {
 	);
 
 				/*route javi*/
-	Route::get('buscarinsumos', function () {
+	Route::get('bus_insumo_', function () {
 		if (Request::ajax()) {
  				$valor = $_REQUEST["filter"]["filters"][0]["value"];
  				$insumos = Insumo::where('nombre','like','%'.$valor.'%')->get();
   				return Response::json($insumos);
 		}
-	}
-	);
+	});
+
+	Route::get('bus_prepro_', function () {
+		if (Request::ajax()) {
+ 				$valor = $_REQUEST["filter"]["filters"][0]["value"];
+ 				$productos = Producto::join('receta','receta.producto_id', '=', 'producto.id')
+ 					->where('nombre','like','%'.$valor.'%')
+					->groupby('id')
+					->get();
+  				return Response::json($productos);
+		}
+	});
 
 	Route::get('bus_per_', function () {
 		$valor = $_REQUEST["filter"]["filters"][0]["value"];
@@ -138,22 +148,16 @@ Route::post('login', function () {
 
 	Route::get('bus_prod_', function () {
 		$valor = $_REQUEST["filter"]["filters"][0]["value"];
-		//$productos = Producto::where('nombre','like',$valor.'%')->lists('id','nombre','descripcion');
 		$productos = Producto::join('familia','familia.id','=','producto.familia_id')
 					->where('producto.nombre','like','%'.$valor.'%')
 					->select('producto.nombre as productoNombre','producto.id as productoID','producto.descripcion as productoDescr','familia.id as familiaID','familia.nombre as familiaNombre')
 					->get();
-		//var_dump($productos);
-		//die();
 		 $arrProd = array();
 		 foreach ($productos as $dato) {
-
 				$arrProd[] = array('id' => $dato->productoID,'nombre' => $dato->productoNombre, 'descripcion' => $dato->productoDescr, 'cantidad' => '1.00', 'precio' => '1.00', 'familiaid' => $dato->familiaID, 'familianombre' =>  $dato->familiaNombre);
-
 		 }
 		return Response::json($arrProd);
-	}
-	);
+	});
 
 	Route::get('bus_sabor_', function () {
 		$valor = $_REQUEST["filter"]["filters"][0]["value"];
@@ -174,23 +178,28 @@ Route::post('login', function () {
 	Route::post('compr_prod_sabr', function(){
 		if (Request::ajax()) {
 			$producto_id = Input::get('productoid');
-			//var_dump($producto_id);
-			//die();
-
-			//$prods = Producto::whereHas('sabores', function($q)
-			//		{
-			//		    $q->where('id', '=', 21);
-
-			//		})->get();
-
 			$prods = Sabor::whereHas('productos', function($q)
 					{
 						$q->where('id', '=', Input::get('productoid'));
 
 					})->get();
 
-			//var_dump($prods);
-			//die();
+			if (count($prods) > 0) {
+				return Response::json(true);
+
+			}else{
+				return Response::json(false);
+			}
+		}
+	});
+
+	Route::post('compr_prod_receta', function(){
+		if (Request::ajax()) {
+			$producto_id = Input::get('productoid');
+			$prods = Insumo::whereHas('productos', function($q)
+					{
+						$q->where('id', '=', Input::get('productoid'));
+					})->get();
 
 			if (count($prods) > 0) {
 				return Response::json(true);
@@ -1073,8 +1082,8 @@ Route::post('login', function () {
 				return Response::json($e);
 			}
 			$cajero = Auth::user()->login;
-			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
-										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
+			/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
 			DB::commit();
 			return json_encode('True');
 		}
@@ -1928,7 +1937,11 @@ Route::post('login', function () {
 		if (Request::ajax()) {
 			$tipo = Input::get('tipo');
 			if($tipo==1){
-				$codigo = uniqid();
+				$codigo = crypt(uniqid(rand(),1)); 
+				$codigo = strip_tags(stripslashes($codigo));
+				$codigo = str_replace(".","",$codigo);
+				$codigo =  strrev(str_replace("/","",$codigo));
+				$codigo = substr($codigo,0,4);   
 				$qrcode = DNS2D::getBarcodeHtml("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, "black");
 				$qrcodepath = DNS2D::getBarcodePngPath("http://192.168.1.247/dev/clientes/".$codigo, "QRCODE", 7, 7, array(0,0,0));
 				$nombrepng = substr($qrcodepath, 2);
