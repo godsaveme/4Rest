@@ -187,7 +187,6 @@ function ON_READY() {
 
           $('body').on('click', '#tdia', function(event) {
             var tdiamarcado = $(this).prop('checked');
-
             if (tdiamarcado) {
                     $('#lun2').prop('checked', true);
                    $('#mar3').prop('checked', true);
@@ -205,9 +204,7 @@ function ON_READY() {
                    $('#sab7').prop('checked', false);
                    $('#dom1').prop('checked', false);
             };
-
           });
-
           //
           if($('#lun2').prop('checked') &&  $('#mar3').prop('checked') &&  $('#mie4').prop('checked') &&  $('#jue5').prop('checked') && $('#vie6').prop('checked') &&  $('#sab7').prop('checked') && $('#dom1').prop('checked')){
             $('#tdia').prop('checked', true );

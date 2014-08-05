@@ -234,6 +234,11 @@ $("#listView").kendoListView({
       for (var i = 0; i < data.length; i++) {
         costo = parseFloat(costo) + parseFloat(data[i].costo);
       }
+
+      var data2 = dsprods.data();
+      for (var i = 0; i < data2.length; i++) {
+        costo = parseFloat(costo) + parseFloat(data2[i].costo);
+      }
       $('#costop').text(costo.toFixed(2));
     }
  });
@@ -249,10 +254,15 @@ $("#listView2").kendoListView({
       dsprods.pushUpdate({ id: Itemid, costo: newcosto });
     },
     dataBound: function() {
-      var data = dsprods.data();
+      var data = ds.data();
       var costo = 0;
       for (var i = 0; i < data.length; i++) {
         costo = parseFloat(costo) + parseFloat(data[i].costo);
+      }
+
+      var data2 = dsprods.data();
+      for (var i = 0; i < data2.length; i++) {
+        costo = parseFloat(costo) + parseFloat(data2[i].costo);
       }
       $('#costop').text(costo.toFixed(2));
     }
