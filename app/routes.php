@@ -2031,5 +2031,66 @@ Route::post('login', function () {
 		}
 	});
 
+	Route::post('buscarordenesproduccion',function(){
+		if (Request::ajax()) {
+			$idarea = Input::get('areaproduccion_id');
+			$areaproduccion = Areadeproduccion::find($idarea);
+			$ordenes = $areaproduccion->ordenesdeproduccion;
+			return Response::json($ordenes);
+		}
+	} );
+
+	Route::post('create_ordenproduccion', function (){
+		if (Request::ajax()) {
+			$areaproduccion_id = Input::get('areaproduccion_id');
+			$areaproduccion = Areadeproduccion::find($areaproduccion_id);
+			$productos = Input::get('productos');
+			$arrayinsumos = array();
+			$arrayverificarstock = array();
+			foreach ($productos as $producto) {
+				$oproducto = Producto::find($producto['id']);
+				$receta = $oproducto->insumos()->get();
+				$preproductos = $oproducto->preproductos()->get();
+				foreach ($receta as $insumo) {
+					if (isset($arrayinsumos[$insumo->id])) {
+						$newcantidad = $arrayinsumos[$insumo->id]['cantidad'] + $insumo->pivot->cantidad;
+						$arrayinsumos[$insumo->id]['cantidad'] = $newcantidad;
+					}else{
+						$arrayinsumos[$insumo->id] = array('insumo_id'=>$insumo->id,
+							'cantidad'=>$insumo->pivot->cantidad);
+						$arrayverificarstock[] = $insumo->id;
+					}
+				}
+				foreach ($preproductos as $preproducto) {
+					$oproducto2 = Producto::find($preproducto->id);
+					$oreceta = $oproducto2->insumos()->get();
+					foreach ($oreceta as $insumo) {
+						if (isset($arrayinsumos[$insumo->id])) {
+							$newcantidad = $arrayinsumos[$insumo->id]['cantidad'] + $insumo->pivot->cantidad;
+							$arrayinsumos[$insumo->id]['cantidad'] = $newcantidad;
+						}else{
+							$arrayinsumos[$insumo->id] = array('insumo_id'=>$insumo->id,
+								'cantidad'=>$insumo->pivot->cantidad);
+							$arrayverificarstock[] = $insumo->id;
+						}
+					}	
+				}
+
+			}
+
+			$stockinsumos = $areaproduccion->almacen;
+			
+			return Response::json($stockinsumos);
+		}
+	});
+
+	Route::post('buscareceta', function (){
+		if (Request::ajax()) {
+			$producto = Producto::find(Input::get('productoid'));
+			$receta = $producto->insumos()->get()->toJson();
+			$preproductos = $producto->preproductos()->get()->toJson();
+			return Response::json(compact('receta','preproductos'));
+		}
+	});
 	//fin rutas
 });

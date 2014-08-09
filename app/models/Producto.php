@@ -10,8 +10,7 @@ class Producto extends Eloquent {
 	public static $rules = array();
 
 	public function insumos(){
-		return $this->belongsToMany('Insumo','receta','producto_id','insumo_id')
-				->withPivot('cantidad');
+		return $this->belongsToMany('Insumo','receta','producto_id','insumo_id')->withPivot('cantidad','precio');
 	}
 	
 	public function precios(){
@@ -37,6 +36,10 @@ class Producto extends Eloquent {
 	public function pedidos(){
 		return $this->belongsToMany('Pedido', 'detallepedido', 'producto_id','pedido_id')
 				->withPivot('importeFinal', 'cantidad','combinacion_id', 'pedido_id');
+	}
+
+	public function preproductos(){
+		return $this->belongsToMany('Producto', 'preProducto', 'producto_id','preproducto_id');
 	}
 
 

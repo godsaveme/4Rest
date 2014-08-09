@@ -58,7 +58,11 @@
 		        				<th class="text-right"></th>
 		        				<th class="text-right"></th>
 		        				<th class="text-right">#:totalatenciones()#</th>
-		        				<th class="text-right">#:totalproductos()#</th>
+		        				<th class="text-right">
+		        				<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=1&fechainicio=#:fechainicio()#&fechafin=#:fechafin()#">
+		        				#:totalproductos()#
+		        				</a>
+		        				</th>
 		        				<th class="text-right">#:totaltickets()#</th>
 		        				<th class="text-right">#:pedidosanulados()#</th>
 		        				<th class="text-right">#:productosanulados()#</th>
@@ -70,6 +74,7 @@
 		        		</tr>
 		        	</script>
 		        	</thead>
+		        	
 		        	<tbody data-template="reporte_mozostemplate" data-bind="source: datosreporte">
 		        	<script id="reporte_mozostemplate" type="text/x-kendo-template">
 		        		<tr>

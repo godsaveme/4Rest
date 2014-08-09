@@ -118,8 +118,6 @@ class SaboresController extends \BaseController {
 	{
 		$producto = Producto::find($id);
 		$sabores = $producto->sabores->toJson();
-		//var_dump($sabores);
-		//die();
 		return Response::view('sabores.editdet', compact('producto','sabores'));
 	}
 
@@ -151,13 +149,9 @@ class SaboresController extends \BaseController {
 	{
 		DB::beginTransaction();	
 		try {
-		//var_dump(Input::get('producto_id'));
-		//var_dump(Input::all());
-		//die();
 		Producto::find(Input::get('producto_id'))->sabores()->detach();
 		$wl = Input::get('wordlist');
 		$sabores = json_decode($wl);
-
 			if(count($sabores) > 0){
 				foreach ($sabores as $sabor) {
 					$detsabor = new DetSabor;

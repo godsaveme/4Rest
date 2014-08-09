@@ -137,6 +137,26 @@ var viewModel_reportemozos = kendo.observable({
         };
         return suma;
     },
+    fechainicio: function(){
+        var data = datareportemozos.data();
+        var fechainicio = $('#textf_inicio').text();
+        if (data.length > 0) {
+            fechainicio = data[0].fechai;
+        }else{
+            fechainicio = '0000-00-00';
+        }
+        return fechainicio;
+    },
+    fechafin: function(){
+        var data = datareportemozos.data();
+        var fechainicio = $('#textf_inicio').text();
+        if (data.length > 0) {
+            fechainicio = data[0].fechafin;
+        }else{
+            fechainicio = '0000-00-00';
+        }
+        return fechainicio;
+    },
     datosreporte: datareportemozos
 });
 
@@ -181,4 +201,9 @@ function ventatotalpor(){
             venta += parseFloat(data[i]['mfactu']);
         };
         return venta.toFixed(2);
+}
+
+function fechafin(){
+    var fechafin = $('#fecha_fin').text();
+    return fechafin;
 }

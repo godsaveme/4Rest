@@ -45,18 +45,6 @@ class AlmacenController extends \BaseController {
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-
-	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
@@ -118,5 +106,9 @@ class AlmacenController extends \BaseController {
 		return Response::json(true);
 	}
 
-
+	public function getOrdenproduccion(){
+		$areasproduccion = Areadeproduccion::where('id_restaurante', '=', 
+							Auth::user()->id_restaurante)->lists('nombre','id');
+		return View::make('almacenes.ordenproduccion',compact('areasproduccion'));
+	}
 }

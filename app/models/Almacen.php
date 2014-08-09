@@ -6,11 +6,15 @@ class Almacen extends Eloquent {
 
 	protected $guarded = array();
 
-	protected $fillable = array('nombre','descripcion','restaurante_id','capacidad');
+	protected $fillable = array('nombre','descripcion','restaurante_id','capacidad','id_tipoareapro');
 
 	public static $rules = array();
 
 	public function restaurante(){
 		return $this->belongsTo('Restaurante','restaurante_id');
+	}
+
+	public function insumos(){
+		return $this->belongsToMany('Insumo','belongsToMany','almacen_id','insumo_id')->withPivot('stockActual');
 	}
 }

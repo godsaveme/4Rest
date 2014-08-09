@@ -68,9 +68,7 @@
 <!--{{ Form::file('imagen') }}-->
 <div class="form-group">
     <div class="col-md-4">
-
         {{Form::submit('Guardar', array('class' => 'btn btn-warning') )}}
-
     </div>
 </div>
 </fieldset>

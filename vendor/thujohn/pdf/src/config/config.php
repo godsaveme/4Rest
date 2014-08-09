@@ -9,7 +9,7 @@ return array(
 	'DOMPDF_DPI' => 96,
 	'DOMPDF_ENABLE_PHP' => false,
 	'DOMPDF_ENABLE_REMOTE' => false,
-	'DOMPDF_ENABLE_CSS_FLOAT' => true,
+	'DOMPDF_ENABLE_CSS_FLOAT' => false,
 	'DOMPDF_ENABLE_JAVASCRIPT' => true,
 	'DEBUGPNG' => false,
 	'DEBUGKEEPTEMP' => false,

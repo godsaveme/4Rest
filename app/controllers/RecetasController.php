@@ -57,27 +57,22 @@ class RecetasController extends \BaseController {
 	}
 
 	/**
-	 * Display the specified resource.
-	 * GET /recetas/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
 	 * Show the form for editing the specified resource.
 	 * GET /recetas/{id}/edit
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function getEdit($id = NULL)
 	{
-		//
+		if (isset($id)) {
+			$producto = Producto::find($id);
+			$insumos = $producto->insumos()->get()->toJson();
+			$preproductos = $producto->preproductos()->get()->toJson();
+			return View::make('recetas.edit');
+		}else{
+			Redirect::to('/recetas');
+		}
 	}
 
 	/**
@@ -87,10 +82,7 @@ class RecetasController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
-	}
+	
 
 	/**
 	 * Remove the specified resource from storage.

@@ -320,6 +320,8 @@
                 @if (Request::is('almacenes/create')) <span class="text-muted pull-right">CREAR</span> @endif
                 @if (Request::is('almacenes/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
         </li>
+        <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/ordenproduccion', 'Orden de Producción') }}
+        </li>
       </ul>
       </div>
     </div>

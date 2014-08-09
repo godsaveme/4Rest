@@ -29,15 +29,65 @@ class ReportesController extends \BaseController {
 		}
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /reportes
-	 *
-	 * @return Response
-	 */
-	public function store()
+	public function getReporteproductos($id=NULL)
 	{
-		//
+		if (isset($id)) {
+			$tipoc = Input::get('tipoc');
+			$restaurante = Restaurante::find($id);
+			$fechaInicio = Input::get('fechainicio');
+			$fechaFin = Input::get('fechafin');
+			switch ($tipoc) {
+				case '1':
+					$productos = DB::select( DB::raw("SELECT fnombre,tipocombid,sum(precio) AS precio, 
+								sum(cantidad) AS cantidad FROM table_productostipocombinacion WHERE 
+								created_at BETWEEN '".$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59' 
+								AND idrest = ".$id." GROUP BY tipocombid ORDER BY precio DESC"));
+					$cantidad = 0;
+					$montototal = 0;
+					foreach ($productos as $producto) {
+						$cantidad = $cantidad + $producto->cantidad;
+						$montototal = $montototal + $producto->precio;
+					}
+					return View::make('reportes.reporteproductos',compact('productos','fechaInicio','fechaFin',
+								'restaurante','cantidad','montototal','tipoc'));
+				break;
+				case '2':
+					$idtipocomb = Input::get('tipocombi');
+					$productos = DB::select( DB::raw("SELECT fnombre,tipocombid,famiid, combinacion_id,sum(precio) AS precio, 
+								sum(cantidad) AS cantidad FROM table_productosfamilias WHERE created_at 
+								BETWEEN '".$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59' AND 
+								idrest = ".$id." AND tipocombid = ".$idtipocomb." GROUP BY famiid,combinacion_id
+								ORDER BY precio DESC"));
+					$cantidad = 0;
+					$montototal = 0;
+					foreach ($productos as $producto) {
+						$cantidad = $cantidad + $producto->cantidad;
+						$montototal = $montototal + $producto->precio;
+					}
+					return View::make('reportes.reporteproductos',compact('productos','fechaInicio','fechaFin',
+								'restaurante','cantidad','montototal','tipoc'));
+				break;
+				case '3':
+					$idtipocomb = Input::get('tipocombi');
+					$idfam = Input::get('famiid');
+					$productos = DB::select( DB::raw("SELECT fnombre, producto_id,sum(precio) AS precio, 
+								sum(cantidad) AS cantidad FROM table_productos WHERE created_at 
+								BETWEEN '".$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59'
+								AND idrest = ".$id." AND famiid = ".$idfam." GROUP BY producto_id
+								ORDER BY precio DESC"));
+					$cantidad = 0;
+					$montototal = 0;
+					foreach ($productos as $producto) {
+						$cantidad = $cantidad + $producto->cantidad;
+						$montototal = $montototal + $producto->precio;
+					}
+					return View::make('reportes.reporteproductos',compact('productos','fechaInicio','fechaFin',
+								'restaurante','cantidad','montototal','tipoc','idtipocomb'));
+				break;
+			}
+		}else{
+			return Redirect::to('/web');
+		}
 	}
 
 	/**
