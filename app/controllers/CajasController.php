@@ -782,7 +782,7 @@ class CajasController extends BaseController {
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
 									'ticketventa.idescuento','ticketventa.cliente')
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
-						->where('Detformadepago.formadepago_id', '=', 3)
+						->wherein('Detformadepago.formadepago_id', array(3,4,5))
 						->get();
 					break;
 				}
@@ -833,13 +833,13 @@ class CajasController extends BaseController {
 						->where('Detformadepago.formadepago_id', '=', 2)
 						->get();
 					break;
-					case 4://descuentos
+					case 4://descuentosautorizados
 						$tickets = Ticket::select('ticketventa.id', 'ticketventa.estado', 'ticketventa.importe',
 									'ticketventa.numero', 'ticketventa.mozo', 'ticketventa.cajero', 
 									'ticketventa.idescuento', 'ticketventa.id', 'ticketventa.cliente')
 						->wherein('ticketventa.detcaja_id', $cajones)
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
-						->where('Detformadepago.formadepago_id', '=', 3)
+						->wherein('Detformadepago.formadepago_id', array(3,4,5))
 						->get();
 					break;
 				}

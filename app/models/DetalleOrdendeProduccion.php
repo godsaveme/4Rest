@@ -1,7 +1,7 @@
 <?php
 
 class DetalleOrdendeProduccion extends \Eloquent {
-	protected $table = 'ordendeproduccion';
+	protected $table = 'detalleodendeproduccion';
 	protected $guarded = array();
 	public static $rules = array();
 }

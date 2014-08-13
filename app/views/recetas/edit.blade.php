@@ -23,11 +23,11 @@
 </style>
         <a href="{{URL('recetas')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
 
-<div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> CREAR RECETA
+<div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> EDITAR RECETA
 </strong></div>
 
 <div class="panel-body">
-        {{ Form::open(array('id'=>'form_receta','url' => '', 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal'))}}
+        {{ Form::open(array('id'=>'form_editreceta','url' => '', 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal'))}}
         <fieldset>
   <legend></legend>
 <div class="form-group">
@@ -35,12 +35,9 @@
 			{{Form::label('nombre', 'Producto', array('class'=>'control-label'))}}
 			    </div>
     <div class="col-md-4">
-      {{Form::input('text', 'txtProd', '', array('id' => 'txtProd', 'placeholder' => 'Selecciona Producto..', 'required', 'validationMessage'=>'Producto es requerido.'))}}
-      {{Form::hidden('producto_id','', array('id' => 'producto_id') )}}
+      {{Form::input('text', 'txtProd', $producto->nombre, array('id' => 'txtProd', 'placeholder' => 'Selecciona Producto..', 'required', 'validationMessage'=>'Producto es requerido.', 'disabled'=>'disabled'))}}
+      {{Form::hidden('producto_id',$producto->id, array('id' => 'producto_id') )}}
 		</div>
-    <div class="col-md-1">
-      <a href="javascript:void(0)" id="btn_buscar" class="btn btn-info">R</a>
-    </div>
 </div>
 <div class="form-group">
     <div class="col-md-3">
@@ -391,6 +388,69 @@ function id_repeat(data,dataItem){
 		return flag;
 	}
 }
+@foreach ($insumos as $insumo)
+	ds.add({id: "{{$insumo->id}}", nombre: "{{$insumo->nombre}}", costo: "{{$insumo->pivot->precio}}", 
+	   			unidadmedida:"{{$insumo->unidadMedida}}", cantidad: "{{$insumo->pivot->cantidad}}", 
+	   			costou: "{{$insumo->ultimocosto}}" });
+@endforeach
 
+@foreach ($preproductos as $preproducto)
+	dsprods.add({id: "{{$preproducto->id}}", nombre: "{{$preproducto->nombre}}", costo: "{{$preproducto->costo*$preproducto->pivot->cantidad}}", 
+	   			unidadmedida:"{{$preproducto->unidadMedida}}", cantidad: "{{$preproducto->pivot->cantidad}}", 
+	   			costou: "{{$preproducto->costo}}" });
+@endforeach
+
+
+$('#form_editreceta').submit(function(event) {
+      event.preventDefault();
+      var insumos = {};
+      var preproductos = {};
+      var dsinsumos= ds.data();
+      var dspro = dsprods.data();
+      var producto_id = $('#producto_id').val();
+      for (var i = 0; i < dsinsumos.length; i++) {
+        var newdata = {};
+        newdata['cantidad'] = dsinsumos[i].cantidad;
+        newdata['insumo_id'] = dsinsumos[i].id;
+        newdata['precio'] = dsinsumos[i].costo;
+        newdata['producto_id'] = producto_id;
+        insumos[i] = newdata; 
+      }
+
+      for (var i = 0; i < dspro.length; i++) {
+        var newdata = {};
+        newdata['cantidad'] = dspro[i].cantidad;
+        newdata['preproducto_id'] = dspro[i].id;
+        newdata['producto_id'] = producto_id;
+        preproductos[i] = newdata;
+      };
+
+      if (dsinsumos.length > 0) {
+        $.ajax({
+          url: '/recetas/edit',
+          type: 'POST',
+          dataType: 'json',
+          data: {producto_id: producto_id, insumos: insumos, costo: $('#costop').text(), preproductos: preproductos},
+        })
+        .done(function(data) {
+          if (data.estado){
+            alert('Operación agregada correctamente');
+            $(location).attr('href', data.route);
+          }else{
+            alert('Operación no agregada. Error: ' + data.msg);
+            $(location).attr('href', data.route);
+          }
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          console.log("complete");
+        });
+        
+      }else{
+        alert('No se ha seleccionado ningun insumo.');
+      }
+    });	
 </script>
 @stop

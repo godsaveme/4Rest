@@ -93,10 +93,8 @@ class AlmacenController extends \BaseController {
 		DB::beginTransaction();	
 
 		try {
-
 		$almacen = Almacen::find($id);
 		$almacen->delete();
-
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(false);
@@ -110,5 +108,38 @@ class AlmacenController extends \BaseController {
 		$areasproduccion = Areadeproduccion::where('id_restaurante', '=', 
 							Auth::user()->id_restaurante)->lists('nombre','id');
 		return View::make('almacenes.ordenproduccion',compact('areasproduccion'));
+	}
+
+	public function getDetalleordenes($id=NULL){
+		if (isset($id)) {
+			$ordendeproduccion = OrdendeProduccion::find($id);
+			$productos =$ordendeproduccion->productos;
+			$contador= 1;
+			return View::make('almacenes.detalleordendeproduccion', compact('ordendeproduccion', 'productos','contador'));
+		}else{
+			return Redirect::to('/almacenes/ordenproduccion');
+		}
+
+	}
+
+	public function getRequerimientos($id=NULL){
+		if (isset($id)) {
+			$ordendeproduccion = OrdendeProduccion::find($id);
+			$requerimientos= $ordendeproduccion->requerimientos;
+			return View::make('almacenes.requerimientos', compact('requerimientos','ordendeproduccion'));
+		}else{
+			return Redirect::to('/almacenes/ordenproduccion');
+		}
+	}
+
+	public function getDetallerequerimiento($id=NULL){
+		if (isset($id)) {
+			$requerimiento = Requerimiento::find($id);
+			$insumos = $requerimiento->insumos;
+			$contador= 1;
+			return View::make('almacenes.detallesrequerimientos', compact('requerimiento', 'insumos', 'contador'));
+		}else{
+			return Redirect::to('/almacenes/ordenproduccion');
+		}
 	}
 }

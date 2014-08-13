@@ -3,10 +3,6 @@
 @parent
 @stop 
 @section('sub-content')
-
-        <a href="{{URL('almacenes')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
-
-
 <div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> Listar Ordenes
 </strong></div>
 
@@ -28,12 +24,25 @@
     </div>
 </fieldset>
 {{ Form::close() }}
-
     <a id="cntnr1" style="opacity: 0;" href="javascript:void(0)" class='pull-right btn btn-primary'><i class="fa fa-edit"></i> Crear Orden</a>
     <br>
     <br>
     <div class="panel-body">
-        <div class="listaordenes"></div>
+        <div class="listaordenes">
+        <script type="text/x-kendo-template" id="templatedetalle">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="/almacenes/detalleordenes/#:id#" class="btn btn-default">Ver Orden</a>
+                </div>
+                <div class="col-md-3">
+                    <a href="/almacenes/requerimientos/#:id#" class="btn btn-default">Ver Requerimiento</a>
+                </div>
+                <div class="col-md-3">
+                    <a href="/almacenes/requerimientoadicional/#:id#" class="btn btn-default">Requerimiento</a>
+                </div>
+            </div>
+        </script>
+        </div>
     </div>
     <div class="crearorden" style="display:none">
     {{ Form::open(array('id'=>'form_ordenproduccion','url' => 'almacenes/store' , 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal')) }}
@@ -197,12 +206,13 @@ $(".listaordenes").kendoGrid({
                         pageSizes: true,
                         buttonCount: 5
                     },
+                     detailTemplate: kendo.template($("#templatedetalle").html()),
                     columns: [{
                         field: "id",
                         title: "Codigo",
                         width: 100
                     }, {
-                        field: "Descripcion",
+                        field: "descripcion",
                         title: "Descripcion"
                     }, {
                         field: "observacion",
@@ -251,7 +261,6 @@ function buscarordenes(){
     })
     .done(function(data) {
         dsordenes.data(data);
-        console.log(data);
     })
     .fail(function() {
         console.log("error");
@@ -308,16 +317,21 @@ function id_repeat(data,dataItem){
 $('#form_ordenproduccion').on('submit', function(event) {
     event.preventDefault();
     /* Act on the event */
-    var productos = {};
+    var productos = new Array();
     var dsproducto =  dsproductos.data();
     for (var i = 0; i < dsproducto.length; i++) {
         var newdata = {};
         newdata['id'] = dsproducto[i].id;
         newdata['nombre'] = dsproducto[i].nombre;
         newdata['cantidad'] = dsproducto[i].cantidad;
-        productos[i] = newdata; 
+        if (dsproducto[i].cantidad > 0) {
+            productos[i] = newdata; 
+        }else{
+            alert('Estas enviando un producto sin cantidad.');
+            return false;
+        }
     }
-
+    console.log(productos);
     $.ajax({
         url: '/create_ordenproduccion',
         type: 'POST',
@@ -328,6 +342,21 @@ $('#form_ordenproduccion').on('submit', function(event) {
                 observacion: $('#observacion').val()},
     })
     .done(function(data) {
+        if (data.estado) {
+            dsproductos.data([]);
+            $('#descripcion').val('');
+            $('#observacion').val('');
+            $('.listaordenes').css('display', 'block');
+            $('.crearorden').css('display', 'none')
+            alert('Operación agregada correctamente');
+        }else{
+            dsproductos.data([]);
+            $('#descripcion').val('');
+            $('#observacion').val('');
+            $('.listaordenes').css('display', 'block');
+            $('.crearorden').css('display', 'none')
+            alert('Operación no completada');
+        }
         console.log(data);
     })
     .fail(function() {

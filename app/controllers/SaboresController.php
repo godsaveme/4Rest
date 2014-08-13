@@ -9,10 +9,7 @@ class SaboresController extends \BaseController {
 	 */
 	public function getIndex()
 	{
-		//
 		$sabores = Sabor::all();
-		//return View::make('sabores.index', compact('sabores'));
-		//return Response::make('sabores.index');
 		return Response::view('sabores.index', compact('sabores'));
 	}
 
@@ -44,10 +41,6 @@ class SaboresController extends \BaseController {
 	 */
 	public function postStore()
 	{
-		//
-		//$x = Input::all();
-		//print_r($x);
-		//die();
 		DB::beginTransaction();	
 		 try {
 		Sabor::create(Input::all());
@@ -63,10 +56,9 @@ class SaboresController extends \BaseController {
 	public function postStoredet()
 	{
 		DB::beginTransaction();	
-		 try {
+		try {
 		$wl = Input::get('wordlist');
 		$sabores = json_decode($wl);
-
 			if(count($sabores) > 0){
 				foreach ($sabores as $sabor) {
 					$detsabor = new DetSabor;
@@ -74,19 +66,13 @@ class SaboresController extends \BaseController {
 					$detsabor->sabor_id = $sabor->id;
 					$detsabor->save();
 				}
-				
 			}
-		
-
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(array('estado' => false));
-
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/sabores/indexdet'));
-
-
 	}
 
 	/**
@@ -132,14 +118,10 @@ class SaboresController extends \BaseController {
 		DB::beginTransaction();	
 		try {
 			$sabor = Sabor::find($id);
-			//var_dump(Input::all());
-			//die();
 			$sabor->update(Input::all());
-			//	$sabor->save();
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(array('estado' => false));
-
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/sabores'));

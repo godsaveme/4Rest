@@ -39,7 +39,7 @@ class Producto extends Eloquent {
 	}
 
 	public function preproductos(){
-		return $this->belongsToMany('Producto', 'preProducto', 'producto_id','preproducto_id');
+		return $this->belongsToMany('Producto', 'preProducto', 'producto_id','preproducto_id')->withPivot('cantidad');
 	}
 
 

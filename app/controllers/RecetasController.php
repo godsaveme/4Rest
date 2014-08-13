@@ -50,7 +50,7 @@ class RecetasController extends \BaseController {
 			$producto->save();
 		}catch (Exception $e){
 			DB::rollback();
-			return Response::json(array('estado'=>false, 'route' => '/recetas/create',  'msg' =>'Operacion no completada'));
+			return Response::json(array('estado'=>false, 'route' => '/recetas/create',  'msg' =>'Operacion no completada', 'error'=>$e));
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/recetas'));
@@ -67,9 +67,9 @@ class RecetasController extends \BaseController {
 	{
 		if (isset($id)) {
 			$producto = Producto::find($id);
-			$insumos = $producto->insumos()->get()->toJson();
-			$preproductos = $producto->preproductos()->get()->toJson();
-			return View::make('recetas.edit');
+			$insumos = $producto->insumos()->get();
+			$preproductos = $producto->preproductos()->get();
+			return View::make('recetas.edit', compact('producto','insumos', 'preproductos'));
 		}else{
 			Redirect::to('/recetas');
 		}
@@ -82,7 +82,30 @@ class RecetasController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	
+	public function postEdit()
+	{
+		DB::beginTransaction();	
+		try {
+			$producto_id = Input::get('producto_id');
+			$costo = Input::get('costo');
+			$producto = Producto::find($producto_id);
+			$detachinsumos = $producto->insumos()->detach();
+			$detachproductos = $producto->preproductos()->detach();
+			$insumos = Input::get('insumos');
+			$preproductos = Input::get('preproductos');
+			$receta = Receta::insert($insumos);
+			if (count($preproductos) > 0) {
+				$preproductos = Preproducto::insert($preproductos);
+			}
+			$producto->costo = $costo;
+			$producto->save();
+		}catch (Exception $e){
+			DB::rollback();
+			return Response::json(array('estado'=>false, 'route' => '/recetas/create',  'msg' =>'Operacion no completada', 'error'=>$e));
+		}
+		DB::commit();
+		return Response::json(array('estado' => true, 'route' => '/recetas'));
+	}
 
 	/**
 	 * Remove the specified resource from storage.
