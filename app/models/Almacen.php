@@ -17,4 +17,8 @@ class Almacen extends Eloquent {
 	public function insumos(){
 		return $this->belongsToMany('Insumo','stockInsumo','almacen_id','insumo_id')->withPivot('stockActual');
 	}
+
+	public function productos(){
+		return $this->belongsToMany('Producto', 'stockProducto','almacen_id','producto_id')->withPivot('stockActual');;
+	}
 }

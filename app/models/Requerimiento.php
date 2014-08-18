@@ -9,4 +9,8 @@ class Requerimiento extends \Eloquent {
 		return $this->belongsToMany('Insumo','detallerequerimiento','requerimiento_id','insumo_id')
 		->withPivot('cantidad','estado');		
 	}
+
+	public function area(){
+		return $this->belongsTo('Areadeproduccion','areaproduccion_id');
+	}
 }

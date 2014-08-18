@@ -76,6 +76,8 @@
         @elseif ($insumo->pivot->estado == 4)
         Recibido
         @elseif ($insumo->pivot->estado == 5)
+        Finalizado
+        @elseif ($insumo->pivot->estado == 6)
         Cancelado
         @endif
       </td>

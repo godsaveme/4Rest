@@ -321,6 +321,8 @@
                 @if (Request::is('almacenes/edit/*')) <span class="text-muted pull-right">EDITAR</span> @endif
         </li>
         <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/ordenproduccion', 'Orden de Producción') }}
+        <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/rarea', 'Requerimiento') }}
+        <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/ordendecompra', 'Orden de Compra') }}
         </li>
       </ul>
       </div>
@@ -380,15 +382,15 @@
     <img src="{{URL('../images/bg_resto.jpg')}}" alt="">
   </div>
   
-  <p><strong>Director Regional:</strong> <br>Javier Álvarez Montenegro.<br>
-  Cell: # 948 535 127.</p>
-  <p><strong>Director de Software:</strong> <br>Iván Calvay Requejo.<br>
+  <p><br>Javier Álvarez Montenegro.<br>
+  </p>
+  <p><br>Ivan Calvay Requejo.<br>
   Cell: # 944 824 053. 
   </p>
   <br>
   <br><br>
 
-  <p class="text-center"><em>®2014 Plaza Verde. Todo los derechos reservados.</em></p>
+  <p class="text-center"><em>®2014 Todos los derechos reservados.</em></p>
   
 </div>
 </div>

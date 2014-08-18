@@ -142,4 +142,36 @@ class AlmacenController extends \BaseController {
 			return Redirect::to('/almacenes/ordenproduccion');
 		}
 	}
+
+	public function getRarea(){
+		$areasproduccion = Areadeproduccion::select('areadeproduccion.id')
+						->join('encargadoareaproduccion','areadeproduccion.id','=','encargadoareaproduccion.areaproduccion_id')
+						->where('encargadoareaproduccion.usuario_id','=',Auth::user()->id)
+						->lists('id');
+		$detallesrequerimientos= Detallerequerimiento::wherein('areaproduccion_id', $areasproduccion)
+								->where('estado','!=',5)
+								->where('estado','!=',6)
+								->get();
+		return View::make('almacenes.procesarrequerimiento', compact('detallesrequerimientos'));
+	}
+
+	public function getOrdendecompra(){
+		$areasproduccion = Areadeproduccion::select('areadeproduccion.id')
+						->join('encargadoareaproduccion','areadeproduccion.id','=','encargadoareaproduccion.areaproduccion_id')
+						->where('encargadoareaproduccion.usuario_id','=',Auth::user()->id)
+						->lists('id');
+		$ordenesdecompra = Ordendecompra::wherein('area_id',$areasproduccion)->get();
+
+		return View::make('almacenes.ordenesdecompra', compact('ordenesdecompra'));
+	}
+
+	public function getDetalleordendecompra($id=NULL){
+		if (isset($id)) {
+			$ordendecompra = Ordendecompra::find($id);
+			$detallesordendecompra = $ordendecompra->insumos()->get();
+			return View::make('almacenes.detalleordendecompra', compact('ordendecompra', 'detallesordendecompra'));
+		}else{
+			return Redirect::to('/almacenes');
+		}
+	}
 }

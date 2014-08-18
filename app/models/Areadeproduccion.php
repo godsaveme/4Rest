@@ -12,5 +12,4 @@ class Areadeproduccion extends Eloquent {
 	public function almacen(){
 		return $this->hasOne('Almacen','id_tipoareapro');
 	}
-
 }
