@@ -698,7 +698,7 @@ Route::post('login', function () {
 							$newprecio = $oprecuenta->precio;
 						}
 					}
-				
+
 					foreach ($detallesproprecuen as $detalleestado) {
 						$detalleestado->pivot->estado_t = 1;
 						$detalleestado->pivot->save();
@@ -750,8 +750,8 @@ Route::post('login', function () {
 					DB::rollback();
 					return Response::json(false);
 				}
+				DB::commit();
 				return Response::json($precuentaf);
-
 			} elseif ($tipopre == 2) {
 				$token = sha1(microtime().'tk');
 				$html = '<!doctype html>
