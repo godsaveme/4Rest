@@ -1913,12 +1913,23 @@ Route::post('login', function () {
 				}
 			}
 			$eventos = Ticket::join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
+						->join('caja','caja.id','=','ticketventa.caja_id')
 						->where('ticketventa.estado', '=', 0)
+						->where('caja.restaurante_id','=',$restauranteid)
 						->whereBetween('ticketventa.created_at', 
 								array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 						->wherenull('dettiketpedido.combinacion_id')
 						->wherenull('dettiketpedido.producto_id')
 						->sum('ticketventa.importe');
+			$eventoscount = Ticket::join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
+						->join('caja','caja.id','=','ticketventa.caja_id')
+						->where('ticketventa.estado', '=', 0)
+						->where('caja.restaurante_id','=',$restauranteid)
+						->whereBetween('ticketventa.created_at', 
+								array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
+						->wherenull('dettiketpedido.combinacion_id')
+						->wherenull('dettiketpedido.producto_id')
+						->count('ticketventa.importe');
 			$arraydatos[] = array(
 								'mozoid'=>'-',
 								'mozo'=> 'Eventos',
@@ -1928,7 +1939,7 @@ Route::post('login', function () {
 								'pedsa'=>'-',
 								'cprods'=>'-',
 								'panul'=> '-',
-								'ctickets'=>'-',
+								'ctickets'=>$eventoscount,
 								'tanul'=>'-', 
 								'tprom'=>'-',
 								'tmin'=>'-',
