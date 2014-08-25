@@ -45,41 +45,63 @@
   </div>
 </div>
 <br>
-  <table id="gridFam" style="width:100%">
+<div class="row">
+  <div class="col-md-3 text-center">
+    <a href="javascript:void(0)" class="btn btn-default" id="btn_recibir">Recibir</a>
+  </div>
+</div>
+<br>
+  <table class="table-bordered" style="width:100%">
                 <colgroup>
                     <col style="width:10%" />
-                    <col style="width:50%" />
+                    <col style="width:30%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
                     <col style="width:20%" />
-                    <col style="width:20%" />
+                    <col style="width:10%">
                 </colgroup>
   <thead>
     <tr>
-      <th data-field="id">Nº</th>
-      <th data-field="nombre">Nombre</th>
-      <th data-field="cantidad">Cantidad</th>
-      <th data-field="estado">Estado</th>
+      <th class="text-center">Nº</th>
+      <th class="text-center">Nombre</th>
+      <th class="text-center">Cantidad</th>
+      <th class="text-center">Cantidad Entregada</th>
+      <th class="text-center">Estado</th>
+      <th class="text-center"><input id="selecionartodo" type="checkbox" value="1"></th>
     </tr>
   </thead>
-  <tbody>
-    @foreach($insumos as $insumo)
+  <tbody class="listarequerimientos">
+    @foreach($requerimientos as $requerimiento0)
     <tr>
-      <td>{{$contador++}}</td>
-      <td>{{$insumo->nombre}}</td>
-      <td>{{$insumo->pivot->cantidad}}</td>
+      <td class="text-center">{{$contador++}}</td>
       <td>
-        @if ($insumo->pivot->estado == 1)
+         @if (isset($requerimiento0->insumo_id))
+            {{$requerimiento0->insumo->nombre}}
+            <input type="hidden" id="selector_{{$requerimiento0->id}}" value="0">
+          @elseif (isset($requerimiento0->producto_id))
+            {{$requerimiento0->producto->nombre}}
+            <input type="hidden" id="selector_{{$requerimiento0->id}}" value="1">
+          @endif  
+      </td>
+      <td class="text-right">{{$requerimiento0->cantidad}}</td>
+      <td class="text-right">{{$requerimiento0->cantidadentregada}}</td>
+      <td class="text-center">
+        @if ($requerimiento0->estado == 1)
         Iniciado
-        @elseif ($insumo->pivot->estado == 2)
+        @elseif ($requerimiento0->estado == 2)
         Proceso
-        @elseif ($insumo->pivot->estado == 3)
+        @elseif ($requerimiento0->estado == 3)
         Despachado
-        @elseif ($insumo->pivot->estado == 4)
+        @elseif ($requerimiento0->estado == 4)
         Recibido
-        @elseif ($insumo->pivot->estado == 5)
+        @elseif ($requerimiento0->estado == 5)
         Finalizado
-        @elseif ($insumo->pivot->estado == 6)
+        @elseif ($requerimiento0->estado == 6)
         Cancelado
         @endif
+      </td>
+      <td class="text-center">
+        <input type="checkbox" value="{{$requerimiento0->id}}">
       </td>
     </tr>
     @endforeach
@@ -87,4 +109,69 @@
 </table>
 </div> <!-- del panel body -->
 </div>
+<script>
+  $('#selecionartodo').on('click', function(){
+    if ($(this).prop('checked')) {
+      $('.listarequerimientos input[type=checkbox]').each(function () {
+        $(this).prop('checked',true)
+      });
+    }else{
+      $('.listarequerimientos input[type=checkbox]').each(function () {
+        $(this).prop('checked',false)
+      });
+    }
+  });
+
+  function tomarrequerimientos(){
+    var requerimiento = {};
+    var productos ={};
+    var insumos = {};
+    var i = 0;
+    var y = 0;
+    $('.listarequerimientos input[type=checkbox]:checked').each(function () {
+      var newdato = {};
+      var item = $(this);
+        if($('#selector_'+item.val()).val() == 0){
+          newdato['id'] = item.val();
+          insumos[i]= newdato; 
+          i++;
+        }else if($('#selector_'+item.val()).val() == 1){
+          newdato['id'] = item.val();
+          productos[i]= newdato; 
+          i++;
+        }
+    });
+    requerimiento['productos'] = productos;
+    requerimiento['insumos'] = insumos;
+    return requerimiento;
+  }
+
+  $('#btn_recibir').on('click', function(event) {
+    event.preventDefault();
+    var requerimiento = tomarrequerimientos();
+
+    $.ajax({
+      url: '/recibirrequerimiento',
+      type: 'post',
+      dataType: 'json',
+      data: {insumos:requerimiento.insumos, productos: requerimiento.productos},
+    })
+    .done(function(data) {
+      $('input[type=checkbox]').prop('checked',false);
+      if (data['estado']) {
+        alert(data['mgs']);
+        location.reload();
+      }else{
+        alert('Operacion no completada');
+        console.log(data.mgs);
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  });
+</script>
 @stop

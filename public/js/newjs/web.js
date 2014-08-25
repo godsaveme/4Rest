@@ -24,8 +24,6 @@ function ON_READY() {
         newdata['producto_id'] = producto_id;
         preproductos[i] = newdata;
       };
-
-      if (dsinsumos.length > 0) {
         $.ajax({
           url: '/recetas/create',
           type: 'POST',
@@ -47,10 +45,6 @@ function ON_READY() {
         .always(function() {
           console.log("complete");
         });
-        
-      }else{
-        alert('No se ha seleccionado ningun insumo.');
-      }
     });
 
 //fin recetas

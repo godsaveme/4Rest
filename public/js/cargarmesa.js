@@ -1681,7 +1681,8 @@ $('.registrarcliente').on('click',function(event) {
 				        apPaterno: $("#input_apPaterno").val(),
 				        apMaterno: $("#input_apMaterno").val(),
 				        dni: $('#input_dni').val(),
-				        direccion: $('#input_direccion').val()
+				        direccion: $('#input_direccion').val(),
+				        cliente: 8
 				    	};
 	}else if ($('#infomesa').data('rclitipo') == 2) {
 		var flag = $('#frm_cliempresa input').filter(function(index) {
@@ -1692,7 +1693,8 @@ $('.registrarcliente').on('click',function(event) {
 		var newdatos = {
 				        nombres: $("#input_rs").val(),
 				        ruc: $('#input_ruc').val(),
-				        direccion: $('#input_direccionem').val()
+				        direccion: $('#input_direccionem').val(),
+				        cliente: 5
 				    	};
 	}
 
@@ -1778,7 +1780,6 @@ $('#btn_aceptarcodigo').on('click', function(event) {
 	.always(function() {
 		console.log("complete");
 	});
-	
 });
 
 $('#btn_cancelarcodigo').on('click', function(event) {

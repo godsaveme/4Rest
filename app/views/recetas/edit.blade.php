@@ -77,7 +77,7 @@
 					<tr>
 						<td  style="border: 1px solid silver;">#:nombre#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
-						#:kendo.toString(cantidad,"n2")#
+						#:kendo.toString(cantidad,"n4")#
 						</td>
 						<td class="text-right"  style="border: 1px solid silver;">#:unidadmedida#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
@@ -93,7 +93,9 @@
 					<tr>
 						<td  style="border: 1px solid silver;">#:nombre#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
-						<input type="text" data-bind="value:cantidad" data-role="numerictextbox" name="UnitsInStock" required="required" data-type="number" min="0" validationMessage="required" />
+						<input type="text" data-bind="value:cantidad" data-role="numerictextbox" data-decimals="4"
+        data-step="0.0001"
+        data-format="n4" name="cantidad" required="required" data-type="number" min="0" validationMessage="required" />
                     	<span data-for="cantidad" class="k-invalid-msg"></span>
 						</td>
 						<td class="text-right"  style="border: 1px solid silver;">#:unidadmedida#</td>
@@ -425,7 +427,6 @@ $('#form_editreceta').submit(function(event) {
         preproductos[i] = newdata;
       };
 
-      if (dsinsumos.length > 0) {
         $.ajax({
           url: '/recetas/edit',
           type: 'POST',
@@ -448,9 +449,6 @@ $('#form_editreceta').submit(function(event) {
           console.log("complete");
         });
         
-      }else{
-        alert('No se ha seleccionado ningun insumo.');
-      }
     });	
 </script>
 @stop

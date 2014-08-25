@@ -10,9 +10,7 @@ class RecetasController extends \BaseController {
 	 */
 	public function getIndex()
 	{
-		$productos = Producto::join('receta','receta.producto_id', '=', 'producto.id')
-					->groupby('id')
-					->get();
+		$productos = Producto::where('receta', '=', 1)->get();
 		return View::make('recetas.index', compact('productos'));
 	}
 
@@ -39,13 +37,17 @@ class RecetasController extends \BaseController {
 		try {
 			$insumos = Input::get('insumos');
 			$preproductos = Input::get('preproductos');
-			$receta = Receta::insert($insumos);
+			if (count($insumos) > 0) {
+				$receta = Receta::insert($insumos);
+			}
+			
 			if (count($preproductos) > 0) {
 				$preproductos = Preproducto::insert($preproductos);
 			}
 			$producto_id = Input::get('producto_id');
 			$costo = Input::get('costo');
 			$producto = Producto::find($producto_id);
+			$producto->receta = 1;
 			$producto->costo = $costo;
 			$producto->save();
 		}catch (Exception $e){
@@ -93,10 +95,13 @@ class RecetasController extends \BaseController {
 			$detachproductos = $producto->preproductos()->detach();
 			$insumos = Input::get('insumos');
 			$preproductos = Input::get('preproductos');
-			$receta = Receta::insert($insumos);
+			if (count($insumos) > 0) {
+				$receta = Receta::insert($insumos);
+			}
 			if (count($preproductos) > 0) {
 				$preproductos = Preproducto::insert($preproductos);
 			}
+			$producto->receta = 1;
 			$producto->costo = $costo;
 			$producto->save();
 		}catch (Exception $e){

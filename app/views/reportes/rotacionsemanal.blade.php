@@ -106,7 +106,7 @@
                                         #:fnombre#
                                     </a>
                                 #}else if (sesion() == 1){#
-                                    #if (combinacion_id) {#
+                                    #if (combinacion_id > 1) {#
                                         #:fnombre#
                                     #}else{#
                                         <a href="javascript:void(0)" class="familias" data-id="#:famiid#">

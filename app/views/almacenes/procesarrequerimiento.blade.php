@@ -36,7 +36,8 @@
         <th style="width:10%;border: 1px solid gray" class="text-center">Cant. E.</th>
         <th style="width:10%;border: 1px solid gray" class="text-center">Estado</th>
         <th style="width:10%;border: 1px solid gray" class="text-center">Cant.</th>
-        <th style="width:5%;border: 1px solid gray" class="text-center"><input id="selecionartodo" type="checkbox" value="1"></th>
+        <th style="width:5%;border: 1px solid gray" class="text-center">
+        <input id="selecionartodo" type="checkbox" value="1"></th>
       </tr>
     </thead>
     <tbody class="listarequerimientos">
@@ -70,7 +71,14 @@
             Cancelado
             @endif
         </td>
-        <td style="border: 1px solid gray"><input id="{{$requerimiento->id}}" type="text" class="form-control" style="height:25px;line-height:20px;"> </td>
+        <td style="border: 1px solid gray">
+          @if ($requerimiento->cantidadentregada > 0)
+          <input id="{{$requerimiento->id}}" type="text" class="form-control" value="{{$requerimiento->cantidadentregada}}" style="height:25px;line-height:20px;" disabled="disabled">
+          @else
+          <input id="{{$requerimiento->id}}" type="text" class="form-control" value="" style="height:25px;line-height:20px;">
+          @endif
+          
+        </td>
         <td style="border: 1px solid gray" class="text-center"><input type="checkbox" value="{{$requerimiento->id}}"></td>
       </tr>
     @endforeach
@@ -79,12 +87,24 @@
 </div> <!-- del panel body -->
 </div>
 <script>
-  $('#btn_procesar').on('click', function(event) {
-    event.preventDefault();
-      var productos ={};
-      var insumos = {};
-      var i = 0;
-      var y = 0;
+  $('#selecionartodo').on('click', function(){
+    if ($(this).prop('checked')) {
+      $('.listarequerimientos input[type=checkbox]').each(function () {
+        $(this).prop('checked',true)
+      });
+    }else{
+      $('.listarequerimientos input[type=checkbox]').each(function () {
+        $(this).prop('checked',false)
+      });
+    }
+  });
+
+  function tomarrequerimientos(){
+    var requerimiento = {};
+    var productos ={};
+    var insumos = {};
+    var i = 0;
+    var y = 0;
     $('.listarequerimientos input[type=checkbox]:checked').each(function () {
       var newdato = {};
       var item = $(this);
@@ -105,15 +125,29 @@
         return false;
       }
     });
+    requerimiento['productos'] = productos;
+    requerimiento['insumos'] = insumos;
+    return requerimiento;
+  }
 
+  $('#btn_procesar').on('click', function(event) {
+    event.preventDefault();
+    var requerimiento = tomarrequerimientos();
     $.ajax({
       url: '/procesarrequerimiento',
       type: 'post',
       dataType: 'json',
-      data: {insumos:insumos, productos:productos},
+      data: {insumos:requerimiento.insumos, productos: requerimiento.productos},
     })
     .done(function(data) {
-      console.log(data);
+      $('input[type=checkbox]').prop('checked',false);
+      if (data['estado']) {
+         alert(data['mgs']);
+         location.reload();
+      }else{
+        alert('Operacion no completada');
+        console.log(data.mgs);
+      }
     })
     .fail(function() {
       console.log("error");
@@ -121,7 +155,34 @@
     .always(function() {
       console.log("complete");
     });
-    
   });
+
+  $('#btn_entregar').on('click', function(event) {
+    event.preventDefault();
+    var requerimiento = tomarrequerimientos();
+    $.ajax({
+      url: '/entregarrequerimiento',
+      type: 'post',
+      dataType: 'json',
+      data: {insumos:requerimiento.insumos, productos: requerimiento.productos},
+    })
+    .done(function(data) {
+      $('input[type=checkbox]').prop('checked',false);
+      if (data['estado']) {
+        alert(data['mgs']);
+         location.reload();
+      }else{
+        alert('Operacion no completada');
+        console.log(data.mgs);
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  });
+
 </script>
 @stop

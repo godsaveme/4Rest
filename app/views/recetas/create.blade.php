@@ -68,7 +68,7 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th class="text-center" style="border: 1px solid silver; width:30% ">Nombre</th>
+						<th class="text-center" style="border: 1px solid silver; width:30%">Nombre</th>
 						<th class="text-center" style="border: 1px solid silver; width:10%">Cantidad</th>
 						<th class="text-center" style="border: 1px solid silver; width:20%">Unidad de Medida</th>
 						<th class="text-center" style="border: 1px solid silver; width:20%">Costo</th>
@@ -80,7 +80,7 @@
 					<tr>
 						<td  style="border: 1px solid silver;">#:nombre#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
-						#:kendo.toString(cantidad,"n2")#
+						#:kendo.toString(cantidad,"n4")#
 						</td>
 						<td class="text-right"  style="border: 1px solid silver;">#:unidadmedida#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
@@ -96,15 +96,17 @@
 					<tr>
 						<td  style="border: 1px solid silver;">#:nombre#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
-						<input type="text" data-bind="value:cantidad" data-role="numerictextbox" name="UnitsInStock" required="required" data-type="number" min="0" validationMessage="required" />
+						<input type="text" data-bind="value:cantidad" data-role="numerictextbox" data-decimals="4"
+        data-step="0.0001"
+        data-format="n4" name="cantidad" required="required" data-type="number" min="0" validationMessage="required" />
                     	<span data-for="cantidad" class="k-invalid-msg"></span>
 						</td>
 						<td class="text-right"  style="border: 1px solid silver;">#:unidadmedida#</td>
 						<td class="text-right"  style="border: 1px solid silver;">#:costo#</td>
 						<td class="text-right"  style="border: 1px solid silver;">
 							<a class="k-button k-update-button" href="\\#"><span class="k-icon k-update"></span></a>
-           					<a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
-           				</td>
+           		<a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
+           	</td>
 					</tr>
 					</script>
 				</tbody>
@@ -127,7 +129,7 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th class="text-center" style="border: 1px solid silver; width:30% ">Nombre</th>
+            <th class="text-center" style="border: 1px solid silver; width:30%">Nombre</th>
             <th class="text-center" style="border: 1px solid silver; width:10%">Cantidad</th>
             <th class="text-center" style="border: 1px solid silver; width:20%">Unidad de Medida</th>
             <th class="text-center" style="border: 1px solid silver; width:20%">Costo</th>
@@ -139,7 +141,7 @@
           <tr>
             <td  style="border: 1px solid silver;">#:nombre#</td>
             <td class="text-right"  style="border: 1px solid silver;">
-            #:kendo.toString(cantidad,"n2")#
+            #:kendo.toString(cantidad,"n4")#
             </td>
             <td class="text-right"  style="border: 1px solid silver;">#:unidadmedida#</td>
             <td class="text-right"  style="border: 1px solid silver;">
@@ -162,8 +164,8 @@
             <td class="text-right"  style="border: 1px solid silver;">#:costo#</td>
             <td class="text-right"  style="border: 1px solid silver;">
               <a class="k-button k-update-button" href="\\#"><span class="k-icon k-update"></span></a>
-                    <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
-                  </td>
+              <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
+            </td>
           </tr>
           </script>
         </tbody>
@@ -185,7 +187,6 @@
   <h2>#: data.descripcion #</h2>
 </script>
 <script>
-
 var ds= new kendo.data.DataSource({
         schema: {
             model: {

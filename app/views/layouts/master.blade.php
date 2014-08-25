@@ -324,6 +324,9 @@
         <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/rarea', 'Requerimiento') }}
         <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">{{ HTML::link('almacenes/ordendecompra', 'Orden de Compra') }}
         </li>
+        <li class="list-group-item @if (Request::is('almacenes') || Request::is('almacenes/*')) active @endif">
+        {{ HTML::link('/compras', 'Compras') }}
+        </li>
       </ul>
       </div>
     </div>

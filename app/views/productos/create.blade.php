@@ -61,32 +61,37 @@
         </div>
       <div class="form-group">
                     <div class="col-md-3">
-        {{Form::label('estado', 'Estado', array('class'=>'control-label'))}} 
-        {{Form::select('estado', array(1=>'Activo', 0=>'Inactivo'),1, array('class' => 'form-control'))}}
-      </div>
-      <div class="col-md-3">
-      {{Form::label(' id_tipoarepro', 'Area de Producción', array('class'=>'control-label'))}}
-      {{Form::select('  id_tipoarepro', $tipoarea,'', array('class' => 'form-control'))}}
-      </div>
-      <div class="col-md-3">
-        {{Form::label('familia_id', 'Familia', array('class'=>'control-label'))}}
-        <select name="familia_id" id="" class='form-control'>
-          @foreach ($familias as $dato) {
-            <option value=" {{$dato->id}} "> {{$dato->nombre}}</option>
-          }
-          @endforeach
-        </select>
-      </div>
-      <div class="col-md-3">
+          {{Form::label('estado', 'Estado', array('class'=>'control-label'))}} 
+          {{Form::select('estado', array(1=>'Activo', 0=>'Inactivo'),1, array('class' => 'form-control'))}}
+        </div>
+        <div class="col-md-3">
+        {{Form::label(' id_tipoarepro', 'Area de Producción', array('class'=>'control-label'))}}
+        {{Form::select('  id_tipoarepro', $tipoarea,'', array('class' => 'form-control'))}}
+        </div>
+        <div class="col-md-3">
+          {{Form::label('familia_id', 'Familia', array('class'=>'control-label'))}}
+          <select name="familia_id" id="" class='form-control'>
+            @foreach ($familias as $dato) {
+              <option value=" {{$dato->id}} "> {{$dato->nombre}}</option>
+            }
+            @endforeach
+          </select>
+        </div>
+        <div class="col-md-3">
 
-                    {{Form::label('unidadMedida', 'Unidad Medida', array('class'=>'control-label'))}}
-            {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'),'', array('class' => 'form-control'))}}
+                      {{Form::label('unidadMedida', 'Unidad Medida', array('class'=>'control-label'))}}
+              {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'),'', array('class' => 'form-control'))}}
 
       </div>
 
     </div>
 
-
+    <div class="form-group">
+        <div class="col-md-3">
+          {{Form::label('proveedor_id', 'Proveedor', array('class'=>'control-label'))}} 
+          {{Form::select('proveedor_id', $areas + array(0=>'Ninguna'),0, array('class' => 'form-control'))}}
+        </div>
+    </div>
 
     <div class="form-group">
               <div class="col-md-4">

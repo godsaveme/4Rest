@@ -135,9 +135,9 @@ class AlmacenController extends \BaseController {
 	public function getDetallerequerimiento($id=NULL){
 		if (isset($id)) {
 			$requerimiento = Requerimiento::find($id);
-			$insumos = $requerimiento->insumos;
+			$requerimientos = Detallerequerimiento::where('requerimiento_id', '=', $id)->get();
 			$contador= 1;
-			return View::make('almacenes.detallesrequerimientos', compact('requerimiento', 'insumos', 'contador'));
+			return View::make('almacenes.detallesrequerimientos', compact('requerimiento', 'requerimientos', 'contador'));
 		}else{
 			return Redirect::to('/almacenes/ordenproduccion');
 		}
@@ -149,8 +149,10 @@ class AlmacenController extends \BaseController {
 						->where('encargadoareaproduccion.usuario_id','=',Auth::user()->id)
 						->lists('id');
 		$detallesrequerimientos= Detallerequerimiento::wherein('areaproduccion_id', $areasproduccion)
+								->where('estado','!=',4)
 								->where('estado','!=',5)
 								->where('estado','!=',6)
+								->orderby('insumo_id', 'ASC')
 								->get();
 		return View::make('almacenes.procesarrequerimiento', compact('detallesrequerimientos'));
 	}
@@ -174,4 +176,5 @@ class AlmacenController extends \BaseController {
 			return Redirect::to('/almacenes');
 		}
 	}
+	
 }

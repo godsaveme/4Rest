@@ -46,7 +46,8 @@ class ProductosController extends BaseController {
 	{
 		$familias = Familia::all();
 		$tipoarea = Tipoareadeproduccion::where('id','!=', '2')->lists('nombre', 'id');
-        return View::make('productos.create', compact('familias','tipoarea'));
+		$areas = Areadeproduccion::all()->lists('nombre', 'id');
+        return View::make('productos.create', compact('familias','tipoarea','areas'));
 	}
 
 	/**
@@ -63,7 +64,12 @@ class ProductosController extends BaseController {
 		 DB::beginTransaction();	
 		 	try {
 				 $producto = Producto::create(Input::all());
+				 $provedor_id = Input::get('proveedor_id');
 				 $insertedId = $producto->id;
+				 if($provedor_id > 0){
+				 	$producto->proveedor_id = $provedor_id;
+				 	$producto->save();
+				 }
 					 if (!empty(Input::get('precio'))) {
 					 		 $precio = new Precio;
 							 $precio->producto_id = $insertedId;

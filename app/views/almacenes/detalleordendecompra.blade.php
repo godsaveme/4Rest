@@ -15,9 +15,10 @@
     <thead>
       <tr>
         <th style="width:10%; border: 1px solid gray" class="text-center">Código</th>
-        <th style="width:40%; border: 1px solid gray" class="text-center">Fecha</th>
-        <th style="width:10%; border: 1px solid gray" class="text-center">Estado</th>
-        <th style="width:20%; border: 1px solid gray" class="text-center">Detalles</th>
+        <th style="width:55%; border: 1px solid gray" class="text-center">Nombre</th>
+        <th style="width:10%; border: 1px solid gray" class="text-center">Cantidad</th>
+        <th style="width:10%; border: 1px solid gray" class="text-center">Cant. Com.</th>
+        <th style="width:15%; border: 1px solid gray" class="text-center">Estado</th>
       </tr>
     </thead>
     <tbody class="listarequerimientos">
@@ -26,14 +27,17 @@
         <td style="border: 1px solid gray">{{$ordendecompra->id}}</td>
         <td style="border: 1px solid gray">{{$ordendecompra->nombre}}</td>
         <td style="border: 1px solid gray">
-        @if ($ordendecompra->pivot->estado == 0)
-        Pendiente
-        @elseif ($ordendecompra->pivot->estado == 1)
-        Finalizado
-        @endif
+          {{$ordendecompra->pivot->cantidad}}
         </td>
         <td style="border: 1px solid gray">
-          <a href="/almacenes/detalleordendecompra/{{$ordendecompra->id}}">Ver Detalle</a>
+          
+        </td>
+        <td style="border: 1px solid gray">
+          @if ($ordendecompra->pivot->estado == 0)
+            Pendiente
+          @elseif ($ordendecompra->pivot->estado == 1)
+            Finalizado
+          @endif
         </td>
       </tr>
     @endforeach

@@ -6,6 +6,7 @@ class Ordendecompra extends \Eloquent {
 	public static $rules = array();
 
 	public function insumos(){
-		return $this->belongsToMany('Insumo','detalleordendecompra','ordendecompra_id','insumo_id');
+		return $this->belongsToMany('Insumo','detalleordendecompra','ordendecompra_id','insumo_id')
+		->withPivot('cantidad','cantidadcomprada','estado');
 	}
 }

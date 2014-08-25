@@ -11,8 +11,6 @@
 <div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> ALMACENES
 </strong></div>
 
-                    
-
 <div id="cntnrGrid" style="opacity: 0;" >
 
 <div class="panel-body">
