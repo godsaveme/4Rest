@@ -1,0 +1,212 @@
+@import 'nib/vendor'
+vendor-prefixes = o ms moz webkit official
+@import 'nib/gradients'
+
+marron = #5a2e21;
+naranja = #ec8011;
+amarillo = #ffd321;
+
+body
+	background lighten(amarillo,20%)
+	color white
+	font-size 14px
+	padding 0
+.btn-controlprimary
+	color white
+	display inline-block
+	margin-left 8px
+	background invert(amarillo)
+	line-height 40px
+	text-decoration none
+	width 40px
+	&:hover
+		background naranja
+header
+	background marron
+	height 60px
+	position relative
+	width 100%
+	.notificaciones
+		display inline-block
+		font-size 20px
+		font-weight bold
+		width 50px
+	.titulo
+		display inline-block
+		font-size 20px
+		font-weight bolder
+		line-height 60px
+		padding 0px 5px
+		width auto
+		span
+			border-left 3px solid white
+			display inline-block
+			margin-left 5px
+			padding 0px 10px 
+	.usuario
+		display inline-block
+		font-size 15px
+		line-height 60px
+		position absolute
+		right 5px
+
+section
+	width 100%
+	.carta
+		display none
+		margin-top 10px
+		.producto
+			background marron
+			border 1px solid naranja
+			display inline-block
+			height 140px
+			margin-left 5px
+			margin-top 5px
+			width 140px
+		.listaproductos
+			display none
+	.comanda
+		display none
+		padding 0
+		width 100%
+		nav
+			background naranja
+			border-bottom 3px solid invert(naranja)
+			height auto
+			line-height 50px
+			padding 0
+			ul
+				li
+					display inline-block
+					a
+						color white
+						display inline-block
+						font-size 18px
+						font-weight 900
+						height 50px
+						margin 0 0.5em
+						padding 0 0.5em
+						position relative
+						text-decoration none
+
+						&:hover
+							color amarillo
+								
+	.mesas
+		padding 0
+		margin 0 auto
+		width 90%
+		.mesa
+			background white
+			display inline-block
+			height 100px
+			margin-left 12px
+			margin-top 5px
+			padding 5px 0px
+			text-align center
+			width 45%
+			.nombre_mesa
+				color marron
+				font-size 15px
+				font-weight 900
+	.pedido
+		border 2px solid marron
+		box-shadow 3px 5px 0 rgba(0,0,0,0.2)
+		margin 0 auto
+		margin-top 5px
+		padding 0 0
+		width 98%
+		.pedidoencabezado
+			background invert(marron)
+			border-bottom 3px solid white
+			height auto
+			font-weight 900
+			width 100%
+			ul
+				li
+					display inline-block
+					font-size 18px
+					line-height 50px
+					padding 0 5px;
+					width 45%
+		.cestaitems
+			div
+				display inline-block
+				line-height 40px
+				font-size 18px
+				vertical-align middle 
+			.itemadicional
+				text-align center
+				width 8%
+			.itemcantidad
+				font-weight 700
+				text-align center
+				width 5%
+			.itemcontrol
+				text-align center
+				width 20%
+			.itemproducto
+				font-weight 700
+				width 55%
+				.combinaciones
+					display inline-block
+					vertical-align middle
+					width 76%
+					.adicionalcombinacion
+						display inline-bloc
+						text-align right
+						width 10%
+				.itemadicionales
+					font-size 15px
+					line-height 20px
+					width 100%
+					ul
+						li
+							border none
+							.adicionalnombre
+								padding 0 5px
+								display inline-block
+								width 76%
+							.adicionalprecio
+								display inline-block
+								text-align right
+								width 19%
+				div
+					display block
+				.itemnombre
+					display inline-block
+					width 76%
+				.itemprecio
+					display inline-block
+					font-size 15px
+					margin-left 10px
+					text-align right
+					vertical-align middle
+					width 19%
+				.itemsabores
+					padding 0 5px
+					font-size 16px
+					line-height 20px
+			.itemremover
+				text-align center
+				width 8%
+			li
+				border 1px solid marron
+				list-style none
+				padding 5px 0
+
+	.salones
+		padding 5px
+		margin 0 auto
+		width 90%
+		.salon
+			background naranja
+			font-size 20px
+			height 60px
+			line-height 60px
+			margin 0 auto
+			text-align center
+			width 95%
+ul
+	margin 0
+	padding 0

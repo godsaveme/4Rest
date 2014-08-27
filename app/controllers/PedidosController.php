@@ -10,21 +10,52 @@ class PedidosController extends BaseController {
 	{
 		$restaurante = Restaurante::find(Auth::user()->id_restaurante);
 
-		$salones = Salon::whereraw('restaurante_id='.$restaurante->id.' and habilitado=1')->get();
-		$arrMesas = array();
+		$salones = Salon::where('restaurante_id', '=', Auth::user()->id_restaurante)->get();
+		$arraymesas = array();
+		$arrayocupadas = array();
 		foreach ($salones as $salon) {
-			$oarrMesas[$salon->id] = Mesa::whereraw('salon_id='.$salon->id.' and habilitado=1')->get();
-			foreach ($oarrMesas[$salon->id] as $dato) {
-						$mesa = Mesa::find($dato->id);
-						$Opedido = $mesa->pedidos()->whereIn('pedido.estado',array('I','D'))->first();
-						if(!isset($Opedido)){
-							$mesa->actividad = NULL;
-							$mesa->estado = 'L';
-							$mesa->save();
-						}
+			$oarraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
+			foreach ($oarraymesas[$salon->id] as $dato) {
+				$mesa = Mesa::find($dato->id);
+				$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I'))->first();
+				if (!isset($Opedido)) {
+					$mesa->actividad = NULL;
+					$mesa->estado = 'L';
+				}else{
+					$mesa->actividad = NULL;
+					$mesa->estado = 'O';
+				}
+				$mesa->save();
+			}
+			$arraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
+			$ocupadas = Mesa::selectraw('mesa.estado , mesa.nombre , pedido.created_at, 
+								mesa.id,pedido.id as pedidoid , usuario.login, SUM(dettiketpedido.precio) as consumo')
+								->leftJoin('detmesa', 'detmesa.mesa_id', '=', 'mesa.id')
+								->leftJoin('pedido', 'pedido.id','=', 'detmesa.pedido_id')
+								->leftJoin('usuario', 'pedido.usuario_id','=', 'usuario.id')
+								->leftJoin('dettiketpedido', 'dettiketpedido.pedido_id','=', 'pedido.id')
+								->where('pedido.estado', '!=','T')
+								->where('pedido.estado', '!=','A')
+								->where('salon_id', '=', $salon->id)
+								->groupby('id')
+								->get();
+			foreach ($arraymesas[$salon->id]  as $mesita) {
+				foreach ($ocupadas as $ocupada) {
+					if($mesita->id == $ocupada->id){
+						$arrayocupadas[$ocupada->id] = $ocupada;
+						$arrayocupadas['pagado_'.$ocupada->id] = Mesa::selectraw('SUM(dettiketpedido.precio) as pagado')
+								->leftJoin('detmesa', 'detmesa.mesa_id', '=', 'mesa.id')
+								->leftJoin('pedido', 'pedido.id','=', 'detmesa.pedido_id')
+								->leftJoin('usuario', 'pedido.usuario_id','=', 'usuario.id')
+								->leftJoin('dettiketpedido', 'dettiketpedido.pedido_id','=', 'pedido.id')
+								->where('pedido.estado', '!=','T')
+								->where('pedido.estado', '!=','A')
+								->whereNull('dettiketpedido.ticket_id')
+								->where('mesa.id', '=', $ocupada->id)
+								->first();
 					}
-			$arrMesas[$salon->id] = Mesa::whereraw('salon_id='.$salon->id.' and habilitado=1')->get();
-
+				}
+			}
 		}
 		//CARTA
 			$familias = Familia::select('familia.nombre', 'familia.id')
@@ -70,7 +101,7 @@ class PedidosController extends BaseController {
 	                        ->join('mesa', 'mesa.id', '=', 'detmesa.mesa_id')
 	                        ->whereraw("usuario.id = ".Auth::user()->id." and detallepedido.estado != 'D'")
 	                        ->get();
-        return View::make('pedidos.index', compact('salones', 'platos', 'arrMesas', 'familias', 'tiposcomb', 'combinaciones', 'platosfamilia'));
+        return View::make('pedidos.index', compact('salones', 'platos', 'arraymesas', 'familias', 'tiposcomb', 'combinaciones', 'platosfamilia'));
 	}
 
 	/*

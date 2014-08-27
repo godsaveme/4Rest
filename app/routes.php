@@ -1930,7 +1930,8 @@ Route::post('login', function () {
 						->wherenull('dettiketpedido.combinacion_id')
 						->wherenull('dettiketpedido.producto_id')
 						->count('ticketventa.importe');
-			$arraydatos[] = array(
+			if ($eventoscount > 0) {
+				$arraydatos[] = array(
 								'mozoid'=>'-',
 								'mozo'=> 'Eventos',
 								'mfactu' => $eventos,
@@ -1949,6 +1950,7 @@ Route::post('login', function () {
 								'idrest'=> '-',
 								'selector'=> 0
 								);
+			}
 			usort($arraydatos,'invenDescSort');
 			return  Response::json($arraydatos);
 		}
