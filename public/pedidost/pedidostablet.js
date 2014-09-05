@@ -21,14 +21,6 @@
 $(function(){
 	NProgress.start();
     setTimeout(function() { NProgress.done()}, 1000);
-    $('.mesa').hammer().bind("swiperight", function(event){
-    	$('.salones').css('display', 'none');
-    	$('.mesas').css('display', 'none');
-    	$('.comanda').css('display', 'block');
-    	var nombre = '<i class="fa fa-cutlery"></i>'+ '&nbsp;' + $(this).attr('salon-nombre').substring(0,8) +'-'+ $(this).children('.nombre_mesa').text();
-    	$('#nombremesa').html(nombre);
-    });
-
     $('.btn_accion').each(function(i, link){
     		var funcion = $(this).prop('hash').substring(1);
 			$(link)
@@ -45,6 +37,9 @@ $(function(){
 				.on('click', function(event){
 					$('.familia').toggle();
 					$(conttogle).toggle();
+					$('.productotitulo')
+						.toggle()
+						.html($(link).children('.nfamilia').text());
 				});
     		}
 	});

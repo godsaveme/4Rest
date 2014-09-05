@@ -57,39 +57,7 @@ class PedidosController extends BaseController {
 				}
 			}
 		}
-		//CARTA
-			$familias = Familia::select('familia.nombre', 'familia.id')
-			            ->join('producto', 'producto.familia_id', '=', 'familia.id')
-			            ->join('precio', 'precio.producto_id','=', 'producto.id')
-			            ->where('precio.combinacion_id', '=', 1)
-			            ->groupby('familia.nombre')
-			            ->get();
-			$tiposcomb = Combinacion::select('tipocomb.nombre', 'tipocomb.id')
-			             ->join('tipocomb', 'combinacion.TipoComb_id', '=', 'combinacion.id')
-			             ->whereraw("combinacion.FechaInicio <= curdate() and combinacion.FechaTermino >= curdate()
-							and combinacion.HoraInicio <= curtime() and combinacion.HoraTermino >= curtime()
-							and tipocomb.nombre != 'Normal'")
-			             ->groupby('tipocomb.nombre')
-			             ->get();
-			$combinaciones = array();
-			foreach ($tiposcomb as $dato) {
-				$combinaciones[$dato->nombre] = Combinacion::selectraw('combinacion.id, combinacion.nombre, sum(DISTINCT precio.precio*precio.cantidad) as preciotcomb')
-												->join('precio', 'combinacion.id', '=', 'precio.combinacion_id')
-												->whereraw("FechaInicio <= curdate() and FechaTermino >= curdate()
-												and HoraInicio <= curtime() and HoraTermino >= curtime()
-												and TipoComb_id =".$dato->id)->get();
-			}
-			$platosfamilia = array();
-			foreach ($familias as $dato) {
-				$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores')
-                            ->join('precio', 'precio.producto_id', '=', 'producto.id')
-                            ->join('combinacion', 'combinacion.id', '=', 'precio.combinacion_id')
-                            ->where('combinacion.nombre', '=', 'Normal')
-                            ->where('producto.familia_id', '=', $dato->id , 'AND')
-                            ->where('producto.estado', '=', 1)
-                            ->get();
-			}
-			//fincarta
+
 			$platos = DetPedido::select('pedido.id', 'usuario.login', 'mesa.nombre', 
 	                        'producto.nombre as pnombre','detallepedido.combinacion_c', 
 	                        'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id as detpedid',

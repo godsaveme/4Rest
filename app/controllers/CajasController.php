@@ -196,6 +196,7 @@ class CajasController extends BaseController {
 												 ->where('combinacion.nombre', '=', 'Normal')
 												 ->where('producto.familia_id', '=', $dato->id, 'AND')
 												 ->where('producto.estado', '=', 1)
+												 ->orderby('producto.nombre','ASC')
 												 ->get();
 			}
 			/*fincarta*/

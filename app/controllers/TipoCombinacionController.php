@@ -114,4 +114,19 @@ class TipoCombinacionController extends BaseController {
 		return Response::json(true);
 	}
 
+	public function getTipocombinacion(){
+		$tipocombinacion = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
+						combinacion.id as CombinacionId, combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
+						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
+					    from combinacion inner join tipocomb
+						on tipocomb.id = combinacion.TipoComb_id inner join horComb
+						on combinacion.id = horComb.combinacion_id ) as x
+						WHERE curdate() BETWEEN CAST(x.x1 AS DATE) AND CAST(x.x2 AS DATE)
+						AND	CASE WHEN  DATE_FORMAT(x.x1,'%H:%i') <=  DATE_FORMAT(x.x2,'%H:%i') THEN 
+						curtime() BETWEEN DATE_FORMAT(x.x1,'%H:%i') AND DATE_FORMAT(x.x2,'%H:%i') ELSE 
+						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
+						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
+						and x.CombinacionNombre != 'Normal' group by x.TipoCombinacionId order by x.TipoCombinacionNombre DESC"));
+		return Response::json($tipocombinacion);
+	}
 }

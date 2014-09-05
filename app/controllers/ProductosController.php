@@ -190,4 +190,28 @@ class ProductosController extends BaseController {
 
 	}
 
+	public function getProductos(){
+		$combinaciones = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
+						combinacion.id as CombinacionId, combinacion.precio as CombinacionPrecio,combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
+						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
+					    from combinacion inner join tipocomb
+						on tipocomb.id = combinacion.TipoComb_id inner join horComb
+						on combinacion.id = horComb.combinacion_id ) as x
+						WHERE curdate() BETWEEN CAST(x.x1 AS DATE) AND CAST(x.x2 AS DATE)
+						AND	CASE WHEN  DATE_FORMAT(x.x1,'%H:%i') <=  DATE_FORMAT(x.x2,'%H:%i') THEN 
+						curtime() BETWEEN DATE_FORMAT(x.x1,'%H:%i') AND DATE_FORMAT(x.x2,'%H:%i') ELSE 
+						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
+						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
+						GROUP BY CombinacionId order by CombinacionNombre asc"));
+		$arraycombinaciones = array();
+		foreach ($combinaciones as $dato) {
+			$arraycombinaciones[] =$dato->CombinacionId;
+		}
+
+		array_push($arraycombinaciones,1);
+		$productos = DB::table('stockproductos')->wherein('combinacion_id',$arraycombinaciones)
+					->where('restaurante_id','=',Auth::user()->id_restaurante)
+					->get();
+		return Response::json($productos);
+	}
 }

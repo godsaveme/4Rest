@@ -139,10 +139,18 @@ class FamiliasController extends BaseController {
 			DB::rollback();
 			return Response::json(false);
 		}
-
 		DB::commit();
 		return Response::json(true);
-
 	}
 
+	public function getFamilias(){
+		$familias = Familia::select('familia.id','familia.nombre')
+					->join('producto', 'producto.familia_id', '=', 'familia.id')
+					->join('precio', 'producto.id','=','precio.producto_id')
+					->wherein('producto.id_tipoarepro', array(1,3))
+					->groupby('familia.id')
+					->orderby('familia.nombre')
+					->get();
+		return Response::json($familias);
+	}
 }

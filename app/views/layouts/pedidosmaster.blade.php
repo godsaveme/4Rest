@@ -33,6 +33,44 @@
 {{HTML::script('pedidost/nprogress.js')}}
 {{HTML::script('pedidost/hammer.min.js')}}
 {{HTML::script('pedidost/hammer.jquery.js')}}
+{{HTML::script('js/underscore-min.js')}}
+{{HTML::script('js/backbone-min.js')}}
+{{HTML::script('js/backbone.localStorage-min.js')}}
+<script src="/dev/socket.io/socket.io.js"></script>
+<script src="/js/vendor/neon.js"></script>
+<script src="/js/vendor/CustomEvent.js"></script>
+<script src="/js/vendor/CustomEventSupport.js"></script>
+<script src="/js/vendor/PonyExpress.js"></script>
+
+{{HTML::script('pedidost/init.js')}}
+
+<script src="/pedidost/app/models/familias.js"></script>
+<script src="/pedidost/app/collections/familias.js"></script>
+<script src="/pedidost/app/views/familias-view.js"></script>
+<script src="/pedidost/app/models/tipocombinaciones.js"></script>
+<script src="/pedidost/app/collections/tipocombinaciones.js"></script>
+<script src="/pedidost/app/views/tipocombinaciones-view.js"></script>
+<script src="/pedidost/app/models/combinaciones.js"></script>
+<script src="/pedidost/app/collections/combinaciones.js"></script>
+<script src="/pedidost/app/views/combinaciones-view.js"></script>
+<script src="/pedidost/app/models/productos.js"></script>
+<script src="/pedidost/app/collections/productos.js"></script>
+<script src="/pedidost/app/views/productos-view.js"></script>
+<script src="/pedidost/app/models/pcombinaciones.js"></script>
+<script src="/pedidost/app/collections/pcombinaciones.js"></script>
+<script src="/pedidost/app/views/pcombinaciones-view.js"></script>
+<script src="/pedidost/app/models/combinacionescesta.js"></script>
+<script src="/pedidost/app/collections/combinacionescesta.js"></script>
+<script src="/pedidost/app/views/combinacionescesta-view.js"></script>
+<script src="/pedidost/app/models/productoscesta.js"></script>
+<script src="/pedidost/app/collections/productoscesta.js"></script>
+<script src="/pedidost/app/views/productoscesta-view.js"></script>
+
+<script src="/pedidost/app/views/app-view.js"></script>
+<script src="/pedidost/app/routers/base.js"></script>
+
+{{HTML::script('pedidost/main.js')}}
+
 {{HTML::script('pedidost/pedidostablet.js')}}
 </body>
 </html>

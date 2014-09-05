@@ -22,6 +22,7 @@ Route::post('login', function () {
 });
 
 	Route::group(array('before' => 'auth'), function (){
+
 	Route::get('logout', function () {
 		if (Auth::check()) {
 			Auth::logout();return 
@@ -2438,6 +2439,13 @@ Route::post('login', function () {
 			}
 			DB::commit();
 			return Response::json(array('estado' => true, 'mgs'=>'Operacion Completada exitosamente'));
+		}
+	});
+
+	Route::post('sesionmesa' , function(){
+		if (Request::ajax()) {
+			$mesa_id = Input::get('mesaid');
+			Session::put('sesionmesa', $mesa_id);
 		}
 	});
 	//fin rutas
