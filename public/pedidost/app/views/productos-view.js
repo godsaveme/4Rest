@@ -39,12 +39,12 @@ Pedidos.Views.Productos = Backbone.View.extend({
 			window.variables.productocesta = {
 				adicionales:[],
 				cantidad: 1,
-				mesa_id: 0,
+				mesa_id: window.variables.mesaid,
 				nombre: this.model.get('nombre'),
 				notas:[],
 				preciot: this.model.get('precio'),
 				preciou: this.model.get('precio'),
-				producto_id: this.model.get('productoid'),
+				idpro: this.model.get('productoid'),
 				sabores:[]
 			};
 			var model = new Pedidos.Models.Productoscesta(window.variables.productocesta);

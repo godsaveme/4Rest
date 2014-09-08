@@ -6,10 +6,9 @@ class PedidosController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function getIndex($id= NULL, $mozoid=NULL)
+	public function getIndex()
 	{
 		$restaurante = Restaurante::find(Auth::user()->id_restaurante);
-
 		$salones = Salon::where('restaurante_id', '=', Auth::user()->id_restaurante)->get();
 		$arraymesas = array();
 		$arrayocupadas = array();
@@ -57,19 +56,7 @@ class PedidosController extends BaseController {
 				}
 			}
 		}
-
-			$platos = DetPedido::select('pedido.id', 'usuario.login', 'mesa.nombre', 
-	                        'producto.nombre as pnombre','detallepedido.combinacion_c', 
-	                        'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id as detpedid',
-	                        'detallepedido.estado')
-	                        ->join('producto', 'producto.id','=', 'detallepedido.producto_id')
-	                        ->join('pedido', 'pedido.id','=', 'detallepedido.pedido_id')
-	                        ->join('usuario', 'usuario.id','=', 'pedido.usuario_id')
-	                        ->join('detmesa', 'detmesa.pedido_id','=', 'detallepedido.pedido_id')
-	                        ->join('mesa', 'mesa.id', '=', 'detmesa.mesa_id')
-	                        ->whereraw("usuario.id = ".Auth::user()->id." and detallepedido.estado != 'D'")
-	                        ->get();
-        return View::make('pedidos.index', compact('salones', 'platos', 'arraymesas', 'familias', 'tiposcomb', 'combinaciones', 'platosfamilia'));
+        return View::make('pedidos.index', compact('salones', 'arraymesas'));
 	}
 
 	/*

@@ -10,6 +10,17 @@ Pedidos.Views.Combinacionescesta = Backbone.View.extend({
 		this.template = _.template($('#combinacioncesta-template').html());
 		this.model.on('change', function () {
 				self.render();
+				window.views.app.totales();
+		});
+		this.model.on('destroy', function () {
+			self.$el.remove();
+		});
+		window.routers.base.on('route:mesa', function () {
+			if (self.model.get('mesa_id') === window.variables.mesaid) {
+				self.$el.show();
+			}else{
+				self.$el.hide();
+			}
 		});
 	},
 	render : function () {
@@ -23,6 +34,7 @@ Pedidos.Views.Combinacionescesta = Backbone.View.extend({
 		e.stopPropagation();
 		this.model.destroy();
 		this.$el.remove();
+		window.views.app.totales();
 	},
 	pluscantidad:function(e){
 		e.preventDefault();

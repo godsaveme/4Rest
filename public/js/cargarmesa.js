@@ -301,7 +301,7 @@ $('#ordenarpedidos').on('click', function(event) {
 	var dataproc = dataSourcecombi.data();
 	if(dataprof.length !== 0 || dataproc.length !== 0 ){
 		$.ajax({
-              type: 'POST',
+              type: 'GET',
                       url: '/verificarcocinas',
                       dataType: "json",
                       data:{parametro:$('#area').attr('data-idlocal')},

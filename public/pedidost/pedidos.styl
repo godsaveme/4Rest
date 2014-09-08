@@ -2,9 +2,14 @@
 vendor-prefixes = o ms moz webkit official
 @import 'nib/gradients'
 
+amarillo = #ffd321;
+colorespera = #42bdc2;
+gris = #666;
 marron = #5a2e21;
 naranja = #ec8011;
-amarillo = #ffd321;
+colorpreparacion = #FF8A3C;
+colorrecoger = #FFD800;
+colorentregado = #7FC242;
 
 body
 	background lighten(amarillo,20%)
@@ -198,7 +203,14 @@ section
 				display inline-block
 				line-height 40px
 				font-size 18px
-				vertical-align middle 
+				font-weight 700
+				vertical-align middle
+			.D
+				background colorentregado
+			.E
+				background colorrecoger
+			.I
+				background colorespera	 
 			.itemadicional
 				text-align center
 				width 8%
@@ -253,6 +265,22 @@ section
 					line-height 20px
 			.itemremover
 				text-align center
+				width 8%
+			.P
+				background colorpreparacion
+			.pcestacantidad
+				text-align center
+				width 5%
+			.pcestanombre
+				width 85%
+				i
+					color gris
+					&:after
+						font-size 38px
+					&:before
+						font-size 38px
+			.pcestaprecio
+				text-align right
 				width 8%
 			li
 				border 1px solid marron

@@ -285,16 +285,13 @@ Route::post('login', function () {
 		}
 	});
 
-	Route::post('verificarcocinas', function () {
-		if (Request::ajax()) {
-			$local = Input::get('parametro');
+	Route::get('verificarcocinas', function () {
 			$areas = Areadeproduccion::select('tipoareadeproduccion.nombre', 'areadeproduccion.id_tipo', 
 					'areadeproduccion.id', 'areadeproduccion.nombre as areanombre')
 					->join('tipoareadeproduccion', 'tipoareadeproduccion.id', '=', 'areadeproduccion.id_tipo')
-					->whereraw("id_restaurante = '".$local."' and  id_tipo != 2")
+					->whereraw("id_restaurante = '".Auth::user()->id_restaurante."' and  id_tipo != 2")
 					->get();
-			return $areas->toJson();
-		}
+			return Response::json($areas);
 	});
 
 	Route::post('mozonotificaciones', function () {
@@ -425,6 +422,7 @@ Route::post('login', function () {
 		return $mozos->toJson();
 	}
 	);
+
 	Route::post('getcombinaciones', function () {
 		if (Request::ajax()) {
 			$idcombi = Input::get('idcombi');
@@ -452,8 +450,8 @@ Route::post('login', function () {
 		}
 	}
 	);
-	Route::post('enviarpedidos', function () {
 
+	Route::post('enviarpedidos', function () {
 		if (Request::ajax()) {
 			$profami = Input::get('prof');
 			$procombi = Input::get('proc');
@@ -489,10 +487,10 @@ Route::post('login', function () {
 					}
 					$datitos1 = array('pedido_id' => $pedidoid, 'producto_id' => $datoprof['idpro'], 
 									'cantidad' => $datoprof['cantidad'], 
-									'ImporteFinal' => $datoprof['preciot'], 
+									'importeFinal' => $datoprof['preciot'], 
 									'estado' => 'I', 'descuento' => 0, 
 									'idarea' => $areapro, 
-									'ordenCocina' => $ordencocina, );
+									'ordenCocina' => $ordencocina);
 					$odetpe = DetPedido::create($datitos1);
 					$flagnotas = 0;
 					if (isset($datoprof['notas'])) {
@@ -610,9 +608,10 @@ Route::post('login', function () {
 			}
 
 			Event::fire('imprimirpedidos', compact('arrayimprimir','mozoid','idmesa', 'cocinas'));
-			return json_encode(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid'));
+			return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid'));
 		}
 	});
+
 	Route::post('adicionales', function () {
 		if (Request::ajax()) {
 			$idpro = Input::get('idpro');
@@ -623,7 +622,7 @@ Route::post('login', function () {
 				$precio = $dato->precios()->where('combinacion_id', '=', 1)->first();
 				$arrayadicionales[] = array('id' => $dato->id, 'nombre' => $dato->nombre, 'precio' => $precio->precio, );
 			}
-			return json_encode($arrayadicionales);
+			return Response::json($arrayadicionales);
 		}
 	});
 
@@ -632,7 +631,7 @@ Route::post('login', function () {
 			$idpro = Input::get('idpro');
 			$producto = Producto::find($idpro);
 			$sabores = $producto->sabores;
-			return $sabores->toJson();
+			return Response::json($sabores);
 		}
 	});
 
@@ -1193,58 +1192,6 @@ Route::post('login', function () {
 		}
 	});
 
-	/*pedidos movil*/
-	Route::post('/abrirmesa', function () {
-		if (Request::ajax()) {
-			$idmesa = Input::get('mesaid');
-			$mesa = Mesa::find($idmesa);
-			$nombremesa = $mesa->nombre;
-			$mesa->estado = 'O';
-			$mesa->save();$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I', 'D'))->first();
-			$nombreusuario = '';
-			if (isset($Opedido)) {
-				$nombreusuario = $Opedido->usuario->login;
-				$idmozo = $Opedido->usuario->id;
-			}
-			if ($Opedido) {
-				$platosp = DetPedido::select('detallepedido.pedido_id', 'producto.nombre as pnombre', 'detallepedido.combinacion_c', 'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id', 'detallepedido.estado', 'detallepedido.importefinal', 'detallepedido.detalle_id')->join('producto', 'producto.id', '=', 'detallepedido.producto_id')->where('detallepedido.pedido_id', '=', $Opedido->id)->where('detallepedido.combinacion_c', '=', NULL, 'AND')->orderby('detallepedido.id', 'DESC')->get();
-				$arrayprof = array();
-				$flagadicional = 0;
-				foreach ($platosp as $dato) {
-					if (isset($dato->detalle_id)) {
-						$flagadicional = 2;
-					}
-					$arrayprof[] = array('iddetpedido' => $dato->id, 'pronombre' => $dato->pnombre, 'pestado' => $dato->estado, 'notas' => 'notas', 'cantidad' => $dato->cantidad, 'precio' => $dato->importefinal, 'idpedido' => $Opedido->id, 'adicionales' => $flagadicional, 'sabores' => 'no', );
-					$flagadicional = 0;
-				}
-				$placombinacionp = array();
-				$arrayproco = array();
-				$combinacionesp = DetPedido::selectraw('detallepedido.cantidad , combinacion.nombre,detallepedido.combinacion_id,
-                         combinacion.precio,detallepedido.combinacion_c, combinacion.precio')
-						 ->join('combinacion', 'combinacion.id', '=', 'detallepedido.combinacion_id')
-						 ->join('precio', 'combinacion.id', '=', 'precio.combinacion_id')
-						 ->whereraw("pedido_id =".$Opedido->id." AND combinacion_c IS NOT NULL")
-						 ->groupby('combinacion_id', 'combinacion_c')
-						 ->orderby('detallepedido.id', 'DESC')
-						 ->get();
-				foreach ($combinacionesp as $datoc) {
-					$procomb = array();
-					$placombinacionp[$dato->combinacion_id.'_'.$dato->combinacion_c] = DetPedido::select('detallepedido.pedido_id', 'producto.nombre as pnombre', 'detallepedido.combinacion_c', 'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id', 'detallepedido.estado')->join('producto', 'producto.id', '=', 'detallepedido.producto_id')->where('detallepedido.pedido_id', '=', $Opedido->id)->where('detallepedido.combinacion_c', '=', $datoc->combinacion_c, 'AND')->where('detallepedido.combinacion_id', '=', $datoc->combinacion_id, 'AND')->orderby('detallepedido.id', 'DESC')->get();
-					foreach ($placombinacionp[$dato->combinacion_id.'_'.$dato->combinacion_c] as $dato) {
-						$procomb[] = array('iddetpedido' => $dato->id, 'pronombre' => $dato->pnombre, 'pestado' => $dato->estado, 'notas' => 'c', );
-					}
-					$arrayproco[] = array('combinombre' => $datoc->nombre, 'precio' => $datoc->precio*$datoc->cantidad, 'produccomb' => $procomb, 'cantidad' => $datoc->cantidad, 'idpedido' => $Opedido->id, );
-				}
-				$idpedido = $Opedido->id;
-				$respuesta = 'true';
-				return Response::json(compact('arrayprof', 'arrayproco', 'nombremesa', 'nombreusuario', 'respuesta', 'idpedido', 'idmozo'));
-			} else {
-				$respuesta = 'false';
-				return Response::json(compact('nombremesa', 'respuesta'));
-			}
-		}
-	});
-	/*finpedidos movil*/
 	
 	Route::get('getproductos', function(){
 		if (Request::ajax()) {
@@ -2445,8 +2392,193 @@ Route::post('login', function () {
 	Route::post('sesionmesa' , function(){
 		if (Request::ajax()) {
 			$mesa_id = Input::get('mesaid');
+			$pedido = Mesa::find($mesa_id)->pedidos()->where('pedido.estado', '=', 'I')->first();
+			if(count($pedido) > 0){
+				Session::put('sesionpedido', $pedido->id);
+			}else{
+				Session::put('sesionpedido', 0);
+			}
 			Session::put('sesionmesa', $mesa_id);
+			return Response::json(array('session'=>Session::get('sesionmesa'), 
+									'pedidoid'=>Session::get('sesionpedido')));
 		}
 	});
+
+
+	//NUEVO ENVIARPEDIDOS
+	Route::post('enviarpedidosnew', function () {
+		if (Request::ajax()) {
+			$profami = json_decode(Input::get('prof'), true);
+			$procombi = json_decode(Input::get('proc'),true);
+
+			$cocinas = Input::get('cocinas');
+			$pedidoid = Input::get('pedidoid');
+			$mozoid = Input::get('mozoid');
+			if ($mozoid == 0) {
+				$mozoid = Auth::user()->id;
+			}
+			$idmesa = Input::get('idmesa');
+			if ($pedidoid == 0) {
+				$mesa = Mesa::find($idmesa);
+				$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I'))->first();
+				if (!isset($Opedido)) {
+					$Opedido = Pedido::create(array('estado' => 'I', 'usuario_id' => $mozoid));
+					$pedidoid = $Opedido->id;
+					$detMesa = DetMesa::create(array('mesa_id' => $idmesa, 'pedido_id' => $pedidoid));
+				}
+			}
+			$arrayprof = array();
+			$arrayproco = array();
+			$arrayimprimir = array();
+			foreach ($cocinas as $cdato) {
+				$arrayimprimir[$cdato['areanombre'].'_'.$cdato['id']] = array();
+			}
+			if (isset($profami)) {
+				foreach ($profami as $datoprof) {
+					$producto = Producto::find($datoprof['idpro']);
+					foreach ($cocinas as $cocina) {
+						$ococina = Areadeproduccion::find($cocina['id']);
+						if ($ococina->id_tipo == $producto->id_tipoarepro) {
+							$areapro = $cocina['id'];
+							$ordencocina = $ococina->ordennumber+1;
+							$arrayimprimir[$cocina['areanombre'].'_'.$cocina['id']][] = $datoprof;
+						}
+					}
+					$datitos1 = array('pedido_id' => $pedidoid, 'producto_id' => $datoprof['idpro'], 
+									'cantidad' => $datoprof['cantidad'], 
+									'importeFinal' => $datoprof['preciot'], 
+									'estado' => 'I', 'descuento' => 0, 
+									'idarea' => $areapro, 
+									'ordenCocina' => $ordencocina);
+					$odetpe = DetPedido::create($datitos1);
+					$flagnotas = 0;
+					if (count($datoprof['notas']) > 0) {
+						$arrayinsertnotas = array();
+						foreach ($datoprof['notas'] as $anota) {
+							$arrayinsertnotas[] = array('notas_id' => $anota['idnota'], 
+												'detallePedido_id' => $odetpe->id, );
+							$flagnotas = 1;
+						}
+
+						Detallenotas::insert($arrayinsertnotas);
+					}
+					$flagadicional = 0;
+					if (count($datoprof['adicionales']) > 0) {
+						foreach ($datoprof['adicionales'] as $datadi) {
+							$inputadi = array('pedido_id' => $pedidoid, 
+											'producto_id' => $datadi['idadicional'], 
+											'cantidad' => $datadi['cantidad'], 
+											'ImporteFinal' => $datadi['precio'], 
+											'estado' => 'I', 'descuento' => 0, 
+											'idarea' => $areapro, 
+											'ordenCocina' => $ordencocina, 
+											'detalle_id' => $odetpe->id);
+							$odetpeadi = DetPedido::create($inputadi);
+							$flagadicional = 1;
+							$arrayprof[] = array('iddetpedido' => $odetpeadi->id, 
+												'pronombre' => $datadi['nombre'], 
+												'pestado' => $odetpeadi->estado, 
+												'notas' => 0, 
+												'cantidad' => $datadi['cantidad'], 
+												'precio' => $datadi['precio'], 
+												'idpedido' => $pedidoid, 
+												'adicionales' => 2, 
+												'sabores' => 0, );
+						}
+					}
+					$flagsabor = 0;
+					if (count($datoprof['sabores']) > 0) {
+						$arraysabores = array();
+						foreach ($datoprof['sabores'] as $datosabor) {
+							$arraysabores[] = array('detpedido_id' => $odetpe->id, 'sabor_id' => $datosabor['idsabor'], );
+							$flagsabor = 1;
+						}
+
+						Detpedidosabores::insert($arraysabores);
+					}
+					$arrayprof[] = array('iddetpedido' => $odetpe->id, 'pronombre' => $datoprof['nombre'], 'pestado' => $odetpe->estado, 'notas' => $flagnotas, 'cantidad' => $datoprof['cantidad'], 'precio' => $datoprof['preciot'], 'idpedido' => $pedidoid, 'adicionales' => $flagadicional, 'sabores' => $flagsabor, );
+				}
+			}
+			if (isset($procombi)) {
+				foreach ($procombi as $datoproc) {
+					$procomb = array();
+					$id_comb = $datoproc['combinacion_id'];
+					$cont_comb_c = DB::select('select max(detallepedido.combinacion_c) as max from detallepedido
+                    where detallepedido.pedido_id = ? and detallepedido.combinacion_id=?', array($pedidoid, $id_comb));
+					foreach ($cont_comb_c as $ccc) {
+						$cont_comb_c2 = $ccc->max;
+					}
+					if ($cont_comb_c2 == '') {
+						$cont_comb_c2 = 0;
+					}
+					$cont_comb_c2 = $cont_comb_c2+1;
+					foreach ($datoproc['productos'] as $procom) {
+						if ($procom['nombre'] != '-') {
+							$producto = Producto::find($procom['id']);
+							foreach ($cocinas as $cocina) {
+								$ococina = Areadeproduccion::find($cocina['id']);
+								if ($ococina->id_tipo == $producto->id_tipoarepro) {
+									$areapro = $cocina['id'];
+									$ordencocina = $ococina->ordennumber+1;
+									$oprocom2 = $procom + array('cantidad'=>$datoproc['cantidad']);
+									$arrayimprimir[$cocina['areanombre'].'_'.$cocina['id']][] = $oprocom2;
+								}
+							}
+							$datitos2 = array('pedido_id' => $pedidoid, 
+										'producto_id' => $procom['id'], 
+										'cantidad' => $datoproc['cantidad'], 
+										'ImporteFinal' => $datoproc['preciot'], 
+										'estado' => 'I', 'descuento' => 0, 
+										'combinacion_id' => $datoproc['combinacion_id'], 
+										'combinacion_c' => $cont_comb_c2, 
+										'combinacion_cant' => $datoproc['cantidad'], 
+										'idarea' => $areapro, 
+										'ordenCocina' => $ordencocina);
+							$oprocom = DetPedido::create($datitos2);
+							$flagnotas = 0;
+							if (count($procom['notas']) > 0) {
+								$arrayinsertnotasc = array();
+								foreach ($procom['notas'] as $anota) {
+									$arrayinsertnotasc[] = array('notas_id' => $anota['idnota'], 'detallePedido_id' => $oprocom->id, );
+									$flagnotas = 1;
+								}
+
+								Detallenotas::insert($arrayinsertnotasc);
+							}
+							$procomb[] = array('iddetpedido' => $oprocom->id, 'pronombre' => $procom['nombre'], 'pestado' => $oprocom->estado, 'notas' => $flagnotas, );
+						}
+					}
+					$arrayproco[] = array('combinombre' => $datoproc['nombre'], 
+									'precio' => $datoproc['preciot'], 
+									'produccomb' => $procomb, 
+									'cantidad' => $datoproc['cantidad'], 
+									'idpedido' => $pedidoid);
+				}
+			}
+			$j = 0;
+			foreach ($cocinas as $cocina) {
+				$max = DetPedido::whereraw("pedido_id = ".$pedidoid."
+                    and idarea = ".$cocina['id'])->first();
+				$ordenes = 0;
+				if (isset($max)) {
+					$areap = Areadeproduccion::find($cocina['id']);
+					$ordenes = $areap->ordennumber+1;
+					$areap->ordennumber = $ordenes;
+					$areap->save();
+				}
+				$orden[] = array('cocina' => $cocina['areanombre'].'_'.$cocina['id'], 
+								'orden' => $ordenes, );
+				$j++;
+			}
+			$arraycocinaimpresion = array();
+			foreach ($cocinas as $cocina) {
+				$arraycocinaimpresion[] = $cdato['areanombre'].'_'.$cdato['id'];
+			}
+			Event::fire('imprimirpedidos', compact('arrayimprimir','mozoid','idmesa', 'arraycocinaimpresion'));
+			return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid', 'mozoid'));
+		}
+	});
+	//FIN NUEVO ENVIARPEDIDOS
+
 	//fin rutas
 });

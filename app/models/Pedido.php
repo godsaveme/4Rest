@@ -19,7 +19,8 @@ class Pedido extends Eloquent {
 
 	public function combinaciones(){
 		return $this->belongsToMany('Combinacion', 'detallepedido', 'pedido_id', 'combinacion_id')
-				->withPivot('importeFinal', 'cantidad','combinacion_id', 'pedido_id');
+				->withPivot('importeFinal','cantidad', 'pedido_id','combinacion_id','estado', 'estado_t','combinacion_c',
+					'combinacion_cant','cocinaonline','idarea','ordenCocina','detalle_id','id');
 	}
 
 	public function combinacionesguardarprecuenta(){
@@ -29,7 +30,9 @@ class Pedido extends Eloquent {
 
 	public function productos(){
 		return $this->belongsToMany('Producto', 'detallepedido', 'pedido_id', 'producto_id')
-				->withPivot('importeFinal', 'cantidad', 'pedido_id');
+				->withPivot('importeFinal','cantidad', 'pedido_id','combinacion_id','estado', 'estado_t','combinacion_c',
+					'combinacion_cant','cocinaonline','idarea','ordenCocina','detalle_id', 
+					'id');
 	}
 
 	public function productosguardarprecuenta(){

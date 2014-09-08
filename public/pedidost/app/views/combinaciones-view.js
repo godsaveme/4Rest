@@ -34,7 +34,7 @@ Pedidos.Views.Combinaciones = Backbone.View.extend({
 			preciou:this.model.get('CombinacionPrecio'),
 			preciot: this.model.get('CombinacionPrecio'),
 			productos: {},
-			mesa_id:0
+			mesa_id:window.variables.mesaid
 		};
 		Backbone.history.navigate('pcombinacion/'+this.model.get('CombinacionId'), {trigger: true});
 	},

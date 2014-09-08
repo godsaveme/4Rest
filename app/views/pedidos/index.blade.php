@@ -42,7 +42,7 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)" class="totalitems">
+                <a href="javascript:void(0)">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="totalitems">
                         1
@@ -60,10 +60,10 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)" class="totalitems">
+                <a href="javascript:void(0)">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="totalitems">
-                        1
+                        0
                     </span>
                 </a>
             </li>
@@ -73,17 +73,14 @@
         <div class="pedidoencabezado">
             <ul>
                 <li>
-                    Total Productos:
+                    Total Productos: <span class="totalitems"></span>
                 </li>
                 <li>
-                    Importe Total: 
+                    Importe Total: S/. <span class="totalprecio"></span>
                 </li>
             </ul>
         </div>
         <ul class="cestaitems">
-             <li>
-                
-            </li>
         </ul>
     </div>
     <div class="carta">
@@ -256,5 +253,57 @@
         </a>
 </div>
 </script>
+
+<script type="text/template" id="productomesa-template">
+    <div class="pcestacantidad">
+        <%=cantidad%>
+    </div>
+    <div class="pcestanombre">
+        &nbsp;
+        <%if (estado == 'I') {%>
+            <i class="fa fa-clock-o"></i>
+        <%}else if(estado == 'P'){ %>
+            <i class="flaticon-chef15"></i>
+        <%}else if(estado=='E'){%>
+            <i class="flaticon-restaurant36"></i>
+        <%}else if(estado == 'D'){%>
+            <i class="flaticon-restaurant2"></i>
+        <%}%>
+        &nbsp;
+        <%=nombre%>
+    </div>
+    <div class="pcestaprecio">
+        <%=precio%>
+    </div>
+</script>
+<script type="text/template" id="combinacionmesa-template">
+    <div class="pcestacantidad">
+        <%= cantidad%>
+    </div>
+    <div class="pcestanombre">
+        <ul class="productomesacombinaciones">
+        <% _.each(productos, function(i) {%>
+            <li class="<%=i.estado%>" data-id ="<%= i.idpedido%>">
+                &nbsp;
+                <%if (i.estado == 'I') {%>
+                    <i class="fa fa-clock-o"></i>
+                <%}else if(i.estado == 'P'){ %>
+                    <i class="flaticon-chef15"></i>
+                <%}else if(i.estado=='E'){%>
+                    <i class="flaticon-restaurant36"></i>
+                <%}else if(i.estado == 'D'){%>
+                    <i class="flaticon-restaurant2"></i>
+                <%}%>
+                &nbsp;
+                <%=i.nombre %> 
+            </li>
+        <% });%>
+        </ul>
+    </div>
+    <div class="pcestaprecio">
+        <%= precio%>
+    </div>
+</script>
+
 
 @stop

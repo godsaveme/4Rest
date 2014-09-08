@@ -122,4 +122,51 @@ class MesasController extends BaseController {
 		return Response::json(true);
 	}
 
+	public function getProductosmesa(){
+		$mesa_id = Session::get('sesionmesa');
+		$pedido = Mesa::find($mesa_id)->pedidos()->where('pedido.estado', '=', 'I')->first();
+		$arrayproductos = array();
+		if (count($pedido) > 0) {
+			$productos = $pedido->productos;
+			$combinaciones = $pedido->combinaciones()->groupby('detallepedido.combinacion_id','detallepedido.combinacion_c')->get();
+			foreach ($productos as $producto) {
+				if (!isset($producto->pivot->combinacion_id)) {
+					$arrayproductos[] = array(
+										'id'=>$producto->pivot->id,
+										'nombre'=>$producto->nombre, 
+										'precio'=> $producto->pivot->importeFinal, 
+										'idpedido'=>$producto->pivot->id,
+										'cantidad'=>$producto->pivot->cantidad,
+										'estado'=>$producto->pivot->estado,
+										'tipo'=>1);
+				}
+			}
+
+			foreach ($combinaciones as $combinacion) {
+				$arraypcombi = array();
+				foreach ($productos as $producto) {
+					if ($producto->pivot->combinacion_id == $combinacion->id 
+						&& $producto->pivot->combinacion_c == $combinacion->pivot->combinacion_c) {
+						$arraypcombi[] = array(
+							'nombre'=>$producto->nombre,
+							'estado'=>$producto->pivot->estado,
+							'idpedido'=>$producto->pivot->id
+							);
+					}
+				}
+				$arrayproductos[] = array(
+						'id'=>$combinacion->pivot->id,
+						'cantidad'=>$combinacion->pivot->cantidad,
+						'nombre'=>$combinacion->nombre,
+						'precio'=>$combinacion->precio,
+						'productos'=>$arraypcombi,
+						'tipo'=>2
+						);
+			}
+			return Response::json($arrayproductos);
+		}else {
+			return Response::json($arrayproductos);
+		}
+		
+	}
 }

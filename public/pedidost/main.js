@@ -8,6 +8,8 @@ $(function(){
 	window.collections.pcombinaciones = new Pedidos.Collections.Pcombinaciones();
 	window.collections.combinacionescesta = new Pedidos.Collections.Combinacionescesta();
 	window.collections.productoscesta = new Pedidos.Collections.Productoscesta();
+	window.collections.productosmesa = new Pedidos.Collections.Productosmesa();
+	window.collections.cocinas = new Pedidos.Collections.Cocinas();
 	window.views.app =new Pedidos.Views.App( $('body') );
 
 	window.collections.familias.on('add', function (model) {
@@ -51,6 +53,7 @@ $(function(){
 		var view = new Pedidos.Views.Combinacionescesta({model: model});
 		view.render();
 		view.$el.prependTo('.cestaitems');
+		window.views.app.totales();
 	});
 
 	window.collections.productoscesta.on('add', function (model) {
@@ -58,6 +61,15 @@ $(function(){
 		var view = new Pedidos.Views.Productoscesta({model: model});
 		view.render();
 		view.$el.prependTo('.cestaitems');
+		window.views.app.totales();
+	});
+
+	window.collections.productosmesa.on('add', function (model) {
+		// Agregar nuevas vistas de articulos aqui
+		var view = new Pedidos.Views.Productosmesa({model: model});
+		view.render();
+		view.$el.appendTo('.cestaitems');
+		window.views.app.totales();
 	});
 
 	window.collections.combinacionescesta.fetch();
@@ -68,6 +80,7 @@ $(function(){
 		xhr = window.collections.tipocombinaciones.fetch();
 		xhr = window.collections.productos.fetch();
 		xhr = window.collections.pcombinaciones.fetch();
+		xhr = window.collections.cocinas.fetch();
 
 	xhr.done(function () {
 		console.log('Start app');

@@ -8,8 +8,19 @@ Pedidos.Views.Productoscesta = Backbone.View.extend({
 	initialize : function () {
 		var self = this;
 		this.template = _.template($('#productocesta-template').html());
+		this.model.on('destroy', function () {
+			self.$el.remove();
+		});
 		this.model.on('change', function () {
 				self.render();
+				window.views.app.totales();
+		});
+		window.routers.base.on('route:mesa', function () {
+			if (self.model.get('mesa_id') == window.variables.mesaid) {
+				self.$el.show();
+			}else{
+				self.$el.hide();
+			}
 		});
 	},
 	render : function () {
@@ -23,6 +34,7 @@ Pedidos.Views.Productoscesta = Backbone.View.extend({
 		e.stopPropagation();
 		this.model.destroy();
 		this.$el.remove();
+		window.views.app.totales();
 	},
 	pluscantidad:function(e){
 		e.preventDefault();

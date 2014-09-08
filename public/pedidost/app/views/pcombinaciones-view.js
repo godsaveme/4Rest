@@ -17,6 +17,10 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 			$('#nav-combinacion').hide();
 			$('#nav-pedido').show();
 		});
+		window.routers.base.on('route:mesa', function () {
+			$('#nav-combinacion').hide();
+			$('#nav-pedido').show();
+		});
 		window.routers.base.on('route:combinaciones', function () {
 			self.$el.hide();
 		});
@@ -71,8 +75,7 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 		this.$('.producto').removeClass('productoselected');
 		this.model.set('combcantidad', this.model.get('combcantidad2'));
 		this.$('.combinaciontitle .cantidad').html('('+this.model.get('combcantidad2')+')');
-	}
-	,
+	},
 	render : function () {
 		var data = this.model.toJSON();
 		// junto data con el template;

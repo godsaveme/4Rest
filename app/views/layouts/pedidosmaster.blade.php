@@ -6,6 +6,7 @@
     <title>4Rest - Pedidos</title>
     {{HTML::style('css/normalize.css')}}
     {{HTML::style('css/font-awesome.min.css')}}
+    {{HTML::style('pedidost/flaticon.css')}}
     {{HTML::style('pedidost/nprogress.css')}}
     {{HTML::style('pedidost/pedidos.css')}}
 </head>
@@ -65,6 +66,11 @@
 <script src="/pedidost/app/models/productoscesta.js"></script>
 <script src="/pedidost/app/collections/productoscesta.js"></script>
 <script src="/pedidost/app/views/productoscesta-view.js"></script>
+<script src="/pedidost/app/models/productosmesa.js"></script>
+<script src="/pedidost/app/collections/productosmesa.js"></script>
+<script src="/pedidost/app/views/productosmesa-view.js"></script>
+<script src="/pedidost/app/models/cocinas.js"></script>
+<script src="/pedidost/app/collections/cocinas.js"></script>
 
 <script src="/pedidost/app/views/app-view.js"></script>
 <script src="/pedidost/app/routers/base.js"></script>
