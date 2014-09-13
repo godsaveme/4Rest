@@ -10,6 +10,7 @@ naranja = #ec8011;
 colorpreparacion = #FF8A3C;
 colorrecoger = #FFD800;
 colorentregado = #7FC242;
+mesaocupada = #FF1800;
 
 body
 	background lighten(amarillo,20%)
@@ -144,6 +145,18 @@ section
 			height auto
 			line-height 50px
 			padding 0
+			#agregar_cesta
+				color white
+				display inline-block
+				float right
+				font-size 18px
+				font-weight 900
+				height 50px
+				margin 0 0.5em
+				margin-top -50px
+				padding 0 0.5em
+				position relative
+				text-decoration none
 			ul
 				li
 					display inline-block
@@ -166,18 +179,26 @@ section
 		margin 0 auto
 		width 90%
 		.mesa
-			background white
+			background colorrecoger
+			border naranja 2px solid
 			display inline-block
 			height 100px
 			margin-left 12px
 			margin-top 5px
+			overflow hidden
 			padding 5px 0px
 			text-align center
-			width 45%
+			width 22%
 			.nombre_mesa
 				color marron
 				font-size 15px
 				font-weight 900
+		.ocupada
+			background mesaocupada
+		.pagada
+			background colorespera
+		.usuario
+			background colorentregado
 	.pedido
 		border 2px solid marron
 		box-shadow 3px 5px 0 rgba(0,0,0,0.2)

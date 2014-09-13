@@ -150,6 +150,7 @@ function socketconection(cliente){
         }
     cliente.usuario = usuario;
     cliente.area = area;
+    cliente.mesa_id = 0;
     cliente.join(area);
     cliente.join(usuario);
     });
@@ -236,6 +237,19 @@ function socketconection(cliente){
                 io.sockets.emit('SupervisorMesa', mesa,results,0,idrest,codigomesa);
             }
         });
+    });
+
+    cliente.on('ocuparmesa', function(mesaid){
+            cliente.mesa_id = mesaid;
+            io.sockets.emit('refreshmesas', cliente.mesa_id);
+    });
+
+    cliente.on('disconnect', function(){
+         if(typeof(cliente.usuario) == "undefined" || typeof(cliente.mesa_id) == "undefined")
+            {
+                return;
+            }
+        io.sockets.emit('liberarmesa', cliente.mesa_id);
     });
 }
 

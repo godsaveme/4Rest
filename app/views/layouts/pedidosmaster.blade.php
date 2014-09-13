@@ -42,7 +42,6 @@
 <script src="/js/vendor/CustomEvent.js"></script>
 <script src="/js/vendor/CustomEventSupport.js"></script>
 <script src="/js/vendor/PonyExpress.js"></script>
-
 {{HTML::script('pedidost/init.js')}}
 
 <script src="/pedidost/app/models/familias.js"></script>
@@ -69,6 +68,11 @@
 <script src="/pedidost/app/models/productosmesa.js"></script>
 <script src="/pedidost/app/collections/productosmesa.js"></script>
 <script src="/pedidost/app/views/productosmesa-view.js"></script>
+<script src="/pedidost/app/models/mesas.js"></script>
+<script src="/pedidost/app/collections/mesas.js"></script>
+<script src="/pedidost/app/views/mesas-view.js"></script>
+<script src="/pedidost/app/models/usuario.js"></script>
+<script src="/pedidost/app/collections/usuario.js"></script>
 <script src="/pedidost/app/models/cocinas.js"></script>
 <script src="/pedidost/app/collections/cocinas.js"></script>
 

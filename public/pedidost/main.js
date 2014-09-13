@@ -1,5 +1,6 @@
 $(function(){
 	window.variables.sabores = 0;
+	window.variables.usuarioid = $('.salones').attr('data-userid');
 	window.routers.base = new Pedidos.Routers.Base();
 	window.collections.familias = new Pedidos.Collections.Familias();
 	window.collections.tipocombinaciones = new Pedidos.Collections.Tipocombinaciones();
@@ -10,6 +11,8 @@ $(function(){
 	window.collections.productoscesta = new Pedidos.Collections.Productoscesta();
 	window.collections.productosmesa = new Pedidos.Collections.Productosmesa();
 	window.collections.cocinas = new Pedidos.Collections.Cocinas();
+	window.collections.mesas = new Pedidos.Collections.Mesas();
+	window.collections.usuario = new Pedidos.Collections.Usuario();
 	window.views.app =new Pedidos.Views.App( $('body') );
 
 	window.collections.familias.on('add', function (model) {
@@ -72,15 +75,30 @@ $(function(){
 		window.views.app.totales();
 	});
 
+	window.collections.mesas.on('add', function (model) {
+		// Agregar nuevas vistas de articulos aqui
+		var view = new Pedidos.Views.Mesas({model: model});
+		view.render();
+		view.$el.appendTo('.mesas');
+	});
+
+	window.collections.usuario.on('add', function (model) {
+		// Agregar nuevas vistas de articulos aqui
+		socket.emit('loginuser', model.get('login'), model.get('areanombre')
+				+'_'+model.get('area_id'), model.get('id'));
+	});
+
 	window.collections.combinacionescesta.fetch();
 	window.collections.productoscesta.fetch();
 
-	var xhr = window.collections.combinaciones.fetch();
+	var xhr = window.collections.usuario.fetch();
+		xhr = window.collections.combinaciones.fetch();
 	 	xhr = window.collections.familias.fetch();
 		xhr = window.collections.tipocombinaciones.fetch();
 		xhr = window.collections.productos.fetch();
 		xhr = window.collections.pcombinaciones.fetch();
 		xhr = window.collections.cocinas.fetch();
+		xhr = window.collections.mesas.fetch();
 
 	xhr.done(function () {
 		console.log('Start app');
@@ -89,5 +107,5 @@ $(function(){
 			pushState: true,
 			silent : false
 		});
-	});
+	});	
 });

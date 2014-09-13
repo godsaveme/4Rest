@@ -169,4 +169,13 @@ class MesasController extends BaseController {
 		}
 		
 	}
+
+	public function getMesas(){
+		$salon = Salon::where('restaurante_id', '=', Auth::user()->id_restaurante)->first();
+		$mesas = Mesa::leftJoin('vistamesaspedidos','vistamesaspedidos.mesa_id', '=', 'mesa.id')
+				->leftJoin('vistamesaspedidosporpagar','vistamesaspedidosporpagar.mesa_id2', '=', 'mesa.id')
+				->where('salon_id', '=', $salon->id)
+				->get();
+		return Response::json($mesas);
+	}
 }

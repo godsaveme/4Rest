@@ -1,24 +1,32 @@
 @extends('layouts.pedidosmaster')
 @section('content')
-<div class="salones">
+<div class="salones" data-userid="{{Auth::user()->id}}">
     @foreach ($salones as $salon)
     <div class="salon">
         {{$salon->nombre}}
     </div>
     @endforeach
 </div>
-@foreach ($salones as $salon)
-<div class="mesas" id="{{$salon->id}}">
-    @foreach ($arraymesas[$salon->id] as $mesa)
-        <div class="mesa" data-id="{{$mesa->id}}" salon-nombre="{{$salon->nombre}}">
-            <span class="nombre_mesa">{{$mesa->nombre}}</span>
-        </div>
-    @endforeach
+
+<div class="mesas">
+        <script type="text/template" id="mesa-template">
+            <span class="nombre_mesa"><%=nombre%></span><br>
+            <span class="nombre_mesa"><%=login%> </span><br><br>
+            <span class="nombre_mesa"><i class="fa fa-clock-o"></i> <%=tiempomesa%></span><br>
+            <span class="nombre_mesa">S/. <%=importetotal%></span>
+        </script>
 </div>
-@endforeach
 <div class="comanda">
     <nav id="nav-pedido">
         <ul>
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="totalitems">
+                        1
+                    </span>
+                </a>
+            </li>
             <li>
                 <a href="#enviarorden" class="btn_accion">
                     <i class="fa fa-send"></i> Ordenar
@@ -38,27 +46,13 @@
              <li>
                 <a href="#mostarsalones" class="btn_accion">
                     <i class="fa fa-reply"></i>
-                    Regresar
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="totalitems">
-                        1
-                    </span>
+                    Salon
                 </a>
             </li>
         </ul>
     </nav>
     <nav id="nav-combinacion">
         <ul>
-            <li>
-                <a href="javascript:void(0)" id="agregar_cesta">
-                    <i class="fa fa-plus-circle"></i>
-                    Agregar
-                </a>
-            </li>
             <li>
                 <a href="javascript:void(0)">
                     <i class="fa fa-shopping-cart"></i>
@@ -68,6 +62,10 @@
                 </a>
             </li>
         </ul>
+        <a href="javascript:void(0)" id="agregar_cesta">
+            <i class="fa fa-plus-circle"></i>
+            Agregar
+        </a>
     </nav>
     <div class="pedido">
         <div class="pedidoencabezado">

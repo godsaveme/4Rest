@@ -2392,15 +2392,32 @@ Route::post('login', function () {
 	Route::post('sesionmesa' , function(){
 		if (Request::ajax()) {
 			$mesa_id = Input::get('mesaid');
-			$pedido = Mesa::find($mesa_id)->pedidos()->where('pedido.estado', '=', 'I')->first();
+			$mesa = Mesa::find($mesa_id);
+			$pedido = $mesa->pedidos()->where('pedido.estado', '=', 'I')->first();
 			if(count($pedido) > 0){
 				Session::put('sesionpedido', $pedido->id);
 			}else{
 				Session::put('sesionpedido', 0);
 			}
 			Session::put('sesionmesa', $mesa_id);
+			$mesa->actividad = 1;
+			$mesa->save();
 			return Response::json(array('session'=>Session::get('sesionmesa'), 
 									'pedidoid'=>Session::get('sesionpedido')));
+		}
+	});
+
+	Route::post('liberarmesa' , function(){
+		if (Request::ajax()) {
+			$mesa_id = Input::get('mesa_id');
+			if ($mesa_id > 0) {
+				$mesa = Mesa::find($mesa_id);
+				if ($mesa->actividad == 1) {
+					$mesa->actividad = 0;
+					$mesa->save();
+				}
+			}
+			return Response::json(array('mesa_id'=>$mesa_id));
 		}
 	});
 
@@ -2574,6 +2591,8 @@ Route::post('login', function () {
 			foreach ($cocinas as $cocina) {
 				$arraycocinaimpresion[] = $cdato['areanombre'].'_'.$cdato['id'];
 			}
+			$mesa->estado = 'O';
+			$mesa->save();
 			Event::fire('imprimirpedidos', compact('arrayimprimir','mozoid','idmesa', 'arraycocinaimpresion'));
 			return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid', 'mozoid'));
 		}

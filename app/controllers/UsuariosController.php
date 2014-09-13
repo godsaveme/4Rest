@@ -258,4 +258,15 @@
 				return Redirect::to('/web');
 			}
 		}
+
+		public function getUsuario(){
+			$area = Auth::user()->areaproduccion;
+			$arrayusuario = array(
+							'id'=> Auth::user()->id,
+							'login'=> Auth::user()->login,
+							'area_id'=> $area->id,
+							'areanombre'=> $area->nombre
+							);
+			return Response::json($arrayusuario); 
+		}
 	}
