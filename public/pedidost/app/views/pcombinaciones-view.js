@@ -35,7 +35,7 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 		window.routers.base.on('route:pcombinacion', function () {
 			$('#nav-pedido').hide();
 			$('#nav-combinacion').show();
-			if(window.app.combinacion === self.model.get('combinacion_id')){
+			if(window.app.combinacion == self.model.get('combinacion_id')){
 				self.$el.show();
 				$('.productotitulo').show();
 				$('.productotitulo').html('Combinaciones');

@@ -27,7 +27,7 @@ Pedidos.Views.Productos = Backbone.View.extend({
 				self.$el.hide();
 		});
 		window.routers.base.on('route:productos', function () {
-			if(window.app.familia === self.model.get('familia_id') &&  self.model.get('combinacion_id') == 1 ){
+			if(window.app.familia == self.model.get('familia_id') &&  self.model.get('combinacion_id') == 1 ){
 				$('.listaproductos').show();
 				$('.productotitulo').show();
 				$('.productotitulo').html('Carta');

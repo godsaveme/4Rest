@@ -12,7 +12,7 @@ Pedidos.Views.Combinaciones = Backbone.View.extend({
 			$('.productotitulo').hide();
 		});
 		window.routers.base.on('route:combinaciones', function () {
-			if(window.app.combinacion === self.model.get('TipoCombinacionId') ){
+			if(window.app.combinacion == self.model.get('TipoCombinacionId') ){
 				$('.listaproductos').show();
 				$('.productotitulo').show();
 				$('.productotitulo').html(window.app.nombre);
