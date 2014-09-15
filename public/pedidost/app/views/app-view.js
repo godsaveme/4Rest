@@ -24,7 +24,7 @@ Pedidos.Views.App = Backbone.View.extend({
 		
 		if (window.app.state == "sabores") {
 			if(window.variables.sabores == 0){
-				if(window.variables.combinacionsabores = 1){
+				if(window.variables.combinacionsabores == 1){
 					Backbone.history.navigate('/pcombinacion/'+window.app.combinacion, {trigger:true});
 				}else{
 					var model = new Pedidos.Models.Productoscesta(window.variables.productocesta);

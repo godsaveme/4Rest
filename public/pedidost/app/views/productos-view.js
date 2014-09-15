@@ -31,6 +31,7 @@ Pedidos.Views.Productos = Backbone.View.extend({
 				$('.listaproductos').show();
 				$('.productotitulo').show();
 				$('.productotitulo').html('Carta');
+				window.variables.combinacionsabores = 0;
 				self.$el.show();
 			}else{
 				self.$el.hide();

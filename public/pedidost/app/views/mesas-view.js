@@ -24,10 +24,9 @@ Pedidos.Views.Mesas = Backbone.View.extend({
     	$('.mesas').css('display', 'none');
     	$('.comanda').css('display', 'block');
     	var nombre = '<i class="fa fa-cutlery"></i>'
-    				+ '&nbsp;' + window.variables.nombremesa.substring(0,8) 
+    				+ '&nbsp;Salon 01'
     				+'-'+ this.model.get('nombre');
     	$('#nombremesa').html(nombre);
-    	
     	$.ajax({
     		url: '/sesionmesa',
     		type: 'POST',
