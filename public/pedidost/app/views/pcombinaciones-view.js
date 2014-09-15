@@ -16,12 +16,17 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 			self.$el.hide();
 			$('#nav-combinacion').hide();
 			$('#nav-pedido').show();
+			window.variables.combinacionnotas = 0;
 		});
 		window.routers.base.on('route:mesa', function () {
 			$('#nav-combinacion').hide();
 			$('#nav-pedido').show();
+			window.variables.combinacionnotas = 0;
 		});
 		window.routers.base.on('route:combinaciones', function () {
+			self.$el.hide();
+		});
+		window.routers.base.on('route:sabores', function () {
 			self.$el.hide();
 		});
 		window.routers.base.on('route:productos', function () {
@@ -32,6 +37,8 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 			$('#nav-combinacion').show();
 			if(window.app.combinacion === self.model.get('combinacion_id')){
 				self.$el.show();
+				$('.productotitulo').show();
+				$('.productotitulo').html('Combinaciones');
 			}else{
 				self.$el.hide();
 			}
@@ -68,7 +75,31 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 				nombre: window.variables.producto.nombre,
 				notas:[],
 				sabores:[],
-				adicionales:[]
+				adicionales:[],
+				indice:this.model.get('fnombre')+orden
+			}
+			window.variables.sabores = window.variables.producto.cantsabores ;
+			if (window.variables.producto.cantsabores > 0) {
+				window.collections.sabores.reset();
+				$('.sabores').html('');
+				$('.sabores').html('<h3> <span class="productonombre"></span> / <span class="count_sabores"></span></h3>');
+				window.variables.combinacionsabores = 1;
+				window.variables.indice = this.model.get('fnombre')+orden;
+				window.variables.productocestaselect = window.variables.combinacioncesta.productos[this.model.get('fnombre')+orden];
+				$('.productonombre').text(window.variables.producto.nombre);
+				$('.count_sabores').text(window.variables.sabores);
+				$('.sabores').show();
+				$.ajax({
+					url: '/sesionproducto',
+					type: 'POST',
+					dataType: 'json',
+					data: {producto_id: window.variables.producto.productoid},
+				})
+				.done(function(data) {
+					window.collections.sabores.fetch();
+					console.log('succes');
+				});
+				Backbone.history.navigate('/sabores', {trigger:true});
 			}
 	},
 	resetcantidad:function(){

@@ -38,9 +38,9 @@
                 </a>
             </li>
             <li>
-                <a href="#mostarcarta" class="btn_accion">
+                <a href="#mostarcarta" class="btn_accion flagcarta">
                     <i class="fa fa-reorder"></i>
-                    Carta
+                    <span>Carta</span>
                 </a>
             </li>
              <li>
@@ -51,7 +51,7 @@
             </li>
         </ul>
     </nav>
-    <nav id="nav-combinacion">
+    <nav id="nav-combinacion" style="display:none">
         <ul>
             <li>
                 <a href="javascript:void(0)">
@@ -66,6 +66,36 @@
             <i class="fa fa-plus-circle"></i>
             Agregar
         </a>
+    </nav>
+    <nav id="nav-notas-adicionales" style="display:none">
+        <ul>
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-check"></i>
+                    <span class="select_product">
+
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="notas">
+                    <i class="fa fa-book"></i>
+                    Notas (<span class="count_notas">0</span> )
+                </a>
+            </li>
+            <li>
+                <a href="#" id="adicionales">
+                    <i class="fa fa-bars"></i>
+                    Adicionales (<span class="count_adicionales">0</span> )
+                </a>
+            </li>
+            <li>
+                <a href="#" class="btn_mesa">
+                    <i class="fa fa-reply"></i>
+                    Mesa
+                </a>
+            </li>
+        </ul>
     </nav>
     <div class="pedido">
         <div class="pedidoencabezado">
@@ -87,8 +117,40 @@
         </div>
         <div class="listaproductos">
         </div>
+        <div class="notas">
+            <ul>
+                
+            </ul>
+        </div>
+        <div class="sabores">
+        <h3> <span class="productonombre"></span> / <span class="count_sabores"></span></h3>
+            
+        </div>
+        <div class="adicionales">
+        
+        </div>
     </div>
 </div>
+<script type="text/template" id="sabor-template">
+    <div class="stock">
+       0
+    </div>
+    <span class="nproducto">
+        <%=nombre %>
+    </span>
+</script>
+<script type="text/template" id="adicional-template">
+    <div class="stock">
+        0
+    </div>
+    <span class="nproducto">
+        <%=nombre %><br>
+        <%=precio %>
+    </span>
+</script>
+<script type="text/template" id="nota-template">
+    <%=descripcion%>
+</script>
 <script type="text/template" id="tipocombinacion-template">
     <span class="nfamilia">
         <%=TipoCombinacionNombre %>
@@ -105,6 +167,7 @@
         <%=CombinacionPrecio %>
     </span>
 </script>
+
 <script type="text/template" id="producto-template">
     <div class="stock">
         <%=stock%>
@@ -170,7 +233,7 @@
             <% _.each(adicionales, function(y) {%>
                 <li>
                 <span class="adicionalnombre">(<%= y.cantidad%>) <%= y.nombre%></span>
-                <span class="adicionalprecio"><%= y.preciot%></span>
+                <span class="adicionalprecio"><%= y.precio%></span>
                 </li>
             <% });%>
             </ul>
@@ -205,7 +268,7 @@
     <div class="itemproducto">
         <ul class="combinaciones">
         <% _.each(productos, function(i) { %>
-            <li>
+            <li data-indice="<%=i.indice%>">
                 <span class="itemnombre">
                     <%=i.nombre%>
                 </span>
@@ -227,7 +290,7 @@
                     <% _.each(i.adicionales, function(y) {%>
                         <li>
                         <span class="adicionalnombre">(<%= y.cantidad%>) <%= y.nombre%></span>
-                        <span class="adicionalcombinacion"><%= y.preciot%></span>
+                        <span class="adicionalcombinacion"><%= y.precio%></span>
                         </li>
                     <% });%>
                     </ul>

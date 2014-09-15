@@ -14,7 +14,13 @@ Pedidos.Views.Familias = Backbone.View.extend({
 		window.routers.base.on('route:combinaciones', function () {
 			self.$el.hide();
 		});
+		window.routers.base.on('route:notas', function () {
+				self.$el.hide();
+		});
 
+		window.routers.base.on('route:adicionales', function () {
+				self.$el.hide();
+		});
 		window.routers.base.on('route:productos', function () {
 				self.$el.hide();
 		});

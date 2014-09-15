@@ -112,4 +112,16 @@ class NotasController extends BaseController {
 					->where('notaxproducto.nota_id', '=', $id)->groupBy('familia_id')->get();
 		return View::make('notas.agregarnotas', compact('nota', 'familias', 'productos', 'familias2','id'));
 	}
+
+	public function getAllnotas(){
+		$notas = Notas::select('notas.descripcion', 'notas.id', 'notaxproducto.producto_id')
+				->join('notaxproducto', 'notaxproducto.nota_id', '=', 'notas.id' )
+				->join('producto', 'producto.id', '=', 'notaxproducto.producto_id')
+				->where('notas.descripcion', '!=', '')
+				->where('producto.id', '=', Session::get('sesionproducto'))
+				->orderby('descripcion', 'ASC')
+				->groupBy('descripcion')
+				->get();
+		return Response::json($notas);
+	}
 }

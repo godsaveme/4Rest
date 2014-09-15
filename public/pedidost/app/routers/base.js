@@ -4,7 +4,10 @@ Pedidos.Routers.Base = Backbone.Router.extend({
 		"combinaciones/:id/:nombre" : "combinaciones",
 		"productos/:id/:nombre" : "productos",
 		"pcombinacion/:id":"pcombinacion",
-		"mesa":"mesa"
+		"mesa":"mesa",
+		"notas":"notas",
+		"sabores":"sabores",
+		"adicionales": "adicionales"
 	},
 	root : function () {
 		window.app.state = "root";
@@ -27,5 +30,14 @@ Pedidos.Routers.Base = Backbone.Router.extend({
 	},
 	mesa:function(){
 		window.app.state = "mesa";
+	},
+	nota: function(){
+		window.app.state = "notas";
+	},
+	sabores: function(){
+		window.app.state = "sabores";
+	},
+	adicionales: function(){
+		window.app.state = "adicionales";
 	}
 });

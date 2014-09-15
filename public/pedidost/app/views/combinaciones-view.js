@@ -17,6 +17,7 @@ Pedidos.Views.Combinaciones = Backbone.View.extend({
 				$('.productotitulo').show();
 				$('.productotitulo').html(window.app.nombre);
 				self.$el.show();
+				$('.productotitulo').html('Carta');
 			}else{
 				self.$el.hide();
 			}

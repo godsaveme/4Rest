@@ -229,6 +229,10 @@ class CombinacionController extends BaseController {
 			$arraycombinaciones[] = $combinacion->CombinacionId;
 		}
 		$arrayproductos = array();
+		if (count($arraycombinaciones) == 0) {
+			return Response::json($arrayproductos);
+		}
+		
 		$familias = DB::table('stockproductos')->wherein('combinacion_id', $arraycombinaciones)
 					->where('restaurante_id','=',Auth::user()->id_restaurante)
 					->groupby('combinacion_id')

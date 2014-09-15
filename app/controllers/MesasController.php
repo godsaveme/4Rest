@@ -127,7 +127,7 @@ class MesasController extends BaseController {
 		$pedido = Mesa::find($mesa_id)->pedidos()->where('pedido.estado', '=', 'I')->first();
 		$arrayproductos = array();
 		if (count($pedido) > 0) {
-			$productos = $pedido->productos;
+			$productos = $pedido->productos()->orderby('detallepedido.id', 'DESC')->get();
 			$combinaciones = $pedido->combinaciones()->groupby('detallepedido.combinacion_id','detallepedido.combinacion_c')->get();
 			foreach ($productos as $producto) {
 				if (!isset($producto->pivot->combinacion_id)) {

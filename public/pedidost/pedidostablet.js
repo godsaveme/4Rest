@@ -4,7 +4,7 @@ var socket = io.connect('http://'+window.location.host+':3000');
 			mesa = mesa.toJSON();
 			if(window.variables.usuarioid  == mesa.usuario_id && data.estado == 'E' ){
 				navigator.vibrate(1500);
-				alert('Tienes platos por recoger para la' + mesa.nombre);
+				//alert('Tienes platos por recoger para la' + mesa.nombre);
 			}
 		window.collections.productosmesa.fetch();
 	});
@@ -42,6 +42,10 @@ var socket = io.connect('http://'+window.location.host+':3000');
 	}
 
 	function enviarorden(){
+		if (window.app.state != "mesa") {
+			alert('Revisa el pedido antes de enviarlo!');
+			return false;
+		}
 		var eproductos = JSON.stringify(window.collections.productoscesta.where({mesa_id: window.variables.mesaid}));
 		var ecombinaciones = JSON.stringify(window.collections.combinacionescesta.where({mesa_id: window.variables.mesaid}));
 		var ecocinas = window.collections.cocinas.toJSON();
@@ -88,6 +92,14 @@ var socket = io.connect('http://'+window.location.host+':3000');
     }
 
     function mostarcarta(){
+    	var text = $('.flagcarta span').text();
+    	if (text == 'Carta') {
+    		$('.flagcarta span').text('Mesa');
+    		Backbone.history.navigate('', {trigger:true});
+    	}else{
+    		$('.flagcarta span').text('Carta');
+    		Backbone.history.navigate('/mesa', {trigger:true});
+    	}
     	$('.pedido').toggle();
     	$('.carta').toggle();
     }
@@ -140,7 +152,7 @@ var socket = io.connect('http://'+window.location.host+':3000');
 		.always(function() {
 			console.log("complete");
 		});
-}
+	}
 
 $(function(){
 	NProgress.start();

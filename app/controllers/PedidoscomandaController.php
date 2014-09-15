@@ -167,7 +167,7 @@ class PedidoscomandaController extends \BaseController {
 				return Redirect::to('/pedidoscomanda');
 			} else {
 				$mesa->actividad = $idusuario;
-				$mesa->estado = 'O';
+				$mesa->estado = 'L';
 				$mesa->save();
 			}
 			return View::make('pedidoscomanda.cargarmesa', compact('mesa', 'Opedido', 'combinacionesp', 'platosp', 'placombinacionp', 

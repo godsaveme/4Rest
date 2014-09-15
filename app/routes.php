@@ -2443,6 +2443,8 @@ Route::post('login', function () {
 					$pedidoid = $Opedido->id;
 					$detMesa = DetMesa::create(array('mesa_id' => $idmesa, 'pedido_id' => $pedidoid));
 				}
+				$mesa->estado = 'O';
+				$mesa->save();
 			}
 			$arrayprof = array();
 			$arrayproco = array();
@@ -2507,7 +2509,8 @@ Route::post('login', function () {
 					if (count($datoprof['sabores']) > 0) {
 						$arraysabores = array();
 						foreach ($datoprof['sabores'] as $datosabor) {
-							$arraysabores[] = array('detpedido_id' => $odetpe->id, 'sabor_id' => $datosabor['idsabor'], );
+							$arraysabores[] = array('detpedido_id' => $odetpe->id, 
+								'sabor_id' => $datosabor['idsabor'], );
 							$flagsabor = 1;
 						}
 
@@ -2556,12 +2559,50 @@ Route::post('login', function () {
 							if (count($procom['notas']) > 0) {
 								$arrayinsertnotasc = array();
 								foreach ($procom['notas'] as $anota) {
-									$arrayinsertnotasc[] = array('notas_id' => $anota['idnota'], 'detallePedido_id' => $oprocom->id, );
+									$arrayinsertnotasc[] = array('notas_id' => $anota['idnota'], 
+										'detallePedido_id' => $oprocom->id, );
 									$flagnotas = 1;
 								}
 
 								Detallenotas::insert($arrayinsertnotasc);
 							}
+
+							$flagadicional = 0;
+							if (count($procom['adicionales']) > 0) {
+								foreach ($procom['adicionales'] as $datadi) {
+									$inputadi = array('pedido_id' => $pedidoid, 
+													'producto_id' => $datadi['idadicional'], 
+													'cantidad' => $datadi['cantidad'], 
+													'ImporteFinal' => $datadi['precio'], 
+													'estado' => 'I', 'descuento' => 0, 
+													'idarea' => $areapro, 
+													'ordenCocina' => $ordencocina, 
+													'detalle_id' => $oprocom->id);
+									$odetpeadi = DetPedido::create($inputadi);
+									$flagadicional = 1;
+									$arrayprof[] = array('iddetpedido' => $odetpeadi->id, 
+														'pronombre' => $datadi['nombre'], 
+														'pestado' => $odetpeadi->estado, 
+														'notas' => 0, 
+														'cantidad' => $datadi['cantidad'], 
+														'precio' => $datadi['precio'], 
+														'idpedido' => $pedidoid, 
+														'adicionales' => 2, 
+														'sabores' => 0, );
+								}
+							}
+							$flagsabor = 0;
+							if (count($procom['sabores']) > 0) {
+								$arraysabores = array();
+								foreach ($procom['sabores'] as $datosabor) {
+									$arraysabores[] = array('detpedido_id' => $oprocom->id, 
+										'sabor_id' => $datosabor['idsabor'], );
+									$flagsabor = 1;
+								}
+
+								Detpedidosabores::insert($arraysabores);
+							}
+
 							$procomb[] = array('iddetpedido' => $oprocom->id, 'pronombre' => $procom['nombre'], 'pestado' => $oprocom->estado, 'notas' => $flagnotas, );
 						}
 					}
@@ -2591,13 +2632,42 @@ Route::post('login', function () {
 			foreach ($cocinas as $cocina) {
 				$arraycocinaimpresion[] = $cdato['areanombre'].'_'.$cdato['id'];
 			}
-			$mesa->estado = 'O';
-			$mesa->save();
+			
 			Event::fire('imprimirpedidos', compact('arrayimprimir','mozoid','idmesa', 'arraycocinaimpresion'));
 			return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid', 'mozoid'));
 		}
 	});
 	//FIN NUEVO ENVIARPEDIDOS
 
+	Route::post('sesionproducto', function(){
+		if (Request::ajax()) 
+		{
+			$producto_id = Input::get('producto_id');
+			Session::put('sesionproducto', $producto_id);
+
+			return Response::json(array('producto_id'=>Session::get('sesionproducto')));
+		}
+	});
+
+	Route::get('getSabores', function () {
+		if (Request::ajax()) {
+			$producto = Producto::find(Session::get('sesionproducto'));
+			$sabores = $producto->sabores()->orderby('nombre', 'ASC')->get();
+			return Response::json($sabores);
+		}
+	});
+
+	Route::get('getAdicionales', function () {
+		if (Request::ajax()) {
+			$producto = Producto::find(Session::get('sesionproducto'));
+			$adicionales = $producto->adicionales;
+			$arrayadicionales = array();
+			foreach ($adicionales as $dato) {
+				$precio = $dato->precios()->where('combinacion_id', '=', 1)->first();
+				$arrayadicionales[] = array('id' => $dato->id, 'nombre' => $dato->nombre, 'precio' => $precio->precio, );
+			}
+			return Response::json($arrayadicionales);
+		}
+	});
 	//fin rutas
 });

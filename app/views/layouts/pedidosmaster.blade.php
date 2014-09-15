@@ -68,6 +68,15 @@
 <script src="/pedidost/app/models/productosmesa.js"></script>
 <script src="/pedidost/app/collections/productosmesa.js"></script>
 <script src="/pedidost/app/views/productosmesa-view.js"></script>
+<script src="/pedidost/app/models/notas.js"></script>
+<script src="/pedidost/app/collections/notas.js"></script>
+<script src="/pedidost/app/views/notas-view.js"></script>
+<script src="/pedidost/app/models/sabores.js"></script>
+<script src="/pedidost/app/collections/sabores.js"></script>
+<script src="/pedidost/app/views/sabores-view.js"></script>
+<script src="/pedidost/app/models/adicionales.js"></script>
+<script src="/pedidost/app/collections/adicionales.js"></script>
+<script src="/pedidost/app/views/adicionales-view.js"></script>
 <script src="/pedidost/app/models/mesas.js"></script>
 <script src="/pedidost/app/collections/mesas.js"></script>
 <script src="/pedidost/app/views/mesas-view.js"></script>
