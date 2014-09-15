@@ -16,6 +16,8 @@ Pedidos.Routers.Base = Backbone.Router.extend({
 	combinaciones : function (id,nombre) {
 		window.app.state = "combinaciones";
 		window.app.combinacion = id;
+		window.app.tipocombinacion = id;
+		window.app.tipocombinacionnombre = nombre;
 		window.app.nombre = nombre;
 
 	},

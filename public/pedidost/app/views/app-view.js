@@ -10,12 +10,14 @@ Pedidos.Views.App = Backbone.View.extend({
 		this.$el = $el;
 		window.routers.base.on('route:root', function () {
 			$('#nav-notas-adicionales').hide();
+			$('.productotitulo').hide();
 		});
 		
 	},
 	navigateHome : function () {
-		if(window.app.combinacion){
-			Backbone.history.navigate('', {trigger:true});
+		if(window.app.state == "pcombinacion"){
+			Backbone.history.navigate('combinaciones/'+window.app.tipocombinacion+'/'+window.app.tipocombinacionnombre, {trigger:true});
+			return false;
 		}
 		$('.productotitulo').toggle();
 		Backbone.history.navigate('', {trigger:true});
