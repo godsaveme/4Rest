@@ -87,8 +87,18 @@ var socket = io.connect('http://'+window.location.host+':3000');
 		}
 	}
 
-    function precuenta(){
-    	alert('precuenta');
+    function getPrecuenta(){
+    	if (window.app.state == "precuenta") {
+    		var html = '<i class="fa fa-calculator"></i> Precuenta';
+    		$('.btn_precuenta').html(html);
+    		Backbone.history.navigate('/mesa', {trigger:true});
+    	}else if(window.app.state == "mesa"){
+    		var html = '<i class="fa fa-calculator"></i> Mesa';
+    		$('.btn_precuenta').html(html);
+    		precuenta(1, 0);
+   			Backbone.history.navigate('/precuenta', {trigger:true});
+    	}
+    	
     }
 
     function mostarcarta(){
@@ -96,12 +106,14 @@ var socket = io.connect('http://'+window.location.host+':3000');
     	if (text == 'Carta') {
     		$('.flagcarta span').text('Mesa');
     		Backbone.history.navigate('', {trigger:true});
+    		$('.pedido').hide();
+    		$('.carta').show();
     	}else{
     		$('.flagcarta span').text('Carta');
     		Backbone.history.navigate('/mesa', {trigger:true});
+    		$('.pedido').show();
+    		$('.carta').hide();
     	}
-    	$('.pedido').toggle();
-    	$('.carta').toggle();
     }
 
     function mostarsalones(){
@@ -141,10 +153,19 @@ var socket = io.connect('http://'+window.location.host+':3000');
 			type: 'POST',
 			dataType: 'json',
 			data: {idpedido: window.variables.pedidoid, tipopre: tipo,
-					mesa: '', mozo: ''}
+					mesa: '', mozo: '', precuenta: pre}
 		})
 		.done(function(data) {
-			console.log("success");
+			if (tipo == 1) 
+			{
+				var preciototal = data.reduce(function(suma, value) 
+								{ return suma + parseFloat(value.precio) }, 0);
+				var datos = {items: data, total: preciototal.toFixed(2)};
+				var html = window.variables.templateprecuenta(datos);
+				window.variables.precuenta = data;
+				$('.precuenta').html(html);
+				$('.precuenta').show();
+			}
 		})
 		.fail(function() {
 			console.log("error");

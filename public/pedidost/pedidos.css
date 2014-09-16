@@ -219,6 +219,41 @@ section .comanda nav ul li a {
 section .comanda nav ul li a:hover {
   color: #ffd321;
 }
+section .precuenta {
+  margin: 0 auto;
+  width: 98%;
+}
+section .precuenta a {
+  background: #002cde;
+  border: 1px #fff solid;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  color: #fff;
+  display: inline-block;
+  font-weight: bolder;
+  line-height: 30px;
+  margin-top: 5px;
+  padding: 5px;
+  text-decoration: none;
+}
+section .precuenta table {
+  border: 2px #5a2e21 solid;
+  margin-top: 5px;
+  width: 100%;
+}
+section .precuenta table th {
+  background: #a5d1de;
+  border: 2px #5a2e21 solid;
+  line-height: 40px;
+  font-weight: bolder;
+}
+section .precuenta table td {
+  background: #137fee;
+  border: 2px #5a2e21 solid;
+  font-weight: bolder;
+  line-height: 40px;
+  padding: 5px;
+}
 section .mesas {
   padding: 0;
   margin: 0 auto;

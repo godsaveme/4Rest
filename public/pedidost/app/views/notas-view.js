@@ -5,7 +5,7 @@ Pedidos.Views.Notas = Backbone.View.extend({
 	tagName : "li",
 	initialize : function () {
 		var self = this;
-		this.template = _.template( $('#nota-template').html() );
+		this.template = _.template( $('#nota-template').html());
 	},
 	selectnota : function () {
 		if (window.variables.combinacionnotas == 1) 

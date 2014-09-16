@@ -33,7 +33,7 @@
                 </a>
             </li>
             <li>
-                <a href="#precuenta" class="btn_accion">
+                <a href="#getPrecuenta" class="btn_accion btn_precuenta">
                     <i class="fa fa-calculator"></i> Precuenta
                 </a>
             </li>
@@ -59,6 +59,12 @@
                     <span class="totalitems">
                         0
                     </span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="btn_mesa">
+                    <i class="fa fa-reply"></i>
+                    Mesa
                 </a>
             </li>
         </ul>
@@ -97,7 +103,10 @@
             </li>
         </ul>
     </nav>
-    <div class="pedido">
+    <div class="precuenta" style="display:none">
+    
+    </div>
+    <div class="pedido pedido_mesa">
         <div class="pedidoencabezado">
             <ul>
                 <li>
@@ -366,5 +375,33 @@
     </div>
 </script>
 
+
+<script type="text/template" id="precuenta-template">
+<a href="#" id="print_precuenta">Imprimir PreCuenta</a>
+<table>
+    <thead>
+        <tr>
+            <th style="width: 60%">Nombre</th>
+            <th style="width: 15%">Precio Unitario</th>
+            <th style="width: 10%">Cantidad</th>
+            <th style="width: 15%">Importe</th>
+        </tr>
+    </thead>
+    <tbody>
+    <%_.each(items, function(i) { %>
+         <tr>
+            <td><%=i.nombre %> </td>
+            <td style="text-align: right"><%=i.preciou %> </td>
+            <td style="text-align: right"><%=i.cantidad %> </td>
+            <td style="text-align: right"><%=i.precio %> </td>
+        </tr>
+    <%}); %>
+        <tr>
+            <td colspan="3">Total</td>
+            <td style="text-align: right"><%=total%></td>
+        </tr>
+    </tbody>
+</table>
+</script>
 
 @stop

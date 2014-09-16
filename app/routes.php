@@ -642,27 +642,30 @@ Route::post('login', function () {
 			$nombremesa = Input::get('mesa');
 			$nombremozo = Input::get('mozo');
 			$precuenta = Input::get('precuenta');
+			$pedido = Pedido::find($idpedido);
+			$nombremesa = $pedido->mesas()->first()->nombre;
+			$nombremozo = $pedido->usuario->login;
 			if ($tipopre == 1) {
 				DB::beginTransaction();
 				try{
-				$detallespro = Pedido::find($idpedido)->productos()
+				$detallespro = $pedido->productos()
 				               ->where('detallepedido.estado_t', '=', 0)
 				               ->where('detallepedido.estado', '!=', 'A', 'AND')
 				               ->where('detallepedido.combinacion_id', '=', NULL, 'AND')
 				               ->groupBy('detallepedido.producto_id')
 				               ->get();
 
-				$detallesproprecuen = Pedido::find($idpedido)->productosguardarprecuenta()
+				$detallesproprecuen = $pedido->productosguardarprecuenta()
 				               ->where('detallepedido.estado_t', '=', 0)
 				               ->where('detallepedido.estado', '!=', 'A', 'AND')
 				               ->where('detallepedido.combinacion_id', '=', NULL, 'AND')
 				               ->groupBy('detallepedido.producto_id')
 				               ->get();
-				$detallescom = Pedido::find($idpedido)->combinaciones()
+				$detallescom = $pedido->combinaciones()
 								->where('detallepedido.estado_t', '=', 0)
 								->groupBy('combinacion_id')->get();
 
-				$detallescomprecuen = Pedido::find($idpedido)->combinacionesguardarprecuenta()
+				$detallescomprecuen = $pedido->combinacionesguardarprecuenta()
 								->where('detallepedido.estado_t', '=', 0)
 								->groupBy('combinacion_id')->get();
 				
@@ -1092,8 +1095,8 @@ Route::post('login', function () {
 				return Response::json($e);
 			}
 			$cajero = Auth::user()->login;
-			/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
-										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
+			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
 			DB::commit();
 			return json_encode('True');
 		}

@@ -4,13 +4,28 @@ Pedidos.Views.App = Backbone.View.extend({
 		"click #agregar_cesta": "agregarcesta",
 		"click #notas": "shownotas",
 		"click #adicionales": "showadicionales",
-		"click .btn_mesa": "backmesa"
+		"click .btn_mesa": "backmesa",
+		"click #print_precuenta": "print_precuenta"
 	},
 	initialize : function ($el) {
 		this.$el = $el;
 		window.routers.base.on('route:root', function () {
 			$('#nav-notas-adicionales').hide();
 			$('.productotitulo').hide();
+			$('.precuenta').hide();
+		});
+
+		window.routers.base.on('route:precuenta', function () {
+			$('.precuenta').show();
+			$('.pedido_mesa').hide();
+			$('.carta').hide();
+		});
+
+		window.routers.base.on('route:mesa', function () {
+			$('.precuenta').hide();
+			$('.pedido_mesa').show();
+			$('.carta').hide();
+			$('.flagcarta span').text('Carta');
 		});
 		
 	},
@@ -86,10 +101,14 @@ Pedidos.Views.App = Backbone.View.extend({
 	backmesa: function(e){
 		e.preventDefault();
 		$('.pedido').show();
-    	$('#nav-notas-adicionales').toggle();
-		$('#nav-pedido').toggle();
+    	$('#nav-notas-adicionales').hide();
+		$('#nav-pedido').show();
 		$('.carta').hide();
     	$('.notas').hide();
 		Backbone.history.navigate('/mesa', {trigger:true});
+	},
+	print_precuenta: function(e){
+		e.preventDefault();
+		precuenta(2, window.variables.precuenta);
 	}
 });

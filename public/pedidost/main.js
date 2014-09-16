@@ -1,4 +1,5 @@
 $(function(){
+	window.variables.templateprecuenta = _.template($('#precuenta-template').html());
 	window.variables.sabores = 0;
 	window.variables.usuarioid = $('.salones').attr('data-userid');
 	window.routers.base = new Pedidos.Routers.Base();
