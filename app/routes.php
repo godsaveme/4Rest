@@ -1095,8 +1095,8 @@ Route::post('login', function () {
 				return Response::json($e);
 			}
 			$cajero = Auth::user()->login;
-			Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
-										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
+			/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete', 
+										'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
 			DB::commit();
 			return json_encode('True');
 		}
