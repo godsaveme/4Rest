@@ -1,145 +1,170 @@
 @extends('layouts.pedidosmaster')
 @section('content')
-<div class="salones" data-userid="{{Auth::user()->id}}">
-    @foreach ($salones as $salon)
-    <div class="salon">
-        {{$salon->nombre}}
-    </div>
-    @endforeach
+<div class="platosusuario">
+    <script type="text/template" id="productosusuario-template">
+        <% _.each(productos, function(i) { %>
+            <li class="<%=i.pivot.estado%>" data-id ="<%= i.pivot.id%>">
+                &nbsp;
+                <%if (i.pivot.estado == 'I') {%>
+                    <i class="fa fa-clock-o"></i>
+                <%}else if(i.pivot.estado == 'P'){ %>
+                    <i class="flaticon-chef15"></i>
+                <%}else if(i.pivot.estado=='E'){%>
+                    <i class="flaticon-restaurant36"></i>
+                <%}else if(i.pivot.estado == 'D'){%>
+                    <i class="flaticon-restaurant2"></i>
+                <%}%>
+                &nbsp;
+                <%=i.nombre %> 
+                &nbsp; / <%=mesas[0].nombre%>
+            </li>
+        <%}); %>
+    </script>
 </div>
-
-<div class="mesas">
-        <script type="text/template" id="mesa-template">
-            <span class="nombre_mesa"><%=nombre%></span><br>
-            <span class="nombre_mesa"><%=login%> </span><br><br>
-            <span class="nombre_mesa"><i class="fa fa-clock-o"></i> <%=tiempomesa%></span><br>
-            <span class="nombre_mesa">S/. <%=importetotal%></span>
-        </script>
-</div>
-<div class="comanda">
-    <nav id="nav-pedido">
-        <ul>
-            <li>
-                <a href="javascript:void(0)">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="totalitems">
-                        1
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#enviarorden" class="btn_accion">
-                    <i class="fa fa-send"></i> Ordenar
-                </a>
-            </li>
-            <li>
-                <a href="#getPrecuenta" class="btn_accion btn_precuenta">
-                    <i class="fa fa-calculator"></i> Precuenta
-                </a>
-            </li>
-            <li>
-                <a href="#mostarcarta" class="btn_accion flagcarta">
-                    <i class="fa fa-reorder"></i>
-                    <span>Carta</span>
-                </a>
-            </li>
-             <li>
-                <a href="#mostarsalones" class="btn_accion">
-                    <i class="fa fa-reply"></i>
-                    Salon
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <nav id="nav-combinacion" style="display:none">
-        <ul>
-            <li>
-                <a href="javascript:void(0)">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="totalitems">
-                        0
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="btn_mesa">
-                    <i class="fa fa-reply"></i>
-                    Mesa
-                </a>
-            </li>
-        </ul>
-        <a href="javascript:void(0)" id="agregar_cesta">
-            <i class="fa fa-plus-circle"></i>
-            Agregar
-        </a>
-    </nav>
-    <nav id="nav-notas-adicionales" style="display:none">
-        <ul>
-            <li>
-                <a href="javascript:void(0)">
-                    <i class="fa fa-check"></i>
-                    <span class="select_product">
-
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#" id="notas">
-                    <i class="fa fa-book"></i>
-                    Notas (<span class="count_notas">0</span> )
-                </a>
-            </li>
-            <li>
-                <a href="#" id="adicionales">
-                    <i class="fa fa-bars"></i>
-                    Adicionales (<span class="count_adicionales">0</span> )
-                </a>
-            </li>
-            <li>
-                <a href="#" class="btn_mesa">
-                    <i class="fa fa-reply"></i>
-                    Mesa
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <div class="precuenta" style="display:none">
-    
+<div class="userui">
+    <div class="salones" data-userid="{{Auth::user()->id}}">
+        @foreach ($salones as $salon)
+        <div class="salon">
+            {{$salon->nombre}}
+        </div>
+        @endforeach
     </div>
-    <div class="pedido pedido_mesa">
-        <div class="pedidoencabezado">
+
+    <div class="mesas">
+            <script type="text/template" id="mesa-template">
+                <span class="nombre_mesa"><%=nombre%></span><br>
+                <span class="nombre_mesa"><%=login%> </span><br><br>
+                <span class="nombre_mesa"><i class="fa fa-clock-o"></i> <%=tiempomesa%></span><br>
+                <span class="nombre_mesa">S/. <%=importetotal%></span>
+            </script>
+    </div>
+
+    <div class="comanda">
+        <nav id="nav-pedido">
             <ul>
                 <li>
-                    Total Productos: <span class="totalitems"></span>
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="totalitems">
+                            1
+                        </span>
+                    </a>
                 </li>
                 <li>
-                    Importe Total: S/. <span class="totalprecio"></span>
+                    <a href="#enviarorden" class="btn_accion">
+                        <i class="fa fa-send"></i> Ordenar
+                    </a>
+                </li>
+                <li>
+                    <a href="#getPrecuenta" class="btn_accion btn_precuenta">
+                        <i class="fa fa-calculator"></i> Precuenta
+                    </a>
+                </li>
+                <li>
+                    <a href="#mostarcarta" class="btn_accion flagcarta">
+                        <i class="fa fa-reorder"></i>
+                        <span>Carta</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="#mostarsalones" class="btn_accion">
+                        <i class="fa fa-reply"></i>
+                        Salon
+                    </a>
                 </li>
             </ul>
-        </div>
-        <ul class="cestaitems">
-        </ul>
-    </div>
-    <div class="carta">
-        <div class="productotitulo">
-            Familia
-        </div>
-        <div class="listaproductos">
-        </div>
-        <div class="notas">
+        </nav>
+        <nav id="nav-combinacion" style="display:none">
             <ul>
-                
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="totalitems">
+                            0
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="btn_mesa">
+                        <i class="fa fa-reply"></i>
+                        Mesa
+                    </a>
+                </li>
             </ul>
-        </div>
-        <div class="sabores">
-        <h3> <span class="productonombre"></span> / <span class="count_sabores"></span></h3>
-            
-        </div>
-        <div class="adicionales">
+            <a href="javascript:void(0)" id="agregar_cesta">
+                <i class="fa fa-plus-circle"></i>
+                Agregar
+            </a>
+        </nav>
+        <nav id="nav-notas-adicionales" style="display:none">
+            <ul>
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-check"></i>
+                        <span class="select_product">
+
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="notas">
+                        <i class="fa fa-book"></i>
+                        Notas (<span class="count_notas">0</span> )
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="adicionales">
+                        <i class="fa fa-bars"></i>
+                        Adicionales (<span class="count_adicionales">0</span> )
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="btn_mesa">
+                        <i class="fa fa-reply"></i>
+                        Mesa
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="precuenta" style="display:none">
         
         </div>
+        <div class="pedido pedido_mesa">
+            <div class="pedidoencabezado">
+                <ul>
+                    <li>
+                        Total Productos: <span class="totalitems"></span>
+                    </li>
+                    <li>
+                        Importe Total: S/. <span class="totalprecio"></span>
+                    </li>
+                </ul>
+            </div>
+            <ul class="cestaitems">
+            </ul>
+        </div>
+        <div class="carta">
+            <div class="productotitulo">
+                Familia
+            </div>
+            <div class="listaproductos">
+            </div>
+            <div class="notas">
+                <ul>
+                    
+                </ul>
+            </div>
+            <div class="sabores">
+            <h3> <span class="productonombre"></span> / <span class="count_sabores"></span></h3>
+                
+            </div>
+            <div class="adicionales">
+            
+            </div>
+        </div>
     </div>
 </div>
+
 <script type="text/template" id="sabor-template">
     <div class="stock">
        0

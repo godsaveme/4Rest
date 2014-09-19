@@ -269,4 +269,17 @@
 							);
 			return Response::json($arrayusuario); 
 		}
+
+		public function getUsuarioProdutos(){
+			$pedidos = Pedido::with(['productos'=> function($q){
+								$q->where('detallepedido.estado', '!=', 'D');
+								$q->orderBy('created_at', 'ASC');
+							}, 'mesas'
+						])
+						->where('usuario_id', '=',Auth::user()->id )
+						->where('estado', '=', 'I')
+						->get();
+						
+			return Response::json($pedidos);
+		}
 	}

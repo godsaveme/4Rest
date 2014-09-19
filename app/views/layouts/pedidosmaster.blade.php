@@ -18,7 +18,7 @@
 
 <div class="usuario">
     <div class="notificaciones">
-        <i class="fa fa-envelope-o"></i>
+        <i class="fa fa-envelope"></i>
     </div>
     {{Auth::user()->login}}
 </div>
@@ -80,6 +80,9 @@
 <script src="/pedidost/app/models/mesas.js"></script>
 <script src="/pedidost/app/collections/mesas.js"></script>
 <script src="/pedidost/app/views/mesas-view.js"></script>
+<script src="/pedidost/app/models/productosusuario.js"></script>
+<script src="/pedidost/app/collections/productosusuario.js"></script>
+<script src="/pedidost/app/views/productosusuario-view.js"></script>
 <script src="/pedidost/app/models/usuario.js"></script>
 <script src="/pedidost/app/collections/usuario.js"></script>
 <script src="/pedidost/app/models/cocinas.js"></script>

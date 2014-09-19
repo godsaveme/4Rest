@@ -17,7 +17,8 @@ $(function(){
 	window.collections.notas = new Pedidos.Collections.Notas();
 	window.collections.adicionales = new Pedidos.Collections.Adicionales();
 	window.collections.sabores = new Pedidos.Collections.Sabores();
-	window.views.app =new Pedidos.Views.App( $('body') );
+	window.collections.productosusuario = new Pedidos.Collections.ProductosUsuario();
+	window.views.app =new Pedidos.Views.App($('body'));
 
 
 	window.collections.tipocombinaciones.on('add', function (model) {
@@ -100,6 +101,12 @@ $(function(){
 		view.$el.appendTo('.sabores');
 	});
 
+	window.collections.productosusuario.on('add', function (model) {
+		var view = new Pedidos.Views.ProductosUsuario({model: model});
+		view.render();
+		view.$el.appendTo('.platosusuario');
+	});
+
 	window.collections.combinacionescesta.fetch();
 	window.collections.productoscesta.fetch();
 
@@ -113,6 +120,7 @@ $(function(){
 		xhr = window.collections.pcombinaciones.fetch();
 		xhr = window.collections.cocinas.fetch();
 		xhr = window.collections.mesas.fetch();
+		xhr = window.collections.productosusuario.fetch();
 
 	xhr.done(function () {
 		console.log('Start app');

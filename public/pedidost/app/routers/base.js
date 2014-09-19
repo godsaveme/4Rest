@@ -8,7 +8,8 @@ Pedidos.Routers.Base = Backbone.Router.extend({
 		"notas":"notas",
 		"sabores":"sabores",
 		"adicionales": "adicionales",
-		"precuenta": "precuenta"
+		"precuenta": "precuenta",
+		"pedidospendientes": "pedidospendientes"
 	},
 	root : function () {
 		window.app.state = "root";
@@ -45,5 +46,8 @@ Pedidos.Routers.Base = Backbone.Router.extend({
 	},
 	precuenta: function(){
 		window.app.state = "precuenta";
+	},
+	pedidospendientes: function(){
+		window.app.state = "pedidospendientes";
 	}
 });

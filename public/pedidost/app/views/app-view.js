@@ -5,7 +5,8 @@ Pedidos.Views.App = Backbone.View.extend({
 		"click #notas": "shownotas",
 		"click #adicionales": "showadicionales",
 		"click .btn_mesa": "backmesa",
-		"click #print_precuenta": "print_precuenta"
+		"click #print_precuenta": "print_precuenta",
+		"click .notificaciones i": "showpedidospendientes"
 	},
 	initialize : function ($el) {
 		this.$el = $el;
@@ -13,6 +14,7 @@ Pedidos.Views.App = Backbone.View.extend({
 			$('#nav-notas-adicionales').hide();
 			$('.productotitulo').hide();
 			$('.precuenta').hide();
+			$('.platosusuario').hide();
 		});
 
 		window.routers.base.on('route:precuenta', function () {
@@ -110,5 +112,10 @@ Pedidos.Views.App = Backbone.View.extend({
 	print_precuenta: function(e){
 		e.preventDefault();
 		precuenta(2, window.variables.precuenta);
+	},
+	showpedidospendientes: function(){
+		$(".platosusuario").toggle();
+		$(".userui").toggle();
+		$('.notificaciones i').css('color', '');
 	}
 });

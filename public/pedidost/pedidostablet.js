@@ -4,9 +4,11 @@ var socket = io.connect('http://'+window.location.host+':3000');
 			mesa = mesa.toJSON();
 			if(window.variables.usuarioid  == mesa.usuario_id && data.estado == 'E' ){
 				navigator.vibrate(1500);
+				$('.notificaciones i').css('color', 'red');
 				//alert('Tienes platos por recoger para la' + mesa.nombre);
 			}
 		window.collections.productosmesa.fetch();
+		window.collections.productosusuario.fetch();
 	});
 
 	socket.on("Recibirpedidos", function(datos, mesa, pedido){
@@ -67,6 +69,7 @@ var socket = io.connect('http://'+window.location.host+':3000');
 				ecombinaciones = window.collections.combinacionescesta.where({mesa_id: window.variables.mesaid});
 				_.invoke(eproductos, 'destroy');
 				_.invoke(ecombinaciones, 'destroy');
+				Backbone.history.navigate('/mesa', {trigger:true});
 				precuenta(1, 0);
 				window.collections.productosmesa.fetch();
 				window.collections.mesas.fetch();
@@ -74,7 +77,7 @@ var socket = io.connect('http://'+window.location.host+':3000');
 	    		$('.carta').hide();
 	    		socket.emit('ocuparmesa',window.variables.mesaid); 
 	    		socket.emit('Enviaracocina', window.variables.nombremesa, window.variables.pedidoid, data.orden, data.mozoid);
-				Backbone.history.navigate('', {trigger:true});
+				
 			})
 			.fail(function() {
 				console.log("error");
@@ -163,8 +166,10 @@ var socket = io.connect('http://'+window.location.host+':3000');
 				var datos = {items: data, total: preciototal.toFixed(2)};
 				var html = window.variables.templateprecuenta(datos);
 				window.variables.precuenta = data;
-				$('.precuenta').html(html);
-				$('.precuenta').show();
+				if (window.app.state != "mesa") {
+					$('.precuenta').html(html);
+					$('.precuenta').show();
+				}
 			}
 		})
 		.fail(function() {
