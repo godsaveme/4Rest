@@ -184,7 +184,6 @@ function socketconection(cliente){
                     throw err;
                 }
             io.sockets.in(usuario).emit("NotificacionDemora", results);
-                console.log(results);
         });
     });
 
@@ -249,7 +248,11 @@ function socketconection(cliente){
             {
                 return;
             }
-        io.sockets.emit('liberarmesa', cliente.mesa_id);
+        mysqlconect.query(
+        "UPDATE mesa SET actividad  = 0 WHERE id = ?",
+         [cliente.mesa_id], function selectUsuario(err, results, fields) {
+            io.sockets.emit('liberarmesa', cliente.mesa_id);
+        });
     });
 }
 
