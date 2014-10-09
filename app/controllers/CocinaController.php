@@ -50,63 +50,28 @@ class CocinaController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function getProductosMesa()
 	{
-        return View::make('cocina.create');
+		$pedidos = Pedido::select('pedido.id', 'detallepedido.ordenCocina', 'usuario.login')
+						->with(['detallepedido'=> function($q){
+								$q->where('detallepedido.estado', '!=', 'E');
+								$q->where('detallepedido.idarea', '=', Auth::user()->id_tipoareapro);
+								$q->whereNull('detallepedido.detalle_id');
+								$q->orderBy('created_at', 'ASC');
+							},'detallepedido.producto',
+							'detallepedido.sabores', 
+							'detallepedido.notas',
+							'detallepedido.adicionales',
+							'detallepedido.adicionales.producto',
+							'mesas'
+						])
+						->join('usuario', 'pedido.usuario_id','=', 'usuario.id')
+						->join('detallepedido', 'detallepedido.pedido_id', '=', 'pedido.id')
+						->where('detallepedido.estado', '!=', 'E')
+						->where('pedido.estado', '=', 'I')
+						->where('detallepedido.idarea', '=', Auth::user()->id_tipoareapro)
+						->groupBy('detallepedido.ordenCocina')
+						->get();
+		return Response::json($pedidos);
 	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-        return View::make('cocina.show');
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-        return View::make('cocina.edit');
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
 }

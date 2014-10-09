@@ -65,9 +65,14 @@ Pedidos.Views.Pcombinaciones = Backbone.View.extend({
 			this.$('.combinaciontitle .cantidad').html('('+cantidad2+')');
 		}
 			objeto.addClass('productoselected');
-			window.variables.producto = window.collections.productos
-										.findWhere({productoid: producto_id, combinacion_id: window.app.combinacion})
-										.toJSON();
+			var item = window.collections.productos
+										.findWhere({productoid: producto_id, combinacion_id: window.app.combinacion});
+			if (typeof item == 'undefined') {
+				item = window.collections.productos
+										.findWhere({productoid: parseInt(producto_id), 
+													combinacion_id: parseInt(window.app.combinacion)});
+			}			
+			window.variables.producto = item.toJSON();
 			window.variables.combinacioncesta.productos[this.model.get('fnombre')+orden]={
 				adicionales:{},
 				cantidads:window.variables.producto.cantsabores,

@@ -15,4 +15,8 @@ class DetPedido extends Eloquent {
 	public function sabores(){
 		return $this->belongsToMany('Sabor','detpedidosabores','detpedido_id', 'sabor_id');
 	}
+
+	public function adicionales(){
+		return $this->hasMany('DetPedido', 'detalle_id');
+	}
 }

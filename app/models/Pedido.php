@@ -43,4 +43,8 @@ class Pedido extends Eloquent {
 	public function tickets(){
 		return $this->hasMany('Ticket', 'pedido_id');
 	}
+
+	public function detallepedido(){
+		return $this->hasMany('DetPedido', 'pedido_id');
+	}
 }

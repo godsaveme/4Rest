@@ -20,6 +20,7 @@ Pedidos.Views.Mesas = Backbone.View.extend({
 		window.collections.productosmesa.reset();
         window.variables.nombremesa = this.model.get('nombre');
 		$('.productosmesa').remove();
+        $('.precuenta').html('');
 		$('.salones').css('display', 'none');
     	$('.mesas').css('display', 'none');
     	$('.comanda').css('display', 'block');
