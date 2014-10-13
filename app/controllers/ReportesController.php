@@ -45,6 +45,9 @@ class ReportesController extends \BaseController {
 						$cantidad   = $cantidad+$producto->cantidad;
 						$montototal = $montototal+$producto->precio;
 					}
+					if (null !==Session::get('tipoc')) {
+						$tipoc = 4;
+					}
 					return View::make('reportes.reporteproductos', compact('productos', 'fechaInicio', 'fechaFin',
 							'restaurante', 'cantidad', 'montototal', 'tipoc'));
 					break;
@@ -92,6 +95,7 @@ class ReportesController extends \BaseController {
 						$cantidad   = $cantidad+$producto->cantidad;
 						$montototal = $montototal+$producto->precio;
 					}
+					Session::put('tipoc',4);
 					return View::make('reportes.reporteproductos', compact('productos', 'fechaInicio', 'fechaFin',
 							'restaurante', 'cantidad', 'montototal', 'tipoc'));
 					break;

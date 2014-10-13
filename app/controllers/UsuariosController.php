@@ -134,6 +134,9 @@
 				$restaurante = Restaurante::find($idrestaurante);
 				$fechaInicio = Input::get('fechainicio');
 				$fechaFin = Input::get('fechafin');
+				if (null !==Session::get('tipoc')) {
+					Session::forget('tipoc');
+				}
 				return View::make('usuarios.reportesmozos', 
 					compact('restaurante','fechaInicio', 'fechaFin'));
 			}else{
