@@ -87,7 +87,8 @@ Route::group(array('before' => 'auth'), function () {
 					}
 				}
 			}
-		);Route::post('bperdni', function () {
+		);
+		Route::post('bperdni', function () {
 				if (Request::ajax()) {
 					$patron = Input::get('parametro');
 					if (isset($patron)) {
@@ -97,7 +98,8 @@ Route::group(array('before' => 'auth'), function () {
 					}
 				}
 			}
-		);Route::post('buscar_provedores', function () {
+		);
+		Route::post('buscar_provedores', function () {
 				if (Request::ajax()) {
 					$patron = Input::get('parametro');
 					$provedores = Persona::whereraw("razonSocial like '".$patron."%' and perfil_id = '4'")->take(10)->get();
@@ -144,6 +146,7 @@ Route::group(array('before' => 'auth'), function () {
 						$arraydatos[] = array('id' => $dato->id, 'nombres' => $dato->nombres.' '.$dato->apPaterno.' '.$dato->apMaterno, 'direccion' => $dato->direccion, 'dni' => $dato->dni, );
 					}
 				}
+
 				return Response::json($arraydatos);
 			}
 		);
@@ -646,24 +649,24 @@ Route::group(array('before' => 'auth'), function () {
 						DB::beginTransaction();
 						try {
 							$detallespro = $pedido->productos()
-							->where('detallepedido.estado_t', '=', 0)
+								->where('detallepedido.estado_t', '=', 0)
 								->where('detallepedido.estado', '!=', 'A', 'AND')
-							->where('detallepedido.combinacion_id', '=', NULL, 'AND')
+								->where('detallepedido.combinacion_id', '=', NULL, 'AND')
 								->groupBy('detallepedido.producto_id')
-							->get();
+								->get();
 
 							$detallesproprecuen = $pedido->productosguardarprecuenta()
-							->where('detallepedido.estado_t', '=', 0)
+								->where('detallepedido.estado_t', '=', 0)
 								->where('detallepedido.estado', '!=', 'A', 'AND')
-							->where('detallepedido.combinacion_id', '=', NULL, 'AND')
+								->where('detallepedido.combinacion_id', '=', NULL, 'AND')
 								->groupBy('detallepedido.producto_id')
-							->get();
+								->get();
 							$detallescom = $pedido->combinaciones()
-							->where('detallepedido.estado_t', '=', 0)
+								->where('detallepedido.estado_t', '=', 0)
 								->groupBy('combinacion_id')->get();
 
 							$detallescomprecuen = $pedido->combinacionesguardarprecuenta()
-							->where('detallepedido.estado_t', '=', 0)
+								->where('detallepedido.estado_t', '=', 0)
 								->groupBy('combinacion_id')->get();
 
 							$arrayproprecuenta = array();
@@ -671,15 +674,15 @@ Route::group(array('before' => 'auth'), function () {
 								foreach ($detallespro as $detallepro) {
 									$cantidadre = $detallepro->pivot->where('detallepedido.producto_id', '=', $detallepro->id)
 									->where('detallepedido.pedido_id', '=', $detallepro->pivot->pedido_id, 'AND')
-										->where('detallepedido.estado_t', '=', 0, 'AND')
+									->where('detallepedido.estado_t', '=', 0, 'AND')
 									->where('detallepedido.combinacion_id', '=', NULL, 'AND')
-										->sum('cantidad');
+									->sum('cantidad');
 									$preciou = $detallepro->pivot->importeFinal/$detallepro->pivot->cantidad;
 									$preciot = $preciou*$cantidadre;
 
 									$oprecuenta = Detpedidotick::where('nombre', '=', $detallepro->nombre)
 									->where('pedido_id', '=', $idpedido, 'AND')
-										->whereNull('ticket_id')
+									->whereNull('ticket_id')
 									->first();
 									$arraycreaprecuenta = array('nombre' => $detallepro->nombre,
 										'cantidad'                          => $cantidadre,
@@ -711,7 +714,7 @@ Route::group(array('before' => 'auth'), function () {
 									$cantidadcr = DetPedido::where('detallepedido.estado_t', '=', 0)
 										->where('detallepedido.combinacion_id', '=', $detallecom->id, 'AND')
 										->where('detallepedido.pedido_id', '=', $idpedido)
-									->groupBy('combinacion_id', 'combinacion_c')
+										->groupBy('combinacion_id', 'combinacion_c')
 										->get();
 									$cantidadcombi = 0;
 									foreach ($cantidadcr as $datocan) {
@@ -891,13 +894,14 @@ Boleta&nbsp;
 											$newprecio = $itemprecuenta->preciou*$newcantidad;
 											$itemprecuenta->cantidad = $newcantidad;
 											$itemprecuenta->precio = $newprecio;
-											$arraycreaprecuenta = array('nombre' => $dato['nombre'],
-												'cantidad'                          => $dato['cantidad'],
-												'precio'                            => $dato['precio'],
-												'combinacion_id'                    => $itemprecuenta->combinacion_id,
-												'preciou'                           => $dato['preciou'],
-												'pedido_id'                         => $itemprecuenta->pedido_id,
-												'producto_id'                       => $itemprecuenta->producto_id);
+											$arraycreaprecuenta = array(
+												'nombre'         => $dato['nombre'],
+												'cantidad'       => $dato['cantidad'],
+												'precio'         => $dato['precio'],
+												'combinacion_id' => $itemprecuenta->combinacion_id,
+												'preciou'        => $dato['preciou'],
+												'pedido_id'      => $itemprecuenta->pedido_id,
+												'producto_id'    => $itemprecuenta->producto_id);
 											$inserteditem = Detpedidotick::create($arraycreaprecuenta);
 											$arrayudateprecuenta[] = $inserteditem->id;
 											$itemprecuenta->save();
@@ -923,26 +927,28 @@ Boleta&nbsp;
 								$newdescuento = $idescuento+$ivale;
 								$osubtotal = $itotal/1.18;
 								$igv = $itotal-$osubtotal;
-								$tickete = Ticket::create(array('descuento'                                  => $descuento,
-										'idescuento'                                                               => number_format($newdescuento, 2),
-										'importe'                                                                  => $itotal,
-										'numero'                                                                   => $newnumero,
-										'serie'                                                                    => $datoscaja->serie,
-										'detcaja_id'                                                               => $detcajaid,
-										'caja_id'                                                                  => $caja_id,
-										'pedido_id'                                                                => $idpedido,
-										'vuelto'                                                                   => $vuelto,
-										'IGV'                                                                      => number_format($igv, 2),
-										'subtotal'                                                                 => number_format($osubtotal, 2),
-										'ipagado'                                                                  => $ipagado,
-										'cliente'                                                                  => $cliente['nombres'],
-										'documento'                                                                => $cliente['dni'],
-										'direccion'                                                                => $cliente['direccion'],
-										'mesa'                                                                     => $nombremesa,
-										'mozo'                                                                     => $nombremozo,
-										'cajero'                                                                   => Auth::user()->login,
-										'mozoid'                                                                   => $idmozo,
-										'cajeroid'                                                                 => Auth::user()->id));
+								$tickete = Ticket::create(array(
+										'descuento'  => $descuento,
+										'idescuento' => number_format($newdescuento, 2),
+										'importe'    => $itotal,
+										'numero'     => $newnumero,
+										'serie'      => $datoscaja->serie,
+										'detcaja_id' => $detcajaid,
+										'caja_id'    => $caja_id,
+										'pedido_id'  => $idpedido,
+										'vuelto'     => $vuelto,
+										'IGV'        => number_format($igv, 2),
+										'subtotal'   => number_format($osubtotal, 2),
+										'ipagado'    => $ipagado,
+										'cliente'    => $cliente['nombres'],
+										'documento'  => $cliente['dni'],
+										'direccion'  => $cliente['direccion'],
+										'mesa'       => $nombremesa,
+										'mozo'       => $nombremozo,
+										'cajero'     => Auth::user()->login,
+										'mozoid'     => $idmozo,
+										'cajeroid'   => Auth::user()->id
+									));
 								Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
 								$odetallestickete = $tickete->detallest;
 
@@ -973,6 +979,7 @@ Boleta&nbsp;
 							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));
 					DB::commit();
 					return json_encode('True');
+					//return Response::json($odetallestickete);
 				}
 			});
 
@@ -1021,13 +1028,14 @@ Boleta&nbsp;
 											$newprecio = $itemprecuenta->preciou*$newcantidad;
 											$itemprecuenta->cantidad = $newcantidad;
 											$itemprecuenta->precio = $newprecio;
-											$arraycreaprecuenta = array('nombre' => $dato['nombre'],
-												'cantidad'                          => $dato['cantidad'],
-												'precio'                            => $dato['precio'],
-												'combinacion_id'                    => $itemprecuenta->combinacion_id,
-												'preciou'                           => $dato['preciou'],
-												'pedido_id'                         => $itemprecuenta->pedido_id,
-												'producto_id'                       => $itemprecuenta->producto_id);
+											$arraycreaprecuenta = array(
+												'nombre'         => $dato['nombre'],
+												'cantidad'       => $dato['cantidad'],
+												'precio'         => $dato['precio'],
+												'combinacion_id' => $itemprecuenta->combinacion_id,
+												'preciou'        => $dato['preciou'],
+												'pedido_id'      => $itemprecuenta->pedido_id,
+												'producto_id'    => $itemprecuenta->producto_id);
 											$inserteditem = Detpedidotick::create($arraycreaprecuenta);
 											$arrayudateprecuenta[] = $inserteditem->id;
 											$itemprecuenta->save();
@@ -1059,27 +1067,29 @@ Boleta&nbsp;
 								$newdescuento = $idescuento+$ivale;
 								$osubtotal = $itotal/1.18;
 								$igv = $itotal-$osubtotal;
-								$tickete = Ticket::create(array('descuento'                                  => $descuento,
-										'idescuento'                                                               => number_format($newdescuento, 2),
-										'importe'                                                                  => $itotal,
-										'numero'                                                                   => $newnumero,
-										'serie'                                                                    => $datoscaja->serie,
-										'detcaja_id'                                                               => $detcajaid,
-										'caja_id'                                                                  => $caja_id,
-										'pedido_id'                                                                => $idpedido,
-										'vuelto'                                                                   => $vuelto,
-										'IGV'                                                                      => number_format($igv, 2),
-										'subtotal'                                                                 => number_format($osubtotal, 2),
-										'ipagado'                                                                  => $ipagado,
-										'cliente'                                                                  => $cliente['nombres'],
-										'documento'                                                                => $cliente['dni'],
-										'direccion'                                                                => $cliente['direccion'],
-										'mesa'                                                                     => $nombremesa,
-										'mozo'                                                                     => $nombremozo,
-										'cajero'                                                                   => Auth::user()->login,
-										'mozoid'                                                                   => $idmozo,
-										'cajeroid'                                                                 => Auth::user()->id,
-										'contable'                                                                 => 2));
+								$tickete = Ticket::create(array(
+										'descuento'  => $descuento,
+										'idescuento' => number_format($newdescuento, 2),
+										'importe'    => $itotal,
+										'numero'     => $newnumero,
+										'serie'      => $datoscaja->serie,
+										'detcaja_id' => $detcajaid,
+										'caja_id'    => $caja_id,
+										'pedido_id'  => $idpedido,
+										'vuelto'     => $vuelto,
+										'IGV'        => number_format($igv, 2),
+										'subtotal'   => number_format($osubtotal, 2),
+										'ipagado'    => $ipagado,
+										'cliente'    => $cliente['nombres'],
+										'documento'  => $cliente['dni'],
+										'direccion'  => $cliente['direccion'],
+										'mesa'       => $nombremesa,
+										'mozo'       => $nombremozo,
+										'cajero'     => Auth::user()->login,
+										'mozoid'     => $idmozo,
+										'cajeroid'   => Auth::user()->id,
+										'contable'   => 2
+									));
 								Detpedidotick::whereIn('id', $arrayudateprecuenta)->update(array('ticket_id' => $tickete->id));
 								$odetallestickete = $tickete->detallest;
 								if ($tipovale == 1) {

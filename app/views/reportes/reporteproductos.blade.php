@@ -10,6 +10,7 @@
 	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 	        			<h3 class="title" id="restauranteinfo" data-id="{{$restaurante->id}}">{{$restaurante->nombreComercial}}</h3>
 	        		</div>
+	        		@if (isset($productos))
 	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 	        		@if ($tipoc== 1)
 	        			<a href="/usuarios/reportemozos/{{$restaurante->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}" class="btn btn-default pull-right">Regresar</a>
@@ -19,8 +20,19 @@
 	        			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=2&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}&tipocombi={{$idtipocomb}}" class="btn btn-default pull-right">Regresar</a>
 	        		@endif
 	            	</div>
+	            	@else
+	            	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            			<h4 class="title">Seleciona Fecha</h4>
+            			<div class="form-group">
+	                		<input id="fecha_inicio" value="{{$fechaInicio}}" placeholder="Fecha Inicio"/>
+	                        <input id="fecha_fin" value="{{$fechaFin}}" placeholder="Fecha Fin"/>
+	                        <a href="javascript:void(0)" id="btn_rotacionpro"  class="btn btn-default">Buscar</a>
+                        </div>
+	            	</div>
+	            	@endif
 	        	</div>
 	        </div>
+	        @if (isset($productos))
 	        <table class="table">
 	                <thead>
 	                    <tr>
@@ -55,7 +67,7 @@
 		                			{{$producto->fnombre}}
 		                		</a>
 		                	@elseif($tipoc == 2)
-		                		@if ($producto->combinacion_id)
+		                		@if ($producto->combinacion_id > 1)
 		                			{{$producto->fnombre}}
 		                		@else
 		                			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=3&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}&tipocombi={{$producto->tipocombid}}&famiid={{$producto->famiid}}">
@@ -75,6 +87,11 @@
                 	@endforeach
                 </tbody>
 	        </table>
+	        @endif
 	    </div>
 	</div>
+@stop
+
+@section('js')
+		{{HTML::script('js/reportemozos.js')}}
 @stop

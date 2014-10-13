@@ -97,6 +97,18 @@
                       Reporte Mozos Woyke
                     </a>
                   </li>
+                  <li>
+                    <a href="/reportes/reporteproductos/2"> 
+                      <i class="fa fa-users"></i>
+                      Rotación Productos Elias Aguirre
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/reportes/reporteproductos/3"> 
+                      <i class="fa fa-users"></i>
+                      Rotación Productos Woyke
+                    </a>
+                  </li>
                   <li class="divider"></li>
   <!--                 <li class="dropdown-header">Nav header</li>
                   <li><a href="#">Separated link</a></li> -->
