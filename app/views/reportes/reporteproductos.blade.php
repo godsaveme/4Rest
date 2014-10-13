@@ -12,13 +12,15 @@
 	        		</div>
 	        		@if (isset($productos))
 	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-	        		@if ($tipoc== 1)
-	        			<a href="/usuarios/reportemozos/{{$restaurante->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}" class="btn btn-default pull-right">Regresar</a>
-	        		@elseif($tipoc == 2)
-	        			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=1&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}" class="btn btn-default pull-right">Regresar</a>
-	        		@elseif ($tipoc== 3)
-	        			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=2&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}&tipocombi={{$idtipocomb}}" class="btn btn-default pull-right">Regresar</a>
-	        		@endif
+		        		@if ($tipoc== 1)
+		        			<a href="/usuarios/reportemozos/{{$restaurante->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}" class="btn btn-default pull-right">Regresar</a>
+		        		@elseif($tipoc == 2)
+		        			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=1&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}" class="btn btn-default pull-right">Regresar</a>
+		        		@elseif ($tipoc== 3)
+		        			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=2&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}&tipocombi={{$idtipocomb}}" class="btn btn-default pull-right">Regresar</a>
+		        		@elseif ($tipoc== 4)
+		        			<a href="/reportes/reporteproductos/{{$restaurante->id}}" class="btn btn-default pull-right">Regresar</a>
+		        		@endif
 	            	</div>
 	            	@else
 	            	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -76,6 +78,10 @@
 		                		@endif
 		                	@elseif($tipoc == 3)
 		                		{{$producto->fnombre}}
+		                	@elseif($tipoc == 4)
+	                			<a href="/reportes/reporteproductos/{{$restaurante->id}}?tipoc=2&fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}&tipocombi={{$producto->tipocombid}}">
+		                			{{$producto->fnombre}}
+		                		</a>
 	                		@endif
                 		@else
                 		Eventos

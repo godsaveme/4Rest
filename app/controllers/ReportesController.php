@@ -81,6 +81,20 @@ class ReportesController extends \BaseController {
 					return View::make('reportes.reporteproductos', compact('productos', 'fechaInicio', 'fechaFin',
 							'restaurante', 'cantidad', 'montototal', 'tipoc', 'idtipocomb'));
 					break;
+				case '4':
+					$productos = DB::select(DB::raw("SELECT fnombre,tipocombid,sum(precio) AS precio,
+								sum(cantidad) AS cantidad FROM table_productostipocombinacion WHERE
+								created_at BETWEEN '"	.$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59'
+								AND idrest = "	.$id." GROUP BY tipocombid ORDER BY precio DESC"));
+					$cantidad   = 0;
+					$montototal = 0;
+					foreach ($productos as $producto) {
+						$cantidad   = $cantidad+$producto->cantidad;
+						$montototal = $montototal+$producto->precio;
+					}
+					return View::make('reportes.reporteproductos', compact('productos', 'fechaInicio', 'fechaFin',
+							'restaurante', 'cantidad', 'montototal', 'tipoc'));
+					break;
 				default:
 					return View::make('reportes.reporteproductos', compact('fechaInicio', 'fechaFin',
 							'restaurante'));

@@ -212,5 +212,5 @@ function fechafin(){
 $('#btn_rotacionpro').on('click', function(event){
     event.preventDefault();
     window.location.href = "/reportes/reporteproductos/"+$('#restauranteinfo').attr('data-id')
-                            +"?tipoc=1&fechainicio="+$('#fecha_inicio').val()+"&fechafin="+$('#fecha_fin').val();
+                            +"?tipoc=4&fechainicio="+$('#fecha_inicio').val()+"&fechafin="+$('#fecha_fin').val();
 });
