@@ -424,7 +424,7 @@
                         </tr>
                         <tr>
                             <th style="width:200px">
-                                <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#">
+                                <a href="/cajas/reportestickets/#:identificador()#/1?fechainicio=#:fechainicio()#&fechafin=#:fechafin()#&tipoc=1">
                                     Tickets Emitidos
                                 </a>
                             </th>

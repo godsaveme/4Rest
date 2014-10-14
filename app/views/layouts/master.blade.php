@@ -71,50 +71,71 @@
                 <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
               </ul>
             </li>
-
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-share-square-o"></i> Ir a<b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-share-square-o"></i> Ir a<b class="caret"></b>
+                </a>
                 <ul class="dropdown-menu">
                   <li><a href="{{URL('pedidos')}}"><i class="fa fa-tablet"></i>  Pedidos Tablet</a></li>
                   <li class="divider"></li>
                   <li><a href="{{URL('cajas')}}"><i class="fa fa-money"></i>  Caja</a></li>
-                  <li>
+                  
+                  <li class="divider"></li>
+  <!--            <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li> -->
+                  <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
+                </ul>
+            </li>
+             <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-caret-square-o-down"></i> Reportes
+                </a>
+                <ul class="dropdown-menu">
+                <li>
                     <a href="{{URL('cajas/reportescaja')}}">
                       <i class="fa fa-file-text-o"></i> 
-                      Reportes
+                      Reporte  Caja Diario
                     </a>
                   </li>
                   <li><a href="{{URL('monitores')}}"> <i class="glyphicon glyphicon-eye-open"></i> Monitores</a></li>
                   <li>
-                    <a href="/usuarios/reportemozos/2"> 
+                    <a href="/usuarios/reportemozos/2">
                       <i class="fa fa-users"></i>
                       Reporte Mozos Elias Aguirre
                     </a>
                   </li>
                   <li>
-                    <a href="/usuarios/reportemozos/3"> 
+                    <a href="/usuarios/reportemozos/3">
                       <i class="fa fa-users"></i>
                       Reporte Mozos Woyke
                     </a>
                   </li>
                   <li>
-                    <a href="/reportes/reporteproductos/2"> 
+                    <a href="/reportes/reporteproductos/2">
                       <i class="fa fa-users"></i>
                       Rotación Productos Elias Aguirre
                     </a>
                   </li>
                   <li>
-                    <a href="/reportes/reporteproductos/3"> 
+                    <a href="/reportes/reporteproductos/3">
                       <i class="fa fa-users"></i>
                       Rotación Productos Woyke
                     </a>
                   </li>
-                  <li class="divider"></li>
-  <!--                 <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li> -->
-                  <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
+                  <li>
+                    <a href="/reportes/reportesemanal/2">
+                      <i class="fa fa-users"></i>
+                      Cuadro Semanal Venta de Productos Elias Aguirre
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/reportes/reportesemanal/3">
+                      <i class="fa fa-users"></i>
+                       Cuadro Semanal Venta de Productos Woyke
+                    </a>
+                  </li>
                 </ul>
-            </li>
+             </li>
 <!--             <li><a href="">About</a></li>
             <li><a href="">Contact</a></li> -->
             <li class="dropdown">
