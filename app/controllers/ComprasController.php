@@ -35,7 +35,7 @@ class ComprasController extends \BaseController {
 	 */
 	public function postCreate()
 	{
-		DB::beginTransaction();	
+		DB::beginTransaction();
 		try {
 			$restaurante_id = Input::get('restaurante_id');
 			$restaurate = Restaurante::find($restaurante_id);
@@ -73,11 +73,11 @@ class ComprasController extends \BaseController {
 			}
 			if($total != $importetotal){
 				DB::rollback();
-				return  Response::json(array('estado' => false));
+				return  Response::json(array('estado' => false, 'msg'=>'Importes no coinciden'));
 			}
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false));
+			return Response::json(array('estado' => false, 'msg'=>$e));
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/compras'));

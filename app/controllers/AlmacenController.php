@@ -176,5 +176,4 @@ class AlmacenController extends \BaseController {
 			return Redirect::to('/almacenes');
 		}
 	}
-	
 }

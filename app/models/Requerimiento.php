@@ -7,7 +7,12 @@ class Requerimiento extends \Eloquent {
 
 	public function insumos(){
 		return $this->belongsToMany('Insumo','detallerequerimiento','requerimiento_id','insumo_id')
-		->withPivot('cantidad','estado');		
+		->withPivot('cantidad','estado');
+	}
+
+	public function productos(){
+		return $this->belongsToMany('Producto','detallerequerimiento','requerimiento_id','producto_id')
+		->withPivot('cantidad','estado');
 	}
 
 	public function area(){

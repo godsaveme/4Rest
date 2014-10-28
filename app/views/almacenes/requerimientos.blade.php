@@ -1,15 +1,12 @@
 @extends('layouts.master')
- 
-
 @section('content')
   @parent
-@stop 
+@stop
 @section('sub-content')
   @parent
   <a href="{{URL('almacenes/ordenproduccion')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
 <div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> Requerimientos Orden de Producción
 </strong></div>
-              
 <div id="cntnrGrid" style="opacity: 0;" >
 <div class="panel-body">
 <div class="row">

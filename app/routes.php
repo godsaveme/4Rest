@@ -2059,15 +2059,20 @@ Hora:'.date('H:i:s').'</strong>
 						$arrayverificarstock = array();
 						$arraydetalleorden = array();
 						$arradetallerequerimiento = array();
-						$ordendeproduccion = OrdendeProduccion::create(array('areaproduccion_id' => $areaproduccion_id,
-								'descripcion'                                                          => $descripcion,
-								'observacion'                                                          => $observacion,
-								'fechainicio'                                                          => date('Y-m-d H:i:s'), 'responsable_id'                                                          => Auth::user()->id));
+						$ordendeproduccion = OrdendeProduccion::create(
+							array('areaproduccion_id' => $areaproduccion_id,
+								'descripcion'	=> $descripcion,
+								'observacion'	=> $observacion,
+								'fechainicio'   => date('Y-m-d H:i:s'),
+								'responsable_id' => Auth::user()->id));
 
-						$requerimiento = Requerimiento::create(array('areaproduccion_id' => $areaproduccion_id,
-								'descripcion'                                                  => $descripcion, 'observacion'                                                  => $observacion,
-								'estado'                                                       => 1, 'ordendeproduccion_id'                                                       => $ordendeproduccion->id,
-								'usuario_id'                                                   => Auth::user()->id));
+						$requerimiento = Requerimiento::create(
+							array('areaproduccion_id' => $areaproduccion_id,
+								'descripcion'   => $descripcion,
+								'observacion'	=> $observacion,
+								'estado'	=> 1,
+								'ordendeproduccion_id'	=> $ordendeproduccion->id,
+								'usuario_id'	=> Auth::user()->id));
 
 						foreach ($productos as $producto) {
 							$oproducto = Producto::find($producto['id']);
@@ -2079,7 +2084,7 @@ Hora:'.date('H:i:s').'</strong>
 									$arrayinsumos[$insumo->id]['cantidad'] = $newcantidad;
 								} else {
 									$arrayinsumos[$insumo->id] = array('insumo_id' => $insumo->id,
-										'cantidad'                                    => $insumo->pivot->cantidad*$producto['cantidad']);
+										'cantidad'	=> $insumo->pivot->cantidad*$producto['cantidad']);
 									$arrayverificarstock[] = $insumo->id;
 								}
 							}
@@ -2125,7 +2130,7 @@ Hora:'.date('H:i:s').'</strong>
 							}
 
 							$arraydetalleorden[] = array('cantidad' => $producto['cantidad'], 'fechainicio' => $ordendeproduccion->fechainicio,
-								'ordendeproduccion_id'                 => $ordendeproduccion->id, 'producto_id'                 => $producto['id']);
+								'ordendeproduccion_id'	=> $ordendeproduccion->id, 'producto_id'	=> $producto['id']);
 						}
 
 						if ($ordenesflag <= 0) {
@@ -2143,17 +2148,20 @@ Hora:'.date('H:i:s').'</strong>
 						foreach ($arrayinsumos as $insumo) {
 							if ($insumo['cantidad'] > 0) {
 								$arradetallerequerimiento[] = array('cantidad' => $insumo['cantidad'], 'estado' => 1,
-									'fechainicio'                                 => $requerimiento->created_at, 'insumo_id'                                 => $insumo['insumo_id'],
-									'producto_id'                                 => NULL, 'requerimiento_id'                                 => $requerimiento->id,
-									'areaproduccion_id'                           => $areaproduccion->almacen_id);
+									'fechainicio'	=> $requerimiento->created_at,
+									'insumo_id'	=> $insumo['insumo_id'],
+									'producto_id'	=> NULL, 'requerimiento_id'                                 => $requerimiento->id,
+									'areaproduccion_id' => $areaproduccion->almacen_id);
 							}
 						}
 
 						foreach ($arraypreproductos as $preproducto) {
 							if ($preproducto['cantidad'] > 0) {
 								$arradetallerequerimiento[] = array('cantidad' => $preproducto['cantidad'], 'estado' => 1,
-									'fechainicio'                                 => $requerimiento->created_at, 'insumo_id'                                 => NULL, 'producto_id'                                 => $preproducto['preproducto_id'],
-									'requerimiento_id'                            => $requerimiento->id, 'areaproduccion_id'                            => $preproducto['areaproduccion_id']);
+									'fechainicio'	=> $requerimiento->created_at, 'insumo_id'	=> NULL,
+									'producto_id'	=> $preproducto['preproducto_id'],
+									'requerimiento_id'	=> $requerimiento->id,
+									'areaproduccion_id'	=> $preproducto['areaproduccion_id']);
 							}
 						}
 
@@ -2171,6 +2179,81 @@ Hora:'.date('H:i:s').'</strong>
 					return Response::json(array('estado' => true, 'mgs' => 'Operacion Completada exitosamente'));
 				}
 			});
+
+		Route::post('create_requerimiento', function(){
+			if (Request::ajax()) {
+				DB::beginTransaction();
+					try {
+						$areaproduccion_id = Input::get('areaproduccion_id');
+						$areaproduccion = Areadeproduccion::find($areaproduccion_id);
+						$ordenesflag = count($areaproduccion->ordenesdeproduccion()
+							->whereBetween('ordendeproduccion.fechainicio',
+								array(date('Y-m-d').' 00:00:00', date('Y-m-d').' 23:59:59'))
+								->get());
+
+						$descripcion = Input::get('descripcion');
+						$observacion = Input::get('observacion');
+						$insumos = Input::get('insumos');
+						$arrayinsumos = array();
+						$arraypreproductos = array();
+						$arrayverificarstock = array();
+						$arraydetalleorden = array();
+						$arradetallerequerimiento = array();
+						$ordendeproduccion = OrdendeProduccion::create(
+							array('areaproduccion_id' => $areaproduccion_id,
+								'descripcion'	=> $descripcion,
+								'observacion'	=> $observacion,
+								'fechainicio'   => date('Y-m-d H:i:s'),
+								'responsable_id' => Auth::user()->id));
+
+						$requerimiento = Requerimiento::create(
+							array('areaproduccion_id' => $areaproduccion_id,
+								'descripcion'   => $descripcion,
+								'observacion'	=> $observacion,
+								'estado'	=> 1,
+								'ordendeproduccion_id'	=> $ordendeproduccion->id,
+								'usuario_id'	=> Auth::user()->id));
+						if ($ordenesflag <= 0) {
+							if (count($arrayverificarstock) > 0) {
+								foreach ($insumos as $insumo) {
+									$stockinsumo = $areaproduccion->almacen->insumos()
+													->where('stockInsumo.stockActual')->first();
+									if (count($stockinsumo > 0)) {
+										$newcantidad = $insumo['cantidad']-$insumo->pivot->stockActual;
+									}else
+									{
+										$newcantidad = $insumo['cantidad'];
+									}
+									if ($newcantidad > 0) {
+										$requerimiento->insumos()->attach($insumo['id'],
+											['cantidad' => $newcantidad,
+											'estado' => 1,
+											'fechainicio'	=> $requerimiento->created_at,
+											'producto_id' => NULL,
+											'requerimiento_id' => $requerimiento->id,
+											'areaproduccion_id' => $areaproduccion->almacen_id]);
+									}
+								}
+							}
+						}else{
+							foreach ($insumos as $insumo) {
+										$requerimiento->insumos()->attach($insumo['id'],
+											['cantidad' => $insumo['cantidad'],
+											'estado' => 1,
+											'fechainicio'	=> $requerimiento->created_at,
+											'producto_id' => NULL,
+											'requerimiento_id' => $requerimiento->id,
+											'areaproduccion_id' => $areaproduccion->almacen_id]);
+							}
+						}
+					} catch (Exception $e) {
+						DB::rollback();
+						return Response::json(array('estado' => false, 'mgs' => $e));
+					}
+					DB::commit();
+					return Response::json(array('estado' => true, 'mgs' => 'Operacion Completada exitosamente'));
+			}
+		});
 
 		Route::post('buscareceta', function () {
 				if (Request::ajax()) {
@@ -2269,6 +2352,20 @@ Hora:'.date('H:i:s').'</strong>
 							foreach ($insumos as $insumo) {
 								$requerimiento = Detallerequerimiento::find($insumo['id']);
 								if ($requerimiento->estado == 2) {
+									$insumominus = Areadeproduccion::find($requerimiento->areaproduccion_id)
+													->almacen->insumos()
+													->where('stockInsumo.insumo_id', '=', $requerimiento->insumo_id)
+													->first();
+									if (is_null($insumominus)) {
+										DB::rollback();
+										return Response::json(array('estado' => false, 'mgs' => 'No tienes Stock'));
+									}else{
+										$avalible = $insumominus->pivot->stockActual - $requerimiento->cantidadentregada;
+										if ($avalible < 0) {
+											DB::rollback();
+											return Response::json(array('estado' => false, 'mgs' => 'No tienes Stock'));
+										}
+									}
 									$requerimiento->estado = 3;
 									$requerimiento->save();
 									$flag = 1;
@@ -2279,6 +2376,20 @@ Hora:'.date('H:i:s').'</strong>
 							foreach ($productos as $producto) {
 								$requerimiento = Detallerequerimiento::find($producto['id']);
 								if ($requerimiento->estado == 2) {
+									$productominus = Areadeproduccion::find($requerimiento->areaproduccion_id)
+													->almacen->productos()
+													->where('stockProducto.producto_id', '=', $requerimiento->producto_id)
+													->first();
+									if (is_null($productominus)) {
+										DB::rollback();
+										return Response::json(array('estado' => false, 'mgs' => 'No tienes Stock'));
+									}else{
+										$avalible = $productominus->pivot->stockActual - $requerimiento->cantidadentregada;
+										if ($avalible < 0) {
+											DB::rollback();
+											return Response::json(array('estado' => false, 'mgs' => 'No tienes Stock'));
+										}
+									}
 									$requerimiento->estado = 3;
 									$requerimiento->save();
 									$flag = 1;

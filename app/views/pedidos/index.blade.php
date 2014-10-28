@@ -127,7 +127,6 @@
             </ul>
         </nav>
         <div class="precuenta" style="display:none">
-        
         </div>
         <div class="pedido pedido_mesa">
             <div class="pedidoencabezado">
@@ -151,15 +150,13 @@
             </div>
             <div class="notas">
                 <ul>
-                    
                 </ul>
             </div>
             <div class="sabores">
             <h3> <span class="productonombre"></span> / <span class="count_sabores"></span></h3>
-                
             </div>
             <div class="adicionales">
-            
+
             </div>
         </div>
     </div>
@@ -248,7 +245,7 @@
         <span class="itemprecio">
             <%=preciot%>
         </span>
-        
+
         <div class="itemsabores">
             <%if(sabores.length > 0){%>
                 <% _.each(sabores, function(y) {%>
@@ -390,7 +387,7 @@
                     <i class="flaticon-restaurant2"></i>
                 <%}%>
                 &nbsp;
-                <%=i.nombre %> 
+                <%=i.nombre %>
             </li>
         <% });%>
         </ul>

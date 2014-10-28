@@ -495,7 +495,7 @@ $('body').on('mouseenter', '#enviarpf .notas', function(event) {
 });
 
 function guardarnotapro(idpro, filaid){
-
+	selecionanotapro(idpro, data['id'], data['descripcion'], filaid);
 	$.ajax({
 		url: '/crearnotapro',
 		type: 'POST',

@@ -1,14 +1,11 @@
 @extends('layouts.master')
- 
-
 @section('content')
   @parent
-@stop 
+@stop
 @section('sub-content')
   @parent
 <div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> Requerimientos
 </strong></div>
-              
 <div id="cntnrGrid" style="opacity: 0;" >
 <div class="panel-body">
 <div class="row">
@@ -52,7 +49,7 @@
           @elseif (isset($requerimiento->producto_id))
             {{$requerimiento->producto->nombre}}
             <input type="hidden" id="selector_{{$requerimiento->id}}" value="1">
-          @endif         
+          @endif
         </td>
         <td style="border: 1px solid gray" class="text-right">{{$requerimiento->cantidad}}</td>
         <td style="border: 1px solid gray" class="text-right">{{$requerimiento->cantidadentregada}}</td>
@@ -77,7 +74,6 @@
           @else
           <input id="{{$requerimiento->id}}" type="text" class="form-control" value="" style="height:25px;line-height:20px;">
           @endif
-          
         </td>
         <td style="border: 1px solid gray" class="text-center"><input type="checkbox" value="{{$requerimiento->id}}"></td>
       </tr>
@@ -172,8 +168,7 @@
         alert(data['mgs']);
          location.reload();
       }else{
-        alert('Operacion no completada');
-        console.log(data.mgs);
+        alert('Operacion no completada:'+ data['mgs']);
       }
     })
     .fail(function() {
