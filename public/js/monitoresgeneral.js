@@ -67,7 +67,6 @@ function tiempoenmesa(){
 		.always(function() {
 			console.log("complete");
 		});
-		
 	});
 }
 tiempoenmesa();

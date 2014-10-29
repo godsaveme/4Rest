@@ -3,7 +3,7 @@
 
 @section('content')
 @parent
-@stop 
+@stop
 @section('sub-content')
 
         <a href="{{URL('insumos')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
@@ -19,7 +19,7 @@
             {{Form::label('nombre', 'Nombre', array('class'=>'control-label'))}}
             </div>
     <div class="col-md-5">
-            {{Form::text('nombre', '', array('class' => 'form-control','placeholder'=>'ej. Azúcar','autofocus', 'required', 'validationMessage'=>'Por favor entre un nombre.'))}}
+            {{Form::text('nombre', '', array('style'=>'width:250px','placeholder'=>'ej. Azúcar','autofocus', 'required', 'validationMessage'=>'Por favor entre un nombre.', 'id'=>'insumo'))}}
             </div>
         </div>
         <div class="form-group">
@@ -52,4 +52,20 @@
 </div>
 {{ Form::close() }}
 </div> <!-- del panel body -->
+
+<script>
+    $("#insumo").kendoAutoComplete({
+                        dataTextField: "nombre",
+                        filter: "contains",
+                        minLength: 2,
+                        dataSource: {
+                            type: "json",
+                            serverFiltering: true,
+                            transport: {
+                                read: "/bus_insumo_"
+                            }
+                        },
+                        height:200
+    });
+</script>
 @stop
