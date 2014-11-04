@@ -2217,7 +2217,7 @@ Hora:'.date('H:i:s').'</strong>
 							if (count($arrayverificarstock) > 0) {
 								foreach ($insumos as $insumo) {
 									$stockinsumo = $areaproduccion->almacen->insumos()
-													->where('stockInsumo.stockActual')->first();
+													->where('stockInsumo.insumo_id', '=', $insumo['id'])->first();
 									if (count($stockinsumo > 0)) {
 										$newcantidad = $insumo['cantidad']-$insumo->pivot->stockActual;
 									}else

@@ -33,7 +33,7 @@ class AlmacenController extends \BaseController {
 	 */
 	public function postStore()
 	{
-		DB::beginTransaction();	
+		DB::beginTransaction();
 		try {
 			Almacen::create(Input::all());
 		} catch (Exception $e) {
@@ -175,5 +175,64 @@ class AlmacenController extends \BaseController {
 		}else{
 			return Redirect::to('/almacenes');
 		}
+	}
+
+	public function getShow($id= NULL)
+	{
+		if (isset($id)) {
+			$almacen = Almacen::find($id);
+			$insumos = $almacen->insumos()->get();
+			$productos = $almacen->productos()->get();
+			return View::make('almacenes.stock', compact('almacen', 'insumos', 'productos'));
+		}else{
+			return Redirect::back();
+		}
+	}
+
+	public function getCreatestock($id = NULL)
+	{
+		if (isset($id)) {
+			$almacen = Almacen::find($id);
+			return View::make('almacenes.createstockinsumo', compact('almacen'));
+		}else{
+			return Redirect::back();
+		}
+	}
+
+	public function postCreatestock()
+	{
+		$insumo_id = Input::get('insumo_id');
+		if ($insumo_id == 0) {
+			return Response::json(array('estado' => false,
+				'route' => '/almacenes/show/'.$almacen->id));
+		}
+		$almacen = Almacen::find(Input::get('almacen_id'));
+		$almacen->insumos()->attach($insumo_id,
+					array('stockActual' => Input::get('stock')));;
+		return Response::json(array('estado' => true, 'route' => '/almacenes/show/'.$almacen->id));
+	}
+
+	public function getEditarstock($id = NULL,$insumo_id = NULL)
+	{
+		if (isset($id)) {
+			$almacen = Almacen::find($id);
+			$insumo = $almacen->insumos()
+						->where('stockInsumo.insumo_id', '=', $insumo_id)->first();
+			return View::make('almacenes.editstockinsumo', compact('insumo','almacen'));
+		}else{
+			return Redirect::back();
+		}
+	}
+
+	public function postEditarstock()
+	{
+		$almacen = Almacen::find(Input::get('almacen_id'));
+		$insumo = $almacen->insumos()
+				->where('stockInsumo.insumo_id', '=', Input::get('insumo_id'))->first();
+
+		$insumo->pivot->stockActual = Input::get('stock');
+		$insumo->pivot->save();
+
+		return Response::json(array('estado' => true, 'route' => '/almacenes/show/'.$almacen->id));
 	}
 }

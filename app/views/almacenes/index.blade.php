@@ -35,7 +35,11 @@
   <tbody>
     @foreach($almacenes as $almacen)
     <tr>
-      <td>{{$almacen->nombre}}</td>
+      <td>
+      <a href="/almacenes/show/{{$almacen->id}}">
+        {{$almacen->nombre}}
+      </a>
+      </td>
       <td>{{$almacen->descripcion}}</td>
       <td> @if(!empty($almacen->restaurante->nombreComercial)) {{$almacen->restaurante->nombreComercial}} @else - @endif </td>
       <td><a href="almacenes/edit/{{$almacen->id}}" type="button" class="k-button">
