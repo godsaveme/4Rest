@@ -48,9 +48,7 @@
       <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;" id="btn_aceptar_mozo">Aceptar</button>
   </div>
   </div>
-</div>
 @stop
 @section('js')
 {{HTML::script('js/caja.js')}}
-{{HTML::script('js/cronometro.js')}}
 @stop

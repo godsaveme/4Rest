@@ -1,7 +1,6 @@
 <?php
 class CajasController extends BaseController {
 	public $detcaja;
-	
 	public function __construct() {
 		$this->detcaja = Detcaja::where('estado', '=', 'A')
 						->where('usuario_id', '=', Auth::user()->id, 'AND')
@@ -170,9 +169,7 @@ class CajasController extends BaseController {
 						curtime() NOT BETWEEN DATE_FORMAT(x.x2,'%H:%i') AND DATE_FORMAT(x.x1,'%H:%i') END 
 						AND DAYOFWEEK(curdate()) IN ( SELECT dias_id FROM det_dias WHERE det_dias.horcomb_id = x.horComb_id)
 						and x.CombinacionNombre != 'Normal' group by x.TipoCombinacionId"));
-			
 			$combinaciones = array();
-
 			foreach ($tiposcomb as $dato) {
 				$combinaciones[$dato->TipoCombinacionId] = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
 						combinacion.id as CombinacionId, combinacion.precio as CombinacionPrecio,combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 

@@ -23,7 +23,6 @@
   	{{HTML::style('css/line/green.css')}}
   	{{HTML::style('css/tooltipster.css')}}
   	{{HTML::style('css/themes/tooltipster-shadow.css')}}
-  	{{HTML::style('css/jquery.countup.css')}}
   	{{HTML::style('css/generalx2.css')}}
   	{{HTML::style('css/notificaciones.css')}}
   	@yield('css')
@@ -300,7 +299,6 @@
 		</section>
 	</div>
 @endif
-</div>
 </div>
 	{{HTML::script('js/vendor/modernizr.js'); }}
   	{{HTML::script('js/vendor/jquery.js'); }}
