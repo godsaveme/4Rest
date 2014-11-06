@@ -19,6 +19,7 @@
   	{{HTML::style('css/kendo.common-bootstrap.min.css')}}
   	{{HTML::style('css/bootstrap/font-awesome/css/font-awesome.min.css')}}
   	{{HTML::style('css/kendo.silver.min.css')}}
+  	{{HTML::style('css/kendo.mobile.all.min.css')}}
   	{{HTML::style('css/line/green.css')}}
   	{{HTML::style('css/tooltipster.css')}}
   	{{HTML::style('css/themes/tooltipster-shadow.css')}}
