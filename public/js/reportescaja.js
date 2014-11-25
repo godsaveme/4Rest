@@ -9,6 +9,13 @@ var start = $("#fecha_inicio").kendoDatePicker({
                         format: "yyyy-MM-dd"
                     }).data("kendoDatePicker");
 
+$("#fecha_fin").kendoDatePicker({
+    format: "yyyy-MM-dd"
+}).data("kendoDatePicker");
+$('#btn_enviarfechasvd').on('click',function(){
+    alert('hola');
+    window.location.href = '/reportes/vales-descuentos/2?fechainicio='+$('#fecha_inicio').val()+'&fechafin='+$('#fecha_fin').val();
+});
 
 var viewModel_reportecajadiario = kendo.observable({
      datosreporte: datareporte,

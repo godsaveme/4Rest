@@ -108,48 +108,74 @@ class ReportesController extends \BaseController {
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 * GET /reportes/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id) {
-		//
+	public function getReporteventa($id=NULL){
+		if (isset($id)) {
+			$fecha = Input::get('fecha');
+			$restaurante = Restaurante::find($id);
+			if (isset($fecha)) {
+				$cajas = $restaurante->cajas()->with(['tickets'=>function($q) use ($fecha){
+								$q->whereBetween('created_at',[$fecha.' 00:00:00', $fecha.' 23:59:59']);
+								$q->where('ticketventa.importe', '>=', 0);
+								$q->get();
+							},'tickets.tipopago'])->get();
+				$datos = ['totalventas'=>0,
+							'totaldescuentos'=>0,
+							'efectivo'=>0,
+							'tarjeta'=>0,
+							'descuentoautorizado'=>0,
+							'valepersonal'=>0,
+							'promocion'=>0,
+							'anulados'=>0,
+							'totaltickets'=>0];
+				foreach ($cajas as $caja) {
+					foreach ($caja->tickets as $ticket) {
+						if ($ticket->estado == 0) {
+							$datos['totalventas'] = $datos['totalventas'] + $ticket->importe;
+							$datos['totaldescuentos'] = $datos['totaldescuentos'] + $ticket->idescuento;
+							foreach ($ticket->tipopago as $formapago) {
+								if ($formapago->id == 1) {
+									$datos['efectivo'] = $datos['efectivo'] + $formapago->pivot->importe;
+								}elseif ($formapago->id == 2) {
+									$datos['tarjeta'] = $datos['tarjeta'] + $formapago->pivot->importe;
+								}elseif ($formapago->id == 3) {
+									$datos['descuentoautorizado'] = $datos['descuentoautorizado'] + $formapago->pivot->importe;
+								}elseif ($formapago->id == 4) {
+									$datos['valepersonal'] = $datos['valepersonal'] + $formapago->pivot->importe;
+								}elseif ($formapago->id == 5) {
+									$datos['promocion'] = $datos['promocion'] + $formapago->pivot->importe;
+								}
+							}
+ 						}elseif ($ticket->estado == 1) {
+							$datos['anulados'] = $datos['anulados'] + 1;
+						}
+						$datos['totaltickets'] = $datos['totaltickets'] + 1;
+					}
+				}
+			}
+			return View::make('reportes.venta', compact('restaurante', 'datos'));
+		}else{
+			return Redirect::back();
+		}
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /reportes/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id) {
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /reportes/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id) {
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /reportes/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id) {
-		//
-	}
-
+    public function getValesDescuentos($id = null){
+        $fechaInicio = Input::get('fechainicio');
+		$fechaFin    = Input::get('fechafin');
+        if(isset($id)){
+            $restaurante = Restaurante::find($id);
+            if(isset($fechaInicio) && isset($fechaFin)){
+                $personas = Persona::has('tickets')->with(['tickets'=> function($q) use($fechaInicio, $fechaFin){
+                    $q->whereBetween('created_at',[$fechaInicio.' 00:00:00',$fechaFin.' 23:59:59']);
+                },'tickets.tipopago'])
+                    ->where('ruc','=',null)
+                ->get();
+                return View::make('reportes.vales-descuentos',compact('personas', 'restaurante','fechaInicio','fechaFin'));
+            }else{
+                $personas = array();
+                return View::make('reportes.vales-descuentos',compact('personas', 'restaurante','fechaInicio','fechaFin'));
+            }
+        }else{
+            return Redirect::back();
+        }
+    }
 }

@@ -12,4 +12,8 @@ class Caja extends Eloquent {
 	public function restaurante(){
 		return $this->belongsTo('Restaurante', 'restaurante_id');
 	}
+
+	public function tickets(){
+		return $this->hasMany('Ticket','caja_id');
+	}
 }

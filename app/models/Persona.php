@@ -15,4 +15,8 @@ class Persona extends Eloquent {
     public function perfil(){
         return $this->belongsTo('Perfil','perfil_id');
     }
+
+    public function tickets(){
+        return $this->hasMany('Ticket','documento','dni');
+    }
 }

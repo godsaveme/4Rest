@@ -134,6 +134,12 @@
                        Cuadro Semanal Venta de Productos Woyke
                     </a>
                   </li>
+                  <li>
+                    <a href="/vales-descuentos">
+                      <i class="fa fa-users"></i>
+                       Reporte Vales y Descuentos Autorizados
+                    </a>
+                  </li>
                 </ul>
              </li>
 <!--             <li><a href="">About</a></li>

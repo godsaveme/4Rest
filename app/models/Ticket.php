@@ -10,7 +10,8 @@ class Ticket extends Eloquent {
 	}
 
 	public function tipopago(){
-		return $this->belongsToMany('Formadepago','Detformadepago', 'ticket_id','formadepago_id');
+		return $this->belongsToMany('Formadepago','Detformadepago', 'ticket_id','formadepago_id')
+					->withPivot('importe');
 	}
 
 	public function detcaja(){
