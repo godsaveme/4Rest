@@ -989,6 +989,7 @@ var onewcliente = {};
 onewcliente['nombres'] = '-';
 onewcliente['direccion'] = '-';
 onewcliente['dni'] = '-';
+    onewcliente['id'] = null;
 $('#infomesa').data('cliente', onewcliente);
 
 $(".modalwindowscuenta").kendoWindow({
