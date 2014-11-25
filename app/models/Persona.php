@@ -17,6 +17,6 @@ class Persona extends Eloquent {
     }
 
     public function tickets(){
-        return $this->hasMany('Ticket','documento','dni');
+        return $this->hasMany('Ticket','persona_id');
     }
 }

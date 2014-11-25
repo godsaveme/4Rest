@@ -943,6 +943,7 @@ Boleta&nbsp;
 										'cliente'    => $cliente['nombres'],
 										'documento'  => $cliente['dni'],
 										'direccion'  => $cliente['direccion'],
+                                        'persona_id' => $cliente['id'],
 										'mesa'       => $nombremesa,
 										'mozo'       => $nombremozo,
 										'cajero'     => Auth::user()->login,
@@ -1083,6 +1084,7 @@ Boleta&nbsp;
 										'cliente'    => $cliente['nombres'],
 										'documento'  => $cliente['dni'],
 										'direccion'  => $cliente['direccion'],
+                                        'persona_id' => $cliente['id'],
 										'mesa'       => $nombremesa,
 										'mozo'       => $nombremozo,
 										'cajero'     => Auth::user()->login,
@@ -2813,25 +2815,4 @@ Hora:'.date('H:i:s').'</strong>
            return View::make('reportes.vales-descuentos-index', compact('restaurantes'));
         });
 
-        Route::get('corregirticket',function(){
-            $personas = Persona::whereBetween('id',[1,100])->get();
-            /*$tickets = Ticket::whereBetween('id',[2401,2450])->get();
-            $persona = Persona::find(769);
-            $ticket = Ticket::find(24149);
-            if($ticket->cliente == $persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno){
-                echo 'test';
-            }
-            echo $ticket->cliente.'<br>';
-            echo $persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno;
-            die();*/
-            foreach($personas as $persona) {
-                $tickets = Ticket::where('cliente','=',$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno)->get();
-                foreach($tickets as $ticket){
-                    $ticket->persona_id = $persona->id;
-                    $ticket->save();
-                    echo $ticket->cliente.'<br>';
-                    echo $persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno;
-                }
-            }
-        });
 	});

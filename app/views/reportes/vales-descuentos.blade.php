@@ -29,7 +29,50 @@
                     </tr>
                 </thead>
             </table>
-
+             <div class="row">
+                <div class="col-sm-1">
+                    &nbsp;
+                </div>
+                <div class="col-sm-9">
+                    <h4>VALES DE PERSONAL</h4>
+                    <table class="table table-bordered">
+                        <thread>
+                            <tr>
+                            <th class="text-center col-sm-6">Nombre</th>
+                            <th class="text-center col-sm-3">DNI</th>
+                            <th class="text-center col-sm-3">Monto</th>
+                            </tr>
+                        </thread>
+                        <tbody>
+                        @foreach($personas as $persona)
+                        <?php $flag_vale = 0; ?>
+                        <?php $importe = 0; ?>
+                            @if(count($persona->tickets) > 0)
+                                @foreach($persona->tickets as $ticket)
+                                    @foreach($ticket->tipopago as $tipopago)
+                                        @if($tipopago->id == 4)
+                                        <?php $importe= $importe + $tipopago->pivot->importe;?>
+                                        <?php $flag_vale = 1; ?>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                                @if($flag_vale == 1)
+                                <tr>
+                                    <td>
+                                    <a href="/reportes/persona-vales/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}">
+                                    {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
+                                    </a>
+                                    </td>
+                                    <td>{{$persona->dni}}</td>
+                                    <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                            @endif
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-1">
                     &nbsp;
@@ -46,20 +89,28 @@
                         </thread>
                         <tbody>
                         @foreach($personas as $persona)
+                        <?php $flag_descuentos = 0; ?>
                         <?php $importe = 0; ?>
                             @if(count($persona->tickets) > 0)
                                 @foreach($persona->tickets as $ticket)
                                     @foreach($ticket->tipopago as $tipopago)
                                         @if($tipopago->id == 3)
                                         <?php $importe= $importe + $tipopago->pivot->importe;?>
-                                        <tr>
-                                            <td>{{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}</td>
-                                            <td>{{$persona->dni}} - {{$ticket->id}}</td>
-                                            <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
-                                        </tr>
+                                        <?php $flag_descuentos = 1; ?>
                                         @endif
                                     @endforeach
                                 @endforeach
+                                @if($flag_descuentos == 1)
+                                <tr>
+                                    <td>
+                                    <a href="/reportes/persona-descuentos-autorizados/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin }}">
+                                    {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
+                                    </a>
+                                    </td>
+                                    <td>{{$persona->dni}}</td>
+                                    <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                </tr>
+                                @endif
                             @endif
                         @endforeach
                         </tbody>

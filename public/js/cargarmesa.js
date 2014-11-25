@@ -1592,6 +1592,7 @@ $("#buscar_cliente").kendoAutoComplete({
             		newcliente['nombres'] = filtro[i]['nombres'];
 		            newcliente['direccion'] = filtro[i]['direccion'];
 		            newcliente['dni'] = filtro[i]['dni'];
+                    newcliente['id'] = filtro[i]['id'];
 		            $('#input_nombrec').val(filtro[i]['nombres']);
 		            $('#input_documento').val(filtro[i]['dni']);
 		            $('#input_addres').val(filtro[i]['direccion']);
@@ -1708,6 +1709,7 @@ $('.registrarcliente').on('click',function(event) {
             newcliente['nombres'] = data[0]['nombres'];
             newcliente['direccion'] = data[0]['direccion'];
             newcliente['dni'] = data[0]['dni'];
+            newcliente['id'] = data[0]['id'];
             $('#input_nombrec').val(data[0]['nombres']);
             $('#input_documento').val(data[0]['dni']);
             $('#input_addres').val(data[0]['direccion']);

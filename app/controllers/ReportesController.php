@@ -178,4 +178,32 @@ class ReportesController extends \BaseController {
             return Redirect::back();
         }
     }
+
+    public function getPersonaVales($id){
+        $fechaInicio = Input::get('fechainicio');
+        $fechaFin    = Input::get('fechafin');
+        if(isset($id) && isset($fechaFin) && isset($fechaInicio)){
+            $persona = Persona::find($id);
+            $tickets = $persona->tickets()->whereBetween('created_at',[$fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'])
+                        ->with(['tipopago'])
+                        ->get();
+            return View::make('reportes.tickets-vales-persona',compact('persona','tickets','fechaInicio','fechaFin'));
+        }else{
+            return Redirect::back();
+        }
+    }
+
+    public function getPersonaDescuentosAutorizados($id){
+        $fechaInicio = Input::get('fechainicio');
+        $fechaFin    = Input::get('fechafin');
+        if(isset($id) && isset($fechaFin) && isset($fechaInicio)){
+            $persona = Persona::find($id);
+            $tickets = $persona->tickets()->whereBetween('created_at',[$fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'])
+                ->with(['tipopago'])
+                ->get();
+            return View::make('reportes.tickets-descuentos-persona',compact('persona','tickets','fechaInicio','fechaFin'));
+        }else{
+            return Redirect::back();
+        }
+    }
 }
