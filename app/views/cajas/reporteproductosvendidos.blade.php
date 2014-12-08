@@ -37,6 +37,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td>
+                        Productos Normales
+                    </td>
+                </tr>
             @foreach ($productos as $producto)
                 <tr>
                     <td class="text-right">{{$contador++}}</td>

@@ -1256,11 +1256,21 @@ Boleta&nbsp;
 						if (isset($oprecuenta)) {
 							if ($oprecuenta->cantidad > 1) {
 								$newcantidad = $oprecuenta->cantidad-$detpedido->cantidad;
+								if ($newcantidad == 0) {
+
+									$oprecuenta->delete();
+									$flaganulacion = 1;
+									
+								}else{
+
 								$newprecio = $oprecuenta->preciou*$newcantidad;
 								$oprecuenta->cantidad = $newcantidad;
 								$oprecuenta->precio = $newprecio;
 								$oprecuenta->save();
 								$flaganulacion = 1;
+
+								}
+
 							} else {
 								$oprecuenta->delete();
 								$flaganulacion = 1;

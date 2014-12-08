@@ -549,6 +549,7 @@ class CajasController extends BaseController {
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
 						->where('detallecaja.id', '=', $detallecaja_id)
 						->where('ticketventa.estado', '=', 0, 'AND')
+						->where('combinacion.id','!=','1')
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();
@@ -608,6 +609,7 @@ class CajasController extends BaseController {
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
 						->wherein('detallecaja.id', $cajones)
 						->where('ticketventa.estado', '=', 0, 'AND')
+						->where('combinacion.id','!=','1')
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();
