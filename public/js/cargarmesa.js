@@ -262,12 +262,16 @@ $('body').on('click', '#btn_ordenarcombi', function(event) {
 	$(".caja_derecha").data("kendoMobileDrawer").hide();
 	$('.panel_combinaciones').css('display', 'none');
 	dataSourcecombitemp.data([]);
+	//add 08-12-14 00:04
+	CalcularPrecioTotal();
 });
 
 $('body').on('click', '#enviarcombi .reitemcesta', function(event) {
 	event.preventDefault();
 	var dataItem = dataSourcecombi.get($(this).attr('data-iddatasour'));
 	dataSourcecombi.remove(dataItem);
+	//add 08-12-14 00:04
+	CalcularPrecioTotal();
 	/*dataSourceprof.data([]);
 	console.log(dataSourceprof);*/
 });
@@ -1762,12 +1766,26 @@ $('#btn_aceptarcodigo').on('click', function(event) {
 				usuarioautoriza: $('#idautorizado').val(), motivo: $('#input_motivo').val()},
 	})
 	.done(function(data) {
-		if(data == 'true'){
+		if(data['response'] == 'true'){
+			if (data['tipo'] == 1) {
+				socket.emit('NotificarPedidos', data['items'], 'area_1');
+			}else if(data['tipo'] == 2){
+				for (var i in  data['items']) {
+					socket.emit('NotificarPedidos', data['items'][i], 'area_1');
+				};
+			}
 			$("#infomesa").data('objetoeliminar').remove();
 			CalcularPrecioTotal();
 			alert('Operacion Completada Correctamente');
 			$(".windowseliminarproductos").data("kendoWindow").close();
-		}else if(data == 'redirect'){
+		}else if(data['response'] == 'redirect'){
+			if (data['tipo'] == 1) {
+				socket.emit('NotificarPedidos', data['items'], 'area_1');
+			}else if(data['tipo'] == 2){
+				for (var i in  data['items']) {
+					socket.emit('NotificarPedidos', data['items'][i], 'area_1');
+				};
+			}
 			window.location.href = '/cajas';
 		}else{
 			alert('Operacion no completada');

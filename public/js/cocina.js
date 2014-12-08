@@ -21,15 +21,22 @@ socket.on('ActulizarestadoAll', actulizarestadosall);
             prestado = 'P';
         }else if (data['estado'] == 'D') {
             prestado = 'E';
-        };  
-        var oitempedido = $('.'+prestado).filter(function(index) {
-            return $(this).attr('data-iddetped') == data['iddetallep'];
-        });
-        oitempedido.removeClass(prestado);
-        oitempedido.addClass(data['estado']);
-        oitempedido.attr('data-estado', data['estado']);
-        oitempedido.find('img').attr('src', '/images/'+estado+'.png');
-        if(data['estado'] == 'E'){
+        };
+        if (data['estado'] == 'A') {
+            var oitempedido = $('.list-group-item').filter(function(index) {
+                return $(this).attr('data-iddetped') == data['iddetallep'];
+            });
+        }else{
+            var oitempedido = $('.'+prestado).filter(function(index) {
+                return $(this).attr('data-iddetped') == data['iddetallep'];
+            });
+            oitempedido.removeClass(prestado);
+            oitempedido.addClass(data['estado']);
+            oitempedido.attr('data-estado', data['estado']);
+            oitempedido.find('img').attr('src', '/images/'+estado+'.png');
+        }
+        
+        if(data['estado'] == 'E' || data['estado'] == 'A'){
             restarplatospanel(data['proid'], data['cantidad']);
             oitempedido.remove();
             contarli();

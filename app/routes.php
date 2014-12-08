@@ -1257,7 +1257,6 @@ Boleta&nbsp;
 							if ($oprecuenta->cantidad > 1) {
 								$newcantidad = $oprecuenta->cantidad-$detpedido->cantidad;
 								if ($newcantidad == 0) {
-
 									$oprecuenta->delete();
 									$flaganulacion = 1;
 									
@@ -1285,11 +1284,24 @@ Boleta&nbsp;
 									->where('combinacion_c', '=', $detpedido->combinacion_c)
 									->where('pedido_id', '=', $detpedido->pedido_id)
 									->update(array('estado' => 'A', 'detalleanulacion_id' => $odetanulacion->id));
+								$detalles = DetPedido::where('combinacion_id', '=', $detpedido->combinacion_id)
+											->where('combinacion_c', '=', $detpedido->combinacion_c)
+											->where('pedido_id', '=', $detpedido->pedido_id)
+											->get();
+								$productos = array();
+								foreach ($detalles as $detalle) {
+									$productos[] = ['estado'=> $detalle->estado, 'iddetallep'=>$detalle->id, 
+											'proid'=>$detalle->producto_id,'cantidad'=>$detalle->cantidad];
+								}
+								$tipo = 2;
 							} else {
 								$detpedido->estado = 'A';
 								$detpedido->detalleanulacion_id = $odetanulacion->id;
 								$detpedido->codigocancelacion = $usuario->usuario_id;
 								$detpedido->save();
+								$productos = ['estado'=> $detpedido->estado, 'iddetallep'=>$detpedido->id, 
+											'proid'=>$detpedido->producto_id,'cantidad'=>$detpedido->cantidad];
+								$tipo = 1;
 							}
 						} else {
 							return Response::json('false - flaganulacion');
@@ -1300,9 +1312,11 @@ Boleta&nbsp;
 							$pedido->estado = 'A';
 							$pedido->fechaCancelacion = date('Y-m-d H:i:s');
 							$pedido->save();
-							return Response::json('redirect');
+							$datos = ['response'=> 'redirect', 'tipo'=>$tipo, 'items'=>$productos];
+							return Response::json($datos);
 						} else {
-							return Response::json('true');
+							$datos = ['response'=> 'true', 'tipo'=>$tipo, 'items'=>$productos];
+							return Response::json($datos);
 						}
 					} else {
 						return Response::json('false');
