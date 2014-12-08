@@ -204,7 +204,16 @@ class CajasController extends BaseController {
 			}
 			if ($Opedido) {
 				$combinacionesp = DetPedido::selectraw('detallepedido.cantidad , combinacion.nombre,detallepedido.combinacion_id, 
-							 combinacion.precio as preciotcomb,detallepedido.combinacion_c')->join('combinacion', 'combinacion.id', '=', 'detallepedido.combinacion_id')->join('precio', 'combinacion.id', '=', 'precio.combinacion_id')->whereraw("pedido_id =".$Opedido->id." AND combinacion_c IS NOT NULL")->groupby('combinacion_id', 'combinacion_c')->orderby('detallepedido.id', 'DESC')->get();
+							 combinacion.precio as preciotcomb,detallepedido.combinacion_c')
+							->join('combinacion', 'combinacion.id', '=', 'detallepedido.combinacion_id')
+							->join('precio', 'combinacion.id', '=', 'precio.combinacion_id')
+							->whereraw("pedido_id =".$Opedido->id." AND combinacion_c IS NOT NULL")
+							//add 08-12-14 11:07
+							->where('detallepedido.estado','!=','A')
+							//
+							->groupby('combinacion_id', 'combinacion_c')
+							->orderby('detallepedido.id', 'DESC')
+							->get();
 				$platosp = DetPedido::select('detallepedido.pedido_id', 'producto.nombre as pnombre', 'detallepedido.combinacion_c', 
 							'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id', 'detallepedido.estado', 'detallepedido.importefinal')->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
 				            ->where('detallepedido.pedido_id', '=', $Opedido->id)
@@ -239,6 +248,8 @@ class CajasController extends BaseController {
 									->join('persona','persona.id', '=', 'usuario.persona_id')
 									->wherein('usuario.id', $autorizados)
 									->lists('nombre', 'id');
+			//print_r($combinacionesp);
+			//die();
 			return View::make('cajas.cargarmesa', compact('mesa', 'Opedido', 'combinacionesp', 
 															'platosp', 'placombinacionp', 'familias', 
 															'tiposcomb', 'platosfamilia', 'combinaciones', 
@@ -973,6 +984,9 @@ class CajasController extends BaseController {
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
 				$newfecha = substr($detacaja->fechaInicio,0,10);
+				//add 08-012-14 12:02
+				$fechaInicio = $newfecha;
+				$fechaFin = $newfecha;
 				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
@@ -982,7 +996,7 @@ class CajasController extends BaseController {
 				$contador = 1;
 				$diario = 1;
 				return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
-								'contador','restaurante', 'diario'));
+								'contador','restaurante', 'diario','fechaInicio','fechaFin'));
 			}else{
 				return Redirect::to('/web');
 			}

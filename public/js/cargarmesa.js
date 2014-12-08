@@ -283,6 +283,8 @@ $('body').on('click', '#enviarcombi .btn_pluscanti', function(event) {
 	var newcantidad = dataItem.cantidad + 1;
 	var newprecio = dataItem.precio*newcantidad;
 	dataSourcecombi.pushUpdate({ id: $(this).attr('data-iddatasour'), cantidad: newcantidad, preciot: parseFloat(newprecio).toFixed(2) });
+	//add 08-12-14 10:51
+	CalcularPrecioTotal();
 });
 
 $('body').on('click', '#enviarcombi .btn_mincanti', function(event) {
@@ -293,6 +295,8 @@ $('body').on('click', '#enviarcombi .btn_mincanti', function(event) {
 	var newprecio = dataItem.precio*newcantidad;
 	if(newcantidad>0){
 		dataSourcecombi.pushUpdate({ id: $(this).attr('data-iddatasour'), cantidad: newcantidad , preciot: parseFloat(newprecio).toFixed(2)});
+		//add 08-12-14 10:51
+		CalcularPrecioTotal();
 	}
 });
 //fincombinaciones
