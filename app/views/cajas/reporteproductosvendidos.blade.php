@@ -60,7 +60,7 @@
             @foreach ($combinaciones as $combinacion)
                 <tr>
                     <td class="text-right">{{$contador++}}</td>
-                    <td><a href="/cajas/detallecombinaciones/{{$detacaja->id}}/{{$producto->famiid}}/{{$flag}}">{{$combinacion->cnombre}}</a></td>
+                    <td><a href="/cajas/detallecombinaciones/{{$detacaja->id}}/{{$combinacion->idcomb}}/{{$flag}}">{{$combinacion->cnombre}}</a></td>
                     <td class="text-right">{{$combinacion->cantidadpro}}</td>
                     <td class="text-right">{{$combinacion->preciou}}</td>
                     <td class="text-right">{{$combinacion->preciot}}</td>

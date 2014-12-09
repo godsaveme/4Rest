@@ -20,27 +20,27 @@
                 <tr>
                     <th>Nº</th>
                     <th>Numero</th>
-                    <th>Producto</th>
-             		<th class="text-center">Cantidad</th>
-                    <th class="text-center">Precio Un</th>
-                    <th class="text-center">Precio To</th>
+                    <th>Combinación</th>
+             		<th>Cantidad</th>
+                    <th>Precio Un</th>
+                    <th>Precio To</th>
                     <th>Mozo</th>
                     <th>Cajero</th>
                     <th>Cliente</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach ($productos as $producto)
+            @foreach ($combinaciones as $combinacion)
                 <tr>
                     <td>{{$contador++}}</td>
-                    <td><a href="/tickets/show/{{$producto->idticket}}">{{$producto->numero}}</a></td>
-                    <td>{{$producto->fnombre}}</td>
-                    <td class="text-right">{{$producto->cantidadpro}}</td>
-                    <td class="text-right">{{$producto->preciou}}</td>
-                    <td class="text-right">{{$producto->preciot}}</td>
-                    <td>{{$producto->mozo}}</td>
-                    <td>{{$producto->cajero}}</td>
-                    <td>{{$producto->cliente}}</td>
+                    <td><a href="/tickets/show/{{$combinacion->idticket}}">{{$combinacion->numero}}</a></td>
+                    <td>{{$combinacion->nombrecomb}}</td>
+                    <td class="text-right">{{$combinacion->cantidadpro}}</td>
+                    <td class="text-right">{{$combinacion->preciou}}</td>
+                    <td class="text-right">{{$combinacion->preciot}}</td>
+                    <td>{{$combinacion->mozo}}</td>
+                    <td>{{$combinacion->cajero}}</td>
+                    <td>{{$combinacion->cliente}}</td>
                 </tr>
             @endforeach
             </tbody>

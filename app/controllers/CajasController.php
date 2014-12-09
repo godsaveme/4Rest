@@ -554,7 +554,7 @@ class CajasController extends BaseController {
 			}
 
 			$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
-						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
+						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre, combinacion.id as idcomb')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
 						->join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
@@ -614,7 +614,7 @@ class CajasController extends BaseController {
 				$montototal = $montototal + $producto->preciot;
 				}
 				$combinaciones = Detcaja::selectraw('sum(dettiketpedido.precio) as preciot, dettiketpedido.preciou, 
-						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre')
+						sum(dettiketpedido.cantidad) as cantidadpro, combinacion.nombre as cnombre, combinacion.id as idcomb')
 						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
 						->join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
@@ -970,39 +970,58 @@ class CajasController extends BaseController {
 		}
 	}
 
-	public function getDetallecombinaciones($detcajaid = NULL, $flag = NULL){
-		if(isset($detcajaid) && !isset($flag)){
-			$detacaja = Detcaja::find($detcajaid);
+	public function getDetallecombinaciones($detallecaja_id = NULL, $combinacionid = NULL, $flag =NULL){
+
+		if (isset($detallecaja_id) && isset($combinacionid) && !isset($flag)) {
+			$detacaja = Detcaja::find($detallecaja_id);
 			$restaurante = $detacaja->caja->restaurante;
-			$descuentos = $detacaja->tickets()->where('ticketventa.idescuento', '!=', 0.00)->get();
+			$combinaciones = Detcaja::selectraw('dettiketpedido.precio as preciot, dettiketpedido.preciou, 
+						dettiketpedido.cantidad as cantidadpro, ticketventa.cajero, ticketventa.mozo,
+						ticketventa.cliente, ticketventa.numero ,combinacion.nombre as nombrecomb, combinacion.id as idcomb,
+						ticketventa.id as idticket')
+						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
+						->join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
+						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
+						->where('detallecaja.id', '=', $detallecaja_id)
+						->where('combinacion.id', '=', $combinacionid)
+						->where('ticketventa.estado', '=', 0, 'AND')
+						->orderby('preciot', 'Desc')
+						->get();
 			$contador = 1;
-			return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
-							'contador','restaurante'));
-		}elseif (isset($detcajaid) && isset($flag)) {
+			return View::make('cajas.detalleticketxcomb', 
+				compact('combinaciones', 'detacaja', 'restaurante', 'contador'));
+		}elseif (isset($detallecaja_id) && isset($combinacionid) && isset($flag)) {
 			if($flag == 1){
-				$detacaja = Detcaja::find($detcajaid);
+				$detacaja = Detcaja::find($detallecaja_id);
 				$restaurante = $detacaja->caja->restaurante;
 				$cajas= $restaurante->cajas()->lists('id');
 				$newfecha = substr($detacaja->fechaInicio,0,10);
-				//add 08-012-14 12:02
-				$fechaInicio = $newfecha;
-				$fechaFin = $newfecha;
 				$cajones = Detcaja::where('FechaInicio', 'LIKE', $newfecha.'%')
 							->wherein('caja_id', $cajas)
 							->orderby('FechaInicio')
 							->lists('id');
-				$descuentos = Ticket::wherein('ticketventa.detcaja_id', $cajones)
-							 ->where('ticketventa.idescuento', '!=', 0.00, 'AND')->get();
+				$combinaciones = Detcaja::selectraw('dettiketpedido.precio as preciot, dettiketpedido.preciou, 
+						dettiketpedido.cantidad as cantidadpro, ticketventa.cajero, ticketventa.mozo,
+						ticketventa.cliente, ticketventa.numero ,combinacion.nombre as nombrecomb, combinacion.id as idcomb,
+						ticketventa.id as idticket')
+						->join('ticketventa', 'ticketventa.detcaja_id', '=', 'detallecaja.id')
+						->join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
+						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
+						->wherein('detallecaja.id', $cajones)
+						->where('combinacion.id', '=', $combinacionid)
+						->where('ticketventa.estado', '=', 0, 'AND')
+						->orderby('preciot', 'Desc')
+						->get();
 				$contador = 1;
 				$diario = 1;
-				return View::make('cajas.reportedescuentosxticket', compact('descuentos','detacaja', 
-								'contador','restaurante', 'diario','fechaInicio','fechaFin'));
+				return View::make('cajas.detalleticketxcomb', 
+				compact('combinaciones', 'detacaja', 'restaurante', 'contador', 'diario'));
 			}else{
 				return Redirect::to('/web');
 			}
-		}
-		else{
+		}else {
 			return Redirect::to('/web');
 		}
+
 	}
 }
