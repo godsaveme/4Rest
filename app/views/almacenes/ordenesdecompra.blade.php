@@ -16,7 +16,6 @@
       <tr>
         <th style="width:10%; border: 1px solid gray" class="text-center">Código</th>
         <th style="width:40%; border: 1px solid gray" class="text-center">Fecha</th>
-        <th style="width:10%; border: 1px solid gray" class="text-center">Estado</th>
         <th style="width:20%; border: 1px solid gray" class="text-center">Detalles</th>
       </tr>
     </thead>
@@ -25,13 +24,6 @@
       <tr>
         <td style="border: 1px solid gray">{{$ordendecompra->id}}</td>
         <td style="border: 1px solid gray">{{$ordendecompra->fechainicio}}</td>
-        <td style="border: 1px solid gray">
-        @if ($ordendecompra->estado == 0)
-        Pendiente
-        @elseif ($ordendecompra->estado == 1)
-        Finalizado
-        @endif
-        </td>
         <td style="border: 1px solid gray">
           <a href="/almacenes/detalleordendecompra/{{$ordendecompra->id}}">Ver Detalle</a>
         </td>

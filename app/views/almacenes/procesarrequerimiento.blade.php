@@ -40,14 +40,14 @@
     <tbody class="listarequerimientos">
     @foreach ($detallesrequerimientos as $requerimiento)
       <tr>
-        <td style="border: 1px solid gray">{{$requerimiento->id}}</td>
+        <td style="border: 1px solid gray">{{$requerimiento->id}} </td>
         <td style="border: 1px solid gray">{{$requerimiento->requerimiento->area->nombre}}</td>
         <td style="border: 1px solid gray">
           @if (isset($requerimiento->insumo_id))
-            {{$requerimiento->insumo->nombre}}
+            {{$requerimiento->insumo->nombre}} <strong class="pull-right">{{substr($requerimiento->insumo->unidadMedida,0,2)}}</strong>
             <input type="hidden" id="selector_{{$requerimiento->id}}" value="0">
           @elseif (isset($requerimiento->producto_id))
-            {{$requerimiento->producto->nombre}}
+            {{$requerimiento->producto->nombre}} <strong class="pull-right">{{substr($requerimiento->producto->unidadMedida,0,2)}}</strong>
             <input type="hidden" id="selector_{{$requerimiento->id}}" value="1">
           @endif
         </td>

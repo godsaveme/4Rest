@@ -71,37 +71,37 @@
     </tr>
   </thead>
   <tbody class="listarequerimientos">
-    @foreach($requerimientos as $requerimiento0)
+    @foreach($requerimientos as $requerimiento)
     <tr>
       <td class="text-center">{{$contador++}}</td>
       <td>
-         @if (isset($requerimiento0->insumo_id))
-            {{$requerimiento0->insumo->nombre}}
-            <input type="hidden" id="selector_{{$requerimiento0->id}}" value="0">
-          @elseif (isset($requerimiento0->producto_id))
-            {{$requerimiento0->producto->nombre}}
-            <input type="hidden" id="selector_{{$requerimiento0->id}}" value="1">
+         @if (isset($requerimiento->insumo_id))
+            {{$requerimiento->insumo->nombre}} <strong class="pull-right">({{substr($requerimiento->insumo->unidadMedida,0,2)}})</strong>
+            <input type="hidden" id="selector_{{$requerimiento->id}}" value="0">
+          @elseif (isset($requerimiento->producto_id))
+            {{$requerimiento->producto->nombre}} <strong class="pull-right">({{substr($requerimiento->producto->unidadMedida,0,2)}})</strong>
+            <input type="hidden" id="selector_{{$requerimiento->id}}" value="1">
           @endif  
       </td>
-      <td class="text-right">{{$requerimiento0->cantidad}}</td>
-      <td class="text-right">{{$requerimiento0->cantidadentregada}}</td>
+      <td class="text-right">{{$requerimiento->cantidad}}</td>
+      <td class="text-right">{{$requerimiento->cantidadentregada}}</td>
       <td class="text-center">
-        @if ($requerimiento0->estado == 1)
+        @if ($requerimiento->estado == 1)
         Iniciado
-        @elseif ($requerimiento0->estado == 2)
+        @elseif ($requerimiento->estado == 2)
         Proceso
-        @elseif ($requerimiento0->estado == 3)
+        @elseif ($requerimiento->estado == 3)
         Despachado
-        @elseif ($requerimiento0->estado == 4)
+        @elseif ($requerimiento->estado == 4)
         Recibido
-        @elseif ($requerimiento0->estado == 5)
+        @elseif ($requerimiento->estado == 5)
         Finalizado
-        @elseif ($requerimiento0->estado == 6)
+        @elseif ($requerimiento->estado == 6)
         Cancelado
         @endif
       </td>
       <td class="text-center">
-        <input type="checkbox" value="{{$requerimiento0->id}}">
+        <input type="checkbox" value="{{$requerimiento->id}}">
       </td>
     </tr>
     @endforeach

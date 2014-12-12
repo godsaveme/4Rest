@@ -33,10 +33,10 @@ function ON_READY() {
         .done(function(data) {
           if (data.estado){
             alert('Operación agregada correctamente');
-            $(location).attr('href', data.route);
+           $(location).attr('href', data.route);
           }else{
             alert('Operación no agregada. Error: ' + data.msg);
-            $(location).attr('href', data.route);
+           $(location).attr('href', data.route);
           }
         })
         .fail(function() {

@@ -20,6 +20,7 @@
                     <col />
                     <col />
                     <col />
+                    <col />
                     <col style="width:120px" />
                     <col style="width:130px" />
                 </colgroup>
@@ -28,6 +29,7 @@
       <th data-field="nombre">Nombre</th>
       <th data-field="descripcion">Descripción</th>
       <th data-field="restaurante">Stock Actual</th>
+      <th data-field="restaurante">Costo</th>
       <th data-field="editar"></th>
     </tr>
   </thead>
@@ -35,10 +37,11 @@
     @foreach($insumos as $insumo)
     <tr>
       <td>
-      {{$insumo->nombre}}
+      {{$insumo->nombre}} <strong>({{substr($insumo->unidadMedida,0,2)}})</strong>
       </td>
       <td>{{$insumo->descripcion}}</td>
       <td>{{$insumo->pivot->stockActual}}</td>
+      <td>{{$insumo->ultimocosto}}</td>
       <td>
       <a href="/almacenes/editarstock/{{$almacen->id}}/{{$insumo->id}}" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->

@@ -86,7 +86,7 @@
                     <tbody id="listView">
                       <script type="text/x-kendo-template" id="template">
                       <tr>
-                        <td  style="border: 1px solid silver;">#:nombre#</td>
+                        <td  style="border: 1px solid silver;">#:nombre# <strong class="pull-right">(#:unidad#)</strong></td>
                         <td class="text-right"  style="border: 1px solid silver;">
                         #:kendo.toString(cantidad,"n2")#
                         </td>
@@ -98,7 +98,7 @@
                       </script>
                       <script type="text/x-kendo-template" id="editTemplate">
                       <tr>
-                        <td  style="border: 1px solid silver;">#:nombre#</td>
+                        <td  style="border: 1px solid silver;">#:nombre# <strong class="pull-right">(#:unidad#)</strong></td>
                         <td class="text-right"  style="border: 1px solid silver;">
                         <input type="text" data-bind="value:cantidad" data-role="numerictextbox" name="UnitsInStock" required="required" data-type="number" min="0" validationMessage="required" />
                                   <span data-for="cantidad" class="k-invalid-msg"></span>
@@ -126,7 +126,7 @@
     {{ Form::close() }}
     </div>
 
-    <div class="crearreqquerimiento">
+    <div class="crearreqquerimiento" style="display:none">
         {{ Form::open(array('id'=>'form_requerimiento','url' => '' , 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal')) }}
     <fieldset>
       <legend></legend>
@@ -167,7 +167,7 @@
                     <tbody id="listViewinsumo">
                       <script type="text/x-kendo-template" id="templateinsumo">
                       <tr>
-                        <td  style="border: 1px solid silver;">#:nombre#</td>
+                        <td  style="border: 1px solid silver;">#:nombre# <strong class="pull-right">(#:unidad#)</strong></td>
                         <td class="text-right"  style="border: 1px solid silver;">
                         #:kendo.toString(cantidad,"n2")#
                         </td>
@@ -179,7 +179,7 @@
                       </script>
                       <script type="text/x-kendo-template" id="editTemplateinsumo">
                       <tr>
-                        <td  style="border: 1px solid silver;">#:nombre#</td>
+                        <td  style="border: 1px solid silver;">#:nombre# <strong class="pull-right">(#:unidad#)</strong></td>
                         <td class="text-right"  style="border: 1px solid silver;">
                         <input type="text" data-bind="value:cantidad" data-role="numerictextbox" name="UnitsInStock" required="required" data-type="number" min="0" validationMessage="required" />
                                   <span data-for="cantidad" class="k-invalid-msg"></span>
@@ -256,6 +256,7 @@ var dsproductos= new kendo.data.DataSource({
                 fields: {
                     id: { type: "number" },
                     nombre: { type: "string" },
+                    unidad: {type: "string"},
                     cantidad: {type: "number"}
                 }
             }
@@ -268,6 +269,7 @@ var dsinsumos= new kendo.data.DataSource({
                 id: "id",
                 fields: {
                     id: { type: "number" },
+                    unidad: {type: "string"},
                     cantidad: {type: "number"}
                 }
             }
@@ -344,7 +346,8 @@ function onSelectProd(e){
        var flag = true;
        flag = id_repeat(ds_Prod,dataItem);
        if (flag == false) {
-            dsproductos.add({id: dataItem.id, nombre: dataItem.nombre , cantidad: 0 });
+            console.log();
+            dsproductos.add({id: dataItem.id, unidad: dataItem.unidadMedida.substring(0, 2),nombre: dataItem.nombre , cantidad: 0 });
        }else{
             alert('Producto Repetido');
        };
@@ -355,7 +358,7 @@ function buscarordenes(){
         url: '/buscarordenesproduccion',
         type: 'POST',
         dataType: 'json',
-        data: {areaproduccion_id: $('#almacen_id').val()},
+        data: {areaproduccion_id: $('#almacen_id').val()}
     })
     .done(function(data) {
         dsordenes.data(data);
@@ -466,7 +469,7 @@ function onSelectInsumo(e){
        var flag = true;
        flag = id_repeat(ds_Insumo,dataItem);
        if (flag == false) {
-            dsinsumos.add({id: dataItem.id, nombre: dataItem.nombre , cantidad: 0 });
+            dsinsumos.add({id: dataItem.id,unidad: dataItem.unidadMedida.substring(0, 2), nombre: dataItem.nombre , cantidad: 0 });
        }else{
             alert('Producto Repetido');
        };

@@ -155,11 +155,18 @@ Route::group(array('before' => 'auth'), function () {
 				$valor = $_REQUEST["filter"]["filters"][0]["value"];
 				$productos = Producto::join('familia', 'familia.id', '=', 'producto.familia_id')
 					->where('producto.nombre', 'like', '%'.$valor.'%')
-				->select('producto.nombre as productoNombre', 'producto.id as productoID', 'producto.descripcion as productoDescr', 'familia.id as familiaID', 'familia.nombre as familiaNombre')
+				->select('producto.nombre as productoNombre','producto.unidadMedida as unidadMedida',  'producto.id as productoID', 'producto.descripcion as productoDescr', 'familia.id as familiaID', 'familia.nombre as familiaNombre')
 					->get();
 				$arrProd = array();
 				foreach ($productos as $dato) {
-					$arrProd[] = array('id' => $dato->productoID, 'nombre' => $dato->productoNombre, 'descripcion' => $dato->productoDescr, 'cantidad' => '1.00', 'precio' => '1.00', 'familiaid' => $dato->familiaID, 'familianombre' => $dato->familiaNombre);
+					$arrProd[] = array('id' => $dato->productoID,
+                                    'nombre' => $dato->productoNombre,
+                                    'descripcion' => $dato->productoDescr,
+                                    'cantidad' => '1.00',
+                                    'precio' => '1.00',
+                                    'familiaid' => $dato->familiaID,
+                                    'familianombre' => $dato->familiaNombre,
+                                    'unidadMedida'=>$dato->unidadMedida);
 				}
 				return Response::json($arrProd);
 			});
@@ -201,7 +208,7 @@ Route::group(array('before' => 'auth'), function () {
 				if (Request::ajax()) {
 					$producto_id = Input::get('productoid');
 					$prods = Insumo::whereHas('productos', function ($q) {
-							$q->where('id', '=', Input::get('productoid'));
+							$q->where('producto.id', '=', Input::get('productoid'));
 						})->get();
 
 					if (count($prods) > 0) {

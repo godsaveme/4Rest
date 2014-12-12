@@ -66,10 +66,29 @@ class ComprasController extends \BaseController {
 					$insumo->pivot->stockActual = $newstock;
 					$insumo->pivot->save();
 					$insumo->save();
+
 				}else{
-					$almacen->insumos()->attach($detallecompra->insumo_id, 
+					$almacen->insumos()->attach($detallecompra->insumo_id,
 						array('stockActual'=>$detallecompra->total));
+                    $insumo = $almacen->insumos()->where('stockInsumo.insumo_id', '=', $detallecompra->insumo_id)->first();
+                    $insumo->ultimocosto = $detallecompra->costototal / $detallecompra->total;
+                    $insumo->save();
+
 				}
+
+               $recetas = Receta::where('insumo_id','=',$insumo->id)->get();
+               foreach($recetas as $receta){
+                   $producto = $receta->producto;
+                    $receta->precio = $insumo->ultimocosto * $receta->cantidad;
+                    $receta->save();
+                   $insumos = $producto->insumos()->get();
+                   $newcostoproducto = 0;
+                   foreach($insumos as $item){
+                       $newcostoproducto = $newcostoproducto + $item->pivot->precio;
+                   }
+                   $producto->costo = $newcostoproducto;
+                   $producto->save();
+                }
 			}
 			if($total != $importetotal){
 				DB::rollback();

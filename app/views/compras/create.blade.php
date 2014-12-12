@@ -211,9 +211,11 @@
                   </td>
                   <td style="border: 1px solid silver;">#:kendo.toString(total,'n2')#</td>
                   <td style="border: 1px solid silver;">
-                  <input type="text" data-bind="value:costou" data-role="numerictextbox" name="costou" required="required" data-type="number" min="0" validationMessage="required" style="width: 95px" />
+                    #:kendo.toString(costou,'c2')#
                   </td>
-                  <td style="border: 1px solid silver;">#:kendo.toString(costot,'c2')#</td>
+                  <td style="border: 1px solid silver;">
+                    <input type="text" data-bind="value:costot" data-role="numerictextbox" name="costot" required="required" data-type="number" min="0" validationMessage="required" style="width: 95px" />
+                  </td>
                   <td style="border: 1px solid silver;">
                     <a class="k-button k-update-button" href="\\#"><span class="k-icon k-update"></span></a>
                     <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span></a>
@@ -282,10 +284,10 @@
         save: function(e) {
         var Itemid = e.model.id;
         var newtotal = e.model.presentacion*e.model.cantidad*e.model.porcion;
-        var newcosto = e.model.cantidad * e.model.costou;
+        var newcostou = e.model.costot/e.model.cantidad ;
         ds.pushUpdate({id: e.model.id, nombre: e.model.nombre, unidadmedida: e.model.unidadmedida,
                     presentacion:e.model.presentacion,cantidad:e.model.cantidad,porcion:e.model.porcion,
-                    total:newtotal,costou: e.model.costou, costot: newcosto});
+                    total:newtotal,costou: newcostou , costot: e.model.costot});
         },
         dataBound: function() {
             var data = ds.data();

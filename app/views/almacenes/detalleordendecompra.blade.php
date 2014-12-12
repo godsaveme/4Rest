@@ -17,8 +17,6 @@
         <th style="width:10%; border: 1px solid gray" class="text-center">Código</th>
         <th style="width:55%; border: 1px solid gray" class="text-center">Nombre</th>
         <th style="width:10%; border: 1px solid gray" class="text-center">Cantidad</th>
-        <th style="width:10%; border: 1px solid gray" class="text-center">Cant. Com.</th>
-        <th style="width:15%; border: 1px solid gray" class="text-center">Estado</th>
       </tr>
     </thead>
     <tbody class="listarequerimientos">
@@ -26,18 +24,8 @@
       <tr>
         <td style="border: 1px solid gray">{{$ordendecompra->id}}</td>
         <td style="border: 1px solid gray">{{$ordendecompra->nombre}}</td>
-        <td style="border: 1px solid gray">
+        <td style="border: 1px solid gray" class="text-right">
           {{$ordendecompra->pivot->cantidad}}
-        </td>
-        <td style="border: 1px solid gray">
-          
-        </td>
-        <td style="border: 1px solid gray">
-          @if ($ordendecompra->pivot->estado == 0)
-            Pendiente
-          @elseif ($ordendecompra->pivot->estado == 1)
-            Finalizado
-          @endif
         </td>
       </tr>
     @endforeach

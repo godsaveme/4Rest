@@ -9,4 +9,8 @@ class Receta extends Eloquent {
 	protected $guarded = array();
 
 	public static $rules = array();
+
+    public function producto(){
+        return $this->belongsTo('Producto','producto_id');
+    }
 }
