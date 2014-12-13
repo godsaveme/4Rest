@@ -1846,8 +1846,10 @@ Hora:'.date('H:i:s').'</strong>
 					$fechaFin = Input::get('fechafin');
 					$mozos = Usuario::where('id_restaurante', '=', $restauranteid)
 						->where('usuario.colaborador', '=', 2)->get();
+
 					$arraydatos = array();
 					foreach ($mozos as $mozo) {
+
 						$ventas = Ticket::selectraw('SUM(ticketventa.importe) AS importe, avg(importe) AS promedioventas,
 						usuario.login,COUNT(DISTINCT ticketventa.id) AS totaltickets')
 							->join('pedido', 'pedido.id', '=', 'ticketventa.pedido_id')
@@ -1884,7 +1886,7 @@ Hora:'.date('H:i:s').'</strong>
 							array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
 						->where('usuario.id', '=', $mozo->id)
 						->where('ticketventa.estado', '=', 1)
-							->first();
+                        ->first();
 						$pedidosanulados = Pedido::selectraw('COUNT(pedido.id) AS pedidosanulados')
 							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 						->whereBetween('pedido.fechaInicio',
@@ -1900,6 +1902,7 @@ Hora:'.date('H:i:s').'</strong>
 						->where('usuario.id', '=', $mozo->id)
 						->where('detallepedido.estado', '=', 'A')
 							->first();
+
 						if ($productos->totalproductos > 0) {
 							$arraydatos[] = array(
 								'mozoid'   => $productos->id,
@@ -1911,14 +1914,14 @@ Hora:'.date('H:i:s').'</strong>
 								'cprods'   => $productos->totalproductos,
 								'panul'    => number_format($productosanulados->productosanulados, 0, '.', ''),
 								'ctickets' => $ventas->totaltickets,
-								'tanul'    => number_format($ticketsanulados->totalanulados, 0, '.', ''),
+								'tanul'    => number_format($ticketsanulados->totaltanulados, 0, '.', ''),
 								'tprom'    => $tiempos->tiempomozopromedio,
 								'tmin'     => $tiempos->tiempomozominimo,
 								'tmax'     => $tiempos->tiempomozomaximo,
 								'fechai'   => $fechaInicio,
 								'fechafin' => $fechaFin,
 								'idrest'   => $restauranteid,
-								'selector' => 1,
+								'selector' => 1
 							);
 						}
 					}
