@@ -5,6 +5,7 @@
 /public/vendor
 /4Restapp/node_modules
 /app/storage
+/4Restapp/old_node_mod
 composer.phar
 composer.lock
 .env.*.php
