@@ -204,6 +204,35 @@ function actulizarpedidosmesa(idpedido, usuario){
 			estado = 'I';
 		}
 		oitempedido.find('img').attr('src', '/images/'+estado+'.png');
+
+		if (data['adicionales'] !== null) {
+			for (var i in data['adicionales']) {
+				console.log(data['adicionales'][i]['iddetallep']);
+
+				var estadoA = data['adicionales'][i]['estado'];
+				var preestadoA = '';
+				if(data['adicionales'][i]['estado'] == 'P'){
+					prestadoA = 'I';
+				}else if (data['adicionales'][i]['estado'] == 'E'){
+					prestadoA = 'P';
+				}else if (data['adicionales'][i]['estado'] == 'D') {
+					prestadoA = 'E';
+				};	
+				var oitempedidoA = $('.'+prestadoA).filter(function(index) {
+					return $(this).attr('data-iddetped') == data['adicionales'][i]['iddetallep'];
+				});
+				oitempedidoA.removeClass(prestado);
+				oitempedidoA.addClass(data['adicionales'][i]['estado']);
+				oitempedidoA.attr('data-estado', data['adicionales'][i]['estado']);
+				if(estadoA == 'C'){
+					estadoA = 'I';
+				}
+				oitempedidoA.find('img').attr('src', '/images/'+estadoA+'.png');
+			}
+
+			
+		};
+
 	}
 //finactulizarestados todos
 

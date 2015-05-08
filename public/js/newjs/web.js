@@ -106,7 +106,8 @@ function ON_READY() {
         });
     }
 
-    $('#login').keyup(function(event) {
+    $('#login').blur(function(event) {
+      if ($(this).val().length > 3) {
           $.ajax({
             url: '/compr_login',
             type: 'POST',
@@ -128,10 +129,11 @@ function ON_READY() {
           .always(function() {
 
           });
-      
+      };
      });
 
-        $('#login').change(function(event) {
+        $('#login').keyup(function(event) {
+          if ($(this).val().length > 3) {
           $.ajax({
             url: '/compr_login',
             type: 'POST',
@@ -153,8 +155,58 @@ function ON_READY() {
           .always(function() {
 
           });
-      
+      }else{
+        $('.check_1').css({display: 'none'});
+              $('.check_2').css({display: 'none'});
+      };
      });
+
+        $('#rpt_pass').blur(function(event) {
+              if ($(this).val().length > 5) {
+                     
+                    if (  $('#password').val() !== $(this).val()  ) {
+                      
+                      $('.check_-').css({display: 'block'});
+                      $('.check_-2').css({display: 'none'});
+                    }else{
+                      
+                      $('.check_-').css({display: 'none'});
+                      $('.check_-2').css({display: 'block'});
+                    };
+
+
+              }else{
+                $('.check_-').css({display: 'none'});
+                      $('.check_-2').css({display: 'none'});
+              }
+        });
+        $('#rpt_pass').keyup(function(event) {
+              if ($(this).val().length > 5) {
+                     
+                    if (  $('#password').val() !== $(this).val()  ) {
+                      
+                      $('.check_-').css({display: 'block'});
+                      $('.check_-2').css({display: 'none'});
+                    }else{
+                      
+                      $('.check_-').css({display: 'none'});
+                      $('.check_-2').css({display: 'block'});
+                    };
+
+
+              }else{
+                $('.check_-').css({display: 'none'});
+                      $('.check_-2').css({display: 'none'});
+              }
+        });
+
+        $('body').on('click','#resetPasswd',function(){
+            var $response = $.post('/resetPasswd', { id_login : $(this).data('id-login') } );
+
+            $response.done(function(data){
+                $('#newPasswd').val(data);
+            });
+        });
         /*agregar combi*/
           $('body').on('click', 'input[name^="foobar"]', function(event) {
             
@@ -277,8 +329,13 @@ function ON_READY() {
       decimals: 3
   });
 
+    $('#ultimocosto').kendoNumericTextBox({
+      format: "c",
+      decimals: 3
+  });
+
         $('#porcion').kendoNumericTextBox({
-      format: "#.00 porciones"
+      format: "#.00"
   });
 
     $('#stockMax').kendoNumericTextBox({
@@ -315,9 +372,9 @@ function ON_READY() {
 
   $("#gridMesas").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -325,6 +382,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -334,9 +392,9 @@ function ON_READY() {
 
   $("#gridRest").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -344,6 +402,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -351,9 +410,9 @@ function ON_READY() {
 
   $("#gridSalones").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -361,6 +420,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -368,9 +428,9 @@ function ON_READY() {
 
   $("#gridFam").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -378,33 +438,87 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
   });
+  if ( $("#ProdTemplate").length ) {
   $("#gridProd").kendoGrid({
     dataSource: {
-      pageSize: 10
-    },
-    height: 525,
+                            type: "json",
+                            transport: {
+                                read: "/getProducts"
+                            },
+                            schema: {
+                                model: {
+                                    id: "id"
+                                }
+                            },
+                            pageSize: 15,
+                            /*serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true*/
+                        },
+
+    columns: [
+                            {  field: "nombreProd",title: "Nombre" },
+                            {  field: "precio", title: "Precio" },
+                            {  field: "costo", title: "Costo" },
+                            {  field: "nombreFam", title: "Familia" },
+                            {  field: "estado", title: "Habilitado" },
+                            {  title: "Editar" },
+                            {  title: "Eliminar"  }
+                        ],
+    rowTemplate: kendo.template($("#ProdTemplate").html()),
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
     sortable: true,
-    filterable: true,
+    filterable: {mode:"row"},
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
-  });
+  }); };
 
-
+  if ( $("#InsumoTemplate").length ) {
   $("#gridInsum").kendoGrid({
     dataSource: {
-      pageSize: 10
-    },
-    height: 525,
+                            type: "json",
+                            transport: {
+                                read: "/getInsumos"
+                            },
+                            schema: {
+                                model: {
+                                    id: "id",
+                                    fields: {
+                                        nombre: { type: "string" },
+                                        descripcion: { type: "string" },                                        
+                                        ultimocosto: { type: "string" },
+                                        unidadmedida: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 15,
+                            /*serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true*/
+                        },
+
+    columns: [
+                            {  field: "nombre", title: "Nombre" },
+                            {  field: "descripcion", title: "Descripcion" },
+                            {  field: "ultimocosto", title: "Costo"},
+                            {  field: "unidadmedida", title: "Unidad de Medida" },
+                            {  title: "Editar" },
+                            {  title: "Eliminar"  }
+                        ],
+    rowTemplate: kendo.template($("#InsumoTemplate").html()),
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -412,16 +526,17 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
-  });
+  });  };
 
     $("#gridTipoComb").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -429,6 +544,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -437,10 +553,10 @@ function ON_READY() {
     
     $("#gridComb").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
                             
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -448,6 +564,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -455,10 +572,9 @@ function ON_READY() {
 
         $("#gridPersonas").kendoGrid({
     dataSource: {
-      pageSize: 10
-    },
-                            
-    height: 525,
+      pagesize: 15
+    },                            
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -466,18 +582,46 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
   });
-
-        
+if ($("#UserTemplate").length) {
     $("#gridUsuarios").kendoGrid({
     dataSource: {
-      pageSize: 10
-    },
+                            type: "json",
+                            transport: {
+                                read: "/getUsers"
+                            },
+                            schema: {
+                                model: {
+                                    id: "id",
+                                    fields: {
+                                        nombres: { type: "string" },
+                                        login: { type: "string" },
+                                        nombre: { type: "string" },
+                                        estado: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 15,
+                            /*serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true*/
+                        },
+
+    columns: [
+                            {  field: "nombres", title: "Nombres" },
+                            {  field: "login", title: "Login" },
+                            {  field: "nombre", title: "Perfil" },
+                            {  field: "estado", title: "Activo" },
+                            {  title: "Editar" },
+                            {  title: "Eliminar"  }
+                        ],
+    rowTemplate: kendo.template($("#UserTemplate").html()),
                             
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -485,17 +629,40 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
-  });
-
+  }); };
+if ($("#NotasTemplate").length) {
         $("#gridNotas").kendoGrid({
     dataSource: {
-      pageSize: 10
-    },
+                            type: "json",
+                            transport: {
+                                read: "/getNotas"
+                            },
+                            schema: {
+                                model: {
+                                    id: "id",
+                                    fields: {
+                                        descripcion: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 15,
+                            /*serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true*/
+                        },
+
+    columns: [
+                            {  field: "descripcion", title: "Nota" },
+                            {  title: "Editar" },
+                            {  title: "Eliminar"  }
+                        ],
+    rowTemplate: kendo.template($("#NotasTemplate").html()),
                             
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -503,17 +670,18 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
-  });
+  }); };
 
   $("#gridSabores").kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
                             
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -521,6 +689,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },
@@ -528,10 +697,10 @@ function ON_READY() {
 
   $('#gridRece').kendoGrid({
     dataSource: {
-      pageSize: 10
+      pagesize: 15
     },
                             
-    height: 525,
+    height: 800,
     sortable: true,
     selectable: true,
     scrollable: true,
@@ -539,6 +708,7 @@ function ON_READY() {
     filterable: true,
     resizable: true,
     pageable: {
+      pageSize: 15,
       refresh: true,
       pageSizes: true
     },

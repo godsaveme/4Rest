@@ -42,6 +42,22 @@ var viewModel_reportecajadiario = kendo.observable({
         };
         return sum.toFixed(2);
     },
+    totaldsctoAut: function(){
+        var sum = 0;
+        var data = datareporte.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            sum += parseFloat(data[i]['totaldsctoAut']);
+        };
+        return sum.toFixed(2);
+    },
+    totalImProm: function(){
+        var sum = 0;
+        var data = datareporte.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            sum += parseFloat(data[i]['totalImProm']);
+        };
+        return sum.toFixed(2);
+    },
 	totalventas: function(){
 		var sum = 0;
         var data = datareporte.data();
@@ -75,12 +91,12 @@ var viewModel_reportecajadiario = kendo.observable({
         return sum.toFixed(2);
     },
     montoinicial: function(){
-        var montoinicial = 0;
+        var sum = 0;
         var data = datareporte.data();
-        if(data.length > 0){
-            montoinicial = data[0]['fondodecaja'];
-        }
-        return montoinicial;
+        for (var i = data.length - 1; i >= 0; i--) {
+            sum += parseFloat(data[i]['fondodecaja']);
+        };
+        return sum.toFixed(2);
     },
     diferencias: function(){
     	var sum = 0;
@@ -105,6 +121,14 @@ var viewModel_reportecajadiario = kendo.observable({
         	sum += parseFloat(data[i]['totalanulados']);
         };
         return sum.toFixed(0);
+    },
+    totalfondocaja: function(){
+        var sum = 0;
+        var data = datareporte.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            sum += parseFloat(data[i]['fondodecaja']);
+        };
+        return sum.toFixed(2);
     },
     totalproductos: function(){
     	var sum = 0;
@@ -242,6 +266,22 @@ var viewModel_reportecajadiario = kendo.observable({
         }
         return dato;
 
+    },
+    valePersonal: function(a){
+        var dato;
+        var data = datareporte.data();
+        if (data.length > 0) {
+            var dataitem = datareporte.at(a);
+            if (dataitem) {
+                dato = dataitem.totalvale;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+        
     }, 
     descuentoautorizado: function(a){
         var dato;
@@ -249,7 +289,7 @@ var viewModel_reportecajadiario = kendo.observable({
         if(data.length > 0){
             var dataitem = datareporte.at(a);
             if(dataitem){
-                dato = dataitem.totalvale;
+                dato = dataitem.totaldsctoAut;
             }else{
                 dato = (0).toFixed(2);
             }
@@ -259,6 +299,23 @@ var viewModel_reportecajadiario = kendo.observable({
         return dato;
 
     },
+    importePromocional: function(a){
+        var dato;
+        var data = datareporte.data();
+        if(data.length > 0){
+            var dataitem = datareporte.at(a);
+            if(dataitem){
+                dato = dataitem.totalImProm;
+            }else{
+                dato = (0).toFixed(2);
+            }
+        }else{
+            dato = (0).toFixed(2);
+        }
+        return dato;
+
+    },
+
     cajaid: function(a){
         var dato;
         var data = datareporte.data();
@@ -394,7 +451,7 @@ $('body').on('click', '#btn_imprimircajadiario', function(event) {
         dataType: 'json',
         data: {totalefectivo: $('#totalefectivo').text(),
                totaltarjeta: $('#totaltarjeta').text(),
-                totalvale:$('#totalvale').text(),
+                totalvale:$('#totaldsctoAut').text(), //falta cambiar en route/imprimirdiariocaja --> totaldsctoAut
                 totalventas: $('#totalventas').text(),
                 totalgastos:$('#totalgastos').text(),
                 totalabonosacaja:$('#totalabonosacaja').text(),

@@ -3,7 +3,7 @@
 <div id="tabstrip">
   <ul id="tabscaja">
     @for ($i=0; $i < count($salones); $i++)
-      <li class="@if($i==0)k-state-active@endif">
+      <li class="@if($i==0) k-state-active @endif">
         {{$salones[$i]['nombre']}}
       </li>
     @endfor

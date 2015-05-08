@@ -10,7 +10,13 @@ class RecetasController extends \BaseController {
 	 */
 	public function getIndex()
 	{
-		$productos = Producto::where('receta', '=', 1)->get();
+		$productos = Producto::join('familia','familia.id','=','producto.familia_id')
+					->leftjoin('receta','producto.id','=','receta.producto_id')
+					->where('receta', '=', 1)
+					->selectraw('producto.id as id,producto.nombre as nombreProd, sum(receta.precio) as costo, familia.nombre as nombreFam')
+					->groupBy('producto.id')
+					->get();
+		//print_r($productos->toJson()); die();
 		return View::make('recetas.index', compact('productos'));
 	}
 
@@ -42,7 +48,7 @@ class RecetasController extends \BaseController {
 			}
 			
 			if (count($preproductos) > 0) {
-				$preproductos = Preproducto::insert($preproductos);
+				/*$preproductos = Preproducto::insert($preproductos);*/
 			}
 			$producto_id = Input::get('producto_id');
 			$costo = Input::get('costo');
@@ -96,10 +102,11 @@ class RecetasController extends \BaseController {
 			$insumos = Input::get('insumos');
 			$preproductos = Input::get('preproductos');
 			if (count($insumos) > 0) {
+
 				$receta = Receta::insert($insumos);
 			}
 			if (count($preproductos) > 0) {
-				$preproductos = Preproducto::insert($preproductos);
+				/*$preproductos = Preproducto::insert($preproductos);*/
 			}
 			$producto->receta = 1;
 			$producto->costo = $costo;

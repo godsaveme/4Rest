@@ -6,11 +6,17 @@ class Producto extends Eloquent {
 	protected $guarded = array();
 
 	protected $fillable = array('nombre','descripcion','stock','unidadMedida','familia_id',
-								'estado','stockMin', 'stockMax', 'selector_adicional', 'lista_prod','id_tipoarepro');
+								'estado','stockMin', 'stockMax', 'selector_adicional', 
+								'lista_prod','id_tipoarepro',
+								'receta','costo');
 	public static $rules = array();
 
+	public function combinaciones(){
+		return $this->belongsToMany('Combinacion','precio','producto_id','combinacion_id');
+	}
+
 	public function insumos(){
-		return $this->belongsToMany('Insumo','receta','producto_id','insumo_id')->withPivot('cantidad','precio');
+		return $this->belongsToMany('Insumo','receta','producto_id','insumo_id')->withPivot('cantidad','precio','created_at','updated_at');
 	}
 	
 	public function precios(){
@@ -42,5 +48,8 @@ class Producto extends Eloquent {
 		return $this->belongsToMany('Producto', 'preProducto', 'producto_id','preproducto_id')->withPivot('cantidad');
 	}
 
+	public function almacenes(){
+		return $this->belongsToMany('Almacen','stockProducto','producto_id','almacen_id');
+	}
 
 }

@@ -101,6 +101,12 @@
             </div>
 	</div>
 	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-7 col-sm-offset-7 col-md-offset-7 col-lg-offset-7" style="position:fixed;top:auto;overflow-y:scroll;height:72%;">
+
+    <!--Autocomplete-->
+
+        <input id="prodAutoCompl" style="width: 100%" accesskey="w">
+
+
 		<ul class="text-center" id="carta">
 		@foreach ($tiposcomb as $tipocomb)
 			<li>
@@ -149,7 +155,7 @@
     					</a>
     				</div>
     				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
-    					<input type="text" value="#:cantidad#" class="form-control" >
+    					<input type="text" value="#:cantidad#" class="form-control kendoNumr2">
     				</div>
     			</div>
     		</div>
@@ -230,7 +236,7 @@
     					</a>
     				</div>
     				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
-    					<input type="text" value="#:cantidad#" class="form-control" >
+    					<input type="text" value="#:cantidad#" class="form-control kendoNumr">
     				</div>
     			</div>
     		</div>
@@ -776,6 +782,100 @@
         .k-panelbar .k-panel, .k-panelbar .k-content{
             border: none;
         }
+
+
+/*style del autocomplete del prod*/
+                .dropdown-header {
+                    font-size: 1.2em;
+                    padding: 0px;
+                    border-width: 0 0 1px 0;
+                    border-color: peru;
+                }
+
+                .dropdown-header > span {
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    text-align: left;
+                    display: inline-block;
+                    /*border-style: solid;*/
+                    border-width: 0;
+                    padding: .3em .6em;
+                    width:auto;
+                    color:peru;
+                }
+
+                .dropdown-header > span:first-child {
+                    /*width: 100px;*/
+                    border-left-width: 0;
+                }
+
+                .demo-section {
+                    width: 450px;
+                }
+
+                #customers-list .k-item > span{
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    border-style: solid;
+                    border-width: 0 0 1px 1px;
+                    vertical-align: top;
+                    min-height: 95px;
+                    width: 79%;
+                    padding: .6em 0 0 .6em;
+                }
+
+                #customers-list .k-item > span:first-child{
+                    width: 77px;
+                    border-left-width: 0;
+                    padding: .6em 0 0 0;
+                }
+
+                #customers-list img {
+                    -moz-box-shadow: 0 0 2px rgba(0,0,0,.4);
+                    -webkit-box-shadow: 0 0 2px rgba(0,0,0,.4);
+                    box-shadow: 0 0 2px rgba(0,0,0,.4);
+                    width: 70px;
+                    height: 77px;
+                }
+
+                #customers-list h3 {
+                    font-size: 1.6em;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                #customers-list p {
+                    margin: 0;
+                    padding: 0;
+                }
+                html.k-material .dropdown-header > span {
+                    border: 0;
+                }
+                html.k-material .dropdown-header > span {
+                    width: 354px;
+                }
+                html.k-material .dropdown-header > span:first-child {
+                    width: 90px;
+                }
+                html.k-material #customers-list .k-item > span{
+                    min-height: 80px;
+                    border-width: 0 0 1px 0;
+                }
+                html.k-material #customers-list img {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                }
+                html.k-material #customers-list h3 {
+                    font-size: 1.2em;
+                    line-height: 1em;
+                    margin-top: .5em;
+                }
+/*fin del style del autocomplete de prod*/
+
 </style>
 @stop
 

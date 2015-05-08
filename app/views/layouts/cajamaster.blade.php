@@ -10,20 +10,23 @@
 	@show
 	</title>
 	{{HTML::style('css/normalize.css')}}
-	{{HTML::style('css/bootstrap.min.css')}}
+	<!--change bootstrap for bootstrap lumen-->
+	{{HTML::style('css/bootstrap/bootstrap_lumen.min.css')}}
 	{{HTML::style('css/foundation-icons.css')}}
-	{{HTML::style('css/bootstrap-theme.min.css')}}
+	<!--quite el bootstrap theme..-->
 	{{HTML::style('css/alertify.core.css')}}
   	{{HTML::style('css/alertify.default.css')}}
-  	{{HTML::style('css/kendo.common-bootstrap.min.css')}}
+  	{{HTML::style('css/kendo/kendo.common.min.css')}}
   	{{HTML::style('css/bootstrap/font-awesome/css/font-awesome.min.css')}}
-  	{{HTML::style('css/kendo.silver.min.css')}}
-  	{{HTML::style('css/kendo.mobile.all.min.css')}}
+  	{{HTML::style('css/kendo/kendo.material.min.css')}}
+  	{{HTML::style('css/kendo/kendo.mobile.all.min.css')}}
   	{{HTML::style('css/line/green.css')}}
   	{{HTML::style('css/tooltipster.css')}}
   	{{HTML::style('css/themes/tooltipster-shadow.css')}}
   	{{HTML::style('css/generalx2.css')}}
   	{{HTML::style('css/notificaciones.css')}}
+  	<!--add fonts-->
+  	{{HTML::style('css/newstyles/fonts.css')}}
   	@yield('css')
 </head>
 <body>
@@ -49,13 +52,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="
-          			@if (Auth::user()->colaborador == 1) 
-          			/web
-          		   @else
-          		   		javascript:void(0)
-          		   @endif 
-          			" class="navbar-brand title" id="prueba">4 Rest</a>
+          <a href="/web" class="navbar-brand title" id="prueba">4 Rest</a>
         </div>
         <!-- en header navbar-->
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -71,20 +68,16 @@
 	        @endif
 	        >{{$mesa->nombre}}</a></li>
 	        @if (isset($Opedido))
-	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="{{$Opedido->id}}" data-idmozo ="{{$Opedido->usuario->id}}">
-	        {{$Opedido->usuario->login}}
-	        </a></li>
+	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="{{$Opedido->id}}" data-idmozo ="{{$Opedido->usuario->id}}">{{$Opedido->usuario->login}}</a></li>
 	        @endif
 	        @if (isset($infomozo))
-	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="0" data-idmozo ="{{$infomozo->id}}">
-	        {{$infomozo->login}}
-	        </a></li>
+	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="0" data-idmozo ="{{$infomozo->id}}">{{$infomozo->login}}</a></li>
 	        @endif
 	    </ul>
 
       	@endif
 	      <ul class="nav navbar-nav navbar-right">
-	      @if (Auth::user()->colaborador != 1)
+	      @if (Auth::user()->persona->perfil_id != 1)
 	      	<li>
       			<a href="javascript:void(0)" id="btn_controlpedidos">
       				Lista de Pedidos
@@ -189,7 +182,7 @@
 <div class="container" id="contenido">
     @yield('content')
 
-@if (Auth::user()->colaborador != 1)
+@if (Auth::user()->persona->perfil_id != 1)
 	<div id="windowsnotificaciones" style="display:none"r>
     	<span id="notificationpedidos" style="display:none;"></span>
     </div>
@@ -279,6 +272,9 @@
 					<a href="/cajas/listargastos">Lista de Gastos</a>
 					</li>
 					<li class="list-group-item list_menu">
+                    <a href="/cajas/listaringresos">Lista de Ingresos</a>
+                    </li>
+					<li class="list-group-item list_menu">
 					<a href="/eventos/listareventoscaja">Lista de Eventos</a>
 					</li>
 					<li class="list-group-item list_menu">
@@ -305,8 +301,9 @@
   	<script src="/dev/socket.io/socket.io.js"></script>
   	{{HTML::script('js/jquery.plugin.js'); }}
   	{{HTML::script('js/jquery.tooltipster.min.js')}}
-  	{{HTML::script('js/kendo.all.min.js')}}
+  	{{HTML::script('js/kendo/kendo.all.min.js')}}
   	{{HTML::script('js/kendo/kendo.culture.es-PE.min.js')}}
+  	{{HTML::script('js/kendo/kendo.messages.es-ES.min.js')}}
   	{{HTML::script('js/icheck.min.js')}}
   	{{HTML::script('js/timeago.js')}}
   	{{HTML::script('js/jquery.countup.js')}}

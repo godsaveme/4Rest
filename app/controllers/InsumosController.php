@@ -9,8 +9,8 @@ class InsumosController extends BaseController {
 	 */
 	public function getIndex()
 	{
-		$insumos = Insumo::all();
-        return View::make('insumos.index', array('insumos' => $insumos));
+		//$insumos = Insumo::all();
+        return View::make('insumos.index');
 	}
 
 

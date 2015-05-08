@@ -32,7 +32,11 @@
                     <td  class="text-right">{{$producto->cantidadpro}}</td>
                     <td class="text-right">{{$producto->preciou}}</td>
                     <td class="text-right">{{$producto->preciot}}</td>
+                    @if ($ventastotales == 0)  
+                        <td class="text-right"> 0.00% </td>
+                    @else 
                     <td class="text-right">{{number_format(($producto->preciot*100)/$ventastotales,2,'.', '')}} %</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

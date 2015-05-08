@@ -2,7 +2,7 @@ var dataSourcelistagastos = new kendo.data.DataSource({
                                                 transport: {
                                                    read: "/listadegastos"
                                                 },
-                                                dataType: "jsonp"
+                                                dataType: "json"
                                             });
 
 var viewModel_listagastos = kendo.observable({
@@ -66,7 +66,7 @@ $('body').on('click', '.btn_anular', function(event) {
             if(data == 'true'){
                 alert('Operación completada');
             }else{
-                alert('Operación no completada');
+                alert('El ticket no se puede anular');
             }
         })
         .fail(function(data) {

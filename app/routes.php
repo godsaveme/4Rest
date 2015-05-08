@@ -16,6 +16,7 @@ Route::get('login', function () {
 Route::post('login', function () {
 		if (Auth::attempt(array('login' => Input::get('login'), 'password' => Input::get('password'), 'estado' => 1), true)) {
 			return Redirect::to('web');
+            //View::make('','');
 		} else {
 			return Redirect::to('login')->with('mensaje_login', 'Ingreso invalido');
 		}
@@ -32,7 +33,33 @@ Route::group(array('before' => 'auth'), function () {
 				}
 			});
 
-		Route::controller('/usuarios', 'UsuariosController');
+        /*Route::when('usuarios*','admin');
+        Route::when('insumos*','admin');
+        Route::when('productos*','admin-caja');
+
+    //Route::controller('/web', 'WebController');
+
+        Route::when('notas*', 'admin');
+        Route::when('cocina*', 'cocina');
+        Route::when('pedidos*', 'mozo');
+        Route::when('combinacions*', 'admin-caja');
+        Route::when('tipocombinacions*', 'admin-caja');
+        Route::when('personas*', 'admin-caja');
+        Route::when('perfiles*', 'admin');
+        Route::when('pedidoscompras*', 'admin');
+        Route::when('cajas*', 'admin-caja');
+        Route::when('pedidoscomanda*', 'mozo');
+        Route::when('eventos*', 'admin');
+        Route::when('tickets*', 'admin-caja');
+        Route::when('detallepedidos*', 'admin'); //reporte de tiempos
+        Route::when('sabores*', 'admin');
+        Route::when('monitores*', 'admin-caja');
+        Route::when('reportes*', 'admin');
+        Route::when('recetas*', 'admin');
+        Route::when('compras*', 'admin');*/
+
+
+		Route::controller('/usuarios','UsuariosController');
 		Route::controller('/insumos', 'InsumosController');
 		Route::controller('/productos', 'ProductosController');
 		Route::controller('/web', 'WebController');
@@ -40,7 +67,6 @@ Route::group(array('before' => 'auth'), function () {
 		Route::controller('/cocina', 'CocinaController');
 		Route::controller('/pedidos', 'PedidosController');
 		Route::controller('/combinacions', 'CombinacionController');
-		Route::controller('/tipocombinacions', 'TipoCombinacionController');
 		Route::controller('/tipocombinacions', 'TipoCombinacionController');
 		Route::controller('/personas', 'PersonasController');
 		Route::controller('/perfiles', 'PerfilesController');
@@ -55,6 +81,10 @@ Route::group(array('before' => 'auth'), function () {
 		Route::controller('/reportes', 'ReportesController');
 		Route::controller('/recetas', 'RecetasController');
 		Route::controller('/compras', 'ComprasController');
+		Route::get('/error-reporting', function(){
+			$datos= [1,2];
+			return View::make('hello', $datos);
+		});
 
 		Route::post('provincias', function () {
 				$patron = '';
@@ -109,6 +139,23 @@ Route::group(array('before' => 'auth'), function () {
 		);
 
 		/*route javi*/
+
+		//route para autocomplete de prod
+
+		Route::get('colorao',function(){
+
+			$productos = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores')
+												 ->join('precio', 'precio.producto_id', '=', 'producto.id')
+												 ->join('combinacion', 'combinacion.id', '=', 'precio.combinacion_id')
+												 ->where('combinacion.nombre', '=', 'Normal')												 
+												 ->where('producto.estado', '=', 1)
+												 //->orderby('producto.nombre','ASC')
+												 ->get();
+			return Response::json($productos);
+
+		});
+
+			//fin rout autocomplete prod
 		Route::get('bus_insumo_', function () {
 				if (Request::ajax()) {
 					$valor = $_REQUEST["filter"]["filters"][0]["value"];
@@ -116,6 +163,18 @@ Route::group(array('before' => 'auth'), function () {
 					return Response::json($insumos);
 				}
 			});
+
+		Route::get('bus_insumo_prod', function () {
+				if (Request::ajax()) {
+					$valor = $_REQUEST["filter"]["filters"][0]["value"];
+					$insumos = Insumo::where('nombre', 'like', '%'.$valor.'%')
+					                  ->selectraw('id, nombre, "Insumos" as Tipo')->get();
+					$productos = Producto::where('nombre','like','%'.$valor.'%')
+										->selectraw('id, nombre, "Productos" as Tipo')
+					                   ->get();
+					return Response::json(array_merge($insumos->toArray(),$productos->toArray()));
+				}
+		});
 
 		Route::get('bus_prepro_', function () {
 				if (Request::ajax()) {
@@ -130,13 +189,13 @@ Route::group(array('before' => 'auth'), function () {
 
 		Route::get('bus_per_', function () {
 				$valor = $_REQUEST["filter"]["filters"][0]["value"];
-				$persona = Persona::where('dni', 'like', $valor.'%')
-					->where('dni', 'like', $valor.'%', 'or')
-				->where('ruc', 'like', $valor.'%', 'or')
-					->where('nombres', 'like', $valor.'%', 'or')
-				->where('apMaterno', 'like', $valor.'%', 'or')
-					->where('apPaterno', 'like', $valor.'%', 'or')
-				->where('razonSocial', 'like', $valor.'%', 'or')
+				$persona = Persona::where('dni', 'like', '%'.$valor.'%')
+					->where('dni', 'like', '%'.$valor.'%', 'or')
+				->where('ruc', 'like', '%'.$valor.'%', 'or')
+					->where('nombres', 'like', '%'.$valor.'%', 'or')
+				->where('apMaterno', 'like', '%'.$valor.'%', 'or')
+					->where('apPaterno', 'like', '%'.$valor.'%', 'or')
+				->where('razonSocial', 'like', '%'.$valor.'%', 'or')
 					->get();
 				$arraydatos = array();
 				foreach ($persona as $dato) {
@@ -205,7 +264,7 @@ Route::group(array('before' => 'auth'), function () {
 			});
 
 		Route::post('compr_prod_receta', function () {
-				if (Request::ajax()) {
+				//if (Request::ajax()) {
 					$producto_id = Input::get('productoid');
 					$prods = Insumo::whereHas('productos', function ($q) {
 							$q->where('producto.id', '=', Input::get('productoid'));
@@ -216,6 +275,53 @@ Route::group(array('before' => 'auth'), function () {
 
 					} else {
 						return Response::json(false);
+					}
+				//}
+			});
+
+		
+		Route::post('compr_ins_stockInicial_prod_receta', function () {
+				if (Request::ajax()) {
+
+					$ins = [];
+					$prod = [];
+					$prodStock = [];
+					if ( Input::get('tipo') == 'Insumos') {
+						$ins = Insumo::whereHas('almacenes', function ($q) {
+							$q->where('insumo.id', '=', Input::get('insumoid'))
+								->where('stockInsumo.almacen_id','=',Input::get('almacenid'));
+						})->get();
+					}elseif(Input::get('tipo') == 'Productos'){
+						$prod = Producto::where('receta','=',1)->where('id','=',Input::get('insumoid'))->get();
+						$prodStock = Producto::whereHas('almacenes',function($q) {
+							$q->where('producto.id','=', Input::get('insumoid'))
+								->where('stockProducto.almacen_id','=', Input::get('almacenid'));
+
+						})->get();
+					}
+
+					
+
+					//$prod = Producto::where('receta','=',1)->where('id','=',Input::get('insumoid'))->get();
+
+					                  //print_r($prod->toJson()); die();
+
+					if (count($ins) > 0) {
+						$data['msg'] = 'Insumo con stock inicial creado en este Almacén. Escoja otro.';
+						$data['boolean'] = true;
+ 						return Response::json($data);
+
+					} elseif(count($prod) > 0) {
+						$data['msg'] = 'Producto con receta. Su Stock se determina a partir de sus ingredientes.';
+						$data['boolean'] = true;
+						return Response::json($data);
+					}elseif(count($prodStock) > 0){
+						$data['msg'] = 'Producto con stock inicial creado en este almacén. Escoja otro.';
+						$data['boolean'] = true;
+						return Response::json($data);
+					}else{
+						$data['boolean'] = false;
+						return Response::json($data);
 					}
 				}
 			});
@@ -297,12 +403,15 @@ Route::group(array('before' => 'auth'), function () {
 					'areadeproduccion.id', 'areadeproduccion.nombre as areanombre')
 					->join('tipoareadeproduccion', 'tipoareadeproduccion.id', '=', 'areadeproduccion.id_tipo')
 				->whereraw("id_restaurante = '".Auth::user()->id_restaurante."' and  id_tipo != 2")
+				->orderBy('areadeproduccion.id_tipo','ASC')
 				->get();
 				return Response::json($areas);
 			});
 
 		Route::post('mozonotificaciones', function () {
 				if (Request::ajax()) {
+					DB::beginTransaction();
+					try{
 					$getestado = Input::get('estado');
 					$estado = $getestado;
 					$iddetalle = Input::get('iddetallep');
@@ -331,7 +440,11 @@ Route::group(array('before' => 'auth'), function () {
 							$estado = 'D';
 							$odepedido->fechaDespachado = date('Y-m-d H:i:s');
 						}
-						$adicionales = DetPedido::where('detalle_id', '=', $iddetalle)->get();
+						$adicArr = null;
+						// no se cuentan los ANULADOS 19-03-15 whereNull('detalleanulacion_id')..
+						$adicionales = DetPedido::where('detalle_id', '=', $iddetalle)
+									   ->whereNull('detalleanulacion_id')
+						               ->get();
 						if (!empty($adicionales)) {
 							foreach ($adicionales as $adicional) {
 								if ($getestado == 'I' || $getestado == "C") {
@@ -346,11 +459,24 @@ Route::group(array('before' => 'auth'), function () {
 								}
 								$adicional->estado = $estado;
 								$adicional->save();
+								$adicArr[] = $adicional;
 							}
 						}
+						//envia adicionales de un prod para ser actualizados
+						$adicArr2 = null;
+						if (isset($adicArr)) {
+							foreach ($adicArr as $adicAr) {
+								$adicArr2[] = array(
+									'iddetallep'	=> $adicAr->id,
+									'estado'		=> $adicAr->estado
+									);
+							}
+						}
+						//fin envi adc
 						$odepedido->estado = $estado;
 						$odepedido->save();
-						$arrayco = array('estado' => $estado,
+						$arrayco = array(
+							'estado' 				  => $estado,
 							'iddetallep'             => Input::get('iddetallep'),
 							'usuario'                => $opedido->login,
 							'mesa'                   => $opedido->nombre,
@@ -359,9 +485,16 @@ Route::group(array('before' => 'auth'), function () {
 							'combinacion_c'          => $opedido->combinacion_c,
 							'areapro'                => $opedido->anombre.'_'.$opedido->id_tipoareapro,
 							'proid'                  => $opedido->proid,
-							'cantidad'               => $opedido->cantidad);
+							'cantidad'               => $opedido->cantidad,
+							'adicionales'			 => $adicArr2
+							);
+						//print_r(json_encode($arrayco)); die();
+						DB::commit();
 						return Response::json($arrayco);
 					}
+				}catch(Exception $e){
+					DB::rollback();
+				}
 				}
 			});
 		Route::post('listarproductos', function () {
@@ -407,7 +540,11 @@ Route::group(array('before' => 'auth'), function () {
 		Route::controller('/modulos', 'ModulosController');Route::post('mostrarnotas', function () {
 				if (Request::ajax()) {
 					$idpro = Input::get('idpro');
-					$notas = Notas::Select('notas.id', 'notas.descripcion')->join('notaxproducto', 'notaxproducto.nota_id', '=', 'notas.id')->where('notaxproducto.producto_id', '=', $idpro)->get();
+					$notas = Notas::Select('notas.id', 'notas.descripcion')
+                                    ->join('notaxproducto', 'notaxproducto.nota_id', '=', 'notas.id')
+                                    ->where('notaxproducto.producto_id', '=', $idpro)
+                                    ->orderBy('id','DESC')
+                                    ->get();
 					return $notas->toJson();
 				}
 			}
@@ -422,11 +559,27 @@ Route::group(array('before' => 'auth'), function () {
 		);
 		Route::post('traermozos', function () {
 				$idres = Input::get('idres');
-				$mozos = Usuario::where('colaborador', '=', '2')
+				/*$mozos = Usuario::where('colaborador', '=', '2')
 					->where('estado', '=', 1)
 				->where('id_restaurante', '=', Auth::user()->id_restaurante, 'AND')
-				->get();
-				return $mozos->toJson();
+				->get();*/
+				//$mozos = Usuario::find(25);
+				//consulta $q es a los usuuarios y personas. Escogido!
+				$mozos = Usuario::whereHas('persona',function($q){
+					$q->where('perfil_id','=',2)
+					  ->where('estado','=',1)
+					  ->where('habilitado','=',1)
+					  ->where('id_restaurante','=',Auth::user()->id_restaurante);
+				})->get();
+				//consulta $q es a los personas
+				/*$mozos = Usuario::with(array('persona' => function($q){
+					$q->where('perfil_id','=',2)
+					  ->where('estado','=',1)
+					  ->where('id_restaurante','=',Auth::user()->id_restaurante);
+				}))->get();*/
+				//$mozos = $mozos->persona->perfil->nombre;
+				//return $mozos->toJson();
+				return $mozos;
 			}
 		);
 
@@ -460,12 +613,24 @@ Route::group(array('before' => 'auth'), function () {
 
 		Route::post('enviarpedidos', function () {
 				if (Request::ajax()) {
+					DB::beginTransaction();
+					try {
 					$profami = Input::get('prof');
 					$procombi = Input::get('proc');
-					$cocinas = Input::get('cocinas');
+					$cocinas = Input::get('cocinas'); //ver cocinas
 					$pedidoid = Input::get('pedidoid');
 					$mozoid = Input::get('mozoid');
 					$idmesa = Input::get('idmesa');
+
+                                    //orden cancelada
+                        if ($pedidoid != 0) {
+                            if (Pedido::find($pedidoid)->estado == 'T') {
+                                DB::rollBack();
+                                return Response::json('can_order');
+                            }
+                        }
+                        //fin add
+
 					if ($pedidoid == 0) {
 						$mesa = Mesa::find($idmesa);
 						$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I'))->first();
@@ -473,6 +638,9 @@ Route::group(array('before' => 'auth'), function () {
 							$Opedido = Pedido::create(array('estado' => 'I', 'usuario_id' => $mozoid));
 							$pedidoid = $Opedido->id;
 							$detMesa = DetMesa::create(array('mesa_id' => $idmesa, 'pedido_id' => $pedidoid));
+						}else{
+							//fixed 10-04-15
+							$pedidoid = $Opedido->id;
 						}
 					}
 					$arrayprof = array();
@@ -492,19 +660,25 @@ Route::group(array('before' => 'auth'), function () {
 									$arrayimprimir[$cocina][] = $datoprof;
 								}
 							}
-							$datitos1 = array('pedido_id' => $pedidoid, 'producto_id' => $datoprof['idpro'],
+							$datitos1 = array(
+								'pedido_id' 				 => $pedidoid,
+							 	'producto_id'				 => $datoprof['idpro'],
 								'cantidad'                   => $datoprof['cantidad'],
 								'importeFinal'               => $datoprof['preciot'],
-								'estado'                     => 'I', 'descuento'                     => 0,
+								'estado'                     => 'I', 
+								'descuento'                  => 0,
 								'idarea'                     => $areapro,
-								'ordenCocina'                => $ordencocina);
+								'ordenCocina'                => $ordencocina
+											);
 							$odetpe = DetPedido::create($datitos1);
 							$flagnotas = 0;
 							if (isset($datoprof['notas'])) {
 								$arrayinsertnotas = array();
 								foreach ($datoprof['notas'] as $anota) {
-									$arrayinsertnotas[] = array('notas_id' => $anota['idnota'],
-										'detallePedido_id'                    => $odetpe->id, );
+									$arrayinsertnotas[] = array(
+										'notas_id' => $anota['idnota'],
+										'detallePedido_id' => $odetpe->id 
+										);
 									$flagnotas = 1;
 								}
 
@@ -513,11 +687,13 @@ Route::group(array('before' => 'auth'), function () {
 							$flagadicional = 0;
 							if (isset($datoprof['adicionales'])) {
 								foreach ($datoprof['adicionales'] as $datadi) {
-									$inputadi = array('pedido_id' => $pedidoid,
+									$inputadi = array(
+										'pedido_id'					 => $pedidoid,
 										'producto_id'                => $datadi['idadicional'],
 										'cantidad'                   => $datadi['cantidad'],
 										'ImporteFinal'               => $datadi['precio'],
-										'estado'                     => 'I', 'descuento'                     => 0,
+										'estado'                     => 'I',
+										'descuento'                  => 0,
 										'idarea'                     => $areapro,
 										'ordenCocina'                => $ordencocina,
 										'detalle_id'                 => $odetpe->id);
@@ -544,7 +720,25 @@ Route::group(array('before' => 'auth'), function () {
 
 								Detpedidosabores::insert($arraysabores);
 							}
-							$arrayprof[] = array('iddetpedido' => $odetpe->id, 'pronombre' => $datoprof['nombre'], 'pestado' => $odetpe->estado, 'notas' => $flagnotas, 'cantidad' => $datoprof['cantidad'], 'precio' => $datoprof['preciot'], 'idpedido' => $pedidoid, 'adicionales' => $flagadicional, 'sabores' => $flagsabor, );
+
+                            //add 28-04-15
+                            $arrNotas = array();
+                            foreach ($odetpe->notas as $detnota){
+                                $arrNotas[] = $detnota->descripcion;
+                            }
+
+                            //print_r($arrNotas);
+                            //die();
+                            $arrSabores = array();
+                            foreach($odetpe->sabores as $detsabor){
+                                $arrSabores[] = $detsabor->nombre;
+                            }
+
+                            //print_r($arrSabores);
+                            //die();
+                            //fin add*
+
+							$arrayprof[] = array('iddetpedido' => $odetpe->id, 'pronombre' => $datoprof['nombre'], 'pestado' => $odetpe->estado, 'notas' => $flagnotas, 'cantidad' => $datoprof['cantidad'], 'precio' => $datoprof['preciot'], 'idpedido' => $pedidoid, 'adicionales' => $flagadicional, 'sabores' => $flagsabor, 'arrNotas' => $arrNotas, 'arrSabores' => $arrSabores );
 						}
 					}
 					if (isset($procombi)) {
@@ -576,7 +770,8 @@ Route::group(array('before' => 'auth'), function () {
 										'producto_id'                => $datoproc[$procom]['idprocombi'],
 										'cantidad'                   => $datoproc['cantidad'],
 										'ImporteFinal'               => $datoproc[$procom]['precio'],
-										'estado'                     => 'I', 'descuento'                     => 0,
+										'estado'                     => 'I', 
+										'descuento'                  => 0,
 										'combinacion_id'             => $datoproc['idcombi'],
 										'combinacion_c'              => $cont_comb_c2,
 										'combinacion_cant'           => $datoproc['cantidad'],
@@ -593,7 +788,24 @@ Route::group(array('before' => 'auth'), function () {
 
 										Detallenotas::insert($arrayinsertnotasc);
 									}
-									$procomb[] = array('iddetpedido' => $oprocom->id, 'pronombre' => $datoproc[$procom]['nombre'], 'pestado' => $oprocom->estado, 'notas' => $flagnotas, );
+
+                                                    //add 07-05-15
+                                                    $arrNotas = array();
+                                                    foreach ($oprocom->notas as $detnota){
+                                                        $arrNotas[] = $detnota->descripcion;
+                                                    }
+
+                                                    //print_r($arrNotas);
+                                                    //die();
+                                                    //$arrSabores = array();
+                                                    //foreach($odetpe->sabores as $detsabor){
+                                                    //    $arrSabores[] = $detsabor->nombre;
+                                                    //print_r($arrSabores);
+                                                    //die();
+                                                    //fin add*
+
+
+									$procomb[] = array('iddetpedido' => $oprocom->id, 'pronombre' => $datoproc[$procom]['nombre'], 'pestado' => $oprocom->estado, 'notas' => $flagnotas, 'arrNotas' => $arrNotas,);
 								}
 							}
 							$arrayproco[] = array('combinombre' => $datoproc['nombrecombi'], 'precio' => $datoproc['preciot'], 'produccomb' => $procomb, 'cantidad' => $datoproc['cantidad'], 'idpedido' => $pedidoid, );
@@ -613,8 +825,12 @@ Route::group(array('before' => 'auth'), function () {
 						$orden[] = array('cocina' => $cocina, 'orden' => $ordenes, );
 						$j++;
 					}
-
+					} catch (Exception $e) {
+						DB::rollBack();
+						return Response::json($e);
+					}
 					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
+					DB::commit();
 					return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid'));
 				}
 			});
@@ -845,12 +1061,12 @@ Boleta&nbsp;
 						$headers = array('Content-Type' => 'application/pdf', );
 						$pdfPath = TIKET_DIR.$token.'.pdf';
 						File::put($pdfPath, PDF::load($html, 'A7', 'portrait')->output());
-						$cmd = "lpr -Pbarraeliasa ";
+						$cmd = "lpr -PHP_Photosmart_Plus_B209a-m ";
 						$cmd .= $pdfPath;
 						if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);
 						}
-						File::delete($pdfPath);
+						//File::delete($pdfPath);
 						return Response::json('true');
 					}
 				}
@@ -891,13 +1107,17 @@ Boleta&nbsp;
 						}
 						if ($parsetotal >= 0) {
 							if ($tipo == 1) {
+								//print_r($tipo); die();
 								foreach ($cobrar as $dato) {
 									if ($dato['cobrar'] == 1) {
 										$itemprecuenta = Detpedidotick::find($dato['proid']);
 										$subtotal = $itemprecuenta->preciou*$dato['cantidad'];
 										$newtotal = $newtotal+$subtotal;
 										if ($dato['modificar'] == 1) {
+											//aqui solo pasan los prod por ejem: prod 1, cant 3, pagar 2. Si se pagan los 3
+											// o sea todos, no pasan por aqui.
 											$newcantidad = $itemprecuenta->cantidad-$dato['cantidad'];
+											//print_r($newcantidad); die();
 											$newprecio = $itemprecuenta->preciou*$newcantidad;
 											$itemprecuenta->cantidad = $newcantidad;
 											$itemprecuenta->precio = $newprecio;
@@ -969,7 +1189,7 @@ Boleta&nbsp;
 								if ($ivale > 0) {
 									$ovale = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
 								}
-
+                                    //modificar poner $idescuento
 								if ($idescuento > 0) {
 									$promocion = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 5));
 								}
@@ -985,6 +1205,8 @@ Boleta&nbsp;
 					$cajero = Auth::user()->login;
 					Event::fire('imprimirticket', compact('odetallestickete', 'restaurante', 'tickete',
 							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));
+					//DB::rollback();
+					//return json_encode('false del rollBack');
 					DB::commit();
 					return json_encode('True');
 					//return Response::json($odetallestickete);
@@ -1026,6 +1248,7 @@ Boleta&nbsp;
 						}
 						if ($parsetotal >= 0) {
 							if ($tipo == 1) {
+								//print_r($tipo.' de cobrarvale'); die();
 								foreach ($cobrar as $dato) {
 									if ($dato['cobrar'] == 1) {
 										$itemprecuenta = Detpedidotick::find($dato['proid']);
@@ -1033,6 +1256,7 @@ Boleta&nbsp;
 										$newtotal = $newtotal+$subtotal;
 										if ($dato['modificar'] == 1) {
 											$newcantidad = $itemprecuenta->cantidad-$dato['cantidad'];
+											//print_r($newcantidad); die();
 											$newprecio = $itemprecuenta->preciou*$newcantidad;
 											$itemprecuenta->cantidad = $newcantidad;
 											$itemprecuenta->precio = $newprecio;
@@ -1118,6 +1342,8 @@ Boleta&nbsp;
 					$cajero = Auth::user()->login;
 					/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete',
 					'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
+					//DB::rollback();
+					//return json_encode('false del rollBack');
 					DB::commit();
 					return json_encode('True');
 				}
@@ -1125,55 +1351,64 @@ Boleta&nbsp;
 
 		Route::post('cerrarmesa', function () {
 				if (Request::ajax()) {
-					$idpedido = Input::get('idpedido');
-					$despachado = DetPedido::where('pedido_id', '=', $idpedido)->where('estado', '!=', 'D')
-					->where('estado', '!=', 'A')->get();
-					$odetallepedidos = Detpedidotick::where('pedido_id', '=', $idpedido)
-						->where('ticket_id', '=', NULL, 'AND')->get();
-					$contelementos = count($odetallepedidos);
-					if ($contelementos == 0) {
-						if (Auth::user()->id_restaurante == 2) {
-							if (count($despachado) == 0) {
-								$opedido = Pedido::find($idpedido);
-								$newimporte = $opedido->tickets()->sum('importe');
-								$newdescuento = $opedido->tickets()->sum('idescuento');
-								$omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
-								$arrayupdatemesas = array();
-								foreach ($omesas as $dato) {
-									$arrayupdatemesas[] = $dato->id;
-								}
+                    //isset corrección desde javascript
+                    if(Pedido::find(Input::get('idpedido'))->estado == 'I'){
 
-								DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));
-								Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado'                                                                                    => 'L'));
-								$opedido->estado = "T";
-								$opedido->importeFinal = $newimporte;
-								$opedido->descuento = $newdescuento;
-								$opedido->save();
-								return json_encode('true');
-							} else {
-								return json_encode('No puedes cerrar la mesa, tienes pedidos por entregar');
-							}
-						} else {
-							$opedido = Pedido::find($idpedido);
-							$newimporte = $opedido->tickets()->sum('importe');
-							$newdescuento = $opedido->tickets()->sum('idescuento');
-							$omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
-							$arrayupdatemesas = array();
-							foreach ($omesas as $dato) {
-								$arrayupdatemesas[] = $dato->id;
-							}
 
-							DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));
-							Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado'                                                                                    => 'L'));
-							$opedido->estado = "T";
-							$opedido->importeFinal = $newimporte;
-							$opedido->descuento = $newdescuento;
-							$opedido->save();
-							return json_encode('true');
-						}
-					} else {
-						return json_encode('No puedes cerrar la mesa, tienes pedidos por cobrar.');
-					}
+                    $idpedido = Input::get('idpedido');
+                    $despachado = DetPedido::where('pedido_id', '=', $idpedido)->where('estado', '!=', 'D')
+                        ->where('estado', '!=', 'A')->get();
+                    $odetallepedidos = Detpedidotick::where('pedido_id', '=', $idpedido)
+                        ->where('ticket_id', '=', NULL, 'AND')->get();
+                    $contelementos = count($odetallepedidos);
+                    if ($contelementos == 0) {
+                        // == 20 por ningun rest
+                        if (Auth::user()->id_restaurante == 20) {
+                            if (count($despachado) == 0) {
+                                $opedido = Pedido::find($idpedido);
+                                $newimporte = $opedido->tickets()->sum('importe');
+                                $newdescuento = $opedido->tickets()->sum('idescuento');
+                                $omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
+                                $arrayupdatemesas = array();
+                                foreach ($omesas as $dato) {
+                                    $arrayupdatemesas[] = $dato->id;
+                                }
+                                //pedido terminado
+                                DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));
+                                //mesas libres
+                                Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));
+                                $opedido->estado = "T";
+                                $opedido->importeFinal = $newimporte;
+                                $opedido->descuento = $newdescuento;
+                                $opedido->save();
+                                return json_encode('true');
+                            } else {
+                                return json_encode('No puedes cerrar la mesa, tienes pedidos por entregar');
+                            }
+                        } else {
+                            $opedido = Pedido::find($idpedido);
+                            $newimporte = $opedido->tickets()->sum('importe');
+                            $newdescuento = $opedido->tickets()->sum('idescuento');
+                            $omesas = $opedido->mesas()->where('detmesa.estado', '=', 0)->get();
+                            $arrayupdatemesas = array();
+                            foreach ($omesas as $dato) {
+                                $arrayupdatemesas[] = $dato->id;
+                            }
+
+                            DetMesa::whereIn('mesa_id', $arrayupdatemesas)->where('pedido_id', '=', $idpedido, 'AND')->where('estado', '=', 0, 'AND')->update(array('estado' => 1));
+                            Mesa::whereIn('id', $arrayupdatemesas)->update(array('estado' => 'L'));
+                            $opedido->estado = "T";
+                            $opedido->importeFinal = $newimporte;
+                            $opedido->descuento = $newdescuento;
+                            $opedido->save();
+                            return json_encode('true');
+                        }
+                    } else {
+                        return json_encode('No puedes cerrar la mesa, tienes pedidos por cobrar.');
+                    }
+                }else{
+                        return json_encode('La Mesa ya ha sido cerrada. Por favor actualiza el navegador.');
+                    }
 				}
 			});
 
@@ -1201,6 +1436,7 @@ Boleta&nbsp;
 				$datos = Input::get('datos');
 				$rtipo = Input::get('rtipo');
 				$responsedatos = array();
+				//print_r(Input::all()); die();
 				if ($rtipo == 1) {
 					$newpersona = Persona::create(array('nombres' => $datos['nombres'], 'apPaterno' => $datos['apPaterno'], 'apMaterno' => $datos['apMaterno'], 'dni' => $datos['dni'], 'direccion' => $datos['direccion'], 'perfil_id' => $datos['cliente']));
 					$responsedatos[] = array('nombres'            => $newpersona->nombres.' '.$newpersona->apPaterno, 'dni'            => $newpersona->dni, 'direccion'            => $newpersona->direccion, 'id'            => $newpersona->id);
@@ -1212,9 +1448,15 @@ Boleta&nbsp;
 			});
 
 		Route::get('listadegastos', function () {
-				if (Request::ajax()) {
-					$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
-					$listadegastos = $detcaja->gastos()->get();
+				if (Request::ajax()) { //modify para q muestre tipo de gasto
+					//$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
+                    $listadegastos = Detcaja::join('registrogastoscaja','registrogastoscaja.detallecaja_id','=','detallecaja.id')
+                                        ->join('tipodegasto','tipodegasto.id','=','registrogastoscaja.tipogasto_id')
+                                        ->where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')
+                                        ->select('registrogastoscaja.id as id','registrogastoscaja.descripcion as descripcion','registrogastoscaja.importetotal as importetotal','tipodegasto.descripcion as tipo_descripcion')
+                                        ->get();
+					//$listadegastos = $detcaja->gastos()->get();
+                    //print_r($listadegastos->toJson()); die();
 					return Response::json($listadegastos);
 				}
 			});
@@ -1239,12 +1481,16 @@ Boleta&nbsp;
 
 		Route::post('postcancelarorden', function () {
 				if (Request::ajax()) {
+					DB::beginTransaction();
+					//try{
 					$codigo = Input::get('codigo');
 					$iddetallepedido = Input::get('iddetalle');
 					$usuario = Codigousuario::where('codigo', '=', $codigo)->first();
 					$idusuarioauto = Input::get('usuarioautoriza');
 					$motivo = Input::get('motivo');
 					$flaganulacion = 0;
+					$flagadicional = 0;
+					//print_r($usuario);
 					if (count($usuario) > 0) {
 						$detpedido = DetPedido::find($iddetallepedido);
 						$pedido = Pedido::find($detpedido->pedido_id);
@@ -1263,6 +1509,13 @@ Boleta&nbsp;
 						if (isset($oprecuenta)) {
 							if ($oprecuenta->cantidad > 1) {
 								$newcantidad = $oprecuenta->cantidad-$detpedido->cantidad;
+								//print_r($newcantidad);
+								//die();
+								if ($newcantidad < 0) {
+									DB::rollBack();
+									//para cuando mando 5 y pago 3. quiero eliminar los 5..
+									return Response::json('false - algunos productos ya han sido pagados');
+								}
 								if ($newcantidad == 0) {
 									$oprecuenta->delete();
 									$flaganulacion = 1;
@@ -1278,19 +1531,99 @@ Boleta&nbsp;
 								}
 
 							} else {
+								$newcantidad = $oprecuenta->cantidad-$detpedido->cantidad; 
+								//para cuando mando 2 y pagó 1. si no ponía esto, se eliminaba 2 en detped y 1 en detticket
+									if ($newcantidad < 0) {
+										DB::rollBack();
+										return Response::json('Error - Algunos productos adic ya han sido pagados');
+										}
 								$oprecuenta->delete();
 								$flaganulacion = 1;
 							}
-						}
+
+							//eliminar prod adicionales
+							$oprecuenta = null;
+							$prodAdic = DetPedido::where('detalle_id','=',$detpedido->id)
+                                                    ->whereNull('detalleanulacion_id')
+							                        ->get();
+							//print_r(count($prodAdic)); die();
+							if (count($prodAdic)>0) {
+								foreach ($prodAdic as $proAdc) {
+									$oprecuenta = Detpedidotick::where('producto_id','=',$proAdc->producto_id)
+											->where('pedido_id','=',$proAdc->pedido_id,'AND')
+											->whereNull('ticket_id')
+											->first();
+
+											if (isset($oprecuenta)) {
+												//print_r('entro'); die();
+												if ($oprecuenta->cantidad > 1) {
+													$newcantidad = $oprecuenta->cantidad-$proAdc->cantidad;
+													//print_r($newcantidad); die();
+													if ($newcantidad < 0) {
+														DB::rollBack();
+														//para cuando mando 5 y pagó 3. quiero eliminar los 5..
+														return Response::json('Error - Algunos productos adic ya han sido pagados');
+													}
+
+													if ($newcantidad == 0) {
+														$oprecuenta->delete();
+														$flagadicional = 1;
+														
+													}else{
+
+													$newprecio = $oprecuenta->preciou*$newcantidad;
+													$oprecuenta->cantidad = $newcantidad;
+													$oprecuenta->precio = $newprecio;
+													$oprecuenta->save();
+													$flagadicional = 1;
+
+													}
+
+												} else {
+
+													//if ($oprecuenta->cantidad = 1) { 
+													//para cuando mando 2 y pagó 1. si no ponía esto, se eliminaba 2 en detped y 1 en detticket
+														$newcantidad = $oprecuenta->cantidad-$proAdc->cantidad; 
+														if ($newcantidad < 0) {
+															DB::rollBack();
+															return Response::json('Error - Algunos productos adic ya han sido pagados');
+														}
+													//}
+													//print_r('entreelse'); die();
+													$oprecuenta->delete();
+													$flagadicional = 1;
+												}	
+
+
+												
+											}
+
+								$oprecuenta = null;
+
+								}
+								
+							}//fin if (count($prodAdic)>0)... <-- no es código comentado.. 
+							
+
+
+						}//
 
 						if ($flaganulacion == 1) {
-							$odetanulacion = Detalleanulacion::create(array('motivo' => $motivo,
-									'usuario_id'                                           => $idusuarioauto));
+							$odetanulacion = Detalleanulacion::create(array(
+									'motivo' 	 => $motivo,
+									'usuario_id' => $idusuarioauto));
+
 							if (isset($detpedido->combinacion_id)) {
 								$actulizando = DetPedido::where('combinacion_id', '=', $detpedido->combinacion_id)
 									->where('combinacion_c', '=', $detpedido->combinacion_c)
 									->where('pedido_id', '=', $detpedido->pedido_id)
-									->update(array('estado' => 'A', 'detalleanulacion_id' => $odetanulacion->id));
+									->update(array('estado' => 'A',
+												 'detalleanulacion_id' => $odetanulacion->id,
+												 	//add 19-03-15
+													 'codigocancelacion' => $usuario->usuario_id));
+													//fin add
+
+								//print_r($actulizando); die();
 								$detalles = DetPedido::where('combinacion_id', '=', $detpedido->combinacion_id)
 											->where('combinacion_c', '=', $detpedido->combinacion_c)
 											->where('pedido_id', '=', $detpedido->pedido_id)
@@ -1301,6 +1634,7 @@ Boleta&nbsp;
 											'proid'=>$detalle->producto_id,'cantidad'=>$detalle->cantidad];
 								}
 								$tipo = 2;
+								//print_r($productos); die();
 							} else {
 								$detpedido->estado = 'A';
 								$detpedido->detalleanulacion_id = $odetanulacion->id;
@@ -1310,24 +1644,64 @@ Boleta&nbsp;
 											'proid'=>$detpedido->producto_id,'cantidad'=>$detpedido->cantidad];
 								$tipo = 1;
 							}
+							//print_r($flagadicional); die();
+							$productosAdc = null;
+								if ($flagadicional == 1) {
+										$actualizandoAdc = DetPedido::where('detalle_id','=',$detpedido->id)
+                                                    ->whereNull('detalleanulacion_id')
+							                        ->update(array('estado' => 'A',
+							                        				'detalleanulacion_id' => $odetanulacion->id,
+							                        				'codigocancelacion' => $usuario->usuario_id
+							                        				));
+
+										$detallesAdc = DetPedido::where('detalle_id','=',$detpedido->id)
+													->where('detalleanulacion_id','=',$odetanulacion->id)
+                                                    ->get();
+										$productosAdc = array();
+										foreach ($detallesAdc as $detalle) {
+											$productosAdc[] = ['estado'=> $detalle->estado, 'iddetallep'=>$detalle->id, 
+													'proid'=>$detalle->producto_id,'cantidad'=>$detalle->cantidad];
+										}
+										//$tipo = 2;
+								}
+
+
 						} else {
+							//no hay nada para eliminar
+							DB::rollBack();
 							return Response::json('false - flaganulacion');
 						}
-
+						//si no queda nada, se anula el pedido
 						$odetalles = $pedido->productos()->where('detallepedido.estado', '!=', 'A')->get();
+						//print_r(count($odetalles)); die();
 						if (count($odetalles) == 0) {
 							$pedido->estado = 'A';
 							$pedido->fechaCancelacion = date('Y-m-d H:i:s');
 							$pedido->save();
-							$datos = ['response'=> 'redirect', 'tipo'=>$tipo, 'items'=>$productos];
+							//print_r($productosAdc); die();
+							$datos = ['response'=> 'redirect', 'tipo'=>$tipo, 'items'=>$productos, 'itemsAdc' => $productosAdc];
+							//print_r(json_encode($datos)); die(); 
+							DB::commit();
 							return Response::json($datos);
 						} else {
-							$datos = ['response'=> 'true', 'tipo'=>$tipo, 'items'=>$productos];
+							//print_r($productosAdc); die();
+							$datos = ['response'=> 'true', 'tipo'=>$tipo, 'items'=>$productos, 'itemsAdc' => $productosAdc];
+							//print_r(json_encode($datos)); die(); 
+							DB::commit();
 							return Response::json($datos);
 						}
 					} else {
+						//si clave no coincide..
+						DB::rollBack();
 						return Response::json('false');
 					}
+
+					/*}catch(Exception $e){
+						DB::rollBack();
+						return Response::json('falsecat');
+
+					}*/
+					//DB::commit();
 				}
 			});
 
@@ -1357,9 +1731,12 @@ Boleta&nbsp;
 				if (Request::ajax()) {
 					$idticket = Input::get('idtick');
 					$tickete = Ticket::find($idticket);
-					if ($tickete->estado == 1) {
+					if ($tickete->estado == 1 or $tickete->importe < 0) {
 						return Response::json('false');
 					}
+
+					print_r("paso");
+					die();
 					$tickete->estado = 1;
 					$infocaja = $tickete->caja;
 					$newnumero = $infocaja->numero+1;
@@ -1554,7 +1931,7 @@ Hora:'.date('H:i:s').'</strong>
 					$cmd = "lpr -P".$infocaja->impresora." ";
 					$cmd .= $pdfPath;
 					$response = shell_exec($cmd);
-					File::delete($pdfPath);
+					//File::delete($pdfPath);
 					$tickete->save();
 					$infocaja->save();
 					return Response::json('true');
@@ -1568,6 +1945,8 @@ Hora:'.date('H:i:s').'</strong>
 					$fechaFin = Input::get('fechafin');
 					$restaurante = Restaurante::find($idrest);
 					$cajas = $restaurante->cajas;
+					//print_r(count($cajas));
+					//die();
 					$arraydatos = array();
 					$contador = 0;
 					foreach ($cajas as $cdato) {
@@ -1581,6 +1960,7 @@ Hora:'.date('H:i:s').'</strong>
 							$totalanulados = $cajon->tickets()->where('ticketventa.estado', '=', 1)->count();
 							$totaldescuentos = $cajon->tickets()->where('ticketventa.estado', '=', 0)
 								->where('ticketventa.importe', '>=', 0)->sum('idescuento');
+							// no cuenta anulados ni tickets en monto negativo
 							$totalventas1 = $cajon->tickets()->where('ticketventa.estado', '=', 0)
 								->where('ticketventa.importe', '>=', 0)->sum('importe');
 							$tickets = $cajon->tickets()->where('ticketventa.estado', '=', 0)
@@ -1590,6 +1970,8 @@ Hora:'.date('H:i:s').'</strong>
 							$efectivo = 0;
 							$tarjeta = 0;
 							$vale = 0;
+							$dsctoAut = 0;
+							$imProm = 0;
 							$totalproductosvendidos = 0;
 							foreach ($tickets as $tickete) {
 								$totalproductosvendidos = $totalproductosvendidos+$tickete->detallest()->sum('cantidad');
@@ -1617,16 +1999,35 @@ Hora:'.date('H:i:s').'</strong>
 
 							foreach ($tickets as $tickete) {
 								$oefect = $tickete->tipopago()->where('formadepago_id', '=', 3)->sum('importe');
+								$newefec = $dsctoAut+$oefect;
+								$dsctoAut = round($newefec, 2);
+							}
+
+							foreach ($tickets as $tickete) {
+								$oefect = $tickete->tipopago()->where('formadepago_id','=',4)->sum('importe');
 								$newefec = $vale+$oefect;
 								$vale = round($newefec, 2);
 							}
+
+							foreach ($tickets as $tickete) {
+								//$oefect = $tickete->tipopago()->where('formadepago_id','=',5)->sum('idescuento');
+								$oefect = $tickete->tipopago()->join('ticketventa','ticketventa.id','=','Detformadepago.ticket_id')
+												->where('Detformadepago.formadepago_id','=',5)->sum('idescuento');
+								$newefec = $imProm+$oefect;
+								$imProm = round($newefec, 2);
+							}
+
+							//print_r($imProm); die();
+
 							if ($totaltickets > 0) {
 								$arraydatos[] = array('usuario' => $usuario->login,
 									'totaltickets'                 => $totaltickets,
 									'totalanulados'                => $totalanulados,
 									'totalefectivo'                => number_format($efectivo, 2, '.', ''),
 									'totaltarjeta'                 => number_format($tarjeta, 2, '.', ''),
-									'totalvale'                    => number_format($vale, 2, '.', ''),
+									'totaldsctoAut'                    => number_format($dsctoAut, 2, '.', ''),
+									'totalvale'						=> number_format($vale, 2, '.',''),
+									'totalImProm'					=> number_format($imProm,2,'.',''),
 									'totaldescuentos'              => $totaldescuentos,
 									'fondodecaja'                  => $cajon->montoInicial,
 									'totalventas'                  => $totalventas1,
@@ -1648,7 +2049,9 @@ Hora:'.date('H:i:s').'</strong>
 									'totalanulados'                => $totalanulados,
 									'totalefectivo'                => number_format($efectivo, 2, '.', ''),
 									'totaltarjeta'                 => number_format($tarjeta, 2, '.', ''),
-									'totalvale'                    => number_format($vale, 2, '.', ''),
+									'totaldsctoAut'                    => number_format($dsctoAut, 2, '.', ''),
+									'totalvale'						=> number_format($vale, 2, '.',''),
+									'totalImProm'					=> number_format($imProm,2,'.',''),
 									'totaldescuentos'              => 0.00,
 									'fondodecaja'                  => $cajon->montoInicial,
 									'totalventas'                  => $cajon->ventastotales,
@@ -1691,15 +2094,15 @@ Hora:'.date('H:i:s').'</strong>
 
 		Route::post('movermesa', function () {
 				if (Request::ajax()) {
-					$idmesaupdate = Input::get('idmesaupdate');
-					$idmesa = Input::get('idmesa');
+					$idmesaupdate = Input::get('idmesaupdate'); //mesa actual
+					$idmesa = Input::get('idmesa'); //id de mesa donde se moverá
 					$idpedido = Input::get('idpedido');
-					$mesa = Mesa::find($idmesa);
+					$mesa = Mesa::find($idmesa); // mesa donde se moverá
 
 					if ($mesa->estado == 'L') {
 						$updatemesa = DetMesa::where('pedido_id', '=', $idpedido)
-						->where('mesa_id', '=', $idmesaupdate, 'AND')
-							->update(array('mesa_id' => $idmesa));
+						->where('mesa_id', '=', $idmesaupdate, 'AND') //falta verificar si pedido ya está cerrado
+							->update(array('mesa_id' => $idmesa)); //si no coincide su mesa actual y su pedido, no cambiará de mesa
 						if (count($updatemesa) > 0) {
 							return Response::json('true');
 						} else {
@@ -1748,6 +2151,7 @@ Hora:'.date('H:i:s').'</strong>
 						->where('detallepedido.estado', '!=', 'D')
 					->where('detallepedido.estado', '!=', 'A')
 						->wherein('pedido.usuario_id', $usuarios)
+						//no prod adicionales de otro
 					->whereNull('detallepedido.detalle_id')
 						->get();
 
@@ -1844,8 +2248,34 @@ Hora:'.date('H:i:s').'</strong>
 					$restauranteid = Input::get('idrestaurante');
 					$fechaInicio = Input::get('fechainicio');
 					$fechaFin = Input::get('fechafin');
-					$mozos = Usuario::where('id_restaurante', '=', $restauranteid)
+
+					/*$mozos = Usuario::where('id_restaurante', '=', $restauranteid)
 						->where('usuario.colaborador', '=', 2)->get();
+						*/
+
+						/*que sucede si cambio los perfiles de un usuario mozo a admin
+						no figuraria aqui y el reporte estaría erroneo
+						tendria q ver todos los usuarios mozos q figuran en los tickets
+						almacenarlos en la variable $mozos.!!
+						*/
+				/*$mozos = Usuario::whereHas('persona',function($q){
+					$q->where('perfil_id','=',2);
+				})->get();*/
+
+				$mozos = Ticket::selectraw('DISTINCT(mozoid)')
+								->whereBetween('ticketventa.created_at',
+							array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
+								->get();
+								//print_r($mozos->toJson());
+								//die();
+						
+
+					/*$mozos = Usuario::where('usuario.colaborador','=',2)->get();*/
+					//print_r(count($mozos)); die();
+					$caja = Caja::where('restaurante_id','=',$restauranteid)->first();
+
+					//print_r($caja->id);
+					//die();	
 
 					$arraydatos = array();
 					foreach ($mozos as $mozo) {
@@ -1856,11 +2286,35 @@ Hora:'.date('H:i:s').'</strong>
 						->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 							->whereBetween('ticketventa.created_at',
 							array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
-						->where('usuario.id', '=', $mozo->id)
+						->where('usuario.id', '=', $mozo->mozoid)
 						->where('ticketventa.estado', '=', 0)
 							->where('ticketventa.importe', '>=', 0)
 						->first();
-						$productos = Detpedidotick::selectraw('usuario.id, sum(dettiketpedido.cantidad) AS totalproductos,
+						
+						//print_r($ventas); die();
+
+						$productos = DB::select( DB::raw("SELECT userID AS id, sum(dettiketpedCant) AS totalproductos, COUNT(DISTINCT pedId) AS totalpedidos
+						FROM (
+						SELECT DISTINCT dettiketpedido.id AS dettiketpID, usuario.id userID, dettiketpedido.cantidad AS dettiketpedCant, pedido.id AS pedId
+						FROM dettiketpedido 
+						INNER JOIN pedido ON pedido.id = dettiketpedido.pedido_id 
+						INNER JOIN ticketventa ON ticketventa.pedido_id = pedido.id 
+						INNER JOIN usuario ON usuario.id = pedido.usuario_id
+						WHERE dettiketpedido.created_at BETWEEN '".$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59'
+						AND usuario.id = '".$mozo->mozoid."' 
+						AND ticketventa.estado = '0'
+						AND ticketventa.importe >= '0'
+						AND ticketventa.caja_id = '".$caja->id."'
+						) AS foo") );
+
+						$productos = $productos[0];
+
+
+						//print_r($productos->totalproductos);
+						//die();
+
+
+						/*$productos = Detpedidotick::selectraw('usuario.id, sum(dettiketpedido.cantidad) AS totalproductos,
 							COUNT(DISTINCT pedido.id) AS totalpedidos')
 							->join('pedido', 'pedido.id', '=', 'dettiketpedido.pedido_id')
 						->join('ticketventa', 'ticketventa.pedido_id', '=', 'pedido.id')
@@ -1868,7 +2322,11 @@ Hora:'.date('H:i:s').'</strong>
 						->whereBetween('dettiketpedido.created_at', array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
 							->where('usuario.id', '=', $mozo->id)
 							->where('ticketventa.estado', '=', 0)
-						->first();
+							//add
+							->where('ticketventa.importe','>=',0)
+							//fin add
+						->first();*/
+
 						$tiempos = DetPedido::selectraw("usuario.id,
 							SEC_TO_TIME((avg(TIMESTAMPDIFF(SECOND , fechaDespacho, fechaDespachado))))
 							AS tiempomozopromedio,SEC_TO_TIME((min(TIMESTAMPDIFF(SECOND , fechaDespacho, fechaDespachado))))
@@ -1877,30 +2335,50 @@ Hora:'.date('H:i:s').'</strong>
 							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 						->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
-						->where('usuario.id', '=', $mozo->id)
+						->where('usuario.id', '=', $mozo->mozoid)
 						->first();
+						
 						$ticketsanulados = Ticket::selectraw('COUNT(ticketventa.id) AS totaltanulados')
 							->join('pedido', 'pedido.id', '=', 'ticketventa.pedido_id')
 						->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 							->whereBetween('ticketventa.created_at',
 							array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
-						->where('usuario.id', '=', $mozo->id)
+						->where('usuario.id', '=', $mozo->mozoid)
 						->where('ticketventa.estado', '=', 1)
                         ->first();
+
 						$pedidosanulados = Pedido::selectraw('COUNT(pedido.id) AS pedidosanulados')
 							->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 						->whereBetween('pedido.fechaInicio',
 							array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
-							->where('usuario.id', '=', $mozo->id)
+							->where('usuario.id', '=', $mozo->mozoid)
 							->where('pedido.estado', '=', 'A')
 						->first();
+
+						$combinacionesanuladas = DB::select(DB::raw("SELECT SUM(x.combinacion_cant) AS combinacionesanuladas FROM 
+(
+SELECT DISTINCT detallepedido.combinacion_id, detallepedido.combinacion_c, detallepedido.combinacion_cant  FROM `detallepedido` 
+INNER JOIN `pedido` ON `pedido`.`id` = `detallepedido`.`pedido_id` 
+INNER JOIN `usuario` ON `usuario`.`id` = `pedido`.`usuario_id` 
+WHERE `detallepedido`.`fechaInicio` BETWEEN '".$fechaInicio." 00:00:00' AND '".$fechaFin." 23:59:59' 
+AND `usuario`.`id` = '".$mozo->mozoid."' 
+AND `detallepedido`.`estado` = 'A'
+AND detallepedido.combinacion_id IS NOT NULL
+) AS x"
+
+
+							));
+
+						//print_r($combinacionesanuladas[0]->combinacionesanuladas);
+						//die();
 
 						$productosanulados = DetPedido::selectraw('SUM(detallepedido.cantidad) AS productosanulados')
 							->join('pedido', 'pedido.id', '=', 'detallepedido.pedido_id')
 						->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 							->whereBetween('detallepedido.fechaInicio', array($fechaInicio.' 00:00:00', $fechaFin.' 23:59:59'))
-						->where('usuario.id', '=', $mozo->id)
+						->where('usuario.id', '=', $mozo->mozoid)
 						->where('detallepedido.estado', '=', 'A')
+						->whereNull('detallepedido.combinacion_id')
 							->first();
 
 						if ($productos->totalproductos > 0) {
@@ -1912,7 +2390,7 @@ Hora:'.date('H:i:s').'</strong>
 								'peds'     => $productos->totalpedidos,
 								'pedsa'    => $pedidosanulados->pedidosanulados,
 								'cprods'   => $productos->totalproductos,
-								'panul'    => number_format($productosanulados->productosanulados, 0, '.', ''),
+								'panul'    => number_format($productosanulados->productosanulados+$combinacionesanuladas[0]->combinacionesanuladas, 0, '.', ''),
 								'ctickets' => $ventas->totaltickets,
 								'tanul'    => number_format($ticketsanulados->totaltanulados, 0, '.', ''),
 								'tprom'    => $tiempos->tiempomozopromedio,
@@ -1925,6 +2403,7 @@ Hora:'.date('H:i:s').'</strong>
 							);
 						}
 					}
+
 					$eventos = Ticket::join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
 						->join('caja', 'caja.id', '=', 'ticketventa.caja_id')
 					->where('ticketventa.estado', '=', 0)
@@ -1934,6 +2413,7 @@ Hora:'.date('H:i:s').'</strong>
 						->wherenull('dettiketpedido.combinacion_id')
 					->wherenull('dettiketpedido.producto_id')
 						->sum('ticketventa.importe');
+
 					$eventoscount = Ticket::join('dettiketpedido', 'dettiketpedido.ticket_id', '=', 'ticketventa.id')
 						->join('caja', 'caja.id', '=', 'ticketventa.caja_id')
 					->where('ticketventa.estado', '=', 0)
@@ -1943,6 +2423,7 @@ Hora:'.date('H:i:s').'</strong>
 						->wherenull('dettiketpedido.combinacion_id')
 					->wherenull('dettiketpedido.producto_id')
 						->count('ticketventa.importe');
+
 					if ($eventoscount > 0) {
 						$arraydatos[] = array(
 							'mozoid'   => '-',
@@ -2844,9 +3325,98 @@ Hora:'.date('H:i:s').'</strong>
 			});
 		//fin rutas
 
-        Route::get('vales-descuentos', function(){
+        Route::get('vales-descuentos', array('before'=>'admin', function(){
             $restaurantes = Restaurante::all();
            return View::make('reportes.vales-descuentos-index', compact('restaurantes'));
+        }));
+
+
+        //routes de listar mantenedores
+        Route::get('/getUsers', function(){
+        	$usuarios = Usuario::selectraw('concat(nombres," ",apPaterno," ",apMaterno) as nombres,perfil.nombre,usuario.estado,usuario.login,usuario.id')
+						->join('persona','persona.id','=','usuario.persona_id')
+						->join('perfil','persona.perfil_id','=','perfil.id')
+						->get();
+			return Response::json($usuarios);
         });
+
+        Route::get('/getProducts', function(){
+        	$producto1 = Producto::join('familia','familia.id','=','producto.familia_id')
+        				/*->whereHas('combinaciones',function($q){
+        					$q->where('combinacion.id','=',1);
+        				})*/
+        				->join('precio','producto.id','=','precio.producto_id')
+        				/*->where('precio.combinacion_id','=',1)*/
+        				->selectraw('distinct(producto.id), producto.nombre as nombreProd, precio.precio as precio, producto.costo as costo,familia.nombre as nombreFam,producto.estado as estado ')
+        				->orderBy('producto.id')
+        				->where('precio.combinacion_id','=',1)
+        				->where('producto.receta','=',0)
+        	            ->get();
+
+        	 $producto2 = Producto::join('familia','familia.id','=','producto.familia_id')
+						->leftjoin('receta','producto.id','=','receta.producto_id')
+						->join('precio','producto.id','=','precio.producto_id')
+						->where('receta', '=', 1)
+						->where('precio.combinacion_id','=',1)
+						->selectraw('distinct(producto.id),producto.nombre as nombreProd, precio.precio as precio, sum(receta.precio) as costo, familia.nombre as nombreFam,producto.estado as estado')
+						->groupBy('producto.id')
+						->get();
+
+			$fusioPrimera = array_merge($producto1->toArray(),$producto2->toArray());
+
+			//print_r($fusioPrimera); die();
+
+			$arrX;
+			foreach ($fusioPrimera as $x) {
+				$arrX[] = $x['id'];
+			}
+			$producto3 = Producto::join('familia','familia.id','=','producto.familia_id')
+						->selectraw('producto.id,producto.nombre as nombreProd, "" as precio, "" as costo, familia.nombre as nombreFam,producto.estado as estado')
+						->whereNotIn('producto.id',$arrX)
+						->get();
+			/*$producto3 = Producto::join('precio','producto.id','=','precio.producto_id')
+						->join('familia','familia.id','=','producto.familia_id')
+						->where('precio.combinacion_id','!=',1)
+						->selectraw('distinct(producto.id),producto.nombre as nombreProd, precio.precio as precio, familia.nombre as nombreFam,producto.estado as estado')	        
+						->groupBy('producto.id')
+						->get();*/
+        	/*$productos = Producto::has('combinaciones','<','1')->get();*/
+        	//print_r($producto3->toJson()); die();
+			return Response::json(array_merge($fusioPrimera,$producto3->toArray()));
+			//return Response::json($producto1);
+        });
+
+		Route::get('/getInsumos', function(){
+
+			$insumos = Insumo::all();
+
+			return Response::json($insumos);
+
+		});
+
+		Route::get('/getNotas', function(){
+
+			$insumos = Notas::all();
+
+			return Response::json($insumos);
+
+		});
+
+		Route::get('/getPersonas', function(){
+			$personas = Persona::with('Perfil')->whereNull('razonSocial')->get();
+
+			return Response::json($personas);
+		});
+
+		Route::post('/resetPasswd', function(){
+			if (Request::ajax()) {
+				$id_login = Input::get('id_login');
+				$user = Usuario::find($id_login);
+				$codigo = substr( md5(microtime()), 1, 6);
+				$user->password = Hash::make($codigo);
+				$user->save();
+				return Response::json($codigo);
+			}
+		});
 
 	});

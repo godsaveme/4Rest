@@ -11,10 +11,10 @@
 	</title>
 	@section('cssgeneral')
   {{HTML::style('css/normalize.css')}}
-  {{HTML::style('css/kendo/kendo.common-bootstrap.min.css')}}
+  {{HTML::style('css/kendo/kendo.common.min.css')}}
   {{HTML::style('css/bootstrap/bootstrap_lumen.min.css')}}
   {{HTML::style('css/bootstrap/font-awesome/css/font-awesome.min.css')}}
-  {{HTML::style('css/kendo/kendo.silver.min.css')}}
+  {{HTML::style('css/kendo/kendo.material.min.css')}}
   {{HTML::style('css/jquery.timeentry.css')}}
 	{{HTML::style('css/general.css')}}
   {{HTML::style('css/alertify.core.css')}}
@@ -26,8 +26,9 @@
   @section('jsgeneral')
   {{HTML::script('js/kendo/jquery-2.1.0.min.js');}}
   {{HTML::script('js/kendo/kendo.all.min.js');}}
-  {{HTML::script('js/bootstrap.min.js')}}
+  {{HTML::script('js/bootstrap/bootstrap.min.js')}}
   {{HTML::script('js/kendo/kendo.culture.es-PE.min.js')}}
+  {{HTML::script('js/kendo/kendo.messages.es-ES.min.js')}}
   {{HTML::script('js/under.js'); }}
   {{HTML::script('js/jquery.plugin.js'); }}
   {{HTML::script('js/jquery.timeentry.min.js'); }}
@@ -57,38 +58,124 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 
+          @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bookmark-o"></i> Archivo<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bookmark-o"></i> Restaurante<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a onclick="event.preventDefault();" href="#"><i class="fa fa-pencil-square-o"></i>  Editar Usuario</a></li>
+                <li><a href="/restaurantes"><i class="fa fa-pencil-square-o"></i>  Sucursal</a></li>
                 <li class="divider"></li>
-                <li><a href="web"><i class="fa fa-rotate-left"></i>  Limpiar</a></li>
-                <li><a onclick="openCollapse();" href="#"><i class="fa fa-plus-square-o"></i>  Expandir todos</a></li>
-                <li><a onclick="hideCollapse();" href="#"><i class="fa fa-minus-square-o"></i>  Colapsar todos</a></li>
-                <li class="divider"></li>
-<!--                 <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li> -->
-                <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
+                <li><a href="/salones"><i class="fa fa-rotate-left"></i>  Salones</a></li>
+                <li><a href="mesas"><i class="fa fa-plus-square-o"></i>  Mesas</a></li>
+                
               </ul>
             </li>
+           @endif
+
+            @if(Auth::user()->persona->perfil->nombre === 'Administrador' or Auth::user()->persona->perfil->nombre === 'Administrador')
               <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-share-square-o"></i> Catálogo<b class="caret"></b>
+                </a>
+               <ul class="dropdown-menu">
+                @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+                <li><a href="/familias"><i class="fa fa-pencil-square-o"></i>  Familias</a></li>
+                <li class="divider"></li>
+                @endif
+                <li><a href="/productos"><i class="fa fa-rotate-left"></i>  Productos</a></li>
+                @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+                <li><a href="/insumos"><i class="fa fa-plus-square-o"></i>  Insumos</a></li>
+                @endif
+
+                <li class="divider"></li>
+                <li><a href="tipocombinacions"><i class="fa fa-rotate-left"></i>  Tipos de Combinaciones</a></li>
+                <li><a href="/combinacions"><i class="fa fa-plus-square-o"></i>  Combinaciones</a></li>
+                 @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+                <li class="divider"></li>
+                 <li><a href="/notas"><i class="fa fa-minus-square-o"></i>  Notas</a></li>
+                 @endif
+                
+<!--                 <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li> -->
+                
+              </ul>
+            </li>
+
+            @endif
+        @if(Auth::user()->persona->perfil->nombre === 'Administrador' or Auth::user()->persona->perfil->nombre === 'Caja')
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-share-square-o"></i> Personas<b class="caret"></b>
+                </a>
+               <ul class="dropdown-menu">
+                <li><a href="/personas"><i class="fa fa-pencil-square-o"></i>  Personas</a></li>
+                <li class="divider"></li>
+                <li><a href="/personas/empresas"><i class="fa fa-rotate-left"></i>  Empresas</a></li>
+                @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+                <li><a href="/usuarios"><i class="fa fa-plus-square-o"></i>  Usuarios</a></li>
+                @endif
+              
+                
+              </ul>
+            </li>
+
+            @endif
+            @if(Auth::user()->persona->perfil->nombre === 'Administrador')
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-share-square-o"></i> Control de Stock<b class="caret"></b>
+                </a>
+               <ul class="dropdown-menu">
+                <li><a href="/almacenes"><i class="fa fa-pencil-square-o"></i>  Almacenes</a></li>
+                
+                <li><a href="/compras"><i class="fa fa-rotate-left"></i>  Compras</a></li>
+                <li class="divider"></li>
+                <li><a href="/recetas"><i class="fa fa-rotate-left"></i>  Recetas</a></li>
+                <li class="divider"></li>
+                <li><a href="/sabores"><i class="fa fa-rotate-left"></i>  Sabores</a></li>
+                <li><a href="/sabores/indexdet"><i class="fa fa-rotate-left"></i>  Agregar sabor a producto</a></li>
+                <li class="divider"></li>
+                <li class="disabled"><a onclick="event.preventDefault();" href="#"><i class="fa fa-rotate-left"></i>  Orden de Producción</a></li>
+                <li class="disabled"><a href="#"><i class="fa fa-rotate-left"></i>  Requerimiento</a></li>
+                <li class="disabled"><a href="#"><i class="fa fa-rotate-left"></i>  Orden de Compra</a></li>
+                
+                
+              </ul>
+            </li>
+
+            @endif
+
+            <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-share-square-o"></i> Ir a<b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{URL('pedidos')}}"><i class="fa fa-tablet"></i>  Pedidos Tablet</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{{URL('cajas')}}"><i class="fa fa-money"></i>  Caja</a></li>
-                  
-                  <li class="divider"></li>
-  <!--            <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li> -->
-                  <li><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
-                </ul>
+               <ul class="dropdown-menu">
+
+                <li><a href="{{URL('monitores')}}"> <i class="glyphicon glyphicon-eye-open"></i> Monitores</a></li>
+               @if(Auth::user()->persona->perfil->nombre === 'Caja')
+               <li><a href="/cajas"><i class="fa fa-pencil-square-o"></i>  Caja </a></li>
+               @endif
+               @if(Auth::user()->persona->perfil->nombre === 'Cocina' and Auth::user()->areaproduccion->nombre ==='Cocina')
+               <li class="divider"></li>
+                <li><a href="/cocina"><i class="fa fa-pencil-square-o"></i>  Área de Producción: Cocina</a></li>
+                @endif
+                @if(Auth::user()->persona->perfil->nombre === 'Cocina' and Auth::user()->areaproduccion->nombre ==='Barra')
+                <li class="divider"></li>
+                <li><a href="/cocina"><i class="fa fa-rotate-left"></i>  Área de Producción: Barra</a></li>
+                @endif
+                @if(Auth::user()->persona->perfil->nombre === 'Mozo')
+                <li class="divider"></li>
+                <li><a href="/pedidoscomanda"><i class="fa fa-rotate-left"></i>  Punto de Venta: Salón</a></li>
+                @endif
+
+                                
+              </ul>
             </li>
+             @if(Auth::user()->persona->perfil->nombre === 'Administrador')
              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-caret-square-o-down"></i> Reportes
+                  Reportes<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                 <li>
@@ -97,7 +184,8 @@
                       Reporte  Caja Diario
                     </a>
                   </li>
-                  <li><a href="{{URL('monitores')}}"> <i class="glyphicon glyphicon-eye-open"></i> Monitores</a></li>
+
+                  <li class="divider"></li>
                   <li>
                     <a href="/usuarios/reportemozos/2">
                       <i class="fa fa-users"></i>
@@ -110,6 +198,7 @@
                       Reporte Mozos Woyke
                     </a>
                   </li>
+                  <li class="divider"></li>
                   <li>
                     <a href="/reportes/reporteproductos/2">
                       <i class="fa fa-users"></i>
@@ -122,6 +211,7 @@
                       Rotación Productos Woyke
                     </a>
                   </li>
+                  <li class="divider"></li>
                   <li>
                     <a href="/reportes/reportesemanal/2">
                       <i class="fa fa-users"></i>
@@ -134,6 +224,7 @@
                        Cuadro Semanal Venta de Productos Woyke
                     </a>
                   </li>
+                  <li class="divider"></li>
                   <li>
                     <a href="/vales-descuentos">
                       <i class="fa fa-users"></i>
@@ -142,6 +233,7 @@
                   </li>
                 </ul>
              </li>
+             @endif
 <!--             <li><a href="">About</a></li>
             <li><a href="">Contact</a></li> -->
             <li class="dropdown">
@@ -156,7 +248,16 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{url('/logout')}}" ><i class="fa fa-sign-out"></i>  Salir</a></li>
+            <li><a > </a></li>
+            <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{Auth::user()->persona->nombres.' '.Auth::user()->persona->apPaterno}} <i class="icon glyphicon glyphicon-cog"></i></a>
+                          <ul class="dropdown-menu" style="padding: 7px 19px;">
+                            <p class="text-center">{{Auth::user()->persona->perfil->nombre}}</p>
+                            <div style="position: relative;text-align: center;
+                                                           margin: 10px auto;"><img src="{{URL('../images/profile-pic.jpg')}}" class="ra-avatar img-responsive"><span onclick="window.location.href='/usuarios/edit/{{Auth::user()->id}}' " class="caption">Editar Usuario</span></div>
+                            <li class="text-right"><a href="/logout"><i class="fa fa-sign-out"></i> Salir</a></li>
+                          </ul>
+                        </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -167,7 +268,7 @@
 @if(Auth::check())
 <div class="container k-content" style="margin-top:-20px;">
   <div class="row" style="background: #f2f4f8;">
-    <div class="col-md-4 " >
+    <div class="col-md-3" style="display: none;" >
                 <div class="panel panel-default" style="margin-top:20px;">
   <div class="panel-body">
       <div class="well well-lg">
@@ -390,7 +491,7 @@
 
 
 
-    <div class="col-md-8">
+    <div class="col-md-12">
                     <div class="panel panel-default" style="margin-top:20px;" >
                     
       @section('sub-content')
@@ -424,12 +525,13 @@
   </div>
   
   <p><br>Javier Álvarez Montenegro.<br>
+  Cell: # 948 535 127.
   </p>
-  <p><br>Ivan Calvay Requejo.<br>
-  Cell: # 944 824 053. 
+  <p><br><br>
+
   </p>
   <br>
-  <br><br>
+  <br><br><br/>
 
   <p class="text-center"><em>®2014 Todos los derechos reservados.</em></p>
   
@@ -466,8 +568,28 @@
 kendo.culture('es-PE');
 /*$(function(){
   kendo.ui.progress($('body'), true);
-})*/  
+})*/
+
 </script>
+
+<style>
+    .caption{
+    opacity: .6;
+    bottom: 0;
+    /*top: -20px;*/
+    left: 0;
+    color: #fff;
+    font-size: 10px;
+    line-height: 9px;
+    position: absolute;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    background-color: #474544;
+    }
+</style>
+
 </body>
 
 </html>

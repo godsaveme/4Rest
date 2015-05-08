@@ -59,7 +59,7 @@
         {{Form::label('porcion', 'Porción', array('class'=>'control-label'))}}
     </div>
     <div class="col-md-5">
-        {{Form::text('porcion', $sabor->porcion, array('class' => 'form-control','placeholder'=>'###', 'required', 'validationMessage'=>'Por favor entre una cantidad.'))}}
+        {{Form::text('porcion', $sabor->porcion, array('class' => '','placeholder'=>'###', 'required', 'validationMessage'=>'Por favor entre una cantidad.'))}}
     </div>
 
 </div>

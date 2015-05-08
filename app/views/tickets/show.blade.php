@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
@@ -24,8 +24,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <td>{{$ticket->importe}}</td>
-                        <td>{{$ticket->idescuento}}</td>
+                        <td>S/. {{$ticket->importe}}</td>
+                        <td>S/. {{$ticket->idescuento}}</td>
                         <td>
                             @if ($ticket->estado == 0)
                                 Correcto
@@ -40,17 +40,17 @@
                         <tr>
                             <th>Cantidad</th>
                             <th>Descripcion</th>
-                            <th>Precio Un</th>
-                            <th>Precio To.</th>
+                            <th>Precio Un (S/.)</th>
+                            <th>Precio To. (S/.)</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($detalles as $detalle)
                             <tr>
-                                <td>{{$detalle->cantidad}}</td>
+                                <td >{{$detalle->cantidad}}</td>
                                 <td>{{$detalle->nombre}}</td>
-                                <td>{{$detalle->preciou}}</td>
-                                <td>{{$detalle->precio}}</td>
+                                <td class="text-right">{{$detalle->preciou}}</td>
+                                <td class="text-right">{{$detalle->precio}}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -59,7 +59,12 @@
                     <thead>
                         <tr>
                             <th>Forma de Pago</th>
-                            <th>{{$ticket->tipopago()->first()->nombre}}</th>
+                            <!--<th>{{$ticket->tipopago()->first()->nombre}}</th>-->
+                            <th>
+                                @foreach($ticket->tipopago as $tipopago)
+                                    {{$tipopago->nombre}}: S/.{{$tipopago->pivot->importe}} <br>
+                                @endforeach
+                            </th>
                         </tr>
                         <tr>
                             <th>Cliente</th>

@@ -27,6 +27,9 @@ class CocinaController extends BaseController {
         				->where('detallepedido.estado','!=','D')
         				->where('detallepedido.estado','!=','E', 'AND')
         				->where('detallepedido.estado','!=','A', 'AND')
+        				//add 19-03-15.. no se cargan los adicionales en el panel der
+        				->whereNull('detallepedido.detalle_id')
+        				//fin add
         				->where('idarea','=' ,Auth::user()->id_tipoareapro , 'AND')
         				->groupBy('producto_id')
         				->get();

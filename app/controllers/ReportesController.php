@@ -30,6 +30,8 @@ class ReportesController extends \BaseController {
 	public function getReporteproductos($id = NULL) {
 		if (isset($id)) {
 			$tipoc       = Input::get('tipoc');
+			//print_r($tipoc);
+			//die();
 			$restaurante = Restaurante::find($id);
 			$fechaInicio = Input::get('fechainicio');
 			$fechaFin    = Input::get('fechafin');
@@ -167,7 +169,7 @@ class ReportesController extends \BaseController {
                 $personas = Persona::has('tickets')->with(['tickets'=> function($q) use($fechaInicio, $fechaFin){
                     $q->whereBetween('created_at',[$fechaInicio.' 00:00:00',$fechaFin.' 23:59:59']);
                 },'tickets.tipopago'])
-                    ->where('ruc','=',null)
+                    /*->where('ruc','=',null)*/
                 ->get();
                 return View::make('reportes.vales-descuentos',compact('personas', 'restaurante','fechaInicio','fechaFin'));
             }else{

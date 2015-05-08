@@ -17,7 +17,6 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 
 class TranslatorTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider      getInvalidLocalesTests
      * @expectedException \InvalidArgumentException
@@ -103,7 +102,6 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar (fr)', $translator->trans('bar'));
     }
 
-
     /**
      * @dataProvider      getInvalidLocalesTests
      * @expectedException \InvalidArgumentException
@@ -161,7 +159,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $translator = new Translator('fr');
         $translator->addLoader('array', new ArrayLoader());
 
-        $translator->setFallbackLocale(array('en'));
+        $translator->setFallbackLocales(array('en'));
 
         $translator->addResource('array', array('foo' => 'foofoo'), 'en');
         $this->assertEquals('foofoo', $translator->trans('foo'));
@@ -329,7 +327,6 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         // no assertion. this method just asserts that no exception is thrown
     }
 
-
     public function getTransFileTests()
     {
         return array(
@@ -348,30 +345,30 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     public function getTransTests()
     {
         return array(
-            array('Symfony2 est super !', 'Symfony2 is great!', 'Symfony2 est super !', array(), 'fr', ''),
-            array('Symfony2 est awesome !', 'Symfony2 is %what%!', 'Symfony2 est %what% !', array('%what%' => 'awesome'), 'fr', ''),
-            array('Symfony2 est super !', new String('Symfony2 is great!'), 'Symfony2 est super !', array(), 'fr', ''),
+            array('Symfony est super !', 'Symfony is great!', 'Symfony est super !', array(), 'fr', ''),
+            array('Symfony est awesome !', 'Symfony is %what%!', 'Symfony est %what% !', array('%what%' => 'awesome'), 'fr', ''),
+            array('Symfony est super !', new String('Symfony is great!'), 'Symfony est super !', array(), 'fr', ''),
         );
     }
 
     public function getFlattenedTransTests()
     {
         $messages = array(
-            'symfony2' => array(
+            'symfony' => array(
                 'is' => array(
-                    'great' => 'Symfony2 est super!'
-                )
+                    'great' => 'Symfony est super!',
+                ),
             ),
             'foo' => array(
                 'bar' => array(
-                    'baz' => 'Foo Bar Baz'
+                    'baz' => 'Foo Bar Baz',
                 ),
                 'baz' => 'Foo Baz',
             ),
         );
 
         return array(
-            array('Symfony2 est super!', $messages, 'symfony2.is.great'),
+            array('Symfony est super!', $messages, 'symfony.is.great'),
             array('Foo Bar Baz', $messages, 'foo.bar.baz'),
             array('Foo Baz', $messages, 'foo.baz'),
         );
@@ -430,6 +427,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             array('fr_FR'),
             array('fr.FR'),
             array('fr-FR.UTF8'),
+            array('sr@latin'),
         );
     }
 

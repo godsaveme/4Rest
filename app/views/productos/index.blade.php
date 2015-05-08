@@ -18,35 +18,27 @@
 <div class="panel-body">
 
 <table id="gridProd" style="width:100%">
-                <colgroup>
-                    <col style="width:130px"/>
-                    <col style="width:130px"/>
-                    <col style="width:130px" />
-                    <col style="width:130px" />
-                    <col style="width:130px" />
-                    <col style="width:120px" />
-                    <col style="width:130px" />
-                </colgroup>
-  <thead>
-    <tr>
-      <th data-field="nombre">Nombre</th>
-      <th data-field="descripcion">Descripción</th>
-      <th data-field="estado">Habilitado</th>
-      <th data-field="familia">Familia</th>
-      <th data-field="unMed">Und. Med.</th>
-      <th data-field="editar">Editar</th>
-      <th data-field="eliminar">Eliminar</th>
-    </tr>
-  </thead>
-  <tbody>
-@foreach ($productos as $dato)
- <tr>
-    <td>{{$dato->nombre}}</td>
-    <td>{{$dato->descripcion}}</td>
-    <td>@if($dato->estado==1)Sí @else No @endif</td>
-    <td>{{$dato->familia->nombre}}</td>
-    <td>{{$dato->unidadMedida}}</td>
-      <td><a href="/productos/edit/{{$dato->id}}" type="button" class="k-button">
+  </tbody>
+</table>
+
+<script id="ProdTemplate" type="text/x-kendo-template">
+    <tr data-uid="#= uid #">
+        <td colspan="">
+            #: nombreProd #
+        </td>
+        <td>
+            #: precio #
+        </td>
+        <td>
+            #: costo #
+        </td>
+        <td>
+            #: nombreFam #
+        </td>
+        <td>
+            #: estado #
+        </td>
+        <td><a href="/productos/edit/#: id #" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                         <span class="k-icon k-i-pencil"></span>
                         Editar
@@ -54,16 +46,14 @@
       </td>
       <td>
         
-        <a onclick="onDestroy('productos/destroy/{{$dato->id}}','productos');" href="#" type="button" class="k-button">
+        <a onclick="onDestroy('productos/destroy/#: id #','productos');" href="\#" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-remove"></span> -->
                         <span class="k-icon k-i-close"></span>
                         Eliminar
                         </a>
       </td>
     </tr>
-@endforeach
-  </tbody>
-</table>
+</script>
 
 </div> <!-- del panel body -->
 

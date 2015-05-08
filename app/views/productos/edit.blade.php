@@ -54,7 +54,7 @@
           } else{
               $price_ = '' ;
             } ?>
-            {{Form::text('precio', $price_, array('class' => 'form-control', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0', 'required'))}}
+            {{Form::text('precio', $price_, array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0', 'required'))}}
           </div>
 
         </div>
@@ -93,6 +93,20 @@
 
       </div>
 
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-3">
+          {{Form::label('receta', 'Tipo', array('class'=>'control-label'))}} 
+          {{Form::select('receta', array('0' => 'Sin Receta','1' => 'Con Receta'),$producto->receta, array('class' => 'form-control'))}}
+        </div>
+        <div class="col-md-3">
+
+                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}}
+
+        
+            {{Form::text('costo', $producto->costo, array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
+          </div>
     </div>
 
 

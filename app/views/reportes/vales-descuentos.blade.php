@@ -58,13 +58,23 @@
                                 @endforeach
                                 @if($flag_vale == 1)
                                 <tr>
-                                    <td>
-                                    <a href="/reportes/persona-vales/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}">
-                                    {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
-                                    </a>
-                                    </td>
-                                    <td>{{$persona->dni}}</td>
-                                    <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @if($persona->ruc == '')
+                                        <td>
+                                        <a href="/reportes/persona-vales/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}">
+                                        {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
+                                        </a>
+                                        </td>
+                                        <td>{{$persona->dni}}</td>
+                                        <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @else
+                                        <td>
+                                        <a href="/reportes/persona-vales/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin}}">
+                                        {{$persona->razonSocial}}
+                                        </a>
+                                        </td>
+                                        <td>{{$persona->ruc}}</td>
+                                        <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @endif
                                 </tr>
                                 @endif
                             @endif
@@ -102,13 +112,23 @@
                                 @endforeach
                                 @if($flag_descuentos == 1)
                                 <tr>
-                                    <td>
-                                    <a href="/reportes/persona-descuentos-autorizados/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin }}">
-                                    {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
-                                    </a>
-                                    </td>
-                                    <td>{{$persona->dni}}</td>
-                                    <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @if($persona->ruc == '')
+                                        <td>
+                                        <a href="/reportes/persona-descuentos-autorizados/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin }}">
+                                        {{$persona->nombres.' '.$persona->apPaterno.' '.$persona->apMaterno}}
+                                        </a>
+                                        </td>
+                                        <td>{{$persona->dni}}</td>
+                                        <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @else
+                                        <td>
+                                        <a href="/reportes/persona-descuentos-autorizados/{{$persona->id}}?fechainicio={{$fechaInicio}}&fechafin={{$fechaFin }}">
+                                        {{$persona->razonSocial}}
+                                        </a>
+                                        </td>
+                                        <td>{{$persona->ruc}}</td>
+                                        <td class="text-right">{{number_format($importe,2,'.',',')}}</td>
+                                    @endif    
                                 </tr>
                                 @endif
                             @endif

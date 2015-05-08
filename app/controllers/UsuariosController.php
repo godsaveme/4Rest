@@ -8,8 +8,20 @@
 		 */
 		public function getIndex()
 		{
-			$usuarios = Persona::all();
-	        return View::make('usuarios.index', compact('usuarios'));
+			/*$usuarios = Usuario::with(array('persona' => function($query)
+										{
+										    //$query->join('perfil','perfil.id','=','persona.perfil_id');
+										    $query->select('persona.nombres');
+
+										}))
+				->get();*/
+			//$usuarios = Usuario::with('persona')->get();
+			//print_r($usuarios->toJson()); die();
+			/*$usuarios = Usuario::select('nombres','apPaterno','apMaterno','perfil.nombre','usuario.estado','usuario.login','usuario.id')
+						->join('persona','persona.id','=','usuario.persona_id')
+						->join('perfil','persona.perfil_id','=','perfil.id')
+						->get();*/
+	        return View::make('usuarios.index');
 		}
 
 		/**
@@ -55,7 +67,7 @@
 
 		} catch (Exception $e) { //'Falta Local, Área o Colaborador.'
 			DB::rollback();
-			return Response::json(array('estado' => false , 'msg' => 'Falta Local, Área, Colaborador o Persona/Empresa escogida por la lista desplegable.'));
+			return Response::json(array('estado' => false , 'msg' => 'Falta Local, Área o Persona/Empresa escogida por la lista desplegable.','e' => $e));
 		}
 
 		DB::commit();
@@ -102,7 +114,8 @@
 				$usuario->save();
 			} catch (Exception $e) {
 				DB::rollback();
-				return Response::json(array('estado' => false , 'msg' => 'Falta Local, Área o Colaborador.'));
+				//print_r($e);
+				return Response::json(array('estado' => false , 'msg' => 'Falta Local o Área .', 'e' => $e));
 			}
 
 			DB::commit();
@@ -188,11 +201,16 @@
 				$fechaFin = Input::get('fechafin');
 				$productos = Detpedidotick::selectraw('usuario.id,sum(dettiketpedido.cantidad) AS cantidad, 
 									dettiketpedido.nombre, dettiketpedido.created_at, dettiketpedido.producto_id , 
-									dettiketpedido.combinacion_id, sum(dettiketpedido.precio) AS precio')
+									dettiketpedido.combinacion_id, sum(dettiketpedido.precio ) AS precio') 
+				//sum(dettiketpedido.precio) cambiado por ticketventa.importe 
+				//sum(ticketventa.importe ) cambiado por dettiketpedido.precio
 									->join('ticketventa', 'ticketventa.id', '=', 'dettiketpedido.ticket_id')
 									->join('pedido', 'pedido.id','=', 'ticketventa.pedido_id')
 									->join('usuario', 'usuario.id', '=', 'pedido.usuario_id')
 									->where('usuario.id', '=', $id)
+									//add 04-Marzo-15
+									->where('ticketventa.estado', '=',0)
+									//no es necesario add ticketventa >= 0 xq no agarra el join con detpedido al no tener detalle 
 									->whereBetween('dettiketpedido.created_at', array($fechaInicio.' 00:00:00',$fechaFin.' 23:59:59'))
 									->groupby('producto_id', 'combinacion_id')
 									->orderby('precio', 'desc')

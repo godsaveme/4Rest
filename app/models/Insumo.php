@@ -6,7 +6,7 @@ class Insumo extends Eloquent {
 
 	//$fillable = array('nombre', 'apellido');
 
-	protected $fillable = array('nombre','descripcion','unidadMedida','tipoins_id','estado');
+	protected $fillable = array('nombre','descripcion','unidadMedida','tipoins_id','estado','ultimocosto');
 
 	public function productos(){
 		return $this->belongsToMany('Producto','receta','insumo_id','producto_id');
@@ -14,6 +14,10 @@ class Insumo extends Eloquent {
 
 	public function tipoins(){
 		 return $this->belongsTo('TipoIns');
+	}
+
+	public function almacenes(){
+		return $this->belongsToMany('Almacen','stockInsumo','insumo_id','almacen_id');
 	}
 
 }

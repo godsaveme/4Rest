@@ -9,7 +9,7 @@
 
 <a id="cntnr1" style="opacity: 0;" href="{{URL('recetas/create')}}" class='pull-right btn btn-primary'><i class="fa fa-edit"></i> Crear Receta</a>
 
-<div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> PRODUCTOS
+<div id="cntnr2" style="opacity: 0;" class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> PRODUCTOS c/receta
 </strong></div>
 <div id="cntnrGrid" style="opacity: 0;">
 
@@ -33,9 +33,9 @@
   <tbody>
 @foreach ($productos as $dato)
  <tr>
-    <td>{{$dato->nombre}}</td>
+    <td>{{$dato->nombreProd}}</td>
     <td>{{$dato->costo}}</td>
-    <td>{{$dato->familia->nombre}}</td>
+    <td>{{$dato->nombreFam}}</td>
 	<td>
 		<a href="/recetas/edit/{{$dato->id}}" type="button" class="k-button">
 	        <span class="k-icon k-i-pencil"></span>

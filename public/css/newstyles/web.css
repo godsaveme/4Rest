@@ -147,3 +147,7 @@ background-color: #f0f7fd;
 border-color: #5bc0de;
 }
 /**/
+
+.k-autocomplete{
+  width: 100%;
+}

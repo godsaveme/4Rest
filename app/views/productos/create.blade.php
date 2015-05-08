@@ -43,7 +43,7 @@
 
           </div>
           <div class="col-md-4">
-            {{Form::text('precio', '', array('class' => 'form-control', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0', 'required'))}}
+            {{Form::text('precio', '', array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un precio.',  'min'=>'0', 'required'))}}
           </div>
 
 
@@ -86,12 +86,33 @@
 
     </div>
 
-    <div class="form-group">
+    <!--<div class="form-group">
         <div class="col-md-3">
           {{Form::label('proveedor_id', 'Proveedor', array('class'=>'control-label'))}} 
           {{Form::select('proveedor_id', $areas + array(0=>'Ninguna'),0, array('class' => 'form-control'))}}
         </div>
+    </div>-->
+
+    <div class="form-group">
+        <div class="col-md-3">
+          {{Form::label('receta', 'Tipo', array('class'=>'control-label'))}} 
+          {{Form::select('receta', array('0' => 'Sin Receta','1' => 'Con Receta'),0, array('class' => 'form-control'))}}
+        </div>
+        <div class="col-md-3">
+
+                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}}
+
+        
+            {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
+          </div>
     </div>
+
+    <div class="form-group">
+                    
+
+
+
+        </div>
 
     <div class="form-group">
               <div class="col-md-4">

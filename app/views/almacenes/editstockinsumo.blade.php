@@ -14,12 +14,13 @@
     {{ Form::open(array('id'=>'form_resto','url' => 'almacenes/editarstock', 'enctype' => 'multipart/form-data' , 'class'=>'form-horizontal')) }}
     {{Form::hidden('almacen_id', $almacen->id)}}
     {{Form::hidden('insumo_id', $insumo->id, ['id'=>'insumo_id'])}}
+    {{Form::hidden('tipo', $tipo,['id'=>'tipo'])}}
   <div class="form-group">
     <div class="col-md-3">
             {{Form::label('nombre', 'Nombre', array('class'=>'control-label'))}}
             </div>
     <div class="col-md-5">
-            {{Form::text('nombre', $insumo->nombre, array('style'=>'width:250px','placeholder'=>'ej. Azúcar','autofocus', 'required', 'validationMessage'=>'Por favor entre un nombre.', 'id'=>'insumo'))}}
+            {{Form::text('nombre', $insumo->nombre, array('style'=>'width:250px','placeholder'=>'ej. Azúcar','autofocus', 'required', 'validationMessage'=>'Por favor entre un nombre.', 'id'=>'insumo','class' => 'form-control','readonly'))}}
             </div>
         </div>
         <div class="form-group">

@@ -48,7 +48,7 @@
 			{{Form::label('precio', 'Precio',array('class'=>'control-label'))}}
 						    </div>
     <div class="col-md-5">
-			{{Form::input('text', 'precio', $combinacion->precio, array('class'=>'form-control','placeholder'=>'##.##', 'required', 'validationMessage'=>'Por favor entre un precio', 'min' => '0'))}}
+			{{Form::input('text', 'precio', $combinacion->precio, array('class'=>'','placeholder'=>'##.##', 'required', 'validationMessage'=>'Por favor entre un precio', 'min' => '0'))}}
 		</div>
 	</div>
 
@@ -151,7 +151,7 @@ $(document).ready(function($) {
 
  var ds= new kendo.data.DataSource({
         data: {{$productos}},
-        pageSize: 10,
+        pageSize: 100,
         change: onChangeDs,
         group: { field: "familianombre", aggregates: [
                                         { field: "cantidad", aggregate: "average" },
@@ -178,6 +178,9 @@ $(document).ready(function($) {
 
  function onChangeDs(e){
   //alert('entro');
+  //ds.fetch(function(){
+
+
               //var data = this.data();
                 var view = this.view();
               var $sumPrecio = 0;
@@ -193,6 +196,7 @@ $(document).ready(function($) {
               var ntbprecioComb = $("#precio").data("kendoNumericTextBox");
               ntbprecioComb.value($sumPrecio.toFixed(2));
               console.log($sumPrecio);
+           // });
  } 
 
  </script>

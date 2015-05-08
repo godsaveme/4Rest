@@ -181,9 +181,34 @@ class AlmacenController extends \BaseController {
 	{
 		if (isset($id)) {
 			$almacen = Almacen::find($id);
-			$insumos = $almacen->insumos()->get();
-			$productos = $almacen->productos()->get();
-			return View::make('almacenes.stock', compact('almacen', 'insumos', 'productos'));
+			$insumos = $almacen->insumos()->selectraw('insumo.id,insumo.nombre,insumo.descripcion,insumo.unidadMedida,"Insumos" as Tipo')->get();
+			//$productos = $almacen->productos()->get();
+
+			//$productosReceta = $almacen->productos()->where('producto.receta','=',1)->get();
+
+			//$productosReceta = DB::statement(DB::raw('CALL select_stock_prod('.$almacen->id.');'));	
+
+			$productosReceta = DB::select('call select_stock_prod(' . $almacen->id . ')');
+
+			$arrX;
+			foreach ($productosReceta as $x) {
+				$arrX[] = $x->xid;
+			}
+			$prodRecNoDispo = Producto::selectraw('producto.id,"Productos" as Tipo,nombre,descripcion,unidadMedida,"No disponible" as disponible')
+					->where('receta', '=', 1)
+					->whereNotIn('producto.id',$arrX)
+					->get();
+			//print_r($productosReceta); die();
+
+			$productosNoReceta = $almacen->productos()->where('producto.receta','=',0)
+                              	 ->selectraw('producto.id,producto.nombre,producto.descripcion,producto.unidadMedida,"Productos" as Tipo')
+			                     ->get();
+
+			//falta prod con receta no disponibles
+
+			$productos = $productosNoReceta;
+			//print_r($prodRecNoDispo); die();
+			return View::make('almacenes.stock', compact('almacen', 'insumos', 'productos','productosReceta','prodRecNoDispo'));
 		}else{
 			return Redirect::back();
 		}
@@ -206,9 +231,16 @@ class AlmacenController extends \BaseController {
 			return Response::json(array('estado' => false,
 				'route' => '/almacenes/show/'.$almacen->id));
 		}
+
 		$almacen = Almacen::find(Input::get('almacen_id'));
-		$almacen->insumos()->attach($insumo_id,
-					array('stockActual' => Input::get('stock')));;
+		if (Input::get('tipo') == 'Insumos') {
+			$almacen->insumos()->attach($insumo_id,
+					array('stockActual' => Input::get('stock')));
+		}elseif(Input::get('tipo') == 'Productos'){
+			$almacen->productos()->attach($insumo_id,array('stockActual' => Input::get('stock')));
+		}
+		
+		
 		return Response::json(array('estado' => true, 'route' => '/almacenes/show/'.$almacen->id));
 	}
 
@@ -218,7 +250,21 @@ class AlmacenController extends \BaseController {
 			$almacen = Almacen::find($id);
 			$insumo = $almacen->insumos()
 						->where('stockInsumo.insumo_id', '=', $insumo_id)->first();
-			return View::make('almacenes.editstockinsumo', compact('insumo','almacen'));
+			$tipo = 'Insumos';			
+			return View::make('almacenes.editstockinsumo', compact('insumo','almacen','tipo'));
+		}else{
+			return Redirect::back();
+		}
+	}
+
+	public function getStockedit($id = NULL,$insumo_id = NULL)
+	{
+		if (isset($id)) {
+			$almacen = Almacen::find($id);
+			$insumo = $almacen->productos()
+						->where('stockProducto.producto_id', '=', $insumo_id)->first();
+			$tipo = 'Productos';
+			return View::make('almacenes.editstockinsumo', compact('insumo','almacen','tipo'));
 		}else{
 			return Redirect::back();
 		}
@@ -227,11 +273,19 @@ class AlmacenController extends \BaseController {
 	public function postEditarstock()
 	{
 		$almacen = Almacen::find(Input::get('almacen_id'));
-		$insumo = $almacen->insumos()
-				->where('stockInsumo.insumo_id', '=', Input::get('insumo_id'))->first();
+		if (Input::get('tipo') == 'Insumos') {
+			$insumo = $almacen->insumos()
+					->where('stockInsumo.insumo_id', '=', Input::get('insumo_id'))->first();
 
-		$insumo->pivot->stockActual = Input::get('stock');
-		$insumo->pivot->save();
+			$insumo->pivot->stockActual = Input::get('stock');
+			$insumo->pivot->save();
+		}elseif(Input::get('tipo') == 'Productos'){
+			$producto = $almacen->productos()
+					->where('stockProducto.producto_id', '=', Input::get('insumo_id'))->first();
+
+			$producto->pivot->stockActual = Input::get('stock');
+			$producto->pivot->save();
+		}
 
 		return Response::json(array('estado' => true, 'route' => '/almacenes/show/'.$almacen->id));
 	}

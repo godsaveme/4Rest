@@ -1,6 +1,10 @@
 /bootstrap/compiled.php
 /vendor
 /.idea
+/public/temp
+/public/vendor
+/4Restapp/node_modules
+/app/storage
 composer.phar
 composer.lock
 .env.*.php

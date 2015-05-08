@@ -15,6 +15,62 @@
     $("#carta").kendoPanelBar({
         animation: false
     });
+
+    //prod autocomplete
+                $(document).ready(function() {
+                    var autocomplete = $("#prodAutoCompl").kendoAutoComplete({
+                        minLength: 1,
+                        dataTextField: "nombre",
+                        placeholder: "Ingrese nombre de Producto...",
+                        headerTemplate: '<div class="dropdown-header">' +
+                                '<span class="k-widget k-header">Nombre - Precio </span>' +
+                            '</div>',
+                        template: '<span class="k-state-default"> #: (data.nombre).substring(0,40) # - <span style="font-weight:bold;">S/.#:data.precio #</span></span>' ,
+                        dataSource: {
+                            transport: {
+                                read:{
+                                    dataType: "json",
+                                    url: "/colorao"
+                                }
+                            }
+                        },
+                        height: 300,
+                        select: onSelectProd
+                    }).data("kendoAutoComplete");
+                });
+
+	function onSelectProd(e) {
+                        
+                            var dataItem = this.dataItem(e.item.index());
+                            //kendoConsole.log("event :: select (" + dataItem + ")" );
+                            console.log("event :: select (" + dataItem.nombre + ")");
+                            var newprofcesta = {};
+							idprocesta++;
+							$('#enviarpf').removeClass('k-widget k-listview');
+							newprofcesta['id'] = idprocesta;
+							newprofcesta['idpro'] = dataItem.id;
+							newprofcesta['nombre'] = dataItem.nombre;
+							newprofcesta['precio'] = dataItem.precio;
+							newprofcesta['preciot'] = dataItem.precio;
+							newprofcesta['numsabores'] = dataItem.cantidadsabores;
+							newprofcesta['cantidad'] = 1;
+							newprofcesta['notas'] = '';
+							newprofcesta['sabores']= '';
+							newprofcesta['cantidadnotas'] = 0;
+							newprofcesta['cantidadadicionales'] = 0;
+							newprofcesta['cantidadsabores'] = 0;
+							newprofcesta['adicionales'] = '';
+							dataSourceprof.add(newprofcesta);
+							dataSourceprof.sort({ field: "id", dir: "desc" });
+							CalcularPrecioTotal();
+							//$(".kendoNumr").kendoNumericTextBox();
+
+							//var numerictextbox = $(".kendoNumr").data("kendoNumericTextBox");
+							//numerictextbox.readonly();
+                        
+                    }
+
+    //fin prod autocomplete
 //cesta de pedidos
 
 //productos normales
@@ -1458,15 +1514,19 @@ function itotalpartircuenta(){
 $('body').on('click', '.btn_partirplus',function(event) {
 	event.preventDefault();
 	/* Act on the event */
+	//var modfc;
+	var modfc = 1;
 	var datacuenta = dataSourcecuenta.get($(this).attr('data-fila'));
 	var dataprecuenta = dataSourceprecuenta.get($(this).attr('data-fila'));
 	var newcantidad = datacuenta.cantidad + 1;
 	var newprecio = datacuenta.preciou*newcantidad;
 	if(datacuenta.cantidad != dataprecuenta.cantidad & datacuenta.cobrar == 1){
+		//verificando si son iguales para que ya no modifique
+		if(newcantidad == dataprecuenta.cantidad){ modfc = 0;};
 		dataSourcecuenta.pushUpdate({ id: $(this).attr('data-fila'), 
 								cantidad: newcantidad, 
 								precio: parseFloat(newprecio).toFixed(2),
-								modificar: 1,
+								modificar: modfc,
 								cobrar: datacuenta.cobrar });
 		itotalpartircuenta();
 	}
@@ -1772,6 +1832,13 @@ $('#btn_aceptarcodigo').on('click', function(event) {
 	.done(function(data) {
 		if(data['response'] == 'true'){
 			if (data['tipo'] == 1) {
+				//eliminar adicionales si es que hubieran
+				if (data['itemsAdc']) {
+					//alert('entro');
+					for(var i in data['itemsAdc']){
+						$('.list-group-item').filter("[data-iddetped='" + data['itemsAdc'][i]['iddetallep'] + "']").remove();
+					}
+				};
 				socket.emit('NotificarPedidos', data['items'], 'area_1');
 			}else if(data['tipo'] == 2){
 				for (var i in  data['items']) {
@@ -1866,3 +1933,58 @@ $('#btn_aceptarmesa').on('click', function(event) {
 });
 
 //movermesa
+
+//para introducir cant 
+var previous;
+var previous2;
+
+$('body').on('focus', '.kendoNumr', function(event) {
+
+	previous = $(this).val();
+	//alert('foucs');
+});
+$('body').on('focus', '.kendoNumr2', function(event) {
+
+	previous2 = $(this).val();
+	//alert('foucs');
+});
+
+$('body').on('blur', '.kendoNumr', function(event) {
+	if (isNumber($(this).val()) && parseFloat($(this).val()) > 0 ) {
+		$(this).val(parseFloat($(this).val()).toFixed(0));
+			var prev = $(this).parent().prev().children().attr('data-iddatasour');
+			console.log(prev);
+			var dataItem = dataSourceprof.get(prev);
+			var newcantidad = parseFloat($(this).val()).toFixed(0);
+			var newprecio = dataItem.precio*newcantidad;
+			dataSourceprof.pushUpdate({ id: prev, cantidad: newcantidad, preciot: parseFloat(newprecio).toFixed(2) });
+			CalcularPrecioTotal();
+	}else{
+		$(this).val(previous);
+
+	}; 
+
+});
+
+$('body').on('blur', '.kendoNumr2', function(event) {
+	if (isNumber($(this).val()) && parseFloat($(this).val()) > 0 ) {
+		$(this).val(parseFloat($(this).val()).toFixed(0));
+			var prev = $(this).parent().prev().children().attr('data-iddatasour');
+			console.log(prev);
+			var dataItem = dataSourcecombi.get(prev);
+			var newcantidad = parseFloat($(this).val()).toFixed(0);
+			var newprecio = dataItem.precio*newcantidad;
+				dataSourcecombi.pushUpdate({ id: prev, cantidad: newcantidad, preciot: parseFloat(newprecio).toFixed(2) });
+				CalcularPrecioTotal();
+	}else{
+		$(this).val(previous2);
+
+	}; 
+
+});
+
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+//fin para intro cant	

@@ -49,7 +49,11 @@
                     <td class="text-right">{{$producto->cantidadpro}}</td>
                     <td class="text-right">{{number_format($producto->preciot/$producto->cantidadpro,2,'.', '')}}</td>
                     <td class="text-right">{{$producto->preciot}}</td>
-                    <td class="text-right">{{number_format(($producto->preciot*100)/$ventastotales,2,'.', '').' '.'%'}}</td>
+                    @if ($ventastotales == 0)  
+                        <td class="text-right"> 0.00% </td>
+                    @else 
+                        <td class="text-right">{{number_format(($producto->preciot*100)/$ventastotales,2,'.', '').' '.'%'}}</td>
+                    @endif
                 </tr>
             @endforeach
                 <tr>
@@ -64,7 +68,11 @@
                     <td class="text-right">{{$combinacion->cantidadpro}}</td>
                     <td class="text-right">{{$combinacion->preciou}}</td>
                     <td class="text-right">{{$combinacion->preciot}}</td>
+                    @if ($ventastotales == 0)  
+                        <td class="text-right"> 0.00% </td>
+                    @else 
                     <td class="text-right">{{number_format(($combinacion->preciot*100)/$ventastotales,2,'.', '').' '.'%'}}</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

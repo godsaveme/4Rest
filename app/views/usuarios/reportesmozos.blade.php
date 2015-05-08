@@ -35,7 +35,7 @@
 		        	<script id="reportemozos_totales" type="text/x-kendo-template">
 		        		<tr>
 		        			<th rowspan="3" class="text-center" valign="middle"> Nombre del Mozo</th>
-		        			<th rowspan="2" class="text-center" valign="middle"> Venta Total</th>
+		        			<th rowspan="2" class="text-center" valign="middle"> Venta Neta</th>
 		        			<th rowspan="2" class="text-center" valign="middle"> %</th>
 		        			<th rowspan="2" class="text-center"  valign="middle">T. P.</th>
 		        			<th colspan="3" class="text-center"  valign="middle">Total</th>

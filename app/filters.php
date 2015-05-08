@@ -38,7 +38,7 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::guest('login');
 	//Añadido
 	if (Auth::check()) {
-			Session::set('LAST_ACTIVITY', time());  
+			//Session::set('LAST_ACTIVITY', time());  
 	}
 	//
 });
@@ -94,4 +94,64 @@ Route::filter('modulo_habilitado',function($route,$request,$modulo_id, $perfil_i
 		return Redirect::to('web')->with('error_message', 'No tienes permisos suficientes para realizar esta acción, ponte en contacto con el administrador');
 		}
 	}
+});
+
+Route::filter('admin',function(){
+    if(Auth::check()){
+        if(Auth::user()->persona->perfil->nombre === 'Administrador'){
+            //return Redirect::intended();
+        }else{
+            //return Redirect::to('hello');
+            //return View::make('hello');
+            return 'hello world';
+        }
+    }
+});
+
+Route::filter('caja',function(){
+    if(Auth::check()){
+        if(Auth::user()->persona->perfil->nombre === 'Caja'){
+            //return Redirect::intended();
+        }else{
+            //return Redirect::to('hello');
+            //return View::make('hello');
+            return 'hello world';
+        }
+    }
+});
+
+Route::filter('cocina',function(){
+    if(Auth::check()){
+        if(Auth::user()->persona->perfil->nombre === 'Cocina'){
+            //return Redirect::intended();
+        }else{
+            //return Redirect::to('hello');
+            //return View::make('hello');
+            return 'hello world';
+        }
+    }
+});
+
+Route::filter('mozo',function(){
+    if(Auth::check()){
+        if(Auth::user()->persona->perfil->nombre === 'Mozo'){
+            //return Redirect::intended();
+        }else{
+            //return Redirect::to('hello');
+            //return View::make('hello');
+            return 'hello world';
+        }
+    }
+});
+
+Route::filter('admin-caja',function(){
+    if(Auth::check()){
+        if(Auth::user()->persona->perfil->nombre === 'Administrador' or Auth::user()->persona->perfil->nombre === 'Caja'){
+            //return Redirect::intended();
+        }else{
+            //return Redirect::to('hello');
+            //return View::make('hello');
+            return 'hello world';
+        }
+    }
 });

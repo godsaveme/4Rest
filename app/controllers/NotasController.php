@@ -9,7 +9,7 @@ class NotasController extends BaseController {
 	 */
 	public function getIndex()
 	{
-		$notas = Notas::all();
+		/*$notas = Notas::all();*/
         return View::make('notas.index', compact('notas'));
 	}
 

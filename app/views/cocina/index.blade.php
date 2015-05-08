@@ -28,6 +28,20 @@
 				                    <li class="list-group-item {{$dato->estado}}" data-idpro="{{$dato->producto_id}}" 
 										data-iddetped="{{$dato->id}}" data-estado="{{$dato->estado}}" style="line-height: 30px">
 									{{HTML::image('images/'.$dato->estado.'.png', 'alt', array('height'=>30, 'width'=>30))}} &nbsp;{{$dato->nombre}} x <span>{{$dato->cantidad}}</span>
+									<br>
+									                                <span class="small text-warning">
+                                                                        <?php $detalle = DetPedido::find($dato->id);
+                                                                            //print_r($detalle->notas->toJson());
+                                                                            foreach ($detalle->notas as $detnota){
+                                                                                echo "/".$detnota->descripcion." ";
+                                                                            }
+                                                                        ?>
+                                                                        <?php
+                                                                            foreach ($detalle->sabores as $detsabor){
+                                                                                echo ">".$detsabor->nombre." ";
+                                                                             }
+                                                                        ?>
+                                                                    </span>
 									</li>
 								@endif
 							@endforeach
@@ -53,19 +67,19 @@
 								#if (platos[i]['notas'].length > 0) {#
 									<br>
 									#for(var j in platos[i]['notas']){#
-										#=platos[i]['notas'][j]#/ 
+									<small class="text-warning">/#=platos[i]['notas'][j]# </small>
 									#}#
 								#}#
 								#if (platos[i]['sabores'].length > 0) {#
 									<br>
 									#for(var l in platos[i]['sabores']){#
-										#=platos[i]['sabores'][l]# /
+									<small class="text-warning">>#=platos[i]['sabores'][l]# </small>
 									#}#
 								#}#
 								#if (platos[i]['adicionales'].length > 0) {#
 									<br>
 									#for(var k in platos[i]['adicionales']){#
-										#=platos[i]['adicionales'][k]['nombre']# x #=platos[i]['adicionales'][k]['cantidad']#/ 
+										<small class="text-warning">*#=platos[i]['adicionales'][k]['nombre']# x #=platos[i]['adicionales'][k]['cantidad']# </small>
 									#}#
 								#}#
 							</li>

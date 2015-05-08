@@ -47,7 +47,7 @@
 	        		<tr>
 	        			<th class="text-center">Producto</th>
 	        			<th class="text-center">Cantidad</th>
-	        			<th class="text-center">Monto S/.</th>
+	        			<th class="text-center">Venta Neta S/.</th>
 	        		</tr>
 	        	</thead>
                 <tbody>

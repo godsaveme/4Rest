@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-4">
                 {{Form::label('ultimocosto','Ultimo Costo',array('class' => 'control-label'))}}
-                {{Form::text('ultimocosto', $insumo->ultimocosto, array('class' => 'form-control','placeholder'=>'0.00', 'required', 'validationMessage'=>'Por favor ingrese ultimo costo.'))}}
+                {{Form::text('ultimocosto', $insumo->ultimocosto, array('class' => '','placeholder'=>'0.00', 'required', 'validationMessage'=>'Por favor ingrese ultimo costo.'))}}
             </div>
 
         </div>

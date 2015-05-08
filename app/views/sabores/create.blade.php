@@ -53,7 +53,7 @@
         {{Form::label('porcion', 'Porción', array('class'=>'control-label'))}}
     </div>
     <div class="col-md-5">
-        {{Form::text('porcion', '', array('class' => 'form-control','placeholder'=>'###', 'required', 'validationMessage'=>'Por favor entre una cantidad.'))}}
+        {{Form::text('porcion', '', array('class' => '','placeholder'=>'###', 'required', 'validationMessage'=>'Por favor entre una cantidad.'))}}
     </div>
 
 </div>
@@ -86,14 +86,7 @@
 
 
 <script type="text/x-kendo-template" id="insumo_ac">
-	<h3>#: data.nombre #</h3>
-	<article>
-		<img src="">
-		<p>#: data.descripcion #</p>
-		<p>Stock: #: data.stock # #: data.unidadMedida #</p>
-		<p>Stock Mínimo: #: data.stockMin # #: data.unidadMedida #</p>
-		<p>Stock Máximo: #: data.stockMax # #: data.unidadMedida #</p>
-	</article>
+	<h5>#: nombre # - #: unidadMedida #</h5>
 </script>
 
 <script type="text/javascript">
@@ -107,7 +100,7 @@
                             type: "json",
                             serverFiltering: true,
                             transport: {
-                                read: "/buscarinsumos"
+                                read: "/bus_insumo_"
                             }
                         },
                         select: onSelect,

@@ -19,35 +19,24 @@
 <div class="panel-body">
 
 <table id="gridInsum" >
-                <colgroup>
-                    <col style="width:130px"/>
-                    <col style="width:80px"/>
-                    <col style="width:50px" />
-                    <col style="width:110px" />
-                    <col style="width:70px" />
-                    <col style="width:120px" />
-                    <col style="width:130px" />
-                </colgroup>
-  <thead>
-    <tr>
-      <th data-field="nombre">Nombre</th>
-      <th data-field="descripcion">Descripción</th>
-      <th data-field="estado">Habilitado</th>
-      <th data-field="familia">Tipo de Insumo</th>
-      <th data-field="unMed">Und. Med.</th>
-      <th data-field="editar">Editar</th>
-      <th data-field="eliminar">Eliminar</th>
-    </tr>
-  </thead>
-  <tbody>
-  @foreach($insumos as $insumo)
-<tr>
-    <td>{{$insumo->nombre}}</td>
-    <td>{{$insumo->descripcion}}</td>
-    <td> @if($insumo->estado==1)Sí @else No @endif</td>
-    <td> @if(!empty($insumo->tipoins->nombre)) {{$insumo->tipoins->nombre}} @else - @endif </td>
-    <td>{{$insumo->unidadMedida}}</td>
-      <td><a href="insumos/edit/{{$insumo->id}}" type="button" class="k-button">
+
+</table>
+
+<script id="InsumoTemplate" type="text/x-kendo-template">
+    <tr data-uid="#= uid #">
+        <td colspan="">
+            #: nombre #
+        </td>
+        <td>
+            #: descripcion #
+        </td>
+        <td>
+            #: ultimocosto #
+        </td>
+        <td>
+            #: unidadMedida #
+        </td>
+       <td><a href="insumos/edit/#: id #" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                         <span class="k-icon k-i-pencil"></span>
                         Editar
@@ -55,15 +44,16 @@
       </td>
       <td>
         
-        <a onclick="onDestroy('insumos/destroy/{{$insumo->id}}','insumos');" href="#" type="button" class="k-button">
+        <a onclick="onDestroy('insumos/destroy/#: id #','insumos');" href="\#" type="button" class="k-button">
                         <!-- <span class="glyphicon glyphicon-remove"></span> -->
                         <span class="k-icon k-i-close"></span>
                         Eliminar
                         </a>
       </td>
     </tr>
-          @endforeach
-  </tbody>
-</table>
+</script>
+
+</div> <!-- del panel body -->
+
 </div>
 @stop

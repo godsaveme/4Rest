@@ -19,39 +19,29 @@
 
 
     <table id="gridNotas">
-                        <colgroup>
-                    <col style="width:120px" />
-                    <col style="width:150px"  />
-                    <col style="width:120px" />
-                    <col style="width:130px" />
-                </colgroup>
-      <thead>
-        <tr>
-          <th data-field="numero">Número</th>
-          <th data-field="nota">Nota</th>
-          <th data-field="editar">Editar</th>
-          <th data-field="eliminar">Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($notas as $dato)
-        <tr>
-          <td>{{$dato->id}}</td>
-          <td>{{$dato->descripcion}}</td>
-          <td><a href="notas/edit/{{$dato->id}}" type="button" class="k-button">
+
+    </table>
+
+    <script id="NotasTemplate" type="text/x-kendo-template">
+    <tr data-uid="#= uid #">
+        <td colspan="">
+            #: descripcion #
+        </td>
+          <td><a href="notas/edit/#: id #" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                 <span class="k-icon k-i-pencil"></span>
         Editar
       </a></td>
-          <td><a onclick="onDestroy('notas/destroy/{{$dato->id}}','notas');" href="#" type="button" class="k-button">
+          <td><a onclick="onDestroy('notas/destroy/#: id #','notas');" href="\#" type="button" class="k-button">
         <!-- <span class="glyphicon glyphicon-remove"></span> -->
         <span class="k-icon k-i-close"></span>
       Eliminar
         </a></td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+    </tr>
+</script>
+
+
+
 
 
 </div> <!-- del panel body -->

@@ -49,7 +49,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="javascript:void(0)" class="navbar-brand title" id="prueba">4 Rest</a>
+          <a href="/web" class="navbar-brand title" id="prueba">4 Rest</a>
         </div>
         <!-- en header navbar-->
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -65,20 +65,16 @@
 	        @endif
 	        >{{$mesa->nombre}}</a></li>
 	        @if (isset($Opedido))
-	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="{{$Opedido->id}}" data-idmozo ="{{$Opedido->usuario->id}}">
-	        {{$Opedido->usuario->login}}
-	        </a></li>
+	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="{{$Opedido->id}}" data-idmozo ="{{$Opedido->usuario->id}}">{{$Opedido->usuario->login}}</a></li>
 	        @endif
 	        @if (isset($infomozo))
-	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="0" data-idmozo ="{{$infomozo->id}}">
-	        {{$infomozo->login}}
-	        </a></li>
+	        <li class="negrita"><a href="javascript:void(0)" id="infomozo" data-idpedido="0" data-idmozo ="{{$infomozo->id}}">{{$infomozo->login}}</a></li>
 	        @endif
 	    </ul>
 
       	@endif
 	      <ul class="nav navbar-nav navbar-right">
-	      	@if (Auth::user()->colaborador != 1)
+	      	@if (Auth::user()->persona->perfil_id != 1)
 	      	<li>
       			<a href="javascript:void(0)" id="btn_controlpedidos">
       				Lista de Pedidos
@@ -181,7 +177,7 @@
 <div class="container" id="contenido">
     @yield('content')
 
-    @if (Auth::user()->colaborador != 1)
+    @if (Auth::user()->persona->perfil_id != 1)
 	<div id="windowsnotificaciones" style="display:none">
     	<span id="notificationpedidos" style="display:none;"></span>
     </div>

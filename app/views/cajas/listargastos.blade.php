@@ -45,7 +45,7 @@
 				        <td>
 				            #: kendo.toString(get("importetotal"), "C") #
 				        </td>
-				        <td data-bind="text: tipogasto_id"></td>
+				        <td data-bind="text: tipo_descripcion"></td>
 				    </tr>
 				</script>
                 </tbody>

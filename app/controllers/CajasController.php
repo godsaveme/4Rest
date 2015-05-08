@@ -30,11 +30,13 @@ class CajasController extends BaseController {
 					 ->where('usuario_id', '=', Auth::user()->id, 'AND')
 					 ->first();
 			if (count($detcaja) > 0) {
-				$salones = Salon::where('restaurante_id', '=', Auth::user()->id_restaurante)->get();
+                //add salon habilitado 30-05-15
+				$salones = Salon::where('restaurante_id', '=', Auth::user()->id_restaurante)->where('habilitado','=',1)->get();
 				$arraymesas = array();
 				$arrayocupadas = array();
 				foreach ($salones as $salon) {
 					$oarraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
+                    //limpiar mesas
 					foreach ($oarraymesas[$salon->id] as $dato) {
 						$mesa = Mesa::find($dato->id);
 						$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I'))->first();
@@ -47,7 +49,9 @@ class CajasController extends BaseController {
 						}
 						$mesa->save();
 					}
-					$arraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
+                    //fin limpiar mesas
+                    //add mesa habilitada 30-05-15
+					$arraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->where('habilitado','=',1)->get();
 					$ocupadas = Mesa::selectraw('mesa.estado , mesa.nombre , pedido.created_at, 
 										mesa.id,pedido.id as pedidoid , usuario.login, SUM(dettiketpedido.precio) as consumo')
 										->leftJoin('detmesa', 'detmesa.mesa_id', '=', 'mesa.id')
@@ -77,17 +81,28 @@ class CajasController extends BaseController {
 						}
 					}
 				}
-				return View::make('cajas.index', compact('salones', 'arraymesas', 'detcaja', 'platoscontrol','arrayocupadas'));
+				return View::make('cajas.index2', compact('salones', 'arraymesas', 'detcaja', 'platoscontrol','arrayocupadas'));
 			} else {
-				$cajas = Caja::where('restaurante_id', '=', Auth::user()->id_restaurante)->where('estado', '=', '0')->lists('id', 'descripcion');
+				$cajas = Caja::where('id','=',0);
+				if (Auth::user()->persona->perfil->nombre === 'Caja') {
+					
+				
+				$cajas = Caja::where('restaurante_id', '=', Auth::user()->id_restaurante)->where('estado', '=', '0')->lists('descripcion','id');
+				}
 				return View::make('cajas.abrircaja', compact('cajas'));
 			}
 		} else {
 			$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id)->first();
 			if (count($detcaja) > 0) {
+				//print_r('asd'); die();
 				return Redirect::to('/cajas/index/'.$detcaja->caja_id);
 			} else {
-				$cajas = Caja::where('restaurante_id', '=', Auth::user()->id_restaurante)->where('estado', '=', '0')->lists('descripcion', 'id');
+				$cajas = Caja::where('id','=',0);
+				if (Auth::user()->persona->perfil->nombre === 'Caja') {
+					
+				
+				$cajas = Caja::where('restaurante_id', '=', Auth::user()->id_restaurante)->where('estado', '=', '0')->lists('descripcion','id');
+				}
 				return View::make('cajas.abrircaja', compact('cajas'));
 			}
 		}
@@ -214,8 +229,11 @@ class CajasController extends BaseController {
 							->groupby('combinacion_id', 'combinacion_c')
 							->orderby('detallepedido.id', 'DESC')
 							->get();
-				$platosp = DetPedido::select('detallepedido.pedido_id', 'producto.nombre as pnombre', 'detallepedido.combinacion_c', 
-							'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id', 'detallepedido.estado', 'detallepedido.importefinal')->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
+				$platosp = DetPedido::select('detallepedido.pedido_id', 'producto.nombre as pnombre', 'detallepedido.combinacion_c',
+							'detallepedido.ordenCocina', 'detallepedido.cantidad', 'detallepedido.id', 'detallepedido.estado', 'detallepedido.importefinal')
+                            ->join('producto', 'producto.id', '=', 'detallepedido.producto_id')
+                            //->leftjoin('detallenotas','detallenotas.detallePedido_id','=','detallepedido.id')
+                            //->leftjoin('notas','notas.id','=','detallenotas.notas_id')
 				            ->where('detallepedido.pedido_id', '=', $Opedido->id)
 				            ->where('detallepedido.combinacion_c', '=', NULL, 'AND')
 				            ->where('detallepedido.estado', '!=', 'A', 'AND')
@@ -250,7 +268,7 @@ class CajasController extends BaseController {
 									->lists('nombre', 'id');
 			//print_r($combinacionesp);
 			//die();
-			return View::make('cajas.cargarmesa', compact('mesa', 'Opedido', 'combinacionesp', 
+			return View::make('cajas.cargarmesa2', compact('mesa', 'Opedido', 'combinacionesp', 
 															'platosp', 'placombinacionp', 'familias', 
 															'tiposcomb', 'platosfamilia', 'combinaciones', 
 															'infomozo', 'detcaja', 'listamesas','platoscontrol', 'usuariosautorizados'));
@@ -261,9 +279,15 @@ class CajasController extends BaseController {
 
 	public function getRegistrargasto($iddetalle = NULL) {
 		if (isset($iddetalle)) {
-			$detcaja = $this->detcaja;
-			$tiposdegastos = Tiposdegatos::lists('descripcion', 'id');
-			return View::make('cajas.registrargasto', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+            $cajaabierta =  Detcaja::find($iddetalle);
+            if ($cajaabierta->estado == 'A' and $cajaabierta->usuario_id == \Illuminate\Support\Facades\Auth::user()->id) {
+                $detcaja = $this->detcaja;
+                //print_r($detcaja->toJson()); die();
+                $tiposdegastos = Tiposdegatos::lists('descripcion', 'id');
+                return View::make('cajas.registrargasto', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+            }else{
+                return Redirect::to('/cajas');
+            }
 		} else {
 			return Redirect::to('/cajas');
 		}
@@ -307,8 +331,14 @@ class CajasController extends BaseController {
 
 	public function getRegistraringreso($iddetalle = NULL) {
 		if (isset($iddetalle)) {
-			$detcaja = $this->detcaja;
-			return View::make('cajas.registraringreso', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+            //print_r(\Illuminate\Support\Facades\Auth::user()->id); die();
+            $cajaabierta =  Detcaja::find($iddetalle);
+            if ($cajaabierta->estado == 'A' and $cajaabierta->usuario_id == \Illuminate\Support\Facades\Auth::user()->id) {
+                $detcaja = $this->detcaja;
+                return View::make('cajas.registraringreso', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+            }else{
+                return Redirect::to('/cajas');
+            }
 		} else {
 			return Redirect::to('/cajas');
 		}
@@ -343,6 +373,10 @@ class CajasController extends BaseController {
 	public function getCerrarcaja($detallecaja_id = NULL) {
 		if (isset($detallecaja_id)) {
 			$detcaja = $this->detcaja;
+			//$detcaja = Detcaja::find('405');
+			//$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
+			//print_r($totalventas);
+			//die();
 			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)
 							->where('ticketventa.importe', '>=', 0)->sum('importe');
 			$efectivo = $detcaja->tickets()
@@ -350,13 +384,15 @@ class CajasController extends BaseController {
 						->where('Detformadepago.formadepago_id', '=', 1)
 						->where('ticketventa.estado', '=', 0)
 						->where('ticketventa.importe', '>=', 0)
-						->sum('ticketventa.importe');
+						//->sum('ticketventa.importe');
+                        ->sum('Detformadepago.importe');
 			$tarjetas = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 2)
 						->where('ticketventa.estado', '=', 0)
 						->where('ticketventa.importe', '>=', 0)
-						->sum('ticketventa.importe');
+						//->sum('ticketventa.importe');
+                        ->sum('Detformadepago.importe');
 			$descuentosautorizados = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 3)
@@ -387,7 +423,8 @@ class CajasController extends BaseController {
 	}
 
 	public function postCerrarcaja() {
-		$detcaja = $this->detcaja;
+		//$detcaja = $this->detcaja;
+        $detcaja = Detcaja::find(420);
 		$reglas = array(
 			'arqueo' => array(
 				'required',
@@ -398,10 +435,13 @@ class CajasController extends BaseController {
 		if ($validator->fails()) {
 			return Redirect::to('/cajas/cerrarcaja/'.$detcaja->id)->withErrors($validator)->withInput();
 		} else {
-			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
+			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->where('ticketventa.importe','>=',0)->sum('importe');
+			//print_r($totalventas);
+			//die();
 			$totalgastos = $detcaja->gastos()->sum('importetotal');
-			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal');
-			$importetotal = round($totalventas,2) + round($detcaja->montoInicial,2) + round($detcaja->totalingresoscaja,2) - round($totalgastos,2);
+			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal'); //VERIFICAR SI YA SE CERRO CAJA (FIX)
+            //modify total ingreso caja: round($detcaja->totalingresoscaja,2) cambia a round($totalingresoscaja,2)
+			$importetotal = round($totalventas,2) + round($detcaja->montoInicial,2) + round($totalingresoscaja,2) - round($totalgastos,2);
 			$arqueo = Input::get('arqueo');
 			$diferencia = round($importetotal,2) - round($arqueo,2);
 			$caja = $detcaja->caja;
@@ -437,48 +477,63 @@ class CajasController extends BaseController {
 
 	public function getListarventas() {
 		$detcaja = $this->detcaja;
-		$tipoconsulta = Input::get('tipoc');
+		//$detcaja = Detcaja::find('406');
+		$tipoconsulta = Input::get('tipoc');	
 		$total = -1;
 		switch ($tipoconsulta) {
 					case 1: //todos
-						$tickets = $detcaja->tickets()->get();
+						$tickets = $detcaja->tickets()				
+						->get();
+						//print_r(count($tickets));
+						//die();
 						$efectivo = $detcaja->tickets()
 										->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 										->where('Detformadepago.formadepago_id', '=', 1)
 										->where('ticketventa.estado', '=', 0)
-										->where('ticketventa.importe', '>=', 0)
-										->sum('ticketventa.importe');
+										->where('ticketventa.importe', '>=', 0) //no se agregan los tickets -xx.00 pq al no join con detformadepago
+										//->sum('ticketventa.importe');
+                                        ->sum('Detformadepago.importe');
 						$tarjeta = $detcaja->tickets()
 										->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 										->where('Detformadepago.formadepago_id', '=', 2)
 										->where('ticketventa.estado', '=', 0)
 										->where('ticketventa.importe', '>=', 0)
-										->sum('ticketventa.importe');
+                                        //->sum('ticketventa.importe');
+                                        ->sum('Detformadepago.importe');
 					break;
 					case 2://efectivo
 						$tickets = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 1)
+						->where('ticketventa.estado','=',0) //agregar a los demas
+						->select('ticketventa.id','ticketventa.numero','ticketventa.subtotal','ticketventa.IGV','ticketventa.importe','ticketventa.idescuento')
 						->get();
+						//print_r($tickets);
+						 //die();
 						$total = $detcaja->tickets()
 								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 								->where('Detformadepago.formadepago_id', '=', 1)
-								->sum('ticketventa.importe');
+								->where('ticketventa.estado','=',0)
+                                //->sum('ticketventa.importe');
+                                ->sum('Detformadepago.importe');
 					break;
 					case 3://tarjetas
 						$tickets = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 2)
+						->select('ticketventa.id','ticketventa.numero','ticketventa.subtotal','ticketventa.IGV','ticketventa.importe','ticketventa.idescuento')
 						->get();
 						$total = $detcaja->tickets()
 								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 								->where('Detformadepago.formadepago_id', '=', 2)
-								->sum('ticketventa.importe');
+                                //->sum('ticketventa.importe');
+                                ->sum('Detformadepago.importe');
 					break;
 					case 4://descuentos
 						$tickets = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 3)
+						->select('ticketventa.id','ticketventa.numero','ticketventa.subtotal','ticketventa.IGV','ticketventa.importe','ticketventa.idescuento')
 						->get();
 						$total = $detcaja->tickets()
 								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
@@ -489,6 +544,7 @@ class CajasController extends BaseController {
 						$tickets = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 4)
+						->select('ticketventa.id','ticketventa.numero','ticketventa.subtotal','ticketventa.IGV','ticketventa.importe','ticketventa.idescuento')
 						->get();
 						$total = $detcaja->tickets()
 								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
@@ -499,7 +555,11 @@ class CajasController extends BaseController {
 						$tickets = $detcaja->tickets()
 						->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 						->where('Detformadepago.formadepago_id', '=', 5)
-						->get();
+						->select('ticketventa.id','ticketventa.numero','ticketventa.subtotal','ticketventa.IGV','ticketventa.importe','ticketventa.idescuento')
+						//corregido problema de show importe total = 0.00 pq cogia del detformaped
+						->get(); 
+						//print_r($tickets);
+						//die();
 						$total = $detcaja->tickets()
 								->join('Detformadepago', 'Detformadepago.ticket_id', '=', 'ticketventa.id')
 								->where('Detformadepago.formadepago_id', '=', 5)
@@ -857,6 +917,7 @@ class CajasController extends BaseController {
 				$montototal = 0;
 				$cantidadtickets = 0;
 				$totaldescuentos = 0;
+				//print_r($tickets); die();
 				foreach ($tickets as $ticket) {
 					if ($ticket->estado == 0 && $ticket->importe >= 0) {
 						$montototal = $montototal + $ticket->importe;

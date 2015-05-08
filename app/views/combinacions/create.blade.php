@@ -47,7 +47,7 @@
 			{{Form::label('precio', 'Precio',array('class'=>'control-label'))}}
 						    </div>
     <div class="col-md-5">
-			{{Form::input('text', 'precio', '', array('class'=>'form-control','placeholder'=>'##.##', 'required', 'validationMessage'=>'Por favor entre un precio', 'min' => '0'))}}
+			{{Form::input('text', 'precio', '', array('class'=>'','placeholder'=>'##.##', 'required', 'validationMessage'=>'Por favor entre un precio', 'min' => '0'))}}
 		</div>
 	</div>
 
@@ -137,7 +137,7 @@ $(document).ready(function($) {
  }); 
 
  var ds= new kendo.data.DataSource({
-        pageSize: 10,
+        pageSize: 100,
         change: onChangeDs,
         group: { field: "familianombre", aggregates: [
                                         { field: "cantidad", aggregate: "average" },

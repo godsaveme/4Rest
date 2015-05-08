@@ -225,7 +225,8 @@ $("#listView").kendoListView({
     save: function(e) {
     	var Itemid = e.model.id;
     	var newcosto = e.model.cantidad * e.model.costou;
-    	ds.pushUpdate({ id: Itemid, costo: newcosto, nombre: e.model.nombre,unidadmedida:e.model.unidadMedida, cantidad: e.model.cantidad, costou: e.model.costou });
+      console.log(e.model.unidadmedida);
+    	ds.pushUpdate({ id: Itemid, costo: newcosto, nombre: e.model.nombre,unidadmedida: e.model.unidadmedida, cantidad: e.model.cantidad, costou: e.model.costou });
   	},
     dataBound: function() {
       var data = ds.data();
@@ -250,7 +251,7 @@ $("#listView2").kendoListView({
     save: function(e) {
       var Itemid = e.model.id;
       var newcosto = e.model.cantidad * e.model.costou;
-      dsprods.pushUpdate({ id: Itemid, costo: newcosto , nombre: e.model.nombre, unidadmedida:e.model.unidadMedida, cantidad: e.model.cantidad, costou: e.model.costou});
+      dsprods.pushUpdate({ id: Itemid, costo: newcosto , nombre: e.model.nombre, unidadmedida:e.model.unidadmedida, cantidad: e.model.cantidad, costou: e.model.costou});
     },
     dataBound: function() {
       var data = ds.data();

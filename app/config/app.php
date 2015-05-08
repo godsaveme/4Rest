@@ -109,7 +109,8 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'Thujohn\Pdf\PdfServiceProvider',
 		'Dinesh\Barcode\BarcodeServiceProvider',
-		'Intervention\Image\ImageServiceProvider'
+		'Intervention\Image\ImageServiceProvider',
+		'Barryvdh\Debugbar\ServiceProvider'
 	),
 
 	/*
@@ -176,7 +177,8 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'PDF' 			  => 'Thujohn\Pdf\PdfFacade',
-		'Image' 		  => 'Intervention\Image\Facades\Image'
+		'Image' 		  => 'Intervention\Image\Facades\Image',
+		'Debugbar' 		  => 'Barryvdh\Debugbar\Facade'
 
 	),
 

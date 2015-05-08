@@ -9,8 +9,8 @@ class ProductosController extends BaseController {
 	 */
 	public function getIndex()
 	{
-		$productos = Producto::all();
-        return View::make('productos.index', array('productos' => $productos));
+		/*$productos = Producto::all();*/
+        return View::make('productos.index');
 	}
 
 	public function postBuscar()

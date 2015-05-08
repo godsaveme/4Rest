@@ -47,9 +47,12 @@
     <div class="col-md-3">
       {{Form::label('password', 'Contraseña', array('class'=>'control-label'))}}
           </div>
-    <div class="col-md-5">
+    {{-- <div class="col-md-5">
       {{Form::input('password', 'password', $usuario->password, array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor entre una contraseña' ,'disabled' => 'disabled'))}}
-          </div>
+    </div> --}}
+    <div class="col-md-4">
+        {{Form::button('Resetear contraseña',array('class'=>'btn btn-warning','id'=>'undo'))}}
+    </div>
 
 </div>
 <div class="form-group">
@@ -65,7 +68,7 @@
     <div class="col-md-3">
       <?php $persona = Persona::find($usuario->persona_id);?>
       {{Form::hidden('persona_id', $usuario->persona_id, array('id'=>'persona_id'))}}
-      {{Form::label('usuario', 'Buscar persona por', array('class'=>'control-label'))}}
+      {{Form::label('usuario', 'Persona', array('class'=>'control-label'))}}
           </div>
 
           @if ($usuario->ruc) <?php   $name_ = $usuario->persona->razonSocial ?> @else <?php $name_ = $usuario->persona->nombres. ' ' . $usuario->persona->apPaterno. ' ' . $usuario->persona->apMaterno ?> @endif
@@ -85,14 +88,14 @@
       {{Form::label('id_tipoareapro', 'Área', array('class'=>'control-label'))}}
       {{Form::select('id_tipoareapro', array('0' => "Seleccione ... "), $usuario->id_tipoareapro, array('select-areap'=>$usuario->id_tipoareapro , 'class'=>'form-control'))}}
     </div>
-            <div class="col-md-4">
+    {{-- <div class="col-md-4">
       {{Form::label('lblColaborador', 'Colaborador', array('class'=>'control-label'))}}
       {{Form::select('colaborador', array('0' => "Seleccione ... ") + $colaboradores,$usuario->colaborador, array('class'=>'form-control'))}}
-    </div>
+    </div> --}}
 </div>
 
 <div class="bs-callout bs-callout-info">
-    <h4>Local, Área y Colaborador requerido.</h4>
+    <h4>Local y Área requerido.</h4>
     <p>Deben estar seleccionadas estas variables para que el Usuario sea modificado.</p>
   </div>
 
@@ -105,11 +108,7 @@
 {{ Form::close() }}
 
 <script type="text/x-kendo-template" id="per_templ">
-  <h3>#: data.nombres #</h3>
-  <article>
-    <img src="">
-    <p></p>
-  </article>
+  <h5>#: nombres #</h5>
 </script>
 
 <script type="text/javascript">
@@ -140,5 +139,46 @@ function onSelect(e){
    //console.log($('#persona_id').val());
 };
 </script>
+            <div id="windowx2">
+                <samp>¿Realmente desea resetearle la contraseña?</samp> <br>
+                <small>Se asignará una contraseña nueva aleatoria de 6 caracteres.</small>
+                <div class="form-group">
+                <label class="control-label"> </label>
+                <div class="input-group">
+                  <span class="input-group-addon">Nueva contraseña:</span>
+                  <input type="text" class="form-control" id="newPasswd" readonly="" value="">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="resetPasswd" data-id-login="{{$usuario->id}}">Resetear</button>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+ <script>
+             $(document).ready(function() {   
+                    var window = $("#windowx2"),
+                        undo = $("#undo")
+                                .bind("click", function() {
+                                    window.data("kendoWindow").open();
+                                    undo.hide();
+                                });
+
+                    var onClose = function() {
+                        undo.show();
+                    }
+
+                    if (!window.data("kendoWindow")) {
+                        window.kendoWindow({
+                            width: "450px",
+                            title: "Resetear contraseña",
+                            modal: true,
+                            visible: false,
+                            close: onClose
+                        });
+                    }
+                    var dialogx2 = window.data("kendoWindow");
+                    dialogx2.center();
+                });
+            </script>
 
 @stop

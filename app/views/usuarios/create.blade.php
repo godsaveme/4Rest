@@ -37,7 +37,7 @@
       {{Form::label('login', 'Usuario',array('class'=>'control-label'))}}
           </div>
     <div class="col-md-5">
-      {{Form::input('text', 'login','', array('class' => 'form-control','placeholder'=>'ej gperez', 'autofocus','required', 'validationMessage'=>'Por favor entre un login.'))}}
+      {{Form::input('text', 'login','', array('class' => 'form-control','placeholder'=>'ej gperez', 'autofocus','required', 'validationMessage'=>'Por favor entre un login (4 carac. mín.)', 'pattern'=>'.{4,}'))}}
 
     </div>
     <div class="col-md-4 control-label check_1" style="display:none;"><i class="fa fa-check fa-5"></i> <span class="text-info">El nombre de usuario está disponible</span></div>
@@ -49,7 +49,7 @@
       {{Form::label('password', 'Contraseña', array('class'=>'control-label'))}}
           </div>
     <div class="col-md-5">
-      {{Form::input('password', 'password','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor entre una contraseña' ))}}
+      {{Form::input('password', 'password','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor entre una contraseña (6 caract mín.)' , 'pattern'=>'.{6,}'))}}
     </div>
 
 </div>
@@ -58,8 +58,10 @@
       {{Form::label('rpt_pass', 'Repita su Contraseña', array('class'=>'control-label'))}}
           </div>
     <div class="col-md-5">
-      {{Form::input('password', 'rpt_pass','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor repita su contraseña' ))}}
+      {{Form::input('password', 'rpt_pass','', array('class' => 'form-control','placeholder'=>'', 'autofocus','required', 'validationMessage'=>'Por favor repita su contraseña (6 caract mín.)', 'pattern'=>'.{6,}'))}}
     </div>
+    <div class="col-md-4 control-label check_-" style="display:none;"><i class="fa fa-bell fa-5"></i><span class="text-danger">Contraseñas no coinciden.</span></div>
+    <div class="col-md-4 control-label check_-2" style="display:none;"><i class="fa fa-check fa-5"></i><span class="text-info">Contraseñas coinciden.</span></div>
 
 </div>
 <div class="form-group">
@@ -72,14 +74,14 @@
        </div>
 </div>
 <div class="form-group">
-  <div class="col-md-3">
+      <div class="col-md-3">
       {{Form::hidden('persona_id', '', array('id'=>'persona_id'))}}
       {{Form::label('usuario', 'Persona/Empresa', array('class' => 'control-label'))}}
       </div>
       <div class="col-md-5">
-      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre/ruc/dni/rs', 'required', 'validationMessage'=>'Por favor ingrese una Persona/Empresa'))}}
+      {{Form::input('text', 'nombre_', '', array('id'=>'nombre_', 'placeholder' => 'Buscar por nombre/ruc/dni/rs', 'required', 'validationMessage'=>'Por favor ingrese una Persona/Empresa','style'=>'width:100%;'))}}
       </div>
-       <div class="col-md-4 control-label check_1"><i class="fa fa-check fa-5"></i> <span class="text-warning">Debe seleccionar una Persona/Empresa de la lista desplegable.</span></div>
+       <div class="col-md-4 control-label check_1--"><i class="fa fa-check fa-5"></i><span class="text-warning">Debe seleccionar una Persona/Empresa de la lista desplegable.</span></div>
     
   </div>
 
@@ -93,14 +95,14 @@
       {{Form::label('id_tipoareapro', 'Área', array('class'=>'control-label'))}}
       {{Form::select('id_tipoareapro', array('0' => "Seleccione ... "),'', array('class'=>'form-control','disabled'))}}
     </div>
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
       {{Form::label('lblColaborador', 'Colaborador', array('class'=>'control-label'))}}
       {{Form::select('colaborador', array('0' => "Seleccione.. ") + $colaboradores,'', array('class'=>'form-control'))}}
-    </div>
+    </div> --}}
 </div>
 
 <div class="bs-callout bs-callout-info">
-    <h4>Local, Área y Colaborador requerido.</h4>
+    <h4>Local y Área requerido.</h4>
     <p>Deben estar seleccionadas estas variables para que el Usuario sea creado.</p>
   </div>
 
@@ -113,11 +115,7 @@
 {{ Form::close() }}
 
 <script type="text/x-kendo-template" id="per_templ">
-  <h3>#: data.nombres #</h3>
-  <article>
-    <img src="">
-    <p></p>
-  </article>
+  <h5>#: nombres #</h5>
 </script>
 
 <script type="text/javascript">

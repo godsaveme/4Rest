@@ -55,6 +55,11 @@
                     </tr>
                 </thead>
                 <tbody>
+
+                    <?php /* print_r($tickets);
+                        die();*/
+                     ?>
+
                 @foreach ($tickets as $ticket)
                     <tr>
                         <td>
@@ -92,7 +97,7 @@
     </div>
 </div>
 
-<div id="windowsdatos">
+<div id="windowsdatos" style="display:none;">
      <form class="form-inline" role="form">
       <div class="form-group">
         <input type="text" id="buscar_clientegenerar" class="form-control" placeholder="Ingrese DNI/RUC/TEXTO">

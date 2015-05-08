@@ -4,8 +4,8 @@
 <audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
 <div id="tabstrip">
   <ul id="tabscaja">
-    @for ($i=0; $i < count($salones); $i++)
-      <li class="@if($i==0)k-state-active@endif">
+    @for($i=0; $i < count($salones); $i++)
+      <li class="@if($i==0) k-state-active @endif">
         {{$salones[$i]['nombre']}}
       </li>
     @endfor
@@ -41,7 +41,7 @@
         </ul>
   </div>
   @endfor
-  <div class="modalwindow">
+  <div class="modalwindow" style="display:none;">
   <ul class="list-group listamozos">
   </ul>
       <button type="button" class="btn btn-danger pull-right" id="btn_cancelar_mozo">Cancelar</button>
