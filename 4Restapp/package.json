@@ -21,6 +21,7 @@
     "mysql": "^2.5.4",
     "redis": "^0.12.1",
     "session.socket.io": "^0.1.6",
-    "socket.io": "^1.2.1"
+    "socket.io": "^1.2.1",
+      "config": "*"
   }
 }

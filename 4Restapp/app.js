@@ -9,13 +9,18 @@ var app = express();
 var server = http.createServer(app);
 io = io.listen(server);
 
+//config enviroment
+var config = require('config');
+var dbConfig = config.get('mysql-config.dbConfig');
+// fin config envir
+
 var mysql =  require('mysql');
-var mysqlconect =  mysql.createConnection({
-    host : '127.0.0.1',
-    user : 'root',
-    password: 'root',
-    database: 'db_4rest'
-    });
+var mysqlconect =  mysql.createConnection(dbConfig);
+
+/*host : 'localhost',
+ user : 'root',
+ password: 'root',
+ database: 'db_4rest'*/
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -31,8 +36,12 @@ var session = require('express-session')
 app.use(session({secret: 'kangoclientes',cookie:{maxAge:120000}}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(request, response) {
-    response.render('error');
+//app.get('/', function(request, response) {
+//    response.render('error');
+//});
+
+app.get('/', function(request, response){
+   response.send('hola from a');
 });
 
 app.get('/clientes/?:codigomesa?', function(request, response) {
@@ -138,7 +147,7 @@ app.post('/llamarsupervisor', function(request, response){
     }
 });
 
-io.sockets.on('connection', socketconection);
+io.on('connection', socketconection);
 
 function socketconection(cliente){
 	cliente.on('loginuser',function(usuario, area, id){
@@ -153,6 +162,7 @@ function socketconection(cliente){
     cliente.mesa_id = 0;
     cliente.join(area);
     cliente.join(usuario);
+        console.log(cliente.join(usuario));
     });
 
     cliente.on('NotificarPedidos', function(data, area){
@@ -259,3 +269,5 @@ function socketconection(cliente){
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+console.log('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));

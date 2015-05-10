@@ -18,70 +18,74 @@ class WebController extends BaseController {
 		}*/
 
 
-             $arraydatos1 = array();
+        $arraydatos1 = array();
+        $arraydatos2 = array();
 
 
-            $idrest = 2;
+            //$idrest = 2; modi
             $fechaInicio  = date("Y-m-d");
             $fechaFin  = date("Y-m-d");
-            $restaurante = Restaurante::find($idrest);
+            //$restaurante = Restaurante::find($idrest); modi
+
+            $restaurantes = Restaurante::all();
+        $c1 = 0;
+        $c2 = 0;
+
+        if(count($restaurantes) > 0) {
+
+            foreach ($restaurantes as $restaurante) {
 
 
-            $cajas = $restaurante->cajas;
+                $cajas = $restaurante->cajas;
 
-            //print_r($CajasenCurso->toJson());
+                //print_r($CajasenCurso->toJson());
 
-            foreach($cajas as $x)
-            {
-                $CajasenCurso = $x->detallecaja()
-                                ->where('estado','=','A')
-                                ->get();
 
-                foreach ($CajasenCurso as $CajaenCurso) {
-                    $usuario = Usuario::find($CajaenCurso->usuario_id);
-                    $fechaInicio = $CajaenCurso->fechaInicio;
-                    $totaltickets = $CajaenCurso->tickets()->count();
-                    $tickets = $CajaenCurso->tickets()->where('ticketventa.estado', '=', 0)
-                        ->where('ticketventa.importe', '>=', 0)->get();
-                    $totalproductosvendidos = 0;
-                    foreach ($tickets as $tickete) {
-                        $totalproductosvendidos = $totalproductosvendidos+$tickete->detallest()->sum('cantidad');
+                foreach ($cajas as $x) {
+                    $CajasenCurso = $x->detallecaja()
+                        ->where('estado', '=', 'A')
+                        ->get();
+
+                    foreach ($CajasenCurso as $CajaenCurso) {
+                        $usuario = Usuario::find($CajaenCurso->usuario_id);
+                        $fechaInicio = $CajaenCurso->fechaInicio;
+                        $totaltickets = $CajaenCurso->tickets()->count();
+                        $tickets = $CajaenCurso->tickets()->where('ticketventa.estado', '=', 0)
+                            ->where('ticketventa.importe', '>=', 0)->get();
+                        $totalproductosvendidos = 0;
+                        foreach ($tickets as $tickete) {
+                            $totalproductosvendidos = $totalproductosvendidos + $tickete->detallest()->sum('cantidad');
+                        }
+                        $totalventas1 = $CajaenCurso->tickets()->where('ticketventa.estado', '=', 0)
+                            ->where('ticketventa.importe', '>=', 0)->sum('importe');
+
+
+                        $arraydatos1[$c1] = array('caja' => $x->descripcion,
+                            'usuario' => $usuario->login,
+                            'fechaInicio' => $fechaInicio,
+                            'totalTickets' => $totaltickets,
+                            'totalProductos' => $totalproductosvendidos,
+                            'ventaNeta' => $totalventas1
+                        );
+                        $c1++;
+
+                        //print_r($arraydatos1);
+                        //die();
                     }
-                    $totalventas1 = $CajaenCurso->tickets()->where('ticketventa.estado', '=', 0)
-                        ->where('ticketventa.importe', '>=', 0)->sum('importe');
 
 
-                    $arraydatos1[] = array('caja' => $x->descripcion,
-                                            'usuario' => $usuario->login,
-                                          'fechaInicio' => $fechaInicio,
-                                          'totalTickets' => $totaltickets,
-                                          'totalProductos' => $totalproductosvendidos,
-                                            'ventaNeta' => $totalventas1
-                                            );
-
-
-
-                    //print_r($arraydatos1);
                 }
 
-
-            }
-
-            //return View::make('web.index',compact('arrDatos'));
+                //return View::make('web.index',compact('arrDatos'));
 
 
+                foreach ($cajas as $x) {
+                    $CajasUltimas = $x->detallecaja()
+                        ->where('estado', '=', 'C')
+                        ->orderBy('fechaInicio', 'DESC')
+                        ->first();
 
-            $arraydatos2 = array();
-
-
-            foreach($cajas as $x)
-            {
-                $CajasUltimas = $x->detallecaja()
-                    ->where('estado','=','C')
-                    ->orderBy('fechaInicio','DESC')
-                    ->first();
-
-                //foreach ($CajasenCurso as $CajaenCurso) {
+                    //foreach ($CajasenCurso as $CajaenCurso) {
                     $usuario = Usuario::find($CajasUltimas->usuario_id);
                     $fechaInicio = $CajasUltimas->fechaInicio;
                     $fechaCierre = $CajasUltimas->fechaCierre;
@@ -90,13 +94,13 @@ class WebController extends BaseController {
                         ->where('ticketventa.importe', '>=', 0)->get();
                     $totalproductosvendidos = 0;
                     foreach ($tickets as $tickete) {
-                        $totalproductosvendidos = $totalproductosvendidos+$tickete->detallest()->sum('cantidad');
+                        $totalproductosvendidos = $totalproductosvendidos + $tickete->detallest()->sum('cantidad');
                     }
                     $totalventas1 = $CajasUltimas->tickets()->where('ticketventa.estado', '=', 0)
                         ->where('ticketventa.importe', '>=', 0)->sum('importe');
 
 
-                    $arraydatos2[] = array( 'caja' => $x->descripcion,
+                    $arraydatos2[$c2] = array('caja' => $x->descripcion,
                         'usuario' => $usuario->login,
                         'fechaInicio' => $fechaInicio,
                         'fechaCierre' => $fechaCierre,
@@ -104,14 +108,16 @@ class WebController extends BaseController {
                         'totalProductos' => $totalproductosvendidos,
                         'ventaNeta' => $totalventas1
                     );
+                    $c2 = $c2 + 1;
 
-
-
+                    //print_r($c2);
                     //print_r($arraydatos2);
-                //}
+                    //}
 
 
+                }
             }
+        }
 
              //die();
 
@@ -245,7 +251,8 @@ class WebController extends BaseController {
             //return Response::json($arraydatos);
             */
 
-
+        //print_r($arraydatos2);
+        //die();
 
 		return View::make('web.index',compact('arraydatos1','arraydatos2'));
 	}

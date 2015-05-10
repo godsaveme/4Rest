@@ -1,4 +1,4 @@
-var host = window.location.host;
+var host = window.location.hostname;
 function ON_READY() {
 //recetas
     $('#form_receta').submit(function(event) {

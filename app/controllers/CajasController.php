@@ -125,6 +125,7 @@ class CajasController extends BaseController {
 		} else {
 			$caja_id = Input::get('caja_id');
 			$ocaja = Caja::find($caja_id);
+            //comprueba si la caja está abierta.
 			if ($ocaja->estado == 0) {
 				$detallecaja = Detcaja::create(Input::all(), $reglas);
 				$ocaja = $detallecaja->caja;
@@ -373,7 +374,7 @@ class CajasController extends BaseController {
 	public function getCerrarcaja($detallecaja_id = NULL) {
 		if (isset($detallecaja_id)) {
 			$detcaja = $this->detcaja;
-			//$detcaja = Detcaja::find('405');
+			//$detcaja = Detcaja::find('420');
 			//$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
 			//print_r($totalventas);
 			//die();
@@ -423,8 +424,8 @@ class CajasController extends BaseController {
 	}
 
 	public function postCerrarcaja() {
-		//$detcaja = $this->detcaja;
-        $detcaja = Detcaja::find(420);
+		$detcaja = $this->detcaja;
+        //$detcaja = Detcaja::find(420);
 		$reglas = array(
 			'arqueo' => array(
 				'required',

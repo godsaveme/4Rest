@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-	var socket = io.connect('http://'+window.location.host+':3000');
+	var socket = io.connect('http://'+window.location.hostname+':3000');
 	$('a[title]').tooltip();
 	$('#llamar_mozo').on('click', function(event) {
 		event.preventDefault();

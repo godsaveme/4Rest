@@ -1,4 +1,4 @@
-var socket = io.connect('http://'+window.location.host+':3000');
+var socket = io.connect('http://'+window.location.hostname+':3000');
 socket.emit('loginuser',$('#usuario').text(), 
           $('#area').text()+'_'+$('#area').attr('data-ida'), 
           $('#usuario').attr('user_id'));

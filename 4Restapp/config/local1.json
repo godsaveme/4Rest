@@ -1,0 +1,10 @@
+{
+"mysql-config": {
+    "dbConfig": {
+        "host" : "localhost",
+        "user" : "root",
+        "password": "root",
+        "database": "db_4rest"
+    }
+  }
+}
