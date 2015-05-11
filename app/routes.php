@@ -3340,6 +3340,14 @@ AND detallepedido.combinacion_id IS NOT NULL
 			return Response::json($usuarios);
         });
 
+
+		function prodSort($item1, $item2) {
+			if ($item1['id'] == $item2['id']) {return 0;
+			}
+
+			return ($item1['id'] > $item2['id'])?1:-1;
+		}
+
         Route::get('/getProducts', function(){
         	$producto1 = Producto::join('familia','familia.id','=','producto.familia_id')
         				/*->whereHas('combinaciones',function($q){
@@ -3370,8 +3378,12 @@ AND detallepedido.combinacion_id IS NOT NULL
 			foreach ($fusioPrimera as $x) {
 				$arrX[] = $x['id'];
 			}
+			if (!isset($arrX)) {
+				$arrX[] = 0;
+			}
+
 			$producto3 = Producto::join('familia','familia.id','=','producto.familia_id')
-						->selectraw('producto.id,producto.nombre as nombreProd, "" as precio, "" as costo, familia.nombre as nombreFam,producto.estado as estado')
+						->selectraw('producto.id,producto.nombre as nombreProd, "-" as precio, costo as costo, familia.nombre as nombreFam,producto.estado as estado')
 						->whereNotIn('producto.id',$arrX)
 						->get();
 			/*$producto3 = Producto::join('precio','producto.id','=','precio.producto_id')
@@ -3381,10 +3393,15 @@ AND detallepedido.combinacion_id IS NOT NULL
 						->groupBy('producto.id')
 						->get();*/
         	/*$productos = Producto::has('combinaciones','<','1')->get();*/
-        	//print_r($producto3->toJson()); die();
-			return Response::json(array_merge($fusioPrimera,$producto3->toArray()));
+        	//print_r($producto3->toArray()); die();
+        	$final = array_merge($fusioPrimera,$producto3->toArray());
+        	usort($final,"prodSort");
+        	//print_r($final); die();
+			return Response::json($final);
 			//return Response::json($producto1);
         });
+
+		
 
 		Route::get('/getInsumos', function(){
 
