@@ -45,7 +45,7 @@ class ProductosController extends BaseController {
 	public function getCreate()
 	{
 		$familias = Familia::all();
-		$tipoarea = Tipoareadeproduccion::where('id','!=', '2')->lists('nombre', 'id');
+		$tipoarea = Tipoareadeproduccion::where('nombre','!=', 'Salon')->where('nombre','!=','almacen')->lists('nombre', 'id');
 		$areas = Areadeproduccion::all()->lists('nombre', 'id');
         return View::make('productos.create', compact('familias','tipoarea','areas'));
 	}
@@ -73,7 +73,8 @@ class ProductosController extends BaseController {
 					 if (!empty(Input::get('precio'))) {
 					 		 $precio = new Precio;
 							 $precio->producto_id = $insertedId;
-							 $precio->combinacion_id = 1;
+							 $oComb = Combinacion::where('nombre','=','Normal')->first();
+							 $precio->combinacion_id = $oComb->id;
 							 $precio->precio=Input::get('precio');
 							 //$precio->seleccionador = '';
 							 //$precio->cantidad = '';
@@ -112,9 +113,13 @@ class ProductosController extends BaseController {
 		$producto = Producto::find($id);
 		if (count($producto)>0) {
 					$familias = Familia::all();
-					$precio = Precio::where('producto_id', '=', $producto->id)
-					->where('combinacion_id', '=', 1, 'AND')->first();
-					$tipoarea = Tipoareadeproduccion::where('id','!=', '2')->lists('nombre', 'id');
+					$precio = Precio::join('combinacion','combinacion.id','=','precio.combinacion_id')
+					->where('producto_id', '=', $producto->id)
+					->where('combinacion.nombre', '=', 'Normal', 'AND')
+					->select('precio.precio as precio') 
+					->first();
+					//print_r($precio->toJson()); die();
+					$tipoarea = Tipoareadeproduccion::where('nombre','!=', 'Salon')->where('nombre','!=','almacen')->lists('nombre', 'id');
         			return View::make('productos.edit', compact('producto', 'familias', 'tipoarea', 'precio'));
 		}else{
 			return Response::view('errors.missing', array(), 404);
@@ -137,9 +142,12 @@ class ProductosController extends BaseController {
 				$producto->save();
 				$insertedId = $producto->id;
 
+				$oComb = Combinacion::where('nombre','=','Normal')->first();
+
 				if (!empty(Input::get('precio'))) {
 						
-					 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+						
+					 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', $oComb->id)->first();
 						 	if(!empty($prod_comb_normal)){
 						 	//var_dump($prod_comb_normal->precio);
 						 	//die();
@@ -148,19 +156,19 @@ class ProductosController extends BaseController {
 						 }else{
 						 			$precio = new Precio;
 									 $precio->producto_id = $insertedId;
-									 $precio->combinacion_id = 1;
+									 $precio->combinacion_id = $oComb->id;
 									 $precio->precio=Input::get('precio');
 									 $precio->save();
 						 }
 				 }else{
-				 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', '1')->first();
+				 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', $oComb->id)->first();
 				 	if(!empty($prod_comb_normal)){
 				 	$prod_comb_normal->delete();
 				 	}
 				 }
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false));
+			return Response::json(array('estado' => $e->getMessage()));
 
 		}
 		DB::commit();
