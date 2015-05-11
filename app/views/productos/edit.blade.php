@@ -74,7 +74,7 @@
         {{Form::select('estado', array(1=>'Activo', 0=>'Inactivo'),$producto->estado, array('class' => 'form-control'))}}
       </div>
       <div class="col-md-3">
-      {{Form::label(' id_tipoarepro', 'Area de Producción', array('class'=>'control-label'))}}
+      {{Form::label(' id_tipoarepro', 'Tipo de Área de Producción', array('class'=>'control-label'))}}
       {{Form::select('  id_tipoarepro', $tipoarea,$producto->id_tipoarepro, array('class' => 'form-control'))}}
       </div>
       <div class="col-md-3">

@@ -88,7 +88,7 @@
                 @endif
 
                 <li class="divider"></li>
-                <li><a href="tipocombinacions"><i class="fa fa-rotate-left"></i>  Tipos de Combinaciones</a></li>
+                <li><a href="/tipocombinacions"><i class="fa fa-rotate-left"></i>  Tipos de Combinaciones</a></li>
                 <li><a href="/combinacions"><i class="fa fa-plus-square-o"></i>  Combinaciones</a></li>
                  @if(Auth::user()->persona->perfil->nombre === 'Administrador')
                 <li class="divider"></li>

@@ -3349,6 +3349,9 @@ AND detallepedido.combinacion_id IS NOT NULL
 		}
 
         Route::get('/getProducts', function(){
+
+        	$oComb = Combinacion::where('nombre','=','Normal')->first();
+
         	$producto1 = Producto::join('familia','familia.id','=','producto.familia_id')
         				/*->whereHas('combinaciones',function($q){
         					$q->where('combinacion.id','=',1);
@@ -3357,7 +3360,7 @@ AND detallepedido.combinacion_id IS NOT NULL
         				/*->where('precio.combinacion_id','=',1)*/
         				->selectraw('distinct(producto.id), producto.nombre as nombreProd, precio.precio as precio, producto.costo as costo,familia.nombre as nombreFam,producto.estado as estado ')
         				->orderBy('producto.id')
-        				->where('precio.combinacion_id','=',1)
+        				->where('precio.combinacion_id','=',$oComb->id)
         				->where('producto.receta','=',0)
         	            ->get();
 
@@ -3365,7 +3368,7 @@ AND detallepedido.combinacion_id IS NOT NULL
 						->leftjoin('receta','producto.id','=','receta.producto_id')
 						->join('precio','producto.id','=','precio.producto_id')
 						->where('receta', '=', 1)
-						->where('precio.combinacion_id','=',1)
+						->where('precio.combinacion_id','=',$oComb->id)
 						->selectraw('distinct(producto.id),producto.nombre as nombreProd, precio.precio as precio, sum(receta.precio) as costo, familia.nombre as nombreFam,producto.estado as estado')
 						->groupBy('producto.id')
 						->get();
