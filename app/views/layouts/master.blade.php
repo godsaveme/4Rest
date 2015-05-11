@@ -187,43 +187,43 @@
 
                   <li class="divider"></li>
                   <li>
-                    <a href="/usuarios/reportemozos/2">
+                    <a href="/usuarios/selectmozo">
                       <i class="fa fa-users"></i>
-                      Reporte Mozos Elias Aguirre
+                      Reporte Mozos
                     </a>
                   </li>
-                  <li>
+                  <!--<li>
                     <a href="/usuarios/reportemozos/3">
                       <i class="fa fa-users"></i>
                       Reporte Mozos Woyke
                     </a>
-                  </li>
+                  </li>-->
                   <li class="divider"></li>
                   <li>
-                    <a href="/reportes/reporteproductos/2">
+                    <a href="/usuarios/selectrota">
                       <i class="fa fa-users"></i>
-                      Rotación Productos Elias Aguirre
+                      Rotación Productos 
                     </a>
                   </li>
-                  <li>
+                  <!--<li>
                     <a href="/reportes/reporteproductos/3">
                       <i class="fa fa-users"></i>
                       Rotación Productos Woyke
                     </a>
-                  </li>
+                  </li>-->
                   <li class="divider"></li>
                   <li>
-                    <a href="/reportes/reportesemanal/2">
+                    <a href="/usuarios/selectcuadro">
                       <i class="fa fa-users"></i>
-                      Cuadro Semanal Venta de Productos Elias Aguirre
+                      Cuadro Semanal Venta de Productos
                     </a>
                   </li>
-                  <li>
+                  <!--<li>
                     <a href="/reportes/reportesemanal/3">
                       <i class="fa fa-users"></i>
                        Cuadro Semanal Venta de Productos Woyke
                     </a>
-                  </li>
+                  </li>-->
                   <li class="divider"></li>
                   <li>
                     <a href="/vales-descuentos">

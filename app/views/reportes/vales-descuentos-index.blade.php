@@ -10,7 +10,7 @@
             &nbsp;
             </div>
            <div class="col-sm-6">
-               <h1>SELECIONE RESTAURANTE</h1>
+               <h1>Selecciona Sucursal</h1>
                <ul  class="list-group">
                @foreach($restaurantes as $restaurante)
                    <li class="list-group-item">

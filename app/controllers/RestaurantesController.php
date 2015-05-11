@@ -91,7 +91,7 @@ class RestaurantesController extends BaseController {
 		try {
 		$restaurante = Restaurante::find($id);
 
-		$restaurante->nombreComercial = Input::get('nombreComercial');
+		/*$restaurante->nombreComercial = Input::get('nombreComercial');
 		$restaurante->razonSocial = Input::get('razonSocial');
 		$restaurante->direccion = Input::get('direccion');
 		$restaurante->ruc = Input::get('ruc');
@@ -103,7 +103,8 @@ class RestaurantesController extends BaseController {
 		$restaurante->tel = Input::get('tel');
 		$restaurante->cel = Input::get('cel');
 		$restaurante->fax = Input::get('fax');
-		$restaurante->comentarios = Input::get('comentarios');
+		$restaurante->comentarios = Input::get('comentarios');*/
+        $restaurante->update(Input::all());
 		$restaurante->save();
 		//$restaurante->nombreComercial = Input::get('nombreComercial');
 

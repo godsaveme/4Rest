@@ -142,6 +142,46 @@
 		return Response::json(true);
 		}
 
+		//seleccion de rest para los reportes.
+        public function getSelectmozo() {
+            $restaurantes = Restaurante::all()->lists('nombreComercial', 'id');
+            return View::make('usuarios.restselectmozo', compact('restaurantes'));
+        }
+
+        public function postSelectmozo(){
+            $idrestaurante = Input::get('restaurante_id');
+            //$restaurante = Restaurante::find($idrestaurante);
+            //return View::make('cajas.reportediario', compact('restaurante'));/usuarios/reportemozos/3
+            return Redirect::to('/usuarios/reportemozos/'.$idrestaurante);
+
+        }
+        public function getSelectrota() {
+            $restaurantes = Restaurante::all()->lists('nombreComercial', 'id');
+            return View::make('usuarios.restselectrota', compact('restaurantes'));
+        }
+
+        public function postSelectrota(){
+            $idrestaurante = Input::get('restaurante_id');
+            //$restaurante = Restaurante::find($idrestaurante);
+            //return View::make('cajas.reportediario', compact('restaurante'));/usuarios/reportemozos/3
+            return Redirect::to('/reportes/reporteproductos/'.$idrestaurante);
+
+        }
+        public function getSelectcuadro() {
+            $restaurantes = Restaurante::all()->lists('nombreComercial', 'id');
+            return View::make('usuarios.restselectcuadro', compact('restaurantes'));
+        }
+
+        public function postSelectcuadro(){
+            $idrestaurante = Input::get('restaurante_id');
+            //$restaurante = Restaurante::find($idrestaurante);
+            //return View::make('cajas.reportediario', compact('restaurante'));/usuarios/reportemozos/3
+            return Redirect::to('/reportes/reportesemanal/'.$idrestaurante);
+
+        }
+
+        //fin seleccion de rest para los reportes.
+
 		public function getReportemozos($idrestaurante = NULL){
 			if (isset($idrestaurante)) {
 				$restaurante = Restaurante::find($idrestaurante);

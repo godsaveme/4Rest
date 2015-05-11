@@ -169,15 +169,15 @@
           <div class="form-group">
                 <div class="col-md-4">
                   {{Form::label('numerovale', 'Numero de Vale', array('class'=>'control-label'))}}
-                  {{Form::text('numerovale', '', array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'123456','required', 'validationMessage'=>'Por favor entre un numero de vale. ', 'pattern'=>'[0-9]'))}}
+                  {{Form::text('numerovale', $restaurante->numerovale, array('id'=>'txtSerie','class' => 'form-control','placeholder'=>'123456','required', 'validationMessage'=>'Por favor entre un numero de vale. ', 'pattern'=>'[0-9]'))}}
                 </div>
                 <div class="col-md-4">
                   {{Form::label('numerodescuentoautorizado', 'Número de Descuento Autorizado', array('class'=>'control-label'))}}
-                  {{Form::text('numerodescuentoautorizado', '', array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'12345','required', 'validationMessage'=>'Por favor ingrese un numero.', 'pattern'=>'[0-9]'))}}
+                  {{Form::text('numerodescuentoautorizado', $restaurante->numerodescuentoautorizado, array('id'=>'txtNumSerie','class' => 'form-control','placeholder'=>'12345','required', 'validationMessage'=>'Por favor ingrese un numero.', 'pattern'=>'[0-9]'))}}
                 </div>
                  <div class="col-md-4">
                   {{Form::label('impresoranocontable', 'Impresora N/Contables', array('class'=>'control-label'))}}
-                  {{Form::text('impresoranocontable', '', array('class' => 'form-control','placeholder'=>'impresorabarra'))}}
+                  {{Form::text('impresoranocontable', $restaurante->impresoranocontable, array('class' => 'form-control','placeholder'=>'impresorabarra'))}}
                 </div>
           </div>
           </fieldset>
