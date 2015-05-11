@@ -9,7 +9,7 @@
 					<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
 						<div class="form-group">
 							<label for="">Selecciona Local</label>
-							{{Form::select('restaurante_id', array('0'=> 'Seleciona Restaurante') + $restaurantes,'', array('class'=>'form-control'))}}
+							{{Form::select('restaurante_id', array('0'=> '-') + $restaurantes,'', array('class'=>'form-control'))}}
 						</div>
 					</div>
 				</div>
