@@ -85,6 +85,9 @@ class WebController extends BaseController {
                         ->orderBy('fechaInicio', 'DESC')
                         ->first();
 
+ 		 if(!empty($CajasUltimas)){
+
+
                     //foreach ($CajasenCurso as $CajaenCurso) {
                     $usuario = Usuario::find($CajasUltimas->usuario_id);
                     $fechaInicio = $CajasUltimas->fechaInicio;
@@ -113,7 +116,7 @@ class WebController extends BaseController {
                     //print_r($c2);
                     //print_r($arraydatos2);
                     //}
-
+		} //empty
 
                 }
             }
