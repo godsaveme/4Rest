@@ -25,7 +25,7 @@ class PersonasController extends BaseController {
 	public function getCreateempresas()
 	{
 		$departamentos = Ubigeo::select()->groupBy('departamento')->get();
-		$perfiles = Perfil::select()->where('selector', '=', 2)->get();
+		$perfiles = Perfil::select()->where('nombre', '=', 'Empresa cliente')->get();
         return View::make('personas.createem', compact('departamentos','perfiles'));
 	}
 
@@ -70,7 +70,7 @@ class PersonasController extends BaseController {
 	{
 		$persona = Persona::find($id);
 		$departamentos = Ubigeo::select()->groupBy('departamento')->get();
-		$perfiles = Perfil::select()->where('selector', '=', 1)->get();
+		$perfiles = Perfil::select()->where('nombre', '!=', 'Empresa cliente')->get();
         return View::make('personas.edit', compact('persona','departamentos', 'perfiles'));
 	}
 
@@ -78,7 +78,7 @@ class PersonasController extends BaseController {
 	{
 		$empresa = Persona::find($id);
 		$departamentos = Ubigeo::select()->groupBy('departamento')->get();
-		$perfiles = Perfil::select()->where('selector', '=', 2)->get();
+		$perfiles = Perfil::select()->where('nombre', '=', 'Empresa cliente')->get();
         return View::make('personas.editem', compact('empresa','departamentos', 'perfiles'));
 	}
 
