@@ -655,9 +655,11 @@ Route::group(array('before' => 'auth'), function () {
 						foreach ($profami as $datoprof) {
 							$producto = Producto::find($datoprof['idpro']);
 							foreach ($cocinas as $cocina) {
-								$ococina = Areadeproduccion::find(substr($cocina, -1));
+								$ococina = Areadeproduccion::find(substr(strrchr($cocina, "_"), 1));
 								if ($ococina->id_tipo == $producto->id_tipoarepro) {
-									$areapro = substr($cocina, -1);
+									//$areapro = substr($cocina, -1); para capturar id de 2 dígitos a más
+									$areapro = substr(strrchr($cocina, "_"), 1);
+									//print_r($areapro);
 									$ordencocina = $ococina->ordennumber+1;
 									$arrayimprimir[$cocina][] = $datoprof;
 								}
@@ -815,11 +817,12 @@ Route::group(array('before' => 'auth'), function () {
 					}
 					$j = 0;
 					foreach ($cocinas as $cocina) {
-						$max = DetPedido::whereraw("pedido_id = ".$pedidoid."
-                    and idarea = ".substr($cocina, -1))->first();
+				//$max = DetPedido::whereraw("pedido_id = ".$pedidoid." and idarea = ".substr($cocina, -1))->first();
+			$max = DetPedido::whereraw("pedido_id = ".$pedidoid." and idarea = ".substr(strrchr($cocina, "_"), 1))->first();
 						$ordenes = 0;
 						if (isset($max)) {
-							$areap = Areadeproduccion::find(substr($cocina, -1));
+							//$areap = Areadeproduccion::find(substr($cocina, -1));
+							$areap = Areadeproduccion::find(substr(strrchr($cocina, "_"), 1));
 							$ordenes = $areap->ordennumber+1;
 							$areap->ordennumber = $ordenes;
 							$areap->save();
@@ -829,7 +832,7 @@ Route::group(array('before' => 'auth'), function () {
 					}
 					} catch (Exception $e) {
 						DB::rollBack();
-						return Response::json($e);
+						return Response::json($e->getLine());
 					}
 					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
 					DB::commit();
@@ -909,10 +912,11 @@ Route::group(array('before' => 'auth'), function () {
 									->where('pedido_id', '=', $idpedido, 'AND')
 									->whereNull('ticket_id')
 									->first();
+									$oComb = Combinacion::where('nombre','=','Normal')->first();
 									$arraycreaprecuenta = array('nombre' => $detallepro->nombre,
 										'cantidad'                          => $cantidadre,
 										'precio'                            => $preciot,
-										'combinacion_id'                    => 1,
+										'combinacion_id'                    => $oComb->id,
 										'preciou'                           => $preciou,
 										'pedido_id'                         => $detallepro->pivot->pedido_id,
 										'producto_id'                       => $detallepro->id);
@@ -978,7 +982,7 @@ Route::group(array('before' => 'auth'), function () {
 							->get();
 						} catch (Exception $e) {
 							DB::rollback();
-							return Response::json(false);
+							return Response::json($e->getMessage());
 						}
 						DB::commit();
 						return Response::json($precuentaf);
