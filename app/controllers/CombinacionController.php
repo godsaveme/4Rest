@@ -67,7 +67,7 @@ class CombinacionController extends BaseController {
 
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false));
+			return Response::json(array('estado' => $e->getMessage()));
 		}
 
 		DB::commit();
