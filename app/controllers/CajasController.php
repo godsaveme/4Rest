@@ -172,7 +172,13 @@ class CajasController extends BaseController {
 		if ($id) {
 			$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
 			/*CARTA*/
-			$familias = Familia::select('familia.nombre', 'familia.id')->join('producto', 'producto.familia_id', '=', 'familia.id')->join('precio', 'precio.producto_id', '=', 'producto.id')->where('precio.combinacion_id', '=', 1)->groupby('familia.nombre')->get();
+			$oComb = Combinacion::where('nombre','=','Normal')->first();
+			$familias = Familia::select('familia.nombre', 'familia.id')
+								->join('producto', 'producto.familia_id', '=', 'familia.id')
+								->join('precio', 'precio.producto_id', '=', 'producto.id')
+								->where('precio.combinacion_id', '=', $oComb->id)
+								->groupby('familia.nombre')
+								->get();
 			$tiposcomb = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
 						combinacion.id as CombinacionId, combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
 						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
