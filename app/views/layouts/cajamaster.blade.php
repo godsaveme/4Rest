@@ -77,7 +77,7 @@
 
       	@endif
 	      <ul class="nav navbar-nav navbar-right">
-	      @if (Auth::user()->persona->perfil_id != 1)
+	      @if (Auth::user()->persona->perfil->nombre != 'Administrador')
 	      	<li>
       			<a href="javascript:void(0)" id="btn_controlpedidos">
       				Lista de Pedidos
@@ -182,7 +182,7 @@
 <div class="container" id="contenido">
     @yield('content')
 
-@if (Auth::user()->persona->perfil_id != 1)
+@if (Auth::user()->persona->perfil->nombre != 'Administrador')
 	<div id="windowsnotificaciones" style="display:none"r>
     	<span id="notificationpedidos" style="display:none;"></span>
     </div>

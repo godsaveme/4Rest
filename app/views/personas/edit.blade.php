@@ -101,7 +101,7 @@
 <div class="form-group">
     <div class="col-md-2">
       {{Form::label('habilitado', 'Habilitado', array('class'=>'control-label'))}}
-      {{Form::select('habilitado', array(1=>'Si', 0=> 'No'), 1 ,array('class' => 'form-control'))}}
+      {{Form::select('habilitado', array(1=>'Si', 0=> 'No'), $persona->habilitado ,array('class' => 'form-control'))}}
     </div>
     <div class="col-md-3">
       {{Form::label('perfil_id', 'Perfil', array('class'=>'control-label'))}}

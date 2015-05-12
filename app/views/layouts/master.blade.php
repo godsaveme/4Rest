@@ -156,13 +156,9 @@
                @if(Auth::user()->persona->perfil->nombre === 'Caja')
                <li><a href="/cajas"><i class="fa fa-pencil-square-o"></i>  Caja </a></li>
                @endif
-               @if(Auth::user()->persona->perfil->nombre === 'Cocina' and Auth::user()->areaproduccion->nombre ==='Cocina')
+               @if(Auth::user()->persona->perfil->nombre === 'Área de Producción')
                <li class="divider"></li>
-                <li><a href="/cocina"><i class="fa fa-pencil-square-o"></i>  Área de Producción: Cocina</a></li>
-                @endif
-                @if(Auth::user()->persona->perfil->nombre === 'Cocina' and Auth::user()->areaproduccion->nombre ==='Barra')
-                <li class="divider"></li>
-                <li><a href="/cocina"><i class="fa fa-rotate-left"></i>  Área de Producción: Barra</a></li>
+                <li><a href="/cocina"><i class="fa fa-pencil-square-o"></i>  Área de Producción: {{Auth::user()->areaproduccion->nombre}}</a></li>
                 @endif
                 @if(Auth::user()->persona->perfil->nombre === 'Mozo')
                 <li class="divider"></li>
