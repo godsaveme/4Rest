@@ -19,7 +19,7 @@ class PersonasController extends BaseController {
 	public function getCreate()
 	{
 		$departamentos = Ubigeo::select()->groupBy('departamento')->get();
-		$perfiles = Perfil::select()->where('selector', '=', 1)->get();
+		$perfiles = Perfil::select()->where('nombre', '!=', 'Empresa cliente')->get();
         return View::make('personas.create', compact('departamentos','perfiles'));
 	}
 	public function getCreateempresas()
