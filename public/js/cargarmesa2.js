@@ -1820,7 +1820,7 @@ $('.registrarcliente').on('click',function(event) {
 				        apMaterno: $("#input_apMaterno").val(),
 				        dni: $('#input_dni').val(),
 				        direccion: $('#input_direccion').val(),
-				        cliente: 8
+				        cliente: 'Cliente'
 				    	};
 	}else if ($('#infomesa').data('rclitipo') == 2) {
 		var flag = $('#frm_cliempresa input').filter(function(index) {
@@ -1832,7 +1832,7 @@ $('.registrarcliente').on('click',function(event) {
 				        nombres: $("#input_rs").val(),
 				        ruc: $('#input_ruc').val(),
 				        direccion: $('#input_direccionem').val(),
-				        cliente: 5
+				        cliente: 'Empresa cliente'
 				    	};
 	}
 

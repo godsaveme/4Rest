@@ -564,9 +564,11 @@ Route::group(array('before' => 'auth'), function () {
 				->where('id_restaurante', '=', Auth::user()->id_restaurante, 'AND')
 				->get();*/
 				//$mozos = Usuario::find(25);
+				//$_perfil = Perfil::where('nombre','=','Mozo')->first()->id;
+				//print_r($_perfil); die();
 				//consulta $q es a los usuuarios y personas. Escogido!
 				$mozos = Usuario::whereHas('persona',function($q){
-					$q->where('perfil_id','=',2)
+					$q->where('perfil_id','=', Perfil::where('nombre','=','Mozo')->first()->id)
 					  ->where('estado','=',1)
 					  ->where('habilitado','=',1)
 					  ->where('id_restaurante','=',Auth::user()->id_restaurante);
@@ -1437,12 +1439,19 @@ Boleta&nbsp;
 				$rtipo = Input::get('rtipo');
 				$responsedatos = array();
 				//print_r(Input::all()); die();
+
 				if ($rtipo == 1) {
-					$newpersona = Persona::create(array('nombres' => $datos['nombres'], 'apPaterno' => $datos['apPaterno'], 'apMaterno' => $datos['apMaterno'], 'dni' => $datos['dni'], 'direccion' => $datos['direccion'], 'perfil_id' => $datos['cliente']));
-					$responsedatos[] = array('nombres'            => $newpersona->nombres.' '.$newpersona->apPaterno, 'dni'            => $newpersona->dni, 'direccion'            => $newpersona->direccion, 'id'            => $newpersona->id);
+					$newpersona = Persona::create(array('nombres' => $datos['nombres'], 'apPaterno' => $datos['apPaterno'], 'apMaterno' => $datos['apMaterno'], 'dni' => $datos['dni'], 'direccion' => $datos['direccion'], 'perfil_id' => Perfil::where('nombre','=',$datos['cliente'])->first()->id));
+					$responsedatos[] = array('nombres'            => $newpersona->nombres.' '.$newpersona->apPaterno,
+											 'dni'            => $newpersona->dni,
+											  'direccion'            => $newpersona->direccion,
+											   'id'            => $newpersona->id);
 				} elseif ($rtipo == 2) {
-					$newpersona = Persona::create(array('razonSocial' => $datos['nombres'], 'ruc' => $datos['ruc'], 'direccion' => $datos['direccion'], 'perfil_id' => $datos['cliente']));
-					$responsedatos[] = array('nombres'                => $newpersona->razonSocial.' '.$newpersona->apPaterno, 'dni'                => $newpersona->ruc, 'direccion'                => $newpersona->direccion, 'id'                => $newpersona->id);
+					$newpersona = Persona::create(array('razonSocial' => $datos['nombres'], 'ruc' => $datos['ruc'], 'direccion' => $datos['direccion'], 'perfil_id' => Perfil::where('nombre','=',$datos['cliente'])->first()->id));
+					$responsedatos[] = array('nombres'                => $newpersona->razonSocial,
+											 'dni'                => $newpersona->ruc,
+											  'direccion'                => $newpersona->direccion,
+											   'id'                => $newpersona->id);
 				}
 				return Response::json($responsedatos);
 			});
