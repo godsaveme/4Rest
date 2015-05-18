@@ -162,10 +162,20 @@ class ProductosController extends BaseController {
 						 }
 				 }else{
 				 	$prod_comb_normal = $producto->precios()->where('combinacion_id', '=', $oComb->id)->first();
+                    //print_r($prod_comb_normal->toJson()); die();
 				 	if(!empty($prod_comb_normal)){
 				 	$prod_comb_normal->delete();
 				 	}
 				 }
+
+                if (Input::get('receta') == 1){
+                    $stockProd = $producto->almacenes()->detach();
+                    //print_r($stockProd->toJson()); die();
+                    //if(!empty($stockProd)){
+                    //    $stockProd->detach();
+                    //}
+                }
+
 		} catch (Exception $e) {
 			DB::rollback();
 			return Response::json(array('estado' => $e->getMessage()));

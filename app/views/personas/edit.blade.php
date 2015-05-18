@@ -58,28 +58,19 @@
 <div class="form-group">
     <div class="col-md-3">
     {{Form::label('pais', 'País', array('class'=>'control-label'))}}
-      {{Form::select('pais', array(''=>'País','Perú'=>'Perú'),$persona->pais,array('class' => 'form-control'))}}
+      {{Form::select('pais', array('0'=>'Seleccione País','Perú'=>'Perú','Otro' => 'Otro'),$persona->pais,array('class' => 'form-control'))}}
     </div>
     <div class="col-md-3">
     {{Form::label('departamento', 'Departamento', array('class'=>'control-label'))}}
-      <select name="departamento" id="departamento" class="form-control">
-        <option value="">Departamento</option>
-        @foreach ($departamentos as $dato) 
-        <option value="{{$dato->departamento}}">{{$dato->departamento}}</option>
-        @endforeach
-      </select>
+      {{Form::select('departamento', $departamentos,$persona->departamento,array('class' => 'form-control'))}}
     </div>
     <div class="col-md-3">
     {{Form::label('provincia', 'Provincia', array('class'=>'control-label'))}}
-      <select name="provincia" id="provincia" class="form-control">
-        <option value="">Provincia</option>
-      </select>
+      {{Form::select('provincia', $provincias,$persona->provincia,array('class' => 'form-control'))}}
     </div>
     <div class="col-md-3">
     {{Form::label('distrito', 'Distrito', array('class'=>'control-label'))}}
-      <select name="distrito" id="distrito" class="form-control">
-        <option value="">Distrito</option>
-      </select>
+      {{Form::select('distrito', $distritos,$persona->distrito,array('class' => 'form-control'))}}
     </div>
   </div>
 

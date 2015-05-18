@@ -100,10 +100,10 @@
         </div>
         <div class="col-md-3">
 
-                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}}
+                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}} <br>
 
         
-            {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
+            {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', 'disabled' => 'disabled', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
           </div>
     </div>
 
@@ -146,6 +146,27 @@
               };
             
           });
+
+
+          var costo = $("#costo").data("kendoNumericTextBox");
+
+
+                    var $checked2;
+
+
+                    $('body').on('change', '#receta', function(event) {
+
+                      $checked2 = $(this).val();
+                        if ($checked2 == 1) {
+                            costo.enable(true);
+
+                        }else{
+                            costo.enable(false);
+
+                        };
+
+                    });
+
 
           });
         </script>

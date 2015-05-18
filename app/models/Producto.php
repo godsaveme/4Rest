@@ -52,4 +52,7 @@ class Producto extends Eloquent {
 		return $this->belongsToMany('Almacen','stockProducto','producto_id','almacen_id');
 	}
 
+    public function stock(){
+        return $this->hasMany('StockProducto','producto_id');
+    }
 }

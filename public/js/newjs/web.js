@@ -805,4 +805,97 @@ function ON_LOAD(){
   function show4Rest(){
     event.preventDefault();
     $('#window').data("kendoWindow").open();
-  } 
+  }
+
+
+$(document).ready(function(){
+
+    $("body").on('change','#pais',function(){
+        $.ajax({
+            url: '/personas/getdpto/'+$(this).val(),
+            type: 'POST',
+            dataType: 'json'
+            //data: {pais: $(this).val()}
+        })
+            .done(function(data) {
+
+                if(data == 1){
+                    //alert('hi');
+                    //$(this).parent().append('<input class="form-control" placeholder="Ingrese Lugar de Proce." required="required" validationmessage="Requerido" name="OtroX" type="text" value="" id="OtroX" >');
+                    $('#departamento').empty();
+                    $('#departamento').append('<option value="0">Seleccione Dpto</option>');
+                    $('#provincia').empty();
+                    $('#provincia').append('<option value="0">Seleccione Prov</option>');
+                    $('#distrito').empty();
+                    $('#distrito').append('<option value="0">Seleccione Dist</option>');
+                }else{
+
+                    if(data == false){
+                        $('#departamento').empty();
+                        $('#departamento').append('<option value="0">Seleccione Dpto</option>');
+                        $('#provincia').empty();
+                        $('#provincia').append('<option value="0">Seleccione Prov</option>');
+                        $('#distrito').empty();
+                        $('#distrito').append('<option value="0">Seleccione Dist</option>');
+                    }else{
+                        $('#departamento').empty();
+                        $('#departamento').append(data);
+                        $('#provincia').empty();
+                        $('#provincia').append('<option value="0">Seleccione Prov</option>');
+                        $('#distrito').empty();
+                        $('#distrito').append('<option value="0">Seleccione Dist</option>');
+                    }
+
+                }
+
+
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    $("body").on('change','#departamento',function(){
+        $.ajax({
+            url: '/personas/getprov/'+$(this).val(),
+            type: 'POST',
+            dataType: 'json'
+            //data: {pais: $(this).val()}
+        })
+            .done(function(data) {
+                $('#provincia').empty();
+                $('#provincia').append(data);
+                $('#distrito').empty();
+                $('#distrito').append('<option value="0">Seleccione Dist</option>');
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    $("body").on('change','#provincia',function(){
+        $.ajax({
+            url: '/personas/getdist/'+$('#departamento').val()+'/'+$(this).val(),
+            type: 'POST',
+            dataType: 'json'
+            //data: {pais: $(this).val()}
+        })
+            .done(function(data) {
+                $('#distrito').empty();
+                $('#distrito').append(data);
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+});

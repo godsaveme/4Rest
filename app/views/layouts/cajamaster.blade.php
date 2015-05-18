@@ -259,35 +259,35 @@
 			<article class="col-sm-3 col-md-3 col-lg-3">
 				<ul class="list-group">
 					<li class="list-group-item list_menu">
-					<a href="/cajas">Caja
+					<a href="/cajas"><i class="fa fa-plus-square-o"></i> Caja
 					</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/cajas/registrargasto/{{$detcaja->id}}"> Registrar Gasto</a>
+					<a href="/cajas/registrargasto/{{$detcaja->id}}"><i class="fa fa-plus-square-o"></i> Registrar Gasto</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/cajas/registraringreso/{{$detcaja->id}}"> Registrar Ingreso</a>
+					<a href="/cajas/registraringreso/{{$detcaja->id}}"><i class="fa fa-plus-square-o"></i> Registrar Ingreso</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/cajas/listargastos">Lista de Gastos</a>
+					<a href="/cajas/listargastos"><i class="fa fa-plus-square-o"></i> Lista de Gastos</a>
 					</li>
 					<li class="list-group-item list_menu">
-                    <a href="/cajas/listaringresos">Lista de Ingresos</a>
+                    <a href="/cajas/listaringresos"><i class="fa fa-plus-square-o"></i> Lista de Ingresos</a>
                     </li>
-					<li class="list-group-item list_menu">
+					<!--<li class="list-group-item list_menu">
 					<a href="/eventos/listareventoscaja">Lista de Eventos</a>
+					</li>-->
+					<li class="list-group-item list_menu">
+					<a href="/cajas/listarventas?tipoc=1"><i class="fa fa-plus-square-o"></i> Ventas Totales</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/cajas/listarventas?tipoc=1">Ventas Totales</a>
+						<a href="/combinacions/create" target="_blank"><i class="fa fa-plus-square-o"></i> Crear Menú</a>
 					</li>
 					<li class="list-group-item list_menu">
-						<a href="/combinacions/create" target="_blank">Crear Menú</a>
+					<a href="/monitores/monitorgeneral/{{Auth::user()->id_restaurante}}" target="_blank"><i class="fa fa-plus-square-o"></i> Monitor</a>
 					</li>
 					<li class="list-group-item list_menu">
-					<a href="/monitores/monitorgeneral/{{Auth::user()->id_restaurante}}" target="_blank">Monitor</a>
-					</li>
-					<li class="list-group-item list_menu">
-					<a href="/cajas/cerrarcaja/{{$detcaja->id}}">Cerrar Caja</a>
+					<a href="/cajas/cerrarcaja/{{$detcaja->id}}"><i class="fa fa-plus-square-o"></i> Cerrar Caja</a>
 					</li>
 				</ul>
 			</article>

@@ -675,6 +675,38 @@ Route::group(array('before' => 'auth'), function () {
 								'ordenCocina'                => $ordencocina
 											);
 							$odetpe = DetPedido::create($datitos1);
+
+
+                            //
+                            $oProd = Producto::find($odetpe->producto_id);
+                            if($oProd->receta == 1){
+                                $almacen_id = Auth::user()->restaurante->almacen_id;
+                                $oAlmacen = Almacen::find($almacen_id);
+                                $insumosReceta = $oProd->insumos()->get();
+
+                                //hasta aqui entra pq no tiene receta aunq en prod esta activado. no errores
+
+                                foreach($insumosReceta as $insumo){
+                                    //aqui insumo no agregado al stock de insumos del almacen principal puede ser..
+                                    $insumoAlmacen = $oAlmacen->insumos()->where('stockInsumo.insumo_id', '=', $insumo->id)->first();
+                                    Almacen::find($almacen_id)->insumos()->updateExistingPivot($insumo->id,
+                                        array('stockActual' => $insumoAlmacen->pivot->stockActual - $odetpe->cantidad*$insumo->pivot->cantidad));
+
+                                }
+
+
+
+                            //prod no agregado al stock del almacen principal.. posible error
+                            }elseif($oProd->receta == 0){
+                               $almacen_id = Auth::user()->restaurante->almacen_id;
+                                $oAlmacen = Almacen::find($almacen_id);
+                                $productoAlmacen = $oAlmacen->productos()->where('stockProducto.producto_id', '=', $oProd->id)->first();
+                                Almacen::find($almacen_id)->productos()->updateExistingPivot($oProd->id, array('stockActual' => $productoAlmacen->pivot->stockActual - $odetpe->cantidad));
+                            }
+
+                            //
+
+
 							$flagnotas = 0;
 							if (isset($datoprof['notas'])) {
 								$arrayinsertnotas = array();
@@ -1041,7 +1073,7 @@ Route::group(array('before' => 'auth'), function () {
                             <td>'.$predato['nombre'].'</td>
                             <td>'.$predato['preciou'].'</td>
                             <td>'.$predato['cantidad'].'</td>
-                            <td>'.$predato['precio'].'</td>
+                            <td style="text-align:right;">'.$predato['precio'].'</td>
                         </tr>';
 							$importetotal = $importetotal+$predato['precio'];
 						}
@@ -1050,28 +1082,46 @@ Route::group(array('before' => 'auth'), function () {
                         <p>Descuentos:</p>
                         <p>Mesa Atendida:'.$nombremesa.'</p>
                         <p>Atendido por:'.$nombremozo.'</p>
-                        <br>
-                        <br>
                         <hr>
                         <p>[  ]&nbsp;
 Boleta&nbsp;
 &nbsp;
-&nbsp;
-&nbsp;
 [  ] Factura</p>
-                        <p>[  ]&nbsp;Registrate y acumula K-Puntos. <br>
-                        	DNI / RUC ...................................
+                        <p>[  ]&nbsp;Regístrate y acumula puntos. <br>
+                        <br>
+                        	<p>Nombres/Razón Social: .................................. </p>
+                        	<br>
+                        	<p>DNI/RUC: ............................................</p>
+                        	<br>
+                        	<p>Teléfono: ...........................................</p>
+                        	<br>
+                        	<p>Email: ...............................................</p>
+
                         </p>
                         </body>
                         </html>';
 						$headers = array('Content-Type' => 'application/pdf', );
 						$pdfPath = TIKET_DIR.$token.'.pdf';
-						File::put($pdfPath, PDF::load($html, 'A7', 'portrait')->output());
+						File::put($pdfPath, PDF::load($html,array(0,0,224.00,370.00), 'portrait')->output());
+                        // init HTML2PDF
+                        //$html2pdf = new HTML2PDF('P',array('74','130'), 'es', true, 'UTF-8', array(0, 0, 0, 0));
+
+                        // display the full page
+                        //$html2pdf->pdf->SetDisplayMode('fullpage');
+
+                        // convert
+                        //$html2pdf->writeHTML($html);
+
+                        // add the automatic index
+                        //$html2pdf->createIndex('Sommaire', 30, 12, false, true, 2);
+
+                        // send the PDF
+                        //$html2pdf->Output($pdfPath,'F');
 						$cmd = "lpr -PHP_Photosmart_Plus_B209a-m ";
 						$cmd .= $pdfPath;
-						if (Auth::user()->id_restaurante == 2) {
+						//if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);
-						}
+						//}
 						//File::delete($pdfPath);
 						return Response::json('true');
 					}
@@ -1369,7 +1419,7 @@ Boleta&nbsp;
                     $contelementos = count($odetallepedidos);
                     if ($contelementos == 0) {
                         // == 20 por ningun rest
-                        if (Auth::user()->id_restaurante == 20) {
+                        if (Auth::user()->id_restaurante == 2000) {
                             if (count($despachado) == 0) {
                                 $opedido = Pedido::find($idpedido);
                                 $newimporte = $opedido->tickets()->sum('importe');
@@ -1465,8 +1515,8 @@ Boleta&nbsp;
 					//$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
                     $listadegastos = Detcaja::join('registrogastoscaja','registrogastoscaja.detallecaja_id','=','detallecaja.id')
                                         ->join('tipodegasto','tipodegasto.id','=','registrogastoscaja.tipogasto_id')
-                                        ->where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')
-                                        ->select('registrogastoscaja.id as id','registrogastoscaja.descripcion as descripcion','registrogastoscaja.importetotal as importetotal','tipodegasto.descripcion as tipo_descripcion')
+                                        ->where('detallecaja.estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')
+                                        ->select('registrogastoscaja.id as id','registrogastoscaja.descripcion as descripcion','registrogastoscaja.importetotal as importetotal','tipodegasto.descripcion as tipo_descripcion','registrogastoscaja.estado as tipo_estado')
                                         ->get();
 					//$listadegastos = $detcaja->gastos()->get();
                     //print_r($listadegastos->toJson()); die();

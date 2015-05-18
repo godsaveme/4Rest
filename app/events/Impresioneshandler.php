@@ -129,7 +129,7 @@
 							    </body>
 							</html>';
 
-					if(Auth::user()->id_restaurante == 2){
+					//if(Auth::user()->id_restaurante == 2){
 						if (!empty($datos[$datococinas])) {
 							$ococina = Areadeproduccion::find(substr($datococinas, -1));
 							$token = sha1(microtime().'tk');
@@ -144,7 +144,7 @@
 							$i = $i +1;
 							//File::delete($pdfPatd);
 						}
-					}
+					//}
 			}
 		}
 
@@ -241,7 +241,7 @@
 			$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
 			$html2pdf->WriteHTML($html);
 			$html2pdf->Output($pdfPatd, 'F');
-			$cmd = "lpr -P HP_Photosmart_Plus_B209a-md ";
+			$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
 			$cmd .= $pdfPatd;
 			$response = shell_exec($cmd);
 			//File::delete($pdfPatd);
@@ -311,8 +311,8 @@
 	                                <body>
 	                                <div class="container">
 	                                <div class="encabezado">
-	                                <strong>KANGO CAFE</strong><br>
 	                                <strong>'.$restaurante->razonSocial.'</strong><br>
+	                                <strong>'.$restaurante->nombreComercial.'</strong><br>
 	                                </div>
 	                                <div class="subencabezado">
 	                                <strong>RUC Nº '.$restaurante->ruc.'</strong><br>

@@ -56,11 +56,22 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="form-group">
 						<label>Descripción:</label>
-						{{Form::input('text', 'descripcion', '',array('class'=>'form-control', 'placeholder'=> 'Ingrese motivo'))}}
+						<!--{{Form::input('text', 'descripcion', '',array('class'=>'form-control', 'placeholder'=> 'Ingrese motivo'))}}-->
+						<textarea name="descripcion" class="form-control" placeholder="Ingrese una descripción" rows="5"></textarea>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<label>Estado:</label>
+                        {{Form::select('estado',array('0' => 'EMITIDO', '1' => 'CANCELADO'),0,array('class' => 'form-control'))}}
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
+				    <div class="row">
+				    <br/><br/>
 					<button type="submit" class="btn btn-primary pull-right">Aceptar</button>
+					<span class="pull-right">   </span>
+
+					<a href="/cajas" class="btn btn-danger pull-right" style="margin-right: 10px;">Cancelar</a>
+					</div>
 				</div>
 			{{Form::close()}}
 		</div>

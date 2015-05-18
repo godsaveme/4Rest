@@ -61,12 +61,12 @@
           @if(Auth::user()->persona->perfil->nombre === 'Administrador')
 
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bookmark-o"></i> Restaurante<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cutlery"></i> Restaurante<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/restaurantes"><i class="fa fa-pencil-square-o"></i>  Sucursal</a></li>
+                <li><a href="/restaurantes"><i class="fa fa-angle-right"></i>  Sucursal</a></li>
                 <li class="divider"></li>
-                <li><a href="/salones"><i class="fa fa-rotate-left"></i>  Salones</a></li>
-                <li><a href="mesas"><i class="fa fa-plus-square-o"></i>  Mesas</a></li>
+                <li><a href="/salones"><i class="fa fa-angle-right"></i>  Salones</a></li>
+                <li><a href="mesas"><i class="fa fa-angle-right"></i>  Mesas</a></li>
                 
               </ul>
             </li>
@@ -75,24 +75,24 @@
             @if(Auth::user()->persona->perfil->nombre === 'Administrador' or Auth::user()->persona->perfil->nombre === 'Administrador')
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-share-square-o"></i> Catálogo<b class="caret"></b>
+                  <i class="fa fa-list-alt"></i> Catálogo<b class="caret"></b>
                 </a>
                <ul class="dropdown-menu">
                 @if(Auth::user()->persona->perfil->nombre === 'Administrador')
-                <li><a href="/familias"><i class="fa fa-pencil-square-o"></i>  Familias</a></li>
+                <li><a href="/familias"><i class="fa fa-angle-right"></i>  Familias</a></li>
                 <li class="divider"></li>
                 @endif
-                <li><a href="/productos"><i class="fa fa-rotate-left"></i>  Productos</a></li>
+                <li><a href="/productos"><i class="fa fa-angle-right"></i>  Productos</a></li>
                 @if(Auth::user()->persona->perfil->nombre === 'Administrador')
-                <li><a href="/insumos"><i class="fa fa-plus-square-o"></i>  Insumos</a></li>
+                <li><a href="/insumos"><i class="fa fa-angle-right"></i>  Insumos</a></li>
                 @endif
 
                 <li class="divider"></li>
-                <li><a href="/tipocombinacions"><i class="fa fa-rotate-left"></i>  Tipos de Combinaciones</a></li>
-                <li><a href="/combinacions"><i class="fa fa-plus-square-o"></i>  Combinaciones</a></li>
+                <li><a href="/tipocombinacions"><i class="fa fa-angle-right"></i>  Tipos de Combinaciones</a></li>
+                <li><a href="/combinacions"><i class="fa fa-angle-right"></i>  Combinaciones</a></li>
                  @if(Auth::user()->persona->perfil->nombre === 'Administrador')
                 <li class="divider"></li>
-                 <li><a href="/notas"><i class="fa fa-minus-square-o"></i>  Notas</a></li>
+                 <li><a href="/notas"><i class="fa fa-angle-right"></i>  Notas</a></li>
                  @endif
                 
 <!--                 <li class="dropdown-header">Nav header</li>
@@ -106,14 +106,14 @@
 
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-share-square-o"></i> Personas<b class="caret"></b>
+                  <i class="fa fa-user"></i> Personas<b class="caret"></b>
                 </a>
                <ul class="dropdown-menu">
-                <li><a href="/personas"><i class="fa fa-pencil-square-o"></i>  Personas</a></li>
+                <li><a href="/personas"><i class="fa fa-angle-right"></i>  Personas</a></li>
                 <li class="divider"></li>
-                <li><a href="/personas/empresas"><i class="fa fa-rotate-left"></i>  Empresas</a></li>
+                <li><a href="/personas/empresas"><i class="fa fa-angle-right"></i>  Empresas</a></li>
                 @if(Auth::user()->persona->perfil->nombre === 'Administrador')
-                <li><a href="/usuarios"><i class="fa fa-plus-square-o"></i>  Usuarios</a></li>
+                <li><a href="/usuarios"><i class="fa fa-angle-right"></i>  Usuarios</a></li>
                 @endif
               
                 
@@ -124,21 +124,21 @@
             @if(Auth::user()->persona->perfil->nombre === 'Administrador')
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-share-square-o"></i> Control de Stock<b class="caret"></b>
+                  <i class="fa fa-cube"></i> Control de Stock<b class="caret"></b>
                 </a>
                <ul class="dropdown-menu">
-                <li><a href="/almacenes"><i class="fa fa-pencil-square-o"></i>  Almacenes</a></li>
+                <li><a href="/almacenes"><i class="fa fa-angle-right"></i>  Almacenes</a></li>
                 
-                <li><a href="/compras"><i class="fa fa-rotate-left"></i>  Compras</a></li>
+                <li><a href="/compras"><i class="fa fa-angle-right"></i>  Compras</a></li>
                 <li class="divider"></li>
-                <li><a href="/recetas"><i class="fa fa-rotate-left"></i>  Recetas</a></li>
+                <li><a href="/recetas"><i class="fa fa-angle-right"></i>  Recetas</a></li>
                 <li class="divider"></li>
-                <li><a href="/sabores"><i class="fa fa-rotate-left"></i>  Sabores</a></li>
-                <li><a href="/sabores/indexdet"><i class="fa fa-rotate-left"></i>  Agregar sabor a producto</a></li>
+                <li><a href="/sabores"><i class="fa fa-angle-right"></i>  Sabores</a></li>
+                <li><a href="/sabores/indexdet"><i class="fa fa-angle-right"></i>  Agregar sabor a producto</a></li>
                 <li class="divider"></li>
-                <li class="disabled"><a onclick="event.preventDefault();" href="#"><i class="fa fa-rotate-left"></i>  Orden de Producción</a></li>
-                <li class="disabled"><a href="#"><i class="fa fa-rotate-left"></i>  Requerimiento</a></li>
-                <li class="disabled"><a href="#"><i class="fa fa-rotate-left"></i>  Orden de Compra</a></li>
+                <li class="disabled"><a onclick="event.preventDefault();" href="#"><i class="fa fa-angle-right"></i>  Orden de Producción</a></li>
+                <li class="disabled"><a href="#"><i class="fa fa-angle-right"></i>  Requerimiento</a></li>
+                <li class="disabled"><a href="#"><i class="fa fa-angle-right"></i>  Orden de Compra</a></li>
                 
                 
               </ul>
@@ -171,7 +171,7 @@
              @if(Auth::user()->persona->perfil->nombre === 'Administrador')
              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  Reportes<b class="caret"></b>
+                 <i class="fa fa-columns"></i> Reportes<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                 <li>
@@ -184,7 +184,7 @@
                   <li class="divider"></li>
                   <li>
                     <a href="/usuarios/selectmozo">
-                      <i class="fa fa-users"></i>
+                      <i class="fa fa-file-text-o"></i>
                       Reporte Mozos
                     </a>
                   </li>
@@ -197,7 +197,7 @@
                   <li class="divider"></li>
                   <li>
                     <a href="/usuarios/selectrota">
-                      <i class="fa fa-users"></i>
+                      <i class="fa fa-file-text-o"></i>
                       Rotación Productos 
                     </a>
                   </li>
@@ -210,7 +210,7 @@
                   <li class="divider"></li>
                   <li>
                     <a href="/usuarios/selectcuadro">
-                      <i class="fa fa-users"></i>
+                      <i class="fa fa-file-text-o"></i>
                       Cuadro Semanal Venta de Productos
                     </a>
                   </li>
@@ -223,7 +223,7 @@
                   <li class="divider"></li>
                   <li>
                     <a href="/vales-descuentos">
-                      <i class="fa fa-users"></i>
+                      <i class="fa fa-file-text-o"></i>
                        Reporte Vales y Descuentos Autorizados
                     </a>
                   </li>

@@ -33,6 +33,7 @@
                         <th>Descripcion</th>
                         <th>Monto</th>
                         <th>Tipo</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody data-template="listagastos_template" data-bind="source: listagastos">
@@ -46,6 +47,7 @@
 				            #: kendo.toString(get("importetotal"), "C") #
 				        </td>
 				        <td data-bind="text: tipo_descripcion"></td>
+				        <td> # if(tipo_estado == 1) { # CANCELADO # }else{ # EMITIDO # } #</td>
 				    </tr>
 				</script>
                 </tbody>

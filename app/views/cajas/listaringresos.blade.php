@@ -30,6 +30,8 @@
                         <th>Nº</th>
                         <th>Descripcion</th>
                         <th>Monto</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +46,16 @@
 				        <td>
 				        	{{$ingreso->importetotal}}
 				        </td>
+				        <td>
+                           	{{$ingreso->tipoingreso->descripcion}}
+                        </td>
+                        <td>
+                           	@if ($ingreso->estado == 0)
+                           	EMITIDO
+                           	@else
+                           	CANCELADO
+                           	@endif
+                        </td>
 				    </tr>
                 @endforeach
                 </tbody>

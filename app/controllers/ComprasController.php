@@ -59,6 +59,7 @@ class ComprasController extends \BaseController {
 								'porcion'=>$insumo['porcion'],'presentacion'=>$insumo['presentacion'],	
 								'total'=>$insumo['total']));
 				$total = $total + $detallecompra->costototal;
+                //print_r($total); die();
 				$insumo = $almacen->insumos()->where('stockInsumo.insumo_id', '=', $detallecompra->insumo_id)->first();
 				if (count($insumo)>0) {
 					$newstock = $insumo->pivot->stockActual + $detallecompra->total;
@@ -89,6 +90,7 @@ class ComprasController extends \BaseController {
                    $producto->costo = $newcostoproducto;
                    $producto->save();
                 }
+
 			}
 			if($total != $importetotal){
 				DB::rollback();
@@ -96,7 +98,7 @@ class ComprasController extends \BaseController {
 			}
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false, 'msg'=>$e));
+			return Response::json(array('estado' => false, 'msg'=>$e->getTrace()));
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/compras'));

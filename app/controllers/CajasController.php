@@ -331,7 +331,7 @@ class CajasController extends BaseController {
 		if ($validator->fails()) {
 			return Redirect::to('/cajas/registrargasto/'.Input::get('detallecaja_id'))->withErrors($validator)->withInput();
 		} else {
-			$tiposdegastos = Regitrodegastos::create(Input::all());
+			$oGasto = Regitrodegastos::create(Input::all());
 			return Redirect::to('/cajas');
 		}
 	}
@@ -342,7 +342,8 @@ class CajasController extends BaseController {
             $cajaabierta =  Detcaja::find($iddetalle);
             if ($cajaabierta->estado == 'A' and $cajaabierta->usuario_id == \Illuminate\Support\Facades\Auth::user()->id) {
                 $detcaja = $this->detcaja;
-                return View::make('cajas.registraringreso', compact('iddetalle', 'detcaja', 'tiposdegastos'));
+                $tiposdeingresos = Tiposdeingresos::lists('descripcion', 'id');
+                return View::make('cajas.registraringreso', compact('iddetalle', 'detcaja', 'tiposdeingresos'));
             }else{
                 return Redirect::to('/cajas');
             }
@@ -352,27 +353,37 @@ class CajasController extends BaseController {
 	}
 
 	public function postRegistraringreso() {
-		$reglas = array(
-			'detallecaja_id' => array(
-				'required',
-				'numeric',
-			),
-			'importetotal' => array(
-				'required',
-				'regex:/^[0-9]{1,3}([0-9]{3})*\.[0-9]+$/',
-			),
-			'descripcion' => array(
-				'required',
-			),
-			'numerodecomprobante' => array(),
-			'seriecomprobante' => array(),
-			'numerocargo' => array(),
-		);
+        $reglas = array(
+            'detallecaja_id' => array(
+                'required',
+                'numeric',
+            ),
+            'tipoingreso_id' => array(
+                'required',
+                'numeric',
+            ),
+            'importetotal' => array(
+                'required',
+                'regex:/^[0-9]{1,3}([0-9]{3})*\.[0-9]+$/',
+            ),
+            'igv' => array(
+                'regex:/^[0-9]{1,3}([0-9]{3})*\.[0-9]+$/',
+            ),
+            'subtotal' => array(
+                'regex:/^[0-9]{1,3}([0-9]{3})*\.[0-9]+$/',
+            ),
+            'descripcion' => array(
+                'required',
+            ),
+            'numerodecomprobante' => array(),
+            'seriecomprobante' => array(),
+            'numerocargo' => array(),
+        );
 		$validator = Validator::make(Input::all(), $reglas);
 		if ($validator->fails()) {
 			return Redirect::to('/cajas/registraringreso/'.Input::get('detallecaja_id'))->withErrors($validator)->withInput();
 		} else {
-			$tiposdegastos = Ingresocaja::create(Input::all());
+			$oIngreso = Ingresocaja::create(Input::all());
 			return Redirect::to('/cajas');
 		}
 	}
@@ -597,7 +608,9 @@ class CajasController extends BaseController {
 	}
 
 	public function getReporteproductoscaja($detallecaja_id = NULL, $flag=NULL){
+		$oComb = Combinacion::where('nombre','=','Normal')->first();
 		if (isset($detallecaja_id) && !isset($flag)) {
+			//$oComb = Combinacion::where('nombre','=','Normal')->first();
 			$detacaja = Detcaja::find($detallecaja_id);
 			$ventastotales = $detacaja->tickets()->sum('importe');
 			$restaurante = $detacaja->caja->restaurante;
@@ -627,7 +640,7 @@ class CajasController extends BaseController {
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
 						->where('detallecaja.id', '=', $detallecaja_id)
 						->where('ticketventa.estado', '=', 0, 'AND')
-						->where('combinacion.id','!=','1')
+						->where('combinacion.id','!=',$oComb->id)
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();
@@ -687,7 +700,7 @@ class CajasController extends BaseController {
 						->join('combinacion', 'combinacion.id', '=', 'dettiketpedido.combinacion_id')
 						->wherein('detallecaja.id', $cajones)
 						->where('ticketventa.estado', '=', 0, 'AND')
-						->where('combinacion.id','!=','1')
+						->where('combinacion.id','!=',$oComb->id)
 						->groupby('cnombre')
 						->orderby('preciot', 'Desc')
 						->get();

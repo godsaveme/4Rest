@@ -440,7 +440,7 @@ $('#form_editreceta').submit(function(event) {
             $(location).attr('href', data.route);
           }else{
             alert('Operación no agregada. Error: ' + data.msg);
-            $(location).attr('href', data.route);
+            //$(location).attr('href', data.route);
           }
         })
         .fail(function() {

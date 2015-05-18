@@ -194,6 +194,9 @@ class AlmacenController extends \BaseController {
 			foreach ($productosReceta as $x) {
 				$arrX[] = $x->xid;
 			}
+            if (!isset($arrX)) {
+                $arrX[] = 0;
+            }
 			$prodRecNoDispo = Producto::selectraw('producto.id,"Productos" as Tipo,nombre,descripcion,unidadMedida,"No disponible" as disponible')
 					->where('receta', '=', 1)
 					->whereNotIn('producto.id',$arrX)

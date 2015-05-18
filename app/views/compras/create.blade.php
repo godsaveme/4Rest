@@ -6,7 +6,7 @@
 @stop 
 @section('sub-content')
 
-        <a href="{{URL('almacenes')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
+        <a href="{{URL('compras')}}" class='pull-right btn btn-info'><i class="fa fa-reply-all"></i> Volver</a>
 
 
 <div class="panel-heading"><strong><i class="glyphicon glyphicon-th"></i> INGRESAR COMPRA
@@ -115,7 +115,7 @@
       </div>
       <div class="col-md-3">
           {{Form::label('estado', 'Estado', array('class'=>'control-label'))}}
-          {{Form::select('estado', array(1=>'Pagado',0=>'Credito'), '', array('class'=>'form-control', 'required'))}}
+          {{Form::select('estado', array(0=>'EMITIDO',1=>'CANCELADO'), '', array('class'=>'form-control', 'required'))}}
       </div>
   </div>
   <div class="form-group">
@@ -137,22 +137,23 @@
       </div>
   </div>
   <div class="form-group">
+
       <div class="col-md-2">
-          {{Form::label('subtotal', 'Sub Total', array('class'=>'control-label'))}}
-          {{Form::text('subtotal', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0.00'))}}
-      </div>
-      <div class="col-md-2">
-          {{Form::label('igv', 'Sub Total', array('class'=>'control-label'))}}
+          {{Form::label('igv', 'IGV', array('class'=>'control-label'))}}
           {{Form::text('igv', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0.00'))}}
       </div>
+      <div class="col-md-2">
+                {{Form::label('subtotal', 'Sub Total', array('class'=>'control-label'))}}
+                {{Form::text('subtotal', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0.00'))}}
+            </div>
       <div class="col-md-7">
           {{Form::label('provedor', 'Provedor', array('class'=>'control-label'))}}
           <br>
           {{Form::text('provedor', '', array('placeholder'=>'Buscar DNI/RUC, NOMBRE','required','style'=>'width: 320px'))}}
           {{Form::hidden('provedor_id', '',array('id'=>'provedor_id'))}}
           <a href="javascript:void(0)" class="btn btn-info" id="reset_provedor">R</a>
-          <a href="javascript:void(0)" class="btn btn-default" id="btn_newpersona">NP</a>
-          <a href="javascript:void(0)" class="btn btn-default"id="btn_newempresa">NE</a>
+          <!--<a href="javascript:void(0)" class="btn btn-default" id="btn_newpersona">NP</a>-->
+          <!--<a href="javascript:void(0)" class="btn btn-default"id="btn_newempresa">NE</a>-->
       </div>
   </div>
   <div class="form-group">
@@ -166,7 +167,8 @@
   </div>
   <div class="form-group">
       <div class="col-md-12">
-          <table class="table table-bordered">
+      <div class="table-responsive">
+          <table class="table table-hover">
               <thead>
                   <tr>
                       <th style="border: 1px solid silver; width:25%">Nombre</th>
@@ -240,6 +242,7 @@
                 </tr>
               </tfoot>
           </table>
+      </div>
       </div>
   </div>
 <!--{{ Form::file('imagen') }}-->
@@ -460,6 +463,7 @@
         }
         if(Number($('#importetotal').val()) != Number($('#Total').text())){
             alert('Importe Total no coincide con la suma de costo de insumos');
+            console.log($('#Total').text());
             return false;
         }
 

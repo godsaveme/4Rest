@@ -8,4 +8,9 @@ class Ingresocaja extends \Eloquent {
 	public function detcaja(){
 		return $this->belongsTo('Detcaja', 'detallecaja_id');
 	}
+
+    public function tipoingreso(){
+        return $this->belongsTo('Tiposdeingresos','tipoingreso_id');
+    }
+
 }

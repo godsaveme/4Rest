@@ -17,6 +17,8 @@
 
 <div class="panel-body">
 
+<p class=""><em><span class="text-danger">Si el producto tiene receta, su costo será determino a partir del costo de sus insumos.</span></em></p>
+
 <table id="gridProd" style="width:100%">
   </tbody>
 </table>

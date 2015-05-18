@@ -102,7 +102,7 @@
         </div>
         <div class="col-md-3">
 
-                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}}
+                    {{Form::label('costo', 'Costo', array('class'=>'control-label'))}}<br>
 
         
             {{Form::text('costo', $producto->costo, array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
@@ -151,6 +151,35 @@
               };
             
           });
+
+
+          var costo = $("#costo").data("kendoNumericTextBox");
+          var receta = $("#receta").val();
+
+                    if (receta == 0) {
+                      costo.enable(true);
+                      //$('#receta').prop('checked',true);
+                    } else{
+                      costo.enable(false);
+                      //$('#havePrice').prop('checked',false);
+                    };
+
+                    var $xrec;
+
+                    $('body').on('change', '#receta', function(event) {
+
+                        $xrec = $(this).val();
+                        //alert($xrec);
+                        if ($xrec == 0) {
+                            costo.enable(true);
+
+                        }else{
+                            costo.enable(false);
+
+                        };
+
+                    });
+
 
           });
         </script>

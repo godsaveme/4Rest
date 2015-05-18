@@ -56,4 +56,8 @@ class Usuario extends Eloquent implements UserInterface, RemindableInterface {
 	public function pedidos(){
 		return $this->hasMany('Pedido','usuario_id');
 	}
+
+    public function restaurante(){
+        return $this->belongsTo('Restaurante','id_restaurante');
+    }
 }

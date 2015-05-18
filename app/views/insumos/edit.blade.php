@@ -37,11 +37,11 @@
                 {{Form::select('unidadMedida', array('Unidades' => 'Unidades', 'Kilogramos' => 'Kilogramos', 'Litros' => 'Litros'),  $insumo->unidadMedida, array('class' => 'form-control'))}}  
             </div>
             <div class="col-md-4">
-                {{Form::label('estado','estado',array('class' => 'control-label'))}}
+                {{Form::label('estado','Estado',array('class' => 'control-label'))}}
                 {{Form::select('estado',array('1' => 'Activo', '0' => 'Inactivo'), $insumo->estado, array('class' => 'form-control'))}}
             </div>
             <div class="col-md-4">
-                {{Form::label('ultimocosto','Ultimo Costo',array('class' => 'control-label'))}}
+                {{Form::label('ultimocosto','Ultimo Costo',array('class' => 'control-label'))}}<br>
                 {{Form::text('ultimocosto', $insumo->ultimocosto, array('class' => '','placeholder'=>'0.00', 'required', 'validationMessage'=>'Por favor ingrese ultimo costo.'))}}
             </div>
 
