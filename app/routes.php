@@ -230,6 +230,26 @@ Route::group(array('before' => 'auth'), function () {
 				return Response::json($arrProd);
 			});
 
+                //para agregar sabores
+                Route::get('bus_prod_saborYZ', function () {
+                    $valor = $_REQUEST["filter"]["filters"][0]["value"];
+                    $productos = Producto::join('familia', 'familia.id', '=', 'producto.familia_id')
+                        ->where('producto.nombre', 'like', '%'.$valor.'%')
+                        ->select('producto.nombre as productoNombre', 'producto.cantidadsabores as cantidadsabores','producto.id as productoID', 'producto.descripcion as productoDescr', 'familia.id as familiaID', 'familia.nombre as familiaNombre')
+                        ->get();
+                    $arrProd = array();
+                    foreach ($productos as $dato) {
+                        $arrProd[] = array('id' => $dato->productoID,
+                            'nombre' => $dato->productoNombre,
+                            'descripcion' => $dato->productoDescr,
+                            'cant_sabores' => $dato->cantidadsabores,
+                            'familiaid' => $dato->familiaID,
+                            'familianombre' => $dato->familiaNombre
+                            );
+                    }
+                    return Response::json($arrProd);
+                });
+
 		Route::get('bus_sabor_', function () {
 				$valor = $_REQUEST["filter"]["filters"][0]["value"];
 				//$productos = Producto::where('nombre','like',$valor.'%')->lists('id','nombre','descripcion');
@@ -613,6 +633,51 @@ Route::group(array('before' => 'auth'), function () {
 			}
 		);
 
+        function descontarStock($prodID,$qant){
+            $oProd = Producto::find($prodID);
+            if($oProd->receta == 1){
+                $almacen_id = Auth::user()->restaurante->almacen_id;
+                $oAlmacen = Almacen::find($almacen_id);
+                $insumosReceta = $oProd->insumos()->get();
+
+                //hasta aqui entra pq no tiene receta aunq en prod esta activado. no errores
+
+                foreach($insumosReceta as $insumo){
+                    //aqui insumo no agregado al stock de insumos del almacen principal puede ser..
+                    $insumoAlmacen = $oAlmacen->insumos()->where('stockInsumo.insumo_id', '=', $insumo->id)->first();
+                    if(!empty($insumoAlmacen)) {
+                        Almacen::find($almacen_id)->insumos()->updateExistingPivot($insumo->id,
+                            array('stockActual' => $insumoAlmacen->pivot->stockActual - $qant * $insumo->pivot->cantidad));
+                    }
+
+                }
+
+
+                //prod no agregado al stock del almacen principal.. posible error
+            }elseif($oProd->receta == 0){
+                //if()
+                $almacen_id = Auth::user()->restaurante->almacen_id;
+                $oAlmacen = Almacen::find($almacen_id);
+                $productoAlmacen = $oAlmacen->productos()->where('stockProducto.producto_id', '=', $oProd->id)->first();
+                if(!empty($productoAlmacen)) {
+                    Almacen::find($almacen_id)->productos()->updateExistingPivot($oProd->id, array('stockActual' => $productoAlmacen->pivot->stockActual - $qant));
+                }
+            }
+        }
+
+    function descontarStockAttr($saborID,$qant){
+        $oSabor = Sabor::find($saborID);
+        $almacen_id = Auth::user()->restaurante->almacen_id;
+        $oAlmacen = Almacen::find($almacen_id);
+        $insumoAlmacen = $oAlmacen->insumos()->where('stockInsumo.insumo_id', '=', $oSabor->insumo->id)->first();
+        if(!empty($insumoAlmacen)) {
+            Almacen::find($almacen_id)->insumos()->updateExistingPivot($oSabor->insumo->id,
+                array('stockActual' => $insumoAlmacen->pivot->stockActual - $qant*$oSabor->porcion));
+        }
+
+    }
+
+
 		Route::post('enviarpedidos', function () {
 				if (Request::ajax()) {
 					DB::beginTransaction();
@@ -677,8 +742,8 @@ Route::group(array('before' => 'auth'), function () {
 							$odetpe = DetPedido::create($datitos1);
 
 
-                            //
-                            $oProd = Producto::find($odetpe->producto_id);
+                            descontarStock($odetpe->producto_id,$odetpe->cantidad);
+                            /*$oProd = Producto::find($odetpe->producto_id);
                             if($oProd->receta == 1){
                                 $almacen_id = Auth::user()->restaurante->almacen_id;
                                 $oAlmacen = Almacen::find($almacen_id);
@@ -689,8 +754,10 @@ Route::group(array('before' => 'auth'), function () {
                                 foreach($insumosReceta as $insumo){
                                     //aqui insumo no agregado al stock de insumos del almacen principal puede ser..
                                     $insumoAlmacen = $oAlmacen->insumos()->where('stockInsumo.insumo_id', '=', $insumo->id)->first();
-                                    Almacen::find($almacen_id)->insumos()->updateExistingPivot($insumo->id,
-                                        array('stockActual' => $insumoAlmacen->pivot->stockActual - $odetpe->cantidad*$insumo->pivot->cantidad));
+                                    if(!empty($insumoAlmacen)) {
+                                        Almacen::find($almacen_id)->insumos()->updateExistingPivot($insumo->id,
+                                            array('stockActual' => $insumoAlmacen->pivot->stockActual - $odetpe->cantidad * $insumo->pivot->cantidad));
+                                    }
 
                                 }
 
@@ -698,11 +765,14 @@ Route::group(array('before' => 'auth'), function () {
 
                             //prod no agregado al stock del almacen principal.. posible error
                             }elseif($oProd->receta == 0){
+                                //if()
                                $almacen_id = Auth::user()->restaurante->almacen_id;
                                 $oAlmacen = Almacen::find($almacen_id);
                                 $productoAlmacen = $oAlmacen->productos()->where('stockProducto.producto_id', '=', $oProd->id)->first();
-                                Almacen::find($almacen_id)->productos()->updateExistingPivot($oProd->id, array('stockActual' => $productoAlmacen->pivot->stockActual - $odetpe->cantidad));
-                            }
+                                if(!empty($productoAlmacen)) {
+                                    Almacen::find($almacen_id)->productos()->updateExistingPivot($oProd->id, array('stockActual' => $productoAlmacen->pivot->stockActual - $odetpe->cantidad));
+                                }
+                            }*/
 
                             //
 
@@ -751,6 +821,7 @@ Route::group(array('before' => 'auth'), function () {
 								$arraysabores = array();
 								foreach ($datoprof['sabores'] as $datosabor) {
 									$arraysabores[] = array('detpedido_id' => $odetpe->id, 'sabor_id' => $datosabor['idsabor'], );
+                                    descontarStockAttr($datosabor['idsabor'],$odetpe->cantidad);
 									$flagsabor = 1;
 								}
 
@@ -814,6 +885,9 @@ Route::group(array('before' => 'auth'), function () {
 										'idarea'                     => $areapro,
 										'ordenCocina'                => $ordencocina);
 									$oprocom = DetPedido::create($datitos2);
+
+                                    descontarStock($oprocom->producto_id,$oprocom->cantidad);
+
 									$flagnotas = 0;
 									if (isset($datoproc[$procom]['notas'])) {
 										$arrayinsertnotasc = array();
@@ -864,7 +938,7 @@ Route::group(array('before' => 'auth'), function () {
 					}
 					} catch (Exception $e) {
 						DB::rollBack();
-						return Response::json($e->getLine());
+						return Response::json($e->getMessage());
 					}
 					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
 					DB::commit();

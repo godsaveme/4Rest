@@ -42,6 +42,12 @@
                         	$("#prodAutoCompl").focus();
                         }
                     }).data("kendoAutoComplete");
+
+
+                    //add readonly input_num
+                    $(".input_num").attr("readonly","readonly");
+                    $('#input_descuento').removeAttr('readonly','readonly');
+
                 });
 
 	function onSelectProd(e) {
@@ -884,6 +890,8 @@ $('body').on('mouseenter', '.produnombre', function(event) {
 	/* Act on the event */
 	var cantsabores = $(this).attr('data-numsabores');
 	var data = dataSourceprof.get($(this).attr('data-iddatasour'));
+    //alert(cantsabores+' '+data);
+    //console.log(cantsabores+' '+data);
 	if(cantsabores){
 		$(this).tooltipster({
 	        trigger: 'click',
@@ -903,13 +911,17 @@ $('body').on('mouseenter', '.produnombre', function(event) {
 	            data: {idpro: idpro},
 	            url: '/sabores',
 	            success: function(data) {
-	              var contenido = '<div style="width: 25em; height: 300px; overflow-y: scroll" class="list-group">';
-	                  for( var i in data){
-	                    contenido += '<a class ="list-group-item" href="javascript:void(0)" onclick="selecionasaborp('+idpro+','+data[i]['id']+',\''+data[i]['nombre']+'\','+filaid+');" >'
-	                    contenido += data[i]['nombre']+'</a>'
-	                  }
-	                  contenido += '</div>';
-	              origin.tooltipster('content', contenido).data('ajax', 'cached');
+                    if (data.length>0){
+                        var contenido = '<div style="width: 25em; height: 300px; overflow-y: scroll" class="list-group">';
+                    for (var i in data) {
+                        contenido += '<a class ="list-group-item" href="javascript:void(0)" onclick="selecionasaborp(' + idpro + ',' + data[i]['id'] + ',\'' + data[i]['nombre'] + '\',' + filaid + ');" >'
+                        contenido += data[i]['nombre'] + '</a>'
+                    }
+                    contenido += '</div>';
+                    origin.tooltipster('content', contenido).data('ajax', 'cached');
+                }else{
+                        origin.tooltipster('content', 'Producto sin sabores').data('ajax', 'cached');
+                    }
 	            }
 	            });
 	           }
@@ -1299,6 +1311,8 @@ $('#btn_tarjeta').on('click', function(event) {
             $("#resultado").val("");
             calcularvuelto();
             $('#infomesa').data('contable', 1);
+            $('#input_descuento').attr('readonly','readonly');
+            $('#input_idescuento').attr('readonly','readonly');
         }else{
             alert('Monto de Tarjeta no puede ser mayor al monto total');
         }

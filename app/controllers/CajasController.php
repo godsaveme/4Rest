@@ -391,6 +391,7 @@ class CajasController extends BaseController {
 	public function getCerrarcaja($detallecaja_id = NULL) {
 		if (isset($detallecaja_id)) {
 			$detcaja = $this->detcaja;
+            if (empty($detcaja)) return Redirect::to('/cajas');
 			//$detcaja = Detcaja::find('420');
 			//$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->sum('importe');
 			//print_r($totalventas);
@@ -452,7 +453,8 @@ class CajasController extends BaseController {
 		$validator = Validator::make(Input::all(), $reglas);
 		if ($validator->fails()) {
 			return Redirect::to('/cajas/cerrarcaja/'.$detcaja->id)->withErrors($validator)->withInput();
-		} else {
+		} elseif($detcaja->estado == 'A' && $detcaja->caja->estado == '1') {
+
 			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->where('ticketventa.importe','>=',0)->sum('importe');
 			//print_r($totalventas);
 			//die();
@@ -475,7 +477,10 @@ class CajasController extends BaseController {
 			$detcaja->fechaCierre = date('Y-m-d H:i:s');
 			$detcaja->save();
 			return Redirect::to('/cajas');
-		}
+		}else{
+            $validator->getMessageBag()->add('arqueo', 'La caja ya está cerrada.');
+            return Redirect::to('/cajas/cerrarcaja/'.$detcaja->id)->withErrors($validator)->withInput();
+        }
 	}
 	
 	public function getListargastos() {

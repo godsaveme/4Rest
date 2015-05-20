@@ -43,7 +43,7 @@
     </div>
 
     <div class="col-md-5">
-        {{Form::text('insumosac','', array('id' => 'insumosac', 'required','width' => '100px;'))}}
+        {{Form::text('insumosac','', array('id' => 'insumosac','width' => '100px;'))}}
         {{Form::text('insumo_id','',array('id' => 'insumo_id','style' => 'display:none'))}}
     </div>
 </div>
@@ -53,7 +53,7 @@
         {{Form::label('porcion', 'Porción', array('class'=>'control-label'))}}
     </div>
     <div class="col-md-5">
-        {{Form::text('porcion', '', array('class' => '','placeholder'=>'###', 'required', 'validationMessage'=>'Por favor entre una cantidad.'))}}
+        {{Form::text('porcion', '', array('class' => '','placeholder'=>'###', 'validationMessage'=>'Por favor entre una cantidad.'))}}
     </div>
 
 </div>
@@ -81,7 +81,7 @@
 </fieldset>
 {{ Form::close() }}
 </div> <!-- del panel body -->
-<img src="">
+
 
 
 

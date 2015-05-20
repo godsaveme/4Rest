@@ -321,8 +321,13 @@ function ON_READY() {
       format: "c",
       decimals: 3
   });
+//$(document).ready(function(){
+    $('#cantdef').kendoNumericTextBox({
+        format: "#",
+        decimals: 0
+    });
+//})
 
-      
 
     $('#costo').kendoNumericTextBox({
       format: "c",

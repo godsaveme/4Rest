@@ -44,14 +44,19 @@
 
     <div class="col-md-5">
         @if (!empty($sabor->insumo->nombre))
-        {{Form::text('insumosac',$sabor->insumo->nombre, array('id' => 'insumosac', 'required'))}}
+        {{Form::text('insumosac',$sabor->insumo->nombre, array('id' => 'insumosac'))}}
         {{Form::text('insumo_id',$sabor->insumo_id,array('id' => 'insumo_id','style' => 'display:none'))}}
         @else
-        {{Form::text('insumosac','', array('id' => 'insumosac', 'required'))}}
+        {{Form::text('insumosac','', array('id' => 'insumosac'))}}
         {{Form::text('insumo_id','',array('id' => 'insumo_id','style' => 'display:none'))}}
         @endif
 
     </div>
+
+    <div class="col-md-1">
+        {{Form::button('Eliminar insumo',array('class' => 'btn btn-default','id' => 'btn_InsuDel'))}}
+    </div>
+
 </div>
 
 <div class="form-group">
@@ -85,19 +90,11 @@
 </fieldset>
 {{ Form::close() }}
 </div> <!-- del panel body -->
-<img src="">
 
 
 
 <script type="text/x-kendo-template" id="insumo_ac">
-	<h3>#: data.nombre #</h3>
-	<article>
-		<img src="">
-		<p>#: data.descripcion #</p>
-		<p>Stock: #: data.stock # #: data.unidadMedida #</p>
-		<p>Stock Mínimo: #: data.stockMin # #: data.unidadMedida #</p>
-		<p>Stock Máximo: #: data.stockMax # #: data.unidadMedida #</p>
-	</article>
+	<h5>#: nombre # - #: unidadMedida #</h5>
 </script>
 
 <script type="text/javascript">
@@ -111,10 +108,11 @@
                             type: "json",
                             serverFiltering: true,
                             transport: {
-                                read: "/buscarinsumos"
+                                read: "/bus_insumo_"
                             }
                         },
-                        select: onSelect
+                        select: onSelect,
+                        height:200
                     });
 
 
@@ -125,6 +123,14 @@ function onSelect(e){
    //$('#id_insumo').text(dataItem.id);
    //console.log($('#id_insumo').val());
 };
+
+
+$('body').on('click','#btn_InsuDel',function(){
+    var r=confirm("¿Realmente desea eliminar la referencia de insumo?");
+        if (r==true) {$('#insumosac').val(''); $('#insumo_id').attr('value','');;}
+        else return false;
+});
+
 </script>
 
 

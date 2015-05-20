@@ -272,8 +272,10 @@
     		</div>
     		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
     			<p class="text-primary produnombre"  style="word-wrap: break-word;"
-                #if (numsabores) {#
+                #if (numsabores>0) {#
                     data-numsabores = #=numsabores#
+                #}else{#
+                    data-numsabores = 0
                 #}#
                 data-iddatasour = "#:id#" >#:nombre#</p>
     				<ul class="list-inline" id="notas_#=id#">
@@ -350,12 +352,14 @@
 
 					<br>
                     								<span class="small text-warning">
+                    								#if(typeof arrNotas !== "undefined") {#
                                                     #for (var i = 0 ; i < arrNotas.length ; i++) {#
                                                     /#=arrNotas[i]#
-                                                    #}#
+                                                    #}}#
+                                                    #if(typeof arrSabores !== "undefined") {#
                                                     #for (var i = 0 ; i < arrSabores.length ; i++) {#
                                                      >#=arrSabores[i]#
-                                                     #}#
+                                                     #}}#
                                                     </span>
 
 
@@ -383,9 +387,10 @@
 
 							    <br>
                                                     								<span class="small text-warning">
+                                                    								#if(typeof arrNotas !== "undefined") {#
                                                                                     #for (var j = 0 ; j < produccomb[i]['arrNotas'].length ; j++) {#
                                                                                     /#=produccomb[i]['arrNotas'][j]#
-                                                                                    #}#
+                                                                                    #}}#
 
                                                                                     </span>
 

@@ -103,16 +103,51 @@
                     {{Form::label('costo', 'Costo', array('class'=>'control-label'))}} <br>
 
         
-            {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', 'disabled' => 'disabled', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
+            {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', '' => '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
           </div>
     </div>
 
     <div class="form-group">
-                    
+        <div class="col-md-5">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-info">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Atributos
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">
+                          <div class="checkbox" style="border-bottom: 1px dotted #e7e7e7; padding-bottom: 10px; margin-bottom: 5px;">
+                              <label>
+                                <input type="checkbox" id="prodAttr"> Este producto tiene atributos
+                              </label>
+                              </div>
+                              <div id="aparProdAttr">
+                              <div class="col-md-6">
+                                Atributo:
 
+                              <select class="form-control" id="prodAttrSend" disabled>
+                                <option value="0">-</option>
+                                <option value="sabores">Sabores</option>
+                              </select>
+                              </div>
+                                    <div class="col-md-6">
+                                  <label for="cantDef" >Cantidad por defecto:</label>
+                                   {{Form::text('cantdef', '', array('class' => '', 'placeholder'=>'#.##', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'1', 'id' => 'cantdef','disabled'))}}
+                                    </div>
+                                    </div>
 
+                    </div>
+                </div>
+              </div>
+            </div>
 
         </div>
+
+    </div>
 
     <div class="form-group">
               <div class="col-md-4">
@@ -157,7 +192,7 @@
                     $('body').on('change', '#receta', function(event) {
 
                       $checked2 = $(this).val();
-                        if ($checked2 == 1) {
+                        if ($checked2 == 0) {
                             costo.enable(true);
 
                         }else{
@@ -166,6 +201,28 @@
                         };
 
                     });
+
+
+
+                              var cantdef = $("#cantdef").data("kendoNumericTextBox");
+
+
+                                        var $checked3;
+
+
+                                        $('body').on('change', '#prodAttr', function(event) {
+
+                                          $checked3 = $(this).is( ":checked" );
+                                            if ($checked3) {
+                                                $('#prodAttrSend').removeAttr('disabled');
+                                                cantdef.enable(true);
+
+                                            }else{
+                                                $('#prodAttrSend').attr('disabled','disabled');
+                                                cantdef.enable(false);
+                                            };
+
+                                        });
 
 
           });

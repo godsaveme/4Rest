@@ -117,14 +117,13 @@
 
 
 <script type="text/x-kendo-template" id="prod_templ">
-  <h2>#: data.nombre #</h2>
-  <h2>#: data.descripcion #</h2>
+  <p>#: data.nombre # / Cant. Sabores: #: data.cant_sabores #</p>
 </script>
 
 <script type="text/x-kendo-template" id="sabor_templ">
 
-  <h2>#: data.nombre #</h2>
-  <p>#: data.descripcion #</p>
+  <h5>#: data.nombre #</h5>
+  <small>#: data.descripcion #</small>
 
 </script>
 
@@ -141,7 +140,7 @@
                             type: "json",
                             serverFiltering: true,
                             transport: {
-                                read: "/bus_prod_"
+                                read: "/bus_prod_saborYZ"
                             }
                         },
                         select: onSelectProd,

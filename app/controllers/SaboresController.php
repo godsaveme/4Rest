@@ -26,7 +26,7 @@ class SaboresController extends \BaseController {
 	public function getCreate()
 	{
 		//
-		$insumos = Insumo::lists('nombre','id');
+		//$insumos = Insumo::lists('nombre','id');
 		return Response::view('sabores.create',compact('insumos'));
 	}
 
@@ -43,10 +43,21 @@ class SaboresController extends \BaseController {
 	{
 		DB::beginTransaction();	
 		 try {
-		Sabor::create(Input::all());
+             if(Input::get('insumo_id') == ''){
+                 $datos = array(
+                     'nombre' 				 => Input::get('nombre'),
+                     'descripcion'				 => Input::get('descripcion'),
+                     'porcion'               => Input::get('porcion'),
+                     'habilitado'                     => Input::get('habilitado')
+                 );
+                 Sabor::create($datos);
+             }else{
+                 Sabor::create(Input::all());
+             }
+
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false));
+			return Response::json(array('estado' => $e->getMessage()));
 
 		}
 		DB::commit();
@@ -96,7 +107,7 @@ class SaboresController extends \BaseController {
 	{
 		//
 		$sabor = Sabor::find($id);
-		$insumos = Insumo::lists('nombre','id');
+		//$insumos = Insumo::lists('nombre','id');
 		return Response::view('sabores.edit',compact('sabor','insumos'));
 	}
 
@@ -118,10 +129,21 @@ class SaboresController extends \BaseController {
 		DB::beginTransaction();	
 		try {
 			$sabor = Sabor::find($id);
-			$sabor->update(Input::all());
+            if(Input::get('insumo_id') == ''){
+                $datos = array(
+                    'nombre' 				 => Input::get('nombre'),
+                    'descripcion'				 => Input::get('descripcion'),
+                    'insumo_id'         => null,
+                    'porcion'               => Input::get('porcion'),
+                    'habilitado'                     => Input::get('habilitado')
+                );
+                $sabor->update($datos);
+            }else{
+                $sabor->update(Input::all());
+            }
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false));
+			return Response::json(array('estado' => $e->getMessage()));
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/sabores'));
