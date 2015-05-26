@@ -1,10 +1,12 @@
 $(".caja_derecha").kendoMobileDrawer({
 	    container: "#contenido",
-	    position: "right"
-	});
+	    position: "right",
+        swipeToOpen: false
+});
 	$(".caja_izquierda").kendoMobileDrawer({
 	    container: "#contenido",
-	    position: "left"
+	    position: "left",
+        swipeToOpen: false
 	});
 	$('#btn_draweriz').on('click', function(event) {
 		event.preventDefault();

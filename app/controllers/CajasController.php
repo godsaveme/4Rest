@@ -209,7 +209,7 @@ class CajasController extends BaseController {
 
 			$platosfamilia = array();
 			foreach ($familias as $dato) {
-				$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores')
+				$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores', 'producto.imagen')
 												 ->join('precio', 'precio.producto_id', '=', 'producto.id')
 												 ->join('combinacion', 'combinacion.id', '=', 'precio.combinacion_id')
 												 ->where('combinacion.nombre', '=', 'Normal')

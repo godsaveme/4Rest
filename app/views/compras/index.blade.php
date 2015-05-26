@@ -20,7 +20,7 @@
     <tr>
       <th data-field="nombre">Nombre</th>
       <th data-field="fecha">Fecha</th>
-      <th data-field="restaurante">Restaurante</th>
+      <th data-field="restaurante">Almacen</th>
       <th data-field="importe">Importe</th>
       <th data-field="detalle">&nbsp;</th>
     </tr>
@@ -30,7 +30,7 @@
     <tr>
       <td>
       @if (isset($compra->provedor->nombres))
-        {{$compra->provedor->nombres}}
+        {{$compra->provedor->nombres.' '.$compra->provedor->apPaterno.' '.$compra->provedor->apMaterno}}
       @elseif (isset($compra->provedor->razonSocial))
         {{$compra->provedor->razonSocial}}
       @endif
@@ -39,7 +39,7 @@
         {{$compra->created_at}}
       </td>
       <td>
-        {{$compra->restaurante->nombreComercial}}
+        {{$compra->almacen->nombre}}
       </td>
       <td>
         {{$compra->importetotal}}

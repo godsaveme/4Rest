@@ -343,6 +343,19 @@ function ON_READY() {
       format: "#.00"
   });
 
+    $('#importetotal').kendoNumericTextBox({
+        format: "c",
+        decimals: 3
+    });
+    $('#igv').kendoNumericTextBox({
+        format: "c",
+        decimals: 3
+    });
+    $('#subtotal').kendoNumericTextBox({
+        format: "c",
+        decimals: 3
+    });
+
     $('#stockMax').kendoNumericTextBox({
 
 

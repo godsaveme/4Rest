@@ -1,5 +1,13 @@
 @extends('layouts.master')
- 
+
+@section('css')
+    <link href="/css/fileinput/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+@stop
+
+@section('js')
+    <script src="/js/fileinput/fileinput.min.js"></script>
+    <script src="/js/fileinput/fileinput_locale_es.js"></script>
+@stop
 
 @section('content')
   @parent
@@ -15,7 +23,7 @@
 </strong></div>
 
 <div class="panel-body">
-        {{ Form::open(array('id'=>'form_resto','url' => 'productos/create', 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal')) }}
+        {{ Form::open(array('id'=>'','url' => 'productos/create', 'class'=>'form-horizontal', 'files' => true)) }}
         <fieldset>
   <legend></legend>
           <div class="form-group">
@@ -105,6 +113,11 @@
         
             {{Form::text('costo', '', array('class' => '', 'placeholder'=>'#.##', '' => '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
           </div>
+          <div class="col-md-4">
+          {{Form::label('checkImage','Crear Imagen de Producto',array('class'=>'control-label'))}}
+                       {{Form::checkbox('checkImage','Cambiar imagen',false,array('class' =>''))}}
+                       {{Form::file('imagen',array('accept' =>'image/*','name' => 'imagen','class'=>'file','id'=>'imagen','disabled'))}}
+          </div>
     </div>
 
     <div class="form-group">
@@ -118,7 +131,7 @@
                     </a>
                   </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                   <div class="panel-body">
                           <div class="checkbox" style="border-bottom: 1px dotted #e7e7e7; padding-bottom: 10px; margin-bottom: 5px;">
                               <label>
@@ -129,14 +142,14 @@
                               <div class="col-md-6">
                                 Atributo:
 
-                              <select class="form-control" id="prodAttrSend" disabled>
+                              <select class="form-control" id="prodAttrSend" name="prodAttrSend" disabled required>
                                 <option value="0">-</option>
                                 <option value="sabores">Sabores</option>
                               </select>
                               </div>
                                     <div class="col-md-6">
                                   <label for="cantDef" >Cantidad por defecto:</label>
-                                   {{Form::text('cantdef', '', array('class' => '', 'placeholder'=>'#.##', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'1', 'id' => 'cantdef','disabled'))}}
+                                   {{Form::text('cantdef', '', array('class' => '', 'placeholder'=>'#.##','required', 'validationMessage'=>'Requerido',  'min'=>'1', 'id' => 'cantdef','disabled'))}}
                                     </div>
                                     </div>
 
@@ -227,4 +240,39 @@
 
           });
         </script>
+
+        <script>
+
+
+                $(document).ready(function(){
+
+
+
+                $("#imagen").fileinput({
+
+
+                    maxFileSize: 500
+
+                });
+
+                    $('body').on('change', '#checkImage', function(event) {
+                                                                                  $checked5 = $(this).is( ":checked" );
+                                                                                  //alert($checked5);
+                                                                                    if (!$checked5) {
+
+                                                                                    $('#imagen').attr('disabled', 'disabled');
+                                                                                    $('#imagen').fileinput('refresh');
+
+                                                                                    }else{
+                                                                                        $("#imagen").fileinput("enable");
+                                                                                        $('#imagen').fileinput('refresh');
+
+                                                                                    };
+
+                                                                                });
+
+                                                                              })
+
+        </script>
+
 @stop

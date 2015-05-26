@@ -15,27 +15,32 @@
 
 <div class="panel-body">
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-3">
     <strong>Provedor:</strong>
     @if (isset($compra->provedor->nombres))
-      {{$compra->provedor->nombres}}
+      {{$compra->provedor->nombres.' '.$compra->provedor->apPaterno.' '.$compra->provedor->apMaterno}}
     @elseif (isset($compra->provedor->razonSocial))
       {{$compra->provedor->razonSocial}}
     @endif
   </div>
-  <div class="col-md-4 ">
+  <div class="col-md-3 ">
     <strong>DNI/RUC:</strong>
     {{$compra->provedor->ruc}}
     @if (isset($compra->provedor->dni))
      / DNI: {{$compra->provedor->dni}}
     @endif
   </div>
-  <div class="col-md-4 ">
+  <div class="col-md-2 ">
+      <strong>Almacén:</strong>
+      {{$compra->almacen->nombre}}
+
+   </div>
+  <div class="col-md-3 ">
     <strong>Estado:</strong>
     @if ($compra->estado == 1)
-      Pagada
+      Cancelada
     @else
-      Credito
+      Emitida
     @endif
   </div>
 </div>

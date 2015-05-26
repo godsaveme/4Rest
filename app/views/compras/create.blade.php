@@ -109,14 +109,20 @@
 <fieldset>
   <legend></legend>
   <div class="form-group">
-      <div class="col-md-4">
+      <!--<div class="col-md-4">
           {{Form::label('restaurante_id', 'Seleccione Local', array('class'=>'control-label'))}}
           {{Form::select('restaurante_id', $restaurantes, '', array('class'=>'form-control', 'required'))}}
       </div>
+      -->
+      <div class="col-md-3">
+                      {{Form::label('almacen_id', 'Almacen Destino', array('class'=>'control-label'))}}
+                      {{Form::select('almacen_id', $almacenes, '', array('class'=>'form-control', 'required'))}}
+            </div>
       <div class="col-md-3">
           {{Form::label('estado', 'Estado', array('class'=>'control-label'))}}
           {{Form::select('estado', array(0=>'EMITIDO',1=>'CANCELADO'), '', array('class'=>'form-control', 'required'))}}
       </div>
+
   </div>
   <div class="form-group">
       <div class="col-md-3">
@@ -125,28 +131,31 @@
       </div>
       <div class="col-md-2">
           {{Form::label('serie', 'Serie', array('class'=>'control-label'))}}
-          {{Form::text('serie', '', array('class'=>'form-control text-right', 'required', 'placeholder'=>'0001'))}}
+          {{Form::text('serie', '', array('class'=>'form-control text-right', 'placeholder'=>'0001'))}}
       </div>
       <div class="col-md-2">
           {{Form::label('numero', 'Numero', array('class'=>'control-label'))}}
-          {{Form::text('numero', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0001'))}}
+          {{Form::text('numero', '', array('class'=>'form-control text-right','placeholder'=>'0001'))}}
       </div>
-      <div class="col-md-3">
-          {{Form::label('importetotal', 'Importe Total', array('class'=>'control-label'))}}
-          {{Form::text('importetotal', '', array('class'=>'form-control text-right', 'required', 'placeholder'=>'0.00'))}}
-      </div>
+
   </div>
   <div class="form-group">
 
       <div class="col-md-2">
-          {{Form::label('igv', 'IGV', array('class'=>'control-label'))}}
-          {{Form::text('igv', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0.00'))}}
+          {{Form::label('igv', 'IGV', array('class'=>'control-label'))}}<br>
+          {{Form::text('igv', '', array('class'=>' text-right', 'required','placeholder'=>'0.00'))}}
       </div>
       <div class="col-md-2">
                 {{Form::label('subtotal', 'Sub Total', array('class'=>'control-label'))}}
-                {{Form::text('subtotal', '', array('class'=>'form-control text-right', 'required','placeholder'=>'0.00'))}}
+
+                {{Form::text('subtotal', '', array('class'=>'', 'required','placeholder'=>'0.00'))}}
+
             </div>
-      <div class="col-md-7">
+            <div class="col-md-2">
+                      {{Form::label('importetotal', 'Importe Total', array('class'=>'control-label'))}}<br>
+                      {{Form::text('importetotal', '', array('class'=>' text-right', 'required', 'placeholder'=>'0.00'))}}
+                  </div>
+      <div class="col-md-5">
           {{Form::label('provedor', 'Provedor', array('class'=>'control-label'))}}
           <br>
           {{Form::text('provedor', '', array('placeholder'=>'Buscar DNI/RUC, NOMBRE','required','style'=>'width: 320px'))}}
@@ -157,16 +166,21 @@
       </div>
   </div>
   <div class="form-group">
+  <div style="clear: both; border-bottom: 1px dotted #e7e7e7; padding: 10px 5px 10px 5px; margin-bottom:15px;"></div>
       <div class="col-md-2">
-          Insumo
+          {{Form::label('insumocdx', 'Insumo', array('class'=>'control-label'))}}
       </div>
       <div class="col-md-8">
           {{Form::text('insumo', '', array('id'=>'insumo', 'placeholder'=>'Buscar Insumo..','style'=>'width: 200px'))}}
           <a href="/insumos/create" class="btn btn-info" target="_blank">Crear Insumo</a>
       </div>
+
   </div>
+
   <div class="form-group">
+
       <div class="col-md-12">
+
       <div class="table-responsive">
           <table class="table table-hover">
               <thead>
@@ -178,13 +192,13 @@
                       <th style="border: 1px solid silver; width:10%">Total</th>
                       <th style="border: 1px solid silver; width:10%">Costo U.</th>
                       <th style="border: 1px solid silver; width:10%">Costo T.</th>
-                      <th style="border: 1px solid silver; width:15%">&nbsp;</th>
+                      <th style="border: 1px solid silver; width:15%">Modificadores</th>
                   </tr>
               </thead>
               <tbody id="listView">
               <script type="text/x-kendo-template" id="template">
                   <tr>
-                      <td style="border: 1px solid silver;">#:nombre# <strong class="pull-right">(#:unidadmedida#)</strong></td>
+                      <td style="border: 1px solid silver;">(#:tipo#) #:nombre# <strong class="pull-right">(#:unidadmedida#)</strong></td>
                       <td style="border: 1px solid silver;">#:kendo.toString(presentacion,'n2')#</td>
                       <td style="border: 1px solid silver;">#:kendo.toString(cantidad,'n2')#</td>
                       <td style="border: 1px solid silver;">#:kendo.toString(porcion,'n2')#</td>
@@ -200,7 +214,7 @@
               <script type="text/x-kendo-template" id="editTemplate">
                 <tr>
                     <td style="border: 1px solid silver;">
-                        #:nombre# <strong class="pull-right">(#:unidadmedida#)</strong>
+                        (#:tipo#) #:nombre# <strong class="pull-right">(#:unidadmedida#)</strong>
                     </td>
                   <td style="border: 1px solid silver; width:10%">
                     <input type="text" data-bind="value:presentacion" data-role="numerictextbox" name="presentacion" required="required" data-type="number" min="0" validationMessage="required" style="width: 95px" style="width: 95px"/>
@@ -264,12 +278,13 @@
                     id: { type: "number" },
                     nombre: { type: "string" },
                     unidadmedida:{type: "string"},
-                    presentacion: {type: "nomber"},
+                    presentacion: {type: "number"},
                     cantidad: {type: "number"},
                     porcion: {type:"number"},
                     total: {type: "number"},
                     costou: {type: "number"},
-                    costot: {type: "number"}
+                    costot: {type: "number"},
+                    tipo: {type: "string"}
                 }
             }
         }
@@ -279,10 +294,13 @@
                                                     },
                                                       serverFiltering: true
                                                     });
+$(document).ready(function(){
+
 
     $("#listView").kendoListView({
         template: kendo.template($("#template").html()),
         editTemplate: kendo.template($("#editTemplate").html()),
+        selectable: true,
         dataSource: ds,
         save: function(e) {
         var Itemid = e.model.id;
@@ -290,17 +308,31 @@
         var newcostou = e.model.costot/e.model.cantidad ;
         ds.pushUpdate({id: e.model.id, nombre: e.model.nombre, unidadmedida: e.model.unidadmedida,
                     presentacion:e.model.presentacion,cantidad:e.model.cantidad,porcion:e.model.porcion,
-                    total:newtotal,costou: newcostou , costot: e.model.costot});
+                    total:newtotal,costou: newcostou , costot: e.model.costot , tipo: e.model.tipo});
         },
         dataBound: function() {
             var data = ds.data();
             var costo = 0;
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
                 costo = costo + data[i].costot;
             }
             $('#Total').text(costo.toFixed(2));
+            var imprttotal = $('#Total').text();
+            //alert(imprttotal);
+            var oImportetotal = $("#importetotal").data("kendoNumericTextBox");
+            var oSubtotal = $("#subtotal").data("kendoNumericTextBox");
+            var oIgv = $("#igv").data("kendoNumericTextBox");
+            oImportetotal.value(imprttotal);
+                    var subtotal =imprttotal/1.18;
+                    var igv = imprttotal - subtotal;
+                    //if(typeof )
+                    oSubtotal.value(subtotal.toFixed(2));
+                    oIgv.value(igv.toFixed(2));
         }
      });
+
+})
 
     $("#insumo").kendoAutoComplete({
                         dataTextField: "nombre",
@@ -310,8 +342,9 @@
                             type: "json",
                             serverFiltering: true,
                             transport: {
-                                read: "/bus_insumo_"
-                            }
+                                read: "/bus_insumo_prod_compras"
+                            },
+                            group: { field: "Tipo" }
                         },
                         select: onSelectInsumo,
                         height:200
@@ -414,9 +447,10 @@
        var ds_Prod = ds.data();
        var flag = true;
        flag = id_repeat(ds_Prod,dataItem);
+       console.log(dataItem);
        if (flag == false) {
             ds.add({id: dataItem.id, nombre: dataItem.nombre, unidadmedida: dataItem.unidadMedida.substring(0, 2),
-                    presentacion:0,cantidad:0,porcion:0,total:0,costou: 0, costot: 0});
+                    presentacion:1,cantidad:1,porcion:1,total:1,costou: parseFloat(dataItem.costo), costot: parseFloat(dataItem.costo), tipo: dataItem.Tipo.substring(0, 3)});
        }else{
             alert('Insumo Repetido');
        };
@@ -430,6 +464,7 @@
             
                 for (var i = data.length - 1; i >= 0; i--) {
                     if (lastElem.id == data[i].id ) {
+                        //if(lastElem.Tipo == data[i].)
                         flag = true;
                         return flag;
                     }else{
@@ -444,13 +479,14 @@
         }
     }
 
-    $('#subtotal').on('focus', function(){
+    /*$('#subtotal').on('focus', function(){
         var importetotal = Number($('#importetotal').val());
         var subtotal =importetotal/1.18;
         var igv = importetotal - subtotal;
         $(this).val(subtotal.toFixed(2));
         $('#igv').val(igv.toFixed(2));
     });
+    */
 
     $('#form_compra').on('submit',function(event){
         event.preventDefault();
@@ -500,6 +536,7 @@
         type: 'POST',
         dataType: 'json',
         data: { restaurante_id: $('#restaurante_id').val(),
+                almacen_id: $('#almacen_id').val(),
             estado:$('#estado').val(),
             tipocomprobante_id: $('#tipocomprobante_id').val(),
             serie: $('#serie').val(),

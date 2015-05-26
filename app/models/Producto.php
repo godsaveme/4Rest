@@ -7,7 +7,7 @@ class Producto extends Eloquent {
 
 	protected $fillable = array('nombre','descripcion','stock','unidadMedida','familia_id',
 								'estado','stockMin', 'stockMax', 'selector_adicional', 
-								'lista_prod','id_tipoarepro',
+								'lista_prod','id_tipoarepro','imagen',
 								'receta','costo');
 	public static $rules = array();
 

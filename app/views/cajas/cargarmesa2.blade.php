@@ -157,7 +157,7 @@
                 @if ($datos->cantidadsabores)
                 {{$datos->cantidadsabores}}
                 @endif">
-            {{HTML::image('/images/productos/shake.jpg')}}
+            {{HTML::image($datos->imagen)}}
             <h3 style="color:#ab7829">{{$datos->nombre}}</h3>
 
             <h4 style="color:#9e9e9e; font-size:1.3rem;">S/.{{$datos->precio}}</h4>
@@ -331,7 +331,7 @@
 <script type="text/x-kendo-template" id="template_platos">
         <div class="product" data-pronombre = "#:nombre#" data-proid="#:id#" data-proprecio = "#:precio#"
          data-cantsabores = 
-            #if (cantidadsabores) {# 
+            #if (cantidadsabores) {#
             #=cantidadsabores#
             #}#>
             {{HTML::image('/images/productos/shake.jpg')}}

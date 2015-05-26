@@ -1,5 +1,12 @@
 @extends('layouts.master')
- 
+@section('css')
+    <link href="/css/fileinput/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+@stop
+
+@section('js')
+    <script src="/js/fileinput/fileinput.min.js"></script>
+    <script src="/js/fileinput/fileinput_locale_es.js"></script>
+@stop
 
 @section('content')
   @parent
@@ -15,7 +22,7 @@
 </strong></div>
 
 <div class="panel-body">
-        {{ Form::open(array('id'=>'form_resto','url' => 'productos/edit', 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal')) }}
+        {{ Form::open(array('id'=>'','url' => 'productos/edit', 'enctype' => 'multipart/form-data', 'class'=>'form-horizontal','files' =>true)) }}
         <fieldset>
   <legend></legend>
         
@@ -107,8 +114,62 @@
         
             {{Form::text('costo', $producto->costo, array('class' => '', 'placeholder'=>'#.##', '', 'validationMessage'=>'Por favor entre un costo.',  'min'=>'0', ''))}}
           </div>
+         <div class="col-md-4">
+             {{Form::label('checkImage','Cambiar Imagen de Producto',array('class'=>'control-label'))}}
+             {{Form::checkbox('checkImage','Cambiar imagen',false,array('class' =>''))}}
+             {{Form::file('imagen',array('accept' =>'image/*','name' => 'imagen','class'=>'file','id'=>'imagen','disabled'))}}
+
+
+
+         </div>
     </div>
 
+
+    <div class="form-group">
+            <div class="col-md-5">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Atributos
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+                              <div class="checkbox" style="border-bottom: 1px dotted #e7e7e7; padding-bottom: 10px; margin-bottom: 5px;">
+                                  <label>
+                                    <input type="checkbox" id="prodAttr"> Este producto tiene atributos
+                                  </label>
+                                  </div>
+                                  <div id="aparProdAttr">
+                                  <div class="col-md-6">
+                                    Atributo:
+
+                                  <select class="form-control" id="prodAttrSend" name="prodAttrSend" disabled required>
+                                    <option value="0">-</option>
+                                    <option value="sabores">Sabores</option>
+                                  </select>
+                                  </div>
+                                        <div class="col-md-6">
+                                      <label for="cantDef" >Cantidad por defecto:</label>
+                                       {{Form::text('cantdef', $producto->cantidadsabores, array('class' => '', 'placeholder'=>'#.##','required', 'validationMessage'=>'Requerido',  'min'=>'1', 'id' => 'cantdef','disabled'))}}
+                                        </div>
+                                        </div>
+
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+            <div class="col-md-6 col-md-offset-1">
+            {{Form::label('imgprod', 'Imagen Actual del Producto', array('class'=>'control-label'))}}<br><br>
+                {{HTML::image($producto->imagen,'Imagen del Producto',array('class' => 'img-responsive img-thumbnail'))}}
+            </div>
+
+        </div>
 
 
     <div class="form-group">
@@ -181,6 +242,71 @@
                     });
 
 
+                                    var cantdef = $("#cantdef").data("kendoNumericTextBox");
+                                                                if (cantdef.value() != null) {
+                                                                            $('#collapseOne').addClass('in');
+                                                                            cantdef.enable(true);
+                                                                            $('#prodAttrSend').removeAttr('disabled','disabled');
+                                                                            $('#prodAttrSend').val('sabores');
+                                                                            $('#prodAttr').prop('checked',true);
+                                                                          } else{
+                                                                            cantdef.enable(false);
+                                                                            $('#prodAttrSend').attr('disabled','disabled');
+                                                                            $('#prodAttr').prop('checked',false);
+                                                                          };
+
+
+                                                            var $checked3;
+
+
+                                                            $('body').on('change', '#prodAttr', function(event) {
+
+                                                              $checked3 = $(this).is( ":checked" );
+                                                                if ($checked3) {
+                                                                    $('#prodAttrSend').removeAttr('disabled');
+                                                                    cantdef.enable(true);
+
+                                                                }else{
+                                                                    $('#prodAttrSend').attr('disabled','disabled');
+                                                                    cantdef.enable(false);
+                                                                };
+
+                                                            });
+
+
           });
         </script>
+
+        <script>
+
+        $(document).ready(function(){
+
+
+
+        $("#imagen").fileinput({
+
+
+            maxFileSize: 500
+
+        });
+
+            $('body').on('change', '#checkImage', function(event) {
+                                                                          $checked5 = $(this).is( ":checked" );
+                                                                          //alert($checked5);
+                                                                            if (!$checked5) {
+
+                                                                            $('#imagen').attr('disabled', 'disabled');
+                                                                            $('#imagen').fileinput('refresh');
+
+                                                                            }else{
+                                                                                $("#imagen").fileinput("enable");
+                                                                                $('#imagen').fileinput('refresh');
+
+                                                                            };
+
+                                                                        });
+
+                                                                      })
+        </script>
+
 @stop

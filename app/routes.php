@@ -1,5 +1,6 @@
 <?php
 define('TIKET_DIR', public_path('temp/'));
+\Debugbar::disable();
 
 Route::get('/', function () {
 		return Redirect::to('login');
@@ -175,6 +176,18 @@ Route::group(array('before' => 'auth'), function () {
 					return Response::json(array_merge($insumos->toArray(),$productos->toArray()));
 				}
 		});
+
+        Route::get('bus_insumo_prod_compras', function () {
+            if (Request::ajax()) {
+                $valor = $_REQUEST["filter"]["filters"][0]["value"];
+                $insumos = Insumo::where('nombre', 'like', '%'.$valor.'%')
+                    ->selectraw('id, nombre,unidadMedida,ultimocosto as costo, "Insumos" as Tipo')->get();
+                $productos = Producto::where('nombre','like','%'.$valor.'%')->where('receta','=',0)
+                    ->selectraw('id, nombre,unidadMedida,costo, "Productos" as Tipo')
+                    ->get();
+                return Response::json(array_merge($insumos->toArray(),$productos->toArray()));
+            }
+        });
 
 		Route::get('bus_prepro_', function () {
 				if (Request::ajax()) {
@@ -1319,9 +1332,9 @@ Boleta&nbsp;
 								if ($ivale > 0) {
 									$ovale = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 3));
 								}
-                                    //modificar poner $idescuento
+                                    //modificar poner $idescuento //cambiado ivale por idescuento
 								if ($idescuento > 0) {
-									$promocion = Detformadpago::create(array('importe' => $ivale, 'ticket_id' => $tickete->id, 'formadepago_id' => 5));
+									$promocion = Detformadpago::create(array('importe' => $idescuento, 'ticket_id' => $tickete->id, 'formadepago_id' => 5));
 								}
 								$datoscaja->save();
 							} else {
@@ -2255,7 +2268,10 @@ Hora:'.date('H:i:s').'</strong>
 				if (Request::ajax()) {
 					$arraydatos = array('totalefectivo' => Input::get('totalefectivo'),
 						'totaltarjeta'                     => Input::get('totaltarjeta'),
+                        'totalimprom'                       => Input::get('totalimprom'),
 						'totalvale'                        => Input::get('totalvale'),
+                        'totaldsctoaut'                     => Input::get('totaldsctoaut'),
+                        'totaldscto'                        => Input::get('totaldscto'),
 						'totalventas'                      => Input::get('totalventas'),
 						'totalgastos'                      => Input::get('totalgastos'),
 						'totalabonosacaja'                 => Input::get('totalabonosacaja'),

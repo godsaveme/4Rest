@@ -16,6 +16,12 @@
 <div id="cntnrGrid" style="opacity: 0;">
 
 <div class="panel-body">
+@if(!empty($msg))
+<div class="alert alert-info alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>{{$msg['msg1']}}</strong> {{$msg['msg2']}}
+</div>
+@endif
 
 <p class=""><em><span class="text-danger">Si el producto tiene receta, su costo será determino a partir del costo de sus insumos.</span></em></p>
 

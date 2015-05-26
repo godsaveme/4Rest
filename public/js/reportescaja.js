@@ -451,7 +451,10 @@ $('body').on('click', '#btn_imprimircajadiario', function(event) {
         dataType: 'json',
         data: {totalefectivo: $('#totalefectivo').text(),
                totaltarjeta: $('#totaltarjeta').text(),
-                totalvale:$('#totaldsctoAut').text(), //falta cambiar en route/imprimirdiariocaja --> totaldsctoAut
+            totalimprom: $('#totalImProm').text(),
+                totalvale:$('#totalvale').text(),
+                totaldsctoaut: $('#totaldsctoAut').text(),
+                totaldscto: $('#totaldescuentos').text(),
                 totalventas: $('#totalventas').text(),
                 totalgastos:$('#totalgastos').text(),
                 totalabonosacaja:$('#totalabonosacaja').text(),
@@ -462,7 +465,7 @@ $('body').on('click', '#btn_imprimircajadiario', function(event) {
                 emitidos: $('#temitidos').text(),
                 pvendidos: $('#pvendidos').text(),
                 fecha: $('#text_fechainicio').text()+'/'+$('#text_fechafin').text(),
-                rango: $('#rangoti').text()},
+                rango: $('#rangoti').text()}
     })
     .done(function(data) {
         console.log(data);

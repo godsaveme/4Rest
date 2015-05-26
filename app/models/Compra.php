@@ -21,4 +21,8 @@ class Compra extends \Eloquent {
 		return $this->belongsToMany('Insumo', 'detallecompra', 'compra_id', 'insumo_id')
 		->withPivot('cantidad', 'costototal','costou', 'porcion','total', 'presentacion');
 	}
+
+    public function almacen(){
+        return $this->belongsTo('Almacen','almacen_id');
+    }
 }

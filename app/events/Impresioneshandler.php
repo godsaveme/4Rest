@@ -173,13 +173,31 @@
 					                            </td>
 					                        </tr>
 					                        <tr>
+					                            <td style="width:110px">Total Importe Prom.</td>
+					                            <td style="width:100px" class="text-right">
+					                            '.$datos['totalimprom'].'
+					                            </td>
+					                        </tr>
+					                        <tr>
 					                            <td style="width:110px">Total Vale</td>
 					                            <td style="width:100px" class="text-right" id="totalvale">
 					                            '.$datos['totalvale'].'
 					                            </td>
 					                        </tr>
 					                        <tr>
-					                            <td style="width:110px">Total Ventas</td>
+					                            <td style="width:110px">Total Dscto Aut.</td>
+					                            <td style="width:100px" class="text-right" id="totalvale">
+					                            '.$datos['totaldsctoaut'].'
+					                            </td>
+					                        </tr>
+					                        <tr>
+					                            <td style="width:110px">Total Dsctos</td>
+					                            <td style="width:100px" class="text-right" id="totalvale">
+					                            '.$datos['totaldscto'].'
+					                            </td>
+					                        </tr>
+					                        <tr>
+					                            <td style="width:110px">Total Venta Neta</td>
 					                            <td style="width:100px" class="text-right" id="totalventas">
 					                            '.$datos['totalventas'].'
 					                            </td>

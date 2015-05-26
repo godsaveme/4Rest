@@ -372,13 +372,13 @@
                         </tr>
                         <tr>
                             <th style="width:200px">Total Importe Prom.</th>
-                            <th style="width:100px" class="text-right" id="totaldsctoAut">
+                            <th style="width:100px" class="text-right" id="totalImProm">
                             #:kendo.toString(parseFloat(totalImProm()),"n")#
                             </th>
                         </tr>
                         <tr>
                             <th style="width:200px">Total Vale</th>
-                            <th style="width:100px" class="text-right" id="totaldsctoAut">
+                            <th style="width:100px" class="text-right" id="totalvale">
                             #:kendo.toString(parseFloat(totalvale()),"n")#
                             </th>
                         </tr>
@@ -394,7 +394,7 @@
                                 Total Descuentos
                                 </a>
                             </th>
-                            <th style="width:100px" class="text-right" id="totalvale">
+                            <th style="width:100px" class="text-right" id="totaldescuentos">
                                 #:kendo.toString(parseFloat(totaldescuento()),"n")#
                             </th>
                         </tr>

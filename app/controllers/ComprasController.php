@@ -24,7 +24,8 @@ class ComprasController extends \BaseController {
 	{
 		$restaurantes = Restaurante::all()->lists('nombreComercial','id');
 		$tipodocumentos = Tipodocumento::all()->lists('nombre','id');
-		return View::make('compras.create',compact('restaurantes','tipodocumentos'));
+        $almacenes = Almacen::all()->lists('nombre','id');
+		return View::make('compras.create',compact('restaurantes','tipodocumentos','almacenes'));
 	}
 
 	/**
@@ -48,11 +49,14 @@ class ComprasController extends \BaseController {
 			$igv = Input::get('igv');
 			$provedor_id = Input::get('provedor_id');
 			$insumos = Input::get('insumos');
+            $almacen_id = Input::get('almacen_id');
+            //print_r($almacen_id); die();
 			$compra = Compra::create(array('restaurante_id'=>$restaurante_id, 'estado'=>$estado, 
 				'tipocomprobante_id'=>$tipocomprobante_id,'serie'=>$serie, 'numero'=>$numero, 'importetotal'=>$importetotal,
 				'subtotal'=>$subtotal, 'igv'=>$igv, 'provedor_id'=>$provedor_id, 'usuario_id'=>Auth::user()->id));
 			$total = 0;
-			$almacen = Areadeproduccion::find($restaurate->areacompras_id)->almacen;
+			//$almacen = Areadeproduccion::find($restaurate->areacompras_id)->almacen;
+            $almacen = Almacen::find($almacen_id);
 			foreach ($insumos as $insumo) {
 				$detallecompra = Detallecompra::create(array('cantidad'=>$insumo['cantidad'], 'compra_id'=>$compra->id, 
 								'costototal'=>$insumo['costot'],'costou'=> $insumo['costou'], 'insumo_id'=> $insumo['id'],
@@ -98,7 +102,7 @@ class ComprasController extends \BaseController {
 			}
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => false, 'msg'=>$e->getTrace()));
+			return Response::json(array('estado' => false, 'msg'=>$e->getMessage()));
 		}
 		DB::commit();
 		return Response::json(array('estado' => true, 'route' => '/compras'));

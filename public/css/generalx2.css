@@ -92,9 +92,9 @@ font-size 0.870rem,
     background-color: #d0e9c6;
 }
 .notas {
-  font-weight: 900;
+  /*font-weight: 900;*/
   color: #000;
-  font-size: 2rem;
+  /*font-size: 2rem;*/
   cursor: pointer;
 }
 .notas:hover {

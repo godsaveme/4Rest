@@ -66,6 +66,7 @@ class ProductosController extends BaseController {
 				 $producto = Producto::create(Input::all());
 				 $provedor_id = Input::get('proveedor_id');
 				 $insertedId = $producto->id;
+
 				 if($provedor_id > 0){
 				 	$producto->proveedor_id = $provedor_id;
 				 	$producto->save();
@@ -81,14 +82,34 @@ class ProductosController extends BaseController {
 							 $precio->save();
 					 }
 
+                if(Input::get('prodAttrSend') == 'sabores'){
+                    $producto->cantidadsabores = Input::get('cantdef');
+                    $producto->save();
+                }
+
+                if(Input::hasFile('imagen') and substr(Input::file('imagen')->getMimeType(), 0, 5) == 'image'){
+                    $file = Input::file('imagen');
+                    $extension = Input::file('imagen')->getClientOriginalExtension();
+                    //print_r($file);
+                    //print_r('mime: '.$extension);
+                    Image::make($file)->resize(200, 200)->save(public_path().'/images/productos/'.$producto->id.'.'.$extension);
+                    //echo public_path();
+                    $producto->imagen = '/images/productos/'.$producto->id.'.'.$extension;
+                    $producto->save();
+                }
+
 				 
 				} catch (Exception $e) {
 					DB::rollback();
-					return Response::json(array('estado' => false));
+					//return Response::json(array('estado' => $e->getMessage()));
+                    $msg = array('status' => false,'msg1' => 'Error!','msg2' => 'Producto no creado');
+                    return Response::view('productos.index',compact('msg'));
 
 				}
 		DB::commit();
-		return Response::json(array('estado' => true, 'route' => '/productos'));
+		//return Response::json(array('estado' => true, 'route' => '/productos'));
+        $msg = array('status' => true,'msg1' => 'Hecho!','msg2' => 'Producto creado con éxito');
+        return Response::view('productos.index',compact('msg'));
 	}
 	/**
 	 * Display the specified resource.
@@ -176,13 +197,36 @@ class ProductosController extends BaseController {
                     //}
                 }
 
+                if(Input::hasFile('imagen') and substr(Input::file('imagen')->getMimeType(), 0, 5) == 'image'){
+                    $file = Input::file('imagen');
+                    $extension = Input::file('imagen')->getClientOriginalExtension();
+                    //print_r($file);
+                    //print_r('mime: '.$extension);
+                    Image::make($file)->resize(200, 200)->save(public_path().'/images/productos/'.$producto->id.'.'.$extension);
+                    //echo public_path();
+                    $producto->imagen = '/images/productos/'.$producto->id.'.'.$extension;
+                    $producto->save();
+                }
+
+                if(Input::get('prodAttrSend') == 'sabores'){
+                    $producto->cantidadsabores = Input::get('cantdef');
+                    $producto->save();
+                }else{
+                    $producto->cantidadsabores = null;
+                    $producto->save();
+                }
+
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(array('estado' => $e->getMessage()));
+			//return Response::json(array('estado' => $e->getMessage()));
+            $msg = array('status' => false,'msg1' => 'Error!','msg2' => 'Producto no modificado');
+            return Response::view('productos.index',compact('msg'));
 
 		}
 		DB::commit();
-		return Response::json(array('estado' => true, 'route' => '/productos'));
+		//return Response::json(array('estado' => true, 'route' => '/productos'));
+        $msg = array('status' => true,'msg1' => 'Hecho!','msg2' => 'Producto modificado con éxito');
+        return Response::view('productos.index',compact('msg'));
 	}
 
 	/**

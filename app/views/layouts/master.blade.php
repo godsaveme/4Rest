@@ -134,7 +134,7 @@
                 <li><a href="/recetas"><i class="fa fa-angle-right"></i>  Recetas</a></li>
                 <li class="divider"></li>
                 <li><a href="/sabores"><i class="fa fa-angle-right"></i>  Sabores</a></li>
-                <li><a href="/sabores/indexdet"><i class="fa fa-angle-right"></i>  Agregar sabor a producto</a></li>
+                <li><a href="/sabores/indexdet"><i class="fa fa-angle-right"></i>  Producto con Sabores</a></li>
                 <li class="divider"></li>
                 <li class="disabled"><a onclick="event.preventDefault();" href="#"><i class="fa fa-angle-right"></i>  Orden de Producción</a></li>
                 <li class="disabled"><a href="#"><i class="fa fa-angle-right"></i>  Requerimiento</a></li>
