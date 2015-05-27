@@ -6,6 +6,7 @@
 /4Restapp/node_modules
 /app/storage
 /4Restapp/old_node_mod
+/public/images/productos
 composer.phar
 composer.lock
 .env.*.php
