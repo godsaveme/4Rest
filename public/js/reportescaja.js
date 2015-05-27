@@ -13,7 +13,9 @@ $("#fecha_fin").kendoDatePicker({
     format: "yyyy-MM-dd"
 }).data("kendoDatePicker");
 $('#btn_enviarfechasvd').on('click',function(){
-    window.location.href = '/reportes/vales-descuentos/2?fechainicio='+$('#fecha_inicio').val()+'&fechafin='+$('#fecha_fin').val();
+    //window.location.href = '/reportes/vales-descuentos/2?fechainicio='+$('#fecha_inicio').val()+'&fechafin='+$('#fecha_fin').val();
+    window.location.href = window.location.href+'?fechainicio='+$('#fecha_inicio').val()+'&fechafin='+$('#fecha_fin').val();
+  
 });
 
 var viewModel_reportecajadiario = kendo.observable({
