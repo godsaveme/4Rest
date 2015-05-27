@@ -682,11 +682,16 @@ Route::group(array('before' => 'auth'), function () {
         $oSabor = Sabor::find($saborID);
         $almacen_id = Auth::user()->restaurante->almacen_id;
         $oAlmacen = Almacen::find($almacen_id);
+        //print_r($oSabor); die();
+        if(!empty($oSabor->insumo->id)){
+        	//print_r($oAlmacen); die();
+
         $insumoAlmacen = $oAlmacen->insumos()->where('stockInsumo.insumo_id', '=', $oSabor->insumo->id)->first();
-        if(!empty($insumoAlmacen)) {
-            Almacen::find($almacen_id)->insumos()->updateExistingPivot($oSabor->insumo->id,
-                array('stockActual' => $insumoAlmacen->pivot->stockActual - $qant*$oSabor->porcion));
-        }
+	        if(!empty($insumoAlmacen)) {
+	            Almacen::find($almacen_id)->insumos()->updateExistingPivot($oSabor->insumo->id,
+	                array('stockActual' => $insumoAlmacen->pivot->stockActual - $qant*$oSabor->porcion));
+	        }
+    	}
 
     }
 
@@ -951,7 +956,7 @@ Route::group(array('before' => 'auth'), function () {
 					}
 					} catch (Exception $e) {
 						DB::rollBack();
-						return Response::json($e->getMessage());
+						return Response::json($e->getMessage().'. L:'.$e->getLine());
 					}
 					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
 					DB::commit();

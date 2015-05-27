@@ -5,9 +5,11 @@
 @section('content')
 <div class="container">
 <div class="englobe">
+
+                <p class="text-center"><img src="{{Request::root().'/images/productos/tostao.jpg'}}" alt=""/></p>
   	{{Form::open(array('url' => 'login', 'class' => 'form-signin' , 'role' => 'form', 'id' => 'login'))}}
 
-    		<h2 class="form-signin-heading text-center">¡Bienvenido a 4Rest!</h2>
+    		<h3 class="form-signin-heading text-center" style="margin: 0px;">¡Bienvenido a 4Rest!</h3>
             <div class="sesion_msg text-center">
                 
             

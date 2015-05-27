@@ -27,6 +27,7 @@
   	{{HTML::style('css/notificaciones.css')}}
   	<!--add fonts-->
   	{{HTML::style('css/newstyles/fonts.css')}}
+  	<link rel="shortcut icon" sizes="128x128" href="/images/productos/favicon.png">
   	@yield('css')
 </head>
 <body>

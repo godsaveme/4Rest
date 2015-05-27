@@ -22,6 +22,7 @@
   {{HTML::style('css/newstyles/web.css')}}
   {{HTML::style('css/newstyles/fonts.css')}}
 	@show
+	<link rel="shortcut icon" sizes="128x128" href="/images/productos/favicon.png">
   @yield('css')
   @section('jsgeneral')
   {{HTML::script('js/kendo/jquery-2.1.0.min.js');}}
