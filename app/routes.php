@@ -1488,8 +1488,8 @@ Boleta&nbsp;
 						return Response::json($e);
 					}
 					$cajero = Auth::user()->login;
-					/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete',
-					'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
+					Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete',
+					'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
 					//DB::rollback();
 					//return json_encode('false del rollBack');
 					DB::commit();
