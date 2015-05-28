@@ -1890,8 +1890,8 @@ Boleta&nbsp;
 						return Response::json('false');
 					}
 
-					print_r("paso");
-					die();
+					//print_r("paso");
+					//die();
 					$tickete->estado = 1;
 					$infocaja = $tickete->caja;
 					$newnumero = $infocaja->numero+1;
