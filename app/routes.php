@@ -1972,7 +1972,7 @@ Boleta&nbsp;
 			<body>
 			<div class="container">
 			<div class="encabezado">
-			<strong>KANGO CAFE</strong><br>
+			<strong></strong><br>
 			<strong>'.$restaurante->razonSocial.'</strong><br>
 			</div>
 			<div class="subencabezado">

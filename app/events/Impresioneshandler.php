@@ -329,7 +329,7 @@
 	                                <body>
 	                                <div class="container">
 	                                <div class="encabezado">
-	                                <strong>'.$restaurante->razonSocial.'</strong><br>
+	                                <strong></strong><br>
 	                                <strong>'.$restaurante->nombreComercial.'</strong><br>
 	                                </div>
 	                                <div class="subencabezado">
