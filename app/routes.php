@@ -1209,7 +1209,7 @@ Boleta&nbsp;
 
                         // send the PDF
                         //$html2pdf->Output($pdfPath,'F');
-						$cmd = "lpr -PHP_Photosmart_Plus_B209a-m ";
+						$cmd = "lpr -PEpson-TM-T20II-1 ";
 						$cmd .= $pdfPath;
 						//if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);

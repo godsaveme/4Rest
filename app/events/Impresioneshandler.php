@@ -259,7 +259,7 @@
 			$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
 			$html2pdf->WriteHTML($html);
 			$html2pdf->Output($pdfPatd, 'F');
-			$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
+			$cmd = "lpr -P Epson-TM-T20II-1 ";
 			$cmd .= $pdfPatd;
 			$response = shell_exec($cmd);
 			//File::delete($pdfPatd);
