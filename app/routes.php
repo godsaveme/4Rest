@@ -1147,6 +1147,7 @@ Route::group(array('before' => 'auth'), function () {
                             }
                         </style>
                         <body>
+                        <center><img src="'.public_path('/').'images/productos/tostao.jpg" height="83px" width="98px" alt=""/></center>
                         <center><h3><strong>PRE-CUENTA</strong></h3></center>
                         <table>
                         <thead class="titulos">
@@ -1351,8 +1352,8 @@ Boleta&nbsp;
 						return Response::json($e);
 					}
 					$cajero = Auth::user()->login;
-					Event::fire('imprimirticket', compact('odetallestickete', 'restaurante', 'tickete',
-							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));
+					/*Event::fire('imprimirticket', compact('odetallestickete', 'restaurante', 'tickete',
+							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));*/
 					//DB::rollback();
 					//return json_encode('false del rollBack');
 					DB::commit();
@@ -2085,7 +2086,7 @@ Hora:'.date('H:i:s').'</strong>
 					$html2pdf->Output($pdfPath, 'F');
 					$cmd = "lpr -P".$infocaja->impresora." ";
 					$cmd .= $pdfPath;
-					$response = shell_exec($cmd);
+					//$response = shell_exec($cmd);
 					//File::delete($pdfPath);
 					$tickete->save();
 					$infocaja->save();
