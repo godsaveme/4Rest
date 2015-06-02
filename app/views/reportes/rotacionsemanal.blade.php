@@ -1,7 +1,5 @@
 @extends('layouts.cajamaster')
-@section('js')
-	{{HTML::script('js/reportesventassemana.js')}}
-@stop
+
 @section('content')
 <div class="container">
 	<div class="panel panel-primary" id="reportesemanal">
@@ -183,4 +181,8 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('js')
+    {{HTML::script('js/reportesventassemana.js')}}
 @stop

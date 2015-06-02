@@ -1,3 +1,4 @@
+$(document).ready(function() {
 var socket = io.connect('http://'+window.location.hostname+':3000');
 socket.emit('loginuser',$('#usuario').text(), 
           $('#area').text()+'_'+$('#area').attr('data-ida'), 
@@ -212,3 +213,5 @@ function notificaciondemora(data){
         document.getElementById('sonido_demora').pause();
     }
 }
+
+});

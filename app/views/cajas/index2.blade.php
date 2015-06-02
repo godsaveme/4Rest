@@ -1,4 +1,7 @@
 @extends('layouts.cajamaster')
+@section('js')
+{{HTML::script('js/caja2.js')}}
+@stop
 @section('content')
 <audio id="sonido_recibirpedido" src="/sound/mozo.mp3"> </audio>
 <audio id="sonido_demora" src="/sound/demora.mp3" loop> </audio>
@@ -59,7 +62,4 @@ background-image: linear-gradient(#ccefff 0%, #76caff 100%);"
         <p class="">No hay salones creados o habilitados</p>
     </div>
   @endif
-@stop
-@section('js')
-{{HTML::script('js/caja2.js')}}
 @stop

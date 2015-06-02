@@ -1,3 +1,4 @@
+$(document).ready(function(){
 $(".caja_derecha").kendoMobileDrawer({
 	    container: "#contenido",
 	    position: "right",
@@ -32,3 +33,4 @@ $(".caja_derecha").kendoMobileDrawer({
 			$(".caja_derecha").data("kendoMobileDrawer").show();
 		}
 	});
+})

@@ -1,3 +1,4 @@
+$(document).ready(function(){
 var socket = io.connect('http://'+window.location.hostname+':3000');
 socket.emit('loginuser',$('#usuario').text(), 
           $('#area').text()+'_'+$('#area').attr('data-ida'), 
@@ -236,7 +237,9 @@ function actulizarpedidosmesa(idpedido, usuario){
 	}
 //finactulizarestados todos
 
-var template_controlpedidos = kendo.template($('#refresh_listcontrolpedidos').html());
+	var template_controlpedidos = kendo.template($('#refresh_listcontrolpedidos').html());
+
+
 
 function actulizarcontrolpedidos(){
 	$.ajax({
@@ -407,3 +410,5 @@ function tiempoenmesa(){
 tiempoenmesa();
 setInterval(tiempoenmesa,60000);
 //fintiemposenmesa
+
+})

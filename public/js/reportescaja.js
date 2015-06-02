@@ -1,3 +1,6 @@
+$(function(){
+
+
 var datareporte = new kendo.data.DataSource({
 							  data: [ ],
 							  schema: {
@@ -480,3 +483,5 @@ $('body').on('click', '#btn_imprimircajadiario', function(event) {
     });
     
 });
+
+})

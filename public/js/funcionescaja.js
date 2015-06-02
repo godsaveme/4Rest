@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 var dataSourcelistagastos = new kendo.data.DataSource({
                                                 transport: {
                                                    read: "/listadegastos"
@@ -104,3 +106,5 @@ $('body').on('click', '.btn_generarticket', function(event) {
     });
 
 });
+    
+})

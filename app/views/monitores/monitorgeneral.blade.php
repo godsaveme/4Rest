@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width" />
 @stop
 @section('modulo')
-	Monitor General
+	<!--Monitor General-->
 @show
  @section('css')
  {{HTML::style('css/foundation.css')}}

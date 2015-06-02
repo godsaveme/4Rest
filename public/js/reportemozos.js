@@ -1,3 +1,30 @@
+var datareportemozos = new kendo.data.DataSource({
+                              data: [ ],
+                              schema: {
+                                model: {
+                                        id: "mozoid",
+                                        fields: {
+                                            mozoid:{type: "number" },
+                                            mozo:{type: "string"},
+                                            mfactu:{type: "number" },
+                                            promt:{type: "number" },
+                                            peds:{type: "number" },
+                                            pedsa:{type: "number" },
+                                            cprods:{type: "number" },
+                                            panul:{type: "number" },
+                                            ctickets:{type: "number" },
+                                            tanul:{type: "number" },
+                                            tprom:{type: "date" },
+                                            tmin:{type: "date" },
+                                            tmax:{type: "date" }
+                                            }
+                                        }
+                              },
+                          });
+
+$(function(){
+
+
 var start = $("#fecha_inicio").kendoDatePicker({
                         format: "yyyy-MM-dd",
                         change: startChange
@@ -42,29 +69,7 @@ function endChange() {
     }
 }
 
-var datareportemozos = new kendo.data.DataSource({
-                              data: [ ],
-                              schema: {
-                                model: {
-                                        id: "mozoid",
-                                        fields: {
-                                            mozoid:{type: "number" },
-                                            mozo:{type: "string"},
-                                            mfactu:{type: "number" },
-                                            promt:{type: "number" },
-                                            peds:{type: "number" },
-                                            pedsa:{type: "number" },
-                                            cprods:{type: "number" },
-                                            panul:{type: "number" },
-                                            ctickets:{type: "number" },
-                                            tanul:{type: "number" },
-                                            tprom:{type: "date" },
-                                            tmin:{type: "date" },
-                                            tmax:{type: "date" }
-                                            }
-                                        }
-                              },
-                          });
+
 
 var viewModel_reportemozos = kendo.observable({
     ventatotal:function(){
@@ -194,14 +199,7 @@ function reportemozos(){
 }
 
 
-function ventatotalpor(){
-        var venta = 0;
-        var data = datareportemozos.data();
-        for (var i = data.length - 1; i >= 0; i--) {
-            venta += parseFloat(data[i]['mfactu']);
-        };
-        return venta.toFixed(2);
-}
+
 
 function fechafin(){
     var fechafin = $('#fecha_fin').text();
@@ -214,3 +212,14 @@ $('#btn_rotacionpro').on('click', function(event){
     window.location.href = "/reportes/reporteproductos/"+$('#restauranteinfo').attr('data-id')
                             +"?tipoc=4&fechainicio="+$('#fecha_inicio').val()+"&fechafin="+$('#fecha_fin').val();
 });
+
+})
+
+function ventatotalpor(){
+        var venta = 0;
+        var data = datareportemozos.data();
+        for (var i = data.length - 1; i >= 0; i--) {
+            venta += parseFloat(data[i]['mfactu']);
+        };
+        return venta.toFixed(2);
+}

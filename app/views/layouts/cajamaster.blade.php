@@ -9,6 +9,22 @@
 	Caja
 	@show
 	</title>
+	   <style type="text/css"> 
+/* Paste this css to your style sheet file or under head tag */
+/* This only works with JavaScript, 
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  background: url(/img/Preloader_2.gif) center no-repeat #fff;
+}
+  </style>
 	{{HTML::style('css/normalize.css')}}
 	<!--change bootstrap for bootstrap lumen-->
 	{{HTML::style('css/bootstrap/bootstrap_lumen.min.css')}}
@@ -29,8 +45,33 @@
   	{{HTML::style('css/newstyles/fonts.css')}}
   	<link rel="shortcut icon" sizes="128x128" href="/images/productos/favicon.png">
   	@yield('css')
+  	{{HTML::script('js/vendor/modernizr.js'); }}
+  	{{HTML::script('js/vendor/jquery.js'); }}
+  	{{HTML::script('js/bootstrap.min.js')}}
+  	<script src="/dev/socket.io/socket.io.js"></script>
+  	{{HTML::script('js/jquery.plugin.js'); }}
+  	{{HTML::script('js/jquery.tooltipster.min.js')}}
+  	{{HTML::script('js/kendo/kendo.all.min.js')}}
+  	{{HTML::script('js/kendo/kendo.culture.es-PE.min.js')}}
+  	{{HTML::script('js/kendo/kendo.messages.es-ES.min.js')}}
+  	{{HTML::script('js/icheck.min.js')}}
+  	{{HTML::script('js/timeago.js')}}
+  	{{HTML::script('js/jquery.countup.js')}}
+  	{{HTML::script('js/funcionescaja.js')}}
+  	{{HTML::script('js/drawer.js')}}
+	@yield('js')
+<script type="text/javascript">
+  //paste this code under head tag or in a seperate js file.
+  // Wait for window load
+  $(window).load(function() {
+    // Animate loader off screen
+    $(".se-pre-con").fadeOut("slow");;
+  });
+  </script>
+
 </head>
 <body>
+<div class="se-pre-con"></div>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 <button type="button" class="navbar-toggle pull-right" id="btn_drawerder" style="margin: 10px; display:block">
             <span class="sr-only">Toggle navigation</span>
@@ -296,20 +337,6 @@
 	</div>
 @endif
 </div>
-	{{HTML::script('js/vendor/modernizr.js'); }}
-  	{{HTML::script('js/vendor/jquery.js'); }}
-  	{{HTML::script('js/bootstrap.min.js')}}
-  	<script src="/dev/socket.io/socket.io.js"></script>
-  	{{HTML::script('js/jquery.plugin.js'); }}
-  	{{HTML::script('js/jquery.tooltipster.min.js')}}
-  	{{HTML::script('js/kendo/kendo.all.min.js')}}
-  	{{HTML::script('js/kendo/kendo.culture.es-PE.min.js')}}
-  	{{HTML::script('js/kendo/kendo.messages.es-ES.min.js')}}
-  	{{HTML::script('js/icheck.min.js')}}
-  	{{HTML::script('js/timeago.js')}}
-  	{{HTML::script('js/jquery.countup.js')}}
-  	{{HTML::script('js/funcionescaja.js')}}
-  	{{HTML::script('js/drawer.js')}}
-	@yield('js')
+	
 </body>
 </html>

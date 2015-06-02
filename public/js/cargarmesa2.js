@@ -1,3 +1,5 @@
+$(document).ready(function() {
+var socket = io.connect('http://'+window.location.hostname+':3000');	
 	function CalcularPrecioTotal(){
                     $total = 0;
                     $c = 0;
@@ -2075,3 +2077,4 @@ function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 //fin para intro cant	
+})

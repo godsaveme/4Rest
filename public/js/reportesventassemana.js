@@ -1,9 +1,13 @@
+
+
+
 var datareporte = new kendo.data.DataSource({
 							  data: [ ]
 							});
 $('#restauranteinfo').data('idtipo', '0');
 $('#restauranteinfo').data('tipobusqueda', '0');
 
+$(function(){
 var viewModel_reporteventasemanal = kendo.observable({
 	ventatotal:function(){
 		var ventasemana = 0;
@@ -136,18 +140,7 @@ $('#btn_summitinfo2').on('click',function(event) {
 	unidadestipocombinacion();
 });
 
-function totalventasporcentaje(){
-	var ventasemana = 0;
-		var data = datareporte.data();
-		for (var i = data.length - 1; i >= 0; i--) {
-        	ventasemana += parseFloat(data[i]['total']);
-        };
-        if($('#restauranteinfo').data('solesunidades') == 1){
-        return ventasemana.toFixed(2);
-    	}else{
-    		return ventasemana;
-    	}
-}
+
 
 $('body').on('click', '.familias', function(event) {
 	event.preventDefault();
@@ -271,14 +264,7 @@ function unidadesfamilias(idtipocombi){
 	});
 }
 
- 	function sesion(){
-		var sesion = $('#restauranteinfo').data('tipobusqueda');
-		return sesion;
-	}
-	function sesionid(){
-		var sesion = $('#restauranteinfo').data('idtipo');
-		return sesion;
-	}
+ 	
 
 function solesproductos(idfamilia){
 	$('#btn_summitinfo').css('display', 'none');
@@ -349,3 +335,27 @@ $('body').on('click', '#btn_regresar2', function(event) {
 		unidadesfamilias($('#restauranteinfo').data('idtipo'));
 	}
 });
+
+})
+
+function sesion(){
+		var sesion = $('#restauranteinfo').data('tipobusqueda');
+		return sesion;
+	}
+	function sesionid(){
+		var sesion = $('#restauranteinfo').data('idtipo');
+		return sesion;
+	}
+
+function totalventasporcentaje(){
+	var ventasemana = 0;
+		var data = datareporte.data();
+		for (var i = data.length - 1; i >= 0; i--) {
+        	ventasemana += parseFloat(data[i]['total']);
+        };
+        if($('#restauranteinfo').data('solesunidades') == 1){
+        return ventasemana.toFixed(2);
+    	}else{
+    		return ventasemana;
+    	}
+}

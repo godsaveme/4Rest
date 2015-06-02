@@ -1,3 +1,6 @@
+$(function(){
+
+
 var socket = io.connect('http://'+window.location.host+':3000');
 socket.on("Recibirpedidos", recibirpedido);
 socket.on('ActulizarestadoAll', actulizarestadosall);
@@ -96,3 +99,5 @@ setInterval(tiempoenmesa,60000);
 		oitempedido.find('img').attr('src', '/images/'+estado+'.png');
 	}
 //finactulizarestados todos
+
+})

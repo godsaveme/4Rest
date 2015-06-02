@@ -947,7 +947,7 @@
 @stop
 
 @section('js')
-    {{HTML::script('js/caja.js')}}
+    {{HTML::script('js/caja2.js')}}
     {{HTML::script('js/cargarmesa2.js')}}
 
     <script type="text/javascript">
