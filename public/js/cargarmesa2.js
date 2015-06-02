@@ -1,4 +1,172 @@
+function guardarnotaprocombi(idpro, filaid, procombi){
+	$.ajax({
+		url: '/crearnotapro',
+		type: 'POST',
+		dataType: 'json',
+		data: {idpro: idpro, nota: $('#inputprocombi_'+idpro+filaid+procombi).val()},
+	})
+	.done(function(data) {
+		selecionanotapro2(idpro, data['id'], data['descripcion'], filaid, procombi);
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+}
+var dataSourcecombi= new kendo.data.DataSource({
+  data: [ ],
+  schema: {
+    model: { id: "id" }
+  }
+});
+function selecionasaborp(idpro, idsabor, nombresabor, filaid){
+	dataSourceprof.fetch(function(){
+		var data = this.get(filaid);
+		var osabores = data.sabores;
+		var nocantidad = data.cantidadsabores;
+		var newsabor = {};
+		if (nocantidad < data.numsabores) {
+			if(osabores){
+				for (var i = nocantidad - 1; i >= 0; i--) {
+					newsabor[i] = {idsabor: data['sabores'][i]['idsabor'] , 
+									nombre: data['sabores'][i]['nombre']};
+				}
+					newsabor[nocantidad] = {idsabor: idsabor, nombre: nombresabor };
+			}else{
+				newsabor[nocantidad] = {idsabor: idsabor, nombre: nombresabor};
+			}
+			var newcantidadsabores = parseInt(nocantidad) + 1;
+			dataSourceprof.pushUpdate({id: filaid, sabores: newsabor, cantidadsabores: newcantidadsabores});
+			console.log(dataSourceprof);
+		}
+	});
+}
+
+var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+function guardarnotapro(idpro, filaid){
+	$.ajax({
+		url: '/crearnotapro',
+		type: 'POST',
+		dataType: 'json',
+		data: {idpro: idpro, nota: $('#inputpro_'+idpro+filaid).val()},
+	})
+	.done(function(data) {
+		selecionanotapro(idpro, data['id'], data['descripcion'], filaid);
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+}
+
+function selecionanotapro(idpro, idnota, nombre, filaid){
+	dataSourceprof.fetch(function(){
+		var data = this.get(filaid);
+		var onotas = data.notas;
+		var nocantidad = data.cantidadnotas;
+		var n =  -1;
+		if(onotas){
+			for (var i = nocantidad - 1; i >= 0; i--) {
+				if(data['notas'][i]['idnota'] == idnota){
+					n = 1;
+				}
+			}
+		}else{
+			n = onotas.indexOf(idnota);
+		}
+		if (parseInt(n) == -1) {
+			var newnotas = {};
+			if(onotas){
+				for (var i = nocantidad - 1; i >= 0; i--) {
+					newnotas[i] = {idnota:data['notas'][i]['idnota'] , nombre: data['notas'][i]['nombre']};
+				}
+					newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
+					var newcantidadnotas = parseInt(nocantidad) + 1;
+			}else{
+				newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
+				var newcantidadnotas = parseInt(nocantidad) + 1;
+			}
+			dataSourceprof.pushUpdate({id: filaid, notas: newnotas, cantidadnotas: newcantidadnotas});
+		};
+	});
+}
+
+var dataSourceprof= new kendo.data.DataSource({
+  data: [ ],
+  schema: {
+    model: { id: "id" }
+  }
+});
+
+function selecionanotapro2(idpro, idnota, nombre, filaid, procombi){
+	dataSourcecombi.fetch(function(){
+		var data = this.get(filaid);
+		var onotas = data[procombi]['notas'];
+		var nocantidad = data[procombi]['cantidadnotas'];
+		var n =  -1;
+		var newdatos = {};
+		if(onotas){
+			for (var i = nocantidad - 1; i >= 0; i--) {
+				if(data[procombi]['notas'][i]['idnota'] == idnota){
+					n = 1;
+				}
+			}
+		}else{
+			n = onotas.indexOf(idnota);
+		}
+		if (parseInt(n) == -1) {
+			var newnotas = {};
+			if(onotas){
+				for (var i = nocantidad - 1; i >= 0; i--) {
+					newnotas[i] = {idnota:data[procombi]['notas'][i]['idnota'] , nombre: data[procombi]['notas'][i]['nombre']};
+				}
+					newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
+					var newcantidadnotas = parseInt(nocantidad) + 1;
+					newdatos['id'] = filaid;
+					var newprocombi = {}
+						newprocombi['notas'] = newnotas;
+					var newcantidadnotas = parseInt(nocantidad) + 1;
+						newprocombi['cantidadnotas'] = newcantidadnotas;
+						newprocombi['nombre'] =data[procombi]['nombre'];
+						newprocombi['idprocombi']= data[procombi]['idprocombi'];
+						newprocombi['precio'] = data[procombi]['precio'];
+						newprocombi['cantidadsabores'] = data[procombi]['cantidadsabores'];
+						newprocombi['cantidadadicionales'] = data[procombi]['cantidadadicionales'];
+						newprocombi['sabores']= data[procombi]['sabores'];
+						newprocombi['adicionales'] = data[procombi]['adicionales'];
+					newdatos[procombi] = newprocombi;
+
+			}else{
+				newdatos['id'] = filaid;
+				newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
+				var newprocombi = {}
+					newprocombi['notas'] = newnotas;
+				var newcantidadnotas = parseInt(nocantidad) + 1;
+					newprocombi['cantidadnotas'] = newcantidadnotas;
+					newprocombi['nombre'] =data[procombi]['nombre'];
+					newprocombi['idprocombi']= data[procombi]['idprocombi'];
+					newprocombi['precio'] = data[procombi]['precio'];
+					newprocombi['cantidadsabores'] = data[procombi]['cantidadsabores'];
+					newprocombi['cantidadadicionales'] = data[procombi]['cantidadadicionales'];
+					newprocombi['sabores']= data[procombi]['sabores'];
+					newprocombi['adicionales'] = data[procombi]['adicionales'];
+				newdatos[procombi] = newprocombi;
+			}
+			dataSourcecombi.pushUpdate(newdatos);
+			console.log(dataSourcecombi);
+		};
+	});
+}
+//fin notas
+
 $(document).ready(function() {
+
+var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
 var socket = io.connect('http://'+window.location.hostname+':3000');	
 	function CalcularPrecioTotal(){
                     $total = 0;
@@ -88,12 +256,7 @@ var socket = io.connect('http://'+window.location.hostname+':3000');
 //cesta de pedidos
 
 //productos normales
-var dataSourceprof= new kendo.data.DataSource({
-  data: [ ],
-  schema: {
-    model: { id: "id" }
-  }
-});
+
 $("#enviarpf").kendoListView({
      dataSource: dataSourceprof,
     template: kendo.template($('#template_cestaproductos').html())
@@ -161,12 +324,7 @@ var dataSourcecombitemp= new kendo.data.DataSource({
     model: { id: "id" }
   }
 });
-var dataSourcecombi= new kendo.data.DataSource({
-  data: [ ],
-  schema: {
-    model: { id: "id" }
-  }
-});
+
 $("#enviarcombi").kendoListView({
      dataSource: dataSourcecombi,
     template: kendo.template($('#template_cestacombinaciones').html())
@@ -593,55 +751,9 @@ $('body').on('mouseenter', '#enviarpf .notas', function(event) {
   });
 });
 
-function guardarnotapro(idpro, filaid){
-	$.ajax({
-		url: '/crearnotapro',
-		type: 'POST',
-		dataType: 'json',
-		data: {idpro: idpro, nota: $('#inputpro_'+idpro+filaid).val()},
-	})
-	.done(function(data) {
-		selecionanotapro(idpro, data['id'], data['descripcion'], filaid);
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
-}
 
-function selecionanotapro(idpro, idnota, nombre, filaid){
-	dataSourceprof.fetch(function(){
-		var data = this.get(filaid);
-		var onotas = data.notas;
-		var nocantidad = data.cantidadnotas;
-		var n =  -1;
-		if(onotas){
-			for (var i = nocantidad - 1; i >= 0; i--) {
-				if(data['notas'][i]['idnota'] == idnota){
-					n = 1;
-				}
-			}
-		}else{
-			n = onotas.indexOf(idnota);
-		}
-		if (parseInt(n) == -1) {
-			var newnotas = {};
-			if(onotas){
-				for (var i = nocantidad - 1; i >= 0; i--) {
-					newnotas[i] = {idnota:data['notas'][i]['idnota'] , nombre: data['notas'][i]['nombre']};
-				}
-					newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
-					var newcantidadnotas = parseInt(nocantidad) + 1;
-			}else{
-				newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
-				var newcantidadnotas = parseInt(nocantidad) + 1;
-			}
-			dataSourceprof.pushUpdate({id: filaid, notas: newnotas, cantidadnotas: newcantidadnotas});
-		};
-	});
-}
+
+
 
 $('body').on('mouseenter', '#enviarcombi .notas', function(event) {
   event.preventDefault();
@@ -683,84 +795,9 @@ $('body').on('mouseenter', '#enviarcombi .notas', function(event) {
   });
 });
 
-function guardarnotaprocombi(idpro, filaid, procombi){
-	$.ajax({
-		url: '/crearnotapro',
-		type: 'POST',
-		dataType: 'json',
-		data: {idpro: idpro, nota: $('#inputprocombi_'+idpro+filaid+procombi).val()},
-	})
-	.done(function(data) {
-		selecionanotapro2(idpro, data['id'], data['descripcion'], filaid, procombi);
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
-}
 
-function selecionanotapro2(idpro, idnota, nombre, filaid, procombi){
-	dataSourcecombi.fetch(function(){
-		var data = this.get(filaid);
-		var onotas = data[procombi]['notas'];
-		var nocantidad = data[procombi]['cantidadnotas'];
-		var n =  -1;
-		var newdatos = {};
-		if(onotas){
-			for (var i = nocantidad - 1; i >= 0; i--) {
-				if(data[procombi]['notas'][i]['idnota'] == idnota){
-					n = 1;
-				}
-			}
-		}else{
-			n = onotas.indexOf(idnota);
-		}
-		if (parseInt(n) == -1) {
-			var newnotas = {};
-			if(onotas){
-				for (var i = nocantidad - 1; i >= 0; i--) {
-					newnotas[i] = {idnota:data[procombi]['notas'][i]['idnota'] , nombre: data[procombi]['notas'][i]['nombre']};
-				}
-					newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
-					var newcantidadnotas = parseInt(nocantidad) + 1;
-					newdatos['id'] = filaid;
-					var newprocombi = {}
-						newprocombi['notas'] = newnotas;
-					var newcantidadnotas = parseInt(nocantidad) + 1;
-						newprocombi['cantidadnotas'] = newcantidadnotas;
-						newprocombi['nombre'] =data[procombi]['nombre'];
-						newprocombi['idprocombi']= data[procombi]['idprocombi'];
-						newprocombi['precio'] = data[procombi]['precio'];
-						newprocombi['cantidadsabores'] = data[procombi]['cantidadsabores'];
-						newprocombi['cantidadadicionales'] = data[procombi]['cantidadadicionales'];
-						newprocombi['sabores']= data[procombi]['sabores'];
-						newprocombi['adicionales'] = data[procombi]['adicionales'];
-					newdatos[procombi] = newprocombi;
 
-			}else{
-				newdatos['id'] = filaid;
-				newnotas[nocantidad] = {idnota: idnota, nombre: nombre};
-				var newprocombi = {}
-					newprocombi['notas'] = newnotas;
-				var newcantidadnotas = parseInt(nocantidad) + 1;
-					newprocombi['cantidadnotas'] = newcantidadnotas;
-					newprocombi['nombre'] =data[procombi]['nombre'];
-					newprocombi['idprocombi']= data[procombi]['idprocombi'];
-					newprocombi['precio'] = data[procombi]['precio'];
-					newprocombi['cantidadsabores'] = data[procombi]['cantidadsabores'];
-					newprocombi['cantidadadicionales'] = data[procombi]['cantidadadicionales'];
-					newprocombi['sabores']= data[procombi]['sabores'];
-					newprocombi['adicionales'] = data[procombi]['adicionales'];
-				newdatos[procombi] = newprocombi;
-			}
-			dataSourcecombi.pushUpdate(newdatos);
-			console.log(dataSourcecombi);
-		};
-	});
-}
-//fin notas
+
 
 
 //adicionales

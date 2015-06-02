@@ -10,6 +10,7 @@ function conectado(mensaje){
 
 $('body').timeago();
 
+
 function checkbox (){
 	$('input').each(function(){
     var self = $(this),

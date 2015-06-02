@@ -146,5 +146,5 @@
 </div>
 @stop
 @section('js')
-    {{HTML::script('js/caja.js')}}
+    {{HTML::script('js/caja2.js')}}
 @stop
