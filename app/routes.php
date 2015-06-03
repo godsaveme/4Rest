@@ -1215,7 +1215,7 @@ Boleta&nbsp;
 						//if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);
 						//}
-						//File::delete($pdfPath);
+						File::delete($pdfPath);
 						return Response::json('true');
 					}
 				}
@@ -2105,7 +2105,7 @@ Hora:'.date('H:i:s').'</strong>
 					$cmd = "lpr -P".$infocaja->impresora." ";
 					$cmd .= $pdfPath;
 					//$response = shell_exec($cmd);
-					//File::delete($pdfPath);
+					File::delete($pdfPath);
 					$tickete->save();
 					$infocaja->save();
 					return Response::json('true');

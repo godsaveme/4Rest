@@ -142,7 +142,7 @@
 							$cmd .= $pdfPatd;
 							$response = shell_exec($cmd);
 							$i = $i +1;
-							//File::delete($pdfPatd);
+							File::delete($pdfPatd);
 						}
 					//}
 			}
@@ -262,7 +262,7 @@
 			$cmd = "lpr -P Epson-TM-T20II-1 ";
 			$cmd .= $pdfPatd;
 			$response = shell_exec($cmd);
-			//File::delete($pdfPatd);
+			File::delete($pdfPatd);
 		}
 
 		public function imprimir_ticketcaja($odetallestickete,$restaurante,$tickete, 
@@ -432,6 +432,6 @@
 			$cmd = "lpr -P".$impresora." ";
 			$cmd .= $pdfPath;
 			$response = shell_exec($cmd);
-			//File::delete($pdfPath);
+			File::delete($pdfPath);
 		}
 	}
