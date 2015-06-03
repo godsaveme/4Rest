@@ -1981,7 +1981,10 @@ $('#btn_aceptarcodigo').on('click', function(event) {
 			}
 			window.location.href = '/cajas';
 		}else{
-			alert('Operacion no completada');
+			if (data['status'] == false) {
+				alert('Operacion no completada. '+data['msg']);
+			};
+			
 			$(".windowseliminarproductos").data("kendoWindow").close();
 		}
 		$("#infomesa").data('cancelarorden', '');

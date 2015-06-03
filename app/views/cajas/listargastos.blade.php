@@ -47,7 +47,7 @@
 				            #: kendo.toString(get("importetotal"), "C") #
 				        </td>
 				        <td data-bind="text: tipo_descripcion"></td>
-				        <td> # if(tipo_estado == 1) { # CANCELADO # }else{ # EMITIDO # } #</td>
+				        <td><a class="ChangeState" data-id="#= id #" href="\#"> # if(tipo_estado == 1) { # <span class="text-success"> CANCELADO </span> # }else{ # <span class="text-danger"> EMITIDO </span> # } #</a></td>
 				    </tr>
 				</script>
                 </tbody>

@@ -16,7 +16,7 @@ var viewModel_listagastos = kendo.observable({
         var sum = 0;
         var data = dataSourcelistagastos.data();
         for (var i = data.length - 1; i >= 0; i--) {
-        	sum += parseFloat(data[i]['importetotal']);
+            if (data[i]['tipo_estado']  == 1) sum += parseFloat(data[i]['importetotal']);
         };
         return sum.toFixed(2);
     },
@@ -106,5 +106,30 @@ $('body').on('click', '.btn_generarticket', function(event) {
     });
 
 });
+
+    $('body').on('click', '.ChangeState', function(event) {
+        event.preventDefault();
+        /* Act on the event */
+        $.ajax({
+            url: '/changestate',
+            type: 'POST',
+            dataType: 'json',
+            data: {id: $(this).attr('data-id')}
+        })
+            .done(function(data) {
+                if(data == true){
+                    window.location.href = '/cajas/listargastos';
+                }else{
+
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+    });
     
 })

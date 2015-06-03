@@ -1616,6 +1616,23 @@ Boleta&nbsp;
 					return Response::json($listadegastos);
 				}
 			});
+        Route::post('changestate', function () {
+            if (Request::ajax()) {
+                $oGasto = Regitrodegastos::find(Input::get('id'));
+                $estado = $oGasto->estado;
+                if($estado == 1){
+                    $oGasto->estado = 0;
+                    $oGasto->save();
+                    return Response::json(true);
+                }elseif($estado == 0){
+                    $oGasto->estado = 1;
+                    $oGasto->save();
+                    return Response::json(true);
+                }
+                return Respone::json(false);
+
+            }
+        });
 
 		Route::get('getproductos', function () {
 				if (Request::ajax()) {
@@ -1638,7 +1655,7 @@ Boleta&nbsp;
 		Route::post('postcancelarorden', function () {
 				if (Request::ajax()) {
 					DB::beginTransaction();
-					//try{
+					try{
 					$codigo = Input::get('codigo');
 					$iddetallepedido = Input::get('iddetalle');
 					$usuario = Codigousuario::where('codigo', '=', $codigo)->first();
@@ -1670,7 +1687,8 @@ Boleta&nbsp;
 								if ($newcantidad < 0) {
 									DB::rollBack();
 									//para cuando mando 5 y pago 3. quiero eliminar los 5..
-									return Response::json('false - algunos productos ya han sido pagados');
+									return Response::json(array('status' => false, 'msg' => 'Algunos productos ya han sido pagados. Revise PRECUENTA'));
+									//Response::json(data, status, headers, options)
 								}
 								if ($newcantidad == 0) {
 									$oprecuenta->delete();
@@ -1691,7 +1709,7 @@ Boleta&nbsp;
 								//para cuando mando 2 y pagó 1. si no ponía esto, se eliminaba 2 en detped y 1 en detticket
 									if ($newcantidad < 0) {
 										DB::rollBack();
-										return Response::json('Error - Algunos productos adic ya han sido pagados');
+										return Response::json(array('status' => false, 'msg' =>'Algunos productos adic ya han sido pagados. Revise PRECUENTA'));
 										}
 								$oprecuenta->delete();
 								$flaganulacion = 1;
@@ -1718,7 +1736,7 @@ Boleta&nbsp;
 													if ($newcantidad < 0) {
 														DB::rollBack();
 														//para cuando mando 5 y pagó 3. quiero eliminar los 5..
-														return Response::json('Error - Algunos productos adic ya han sido pagados');
+														return Response::json(array('status' => false, 'msg' =>'Algunos productos adic ya han sido pagados. Revise PRECUENTA'));
 													}
 
 													if ($newcantidad == 0) {
@@ -1742,7 +1760,7 @@ Boleta&nbsp;
 														$newcantidad = $oprecuenta->cantidad-$proAdc->cantidad; 
 														if ($newcantidad < 0) {
 															DB::rollBack();
-															return Response::json('Error - Algunos productos adic ya han sido pagados');
+															return Response::json(array('status' => false, 'msg' =>'Algunos productos adic ya han sido pagados. Revise PRECUENTA'));
 														}
 													//}
 													//print_r('entreelse'); die();
@@ -1825,7 +1843,7 @@ Boleta&nbsp;
 						} else {
 							//no hay nada para eliminar
 							DB::rollBack();
-							return Response::json('false - flaganulacion');
+							return Response::json(array('status' => false, 'msg' =>'No hay nada para eliminar. Por favor, actualice la página'));
 						}
 						//si no queda nada, se anula el pedido
 						$odetalles = $pedido->productos()->where('detallepedido.estado', '!=', 'A')->get();
@@ -1849,14 +1867,14 @@ Boleta&nbsp;
 					} else {
 						//si clave no coincide..
 						DB::rollBack();
-						return Response::json('false');
+						return Response::json(array('status' => false, 'msg' =>'Contraseña no coincide.'));
 					}
 
-					/*}catch(Exception $e){
+					}catch(Exception $e){
 						DB::rollBack();
-						return Response::json('falsecat');
+						return Response::json(array('status' => false, 'msg' =>'Error 01'));
 
-					}*/
+					}
 					//DB::commit();
 				}
 			});

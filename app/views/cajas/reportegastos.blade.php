@@ -24,6 +24,7 @@
                     <th>Tipo de Gasto</th>
                     <th>Descripcion</th>
                     <th>Monto</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,7 @@
                     <td>{{$gasto->tipogasto->descripcion}}</td>
                     <td>{{$gasto->descripcion}}</td>
                     <td class="text-right">{{$gasto->importetotal}}</td>
+                    <td class="text-right">@if($gasto->estado == 1) <span class="text-success">CANCELADO</span> @elseif($gasto->estado == 0) <span class="text-danger">EMITIDO</span> @else sin estado @endif</td>
                 </tr>
             @endforeach
             </tbody>

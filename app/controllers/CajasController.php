@@ -224,6 +224,7 @@ class CajasController extends BaseController {
 			if (isset($Opedido)) {
 				$idusuario = $Opedido->usuario->id;
 			}
+			//print_r($idusuario); die();
 			if ($Opedido) {
 				$combinacionesp = DetPedido::selectraw('detallepedido.cantidad , combinacion.nombre,detallepedido.combinacion_id, 
 							 combinacion.precio as preciotcomb,detallepedido.combinacion_c')
@@ -430,7 +431,7 @@ class CajasController extends BaseController {
 						->where('ticketventa.estado', '=', 0)
 						->where('ticketventa.importe', '>=', 0)
 						->sum('ticketventa.idescuento');
-			$totalgastos = $detcaja->gastos()->sum('importetotal');
+			$totalgastos = $detcaja->gastos()->where('estado','=',1)->sum('importetotal');
 			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal');
 			$importetotal = number_format($totalventas+$detcaja->montoInicial+$totalingresoscaja -$totalgastos, 2, '.', '');
 			return View::make('cajas.cerrarcaja', compact('importetotal', 'totalventas', 
@@ -458,8 +459,8 @@ class CajasController extends BaseController {
 			$totalventas = $detcaja->tickets()->where('ticketventa.estado', '=', 0)->where('ticketventa.importe','>=',0)->sum('importe');
 			//print_r($totalventas);
 			//die();
-			$totalgastos = $detcaja->gastos()->sum('importetotal');
-			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal'); //VERIFICAR SI YA SE CERRO CAJA (FIX)
+			$totalgastos = $detcaja->gastos()->where('estado','=',1)->sum('importetotal');
+			$totalingresoscaja = $detcaja->abonocaja()->sum('importetotal'); //VERIFICAR SI YA SE CERRO CAJA (FIX) arreglado!!
             //modify total ingreso caja: round($detcaja->totalingresoscaja,2) cambia a round($totalingresoscaja,2)
 			$importetotal = round($totalventas,2) + round($detcaja->montoInicial,2) + round($totalingresoscaja,2) - round($totalgastos,2);
 			$arqueo = Input::get('arqueo');
@@ -971,7 +972,9 @@ class CajasController extends BaseController {
 			$contador = 1;
 			$totalgastos = 0;
 			foreach ($gastos as $gasto) {
-				$totalgastos = $totalgastos + $gasto->importetotal;
+                if($gasto->estado == 1) {
+                    $totalgastos = $totalgastos + $gasto->importetotal;
+                }
 			}
 			return View::make('cajas.reportegastos', 
 				compact('gastos','detacaja', 'contador','restaurante','totalgastos'));
@@ -990,7 +993,9 @@ class CajasController extends BaseController {
 							 ->get();
 				$totalgastos = 0;
 				foreach ($gastos as $gasto) {
-					$totalgastos = $totalgastos + $gasto->importetotal;
+                    if($gasto->estado == 1) {
+                        $totalgastos = $totalgastos + $gasto->importetotal;
+                    }
 				}
 				$contador = 1;
 				$diario = 1;

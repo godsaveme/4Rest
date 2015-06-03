@@ -34,7 +34,7 @@ if it's not present, don't show loader */
   	{{HTML::style('css/alertify.default.css')}}
   	{{HTML::style('css/kendo/kendo.common.min.css')}}
   	{{HTML::style('css/bootstrap/font-awesome/css/font-awesome.min.css')}}
-  	{{HTML::style('css/kendo/kendo.material.min.css')}}
+  	{{HTML::style('css/kendo/kendo.fiori.min.css')}}
   	{{HTML::style('css/kendo/kendo.mobile.all.min.css')}}
   	{{HTML::style('css/line/green.css')}}
   	{{HTML::style('css/tooltipster.css')}}
