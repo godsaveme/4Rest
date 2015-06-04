@@ -20,8 +20,8 @@
 
              <button type="submit" class="btn btn-primary btn-lg" id="btn_cerrarmesa"><i class="fa fa-external-link"></i> Cerrar Mesa</button>
 
-            <button type="submit" class="btn btn-default btn-lg" id="btn_juntarmesa"><i class="fa fa-chain-broken"></i> Juntar Mesa</button>
-            <a href="#" class="btn btn-info btn-lg" id=""><i class="fa fa-times-circle-o"></i> Anular Pedido</a>
+            <button type="submit" class="btn btn-default btn-lg" id="btn_juntarmesa"><i class="fa fa-chain-broken"></i> Junt. Mes.</button>
+            <a href="#" class="btn btn-info btn-lg" id=""><i class="fa fa-times-circle-o"></i> Anu. Ped.</a>
             <button type="submit" class="btn btn-warning btn-lg" id="btn_salirmesa"><i class="fa fa-reply-all"></i> Regresar</button>
 
           </form>
