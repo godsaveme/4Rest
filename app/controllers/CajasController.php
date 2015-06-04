@@ -36,6 +36,7 @@ class CajasController extends BaseController {
 				$arrayocupadas = array();
 				foreach ($salones as $salon) {
 					$oarraymesas[$salon->id] = Mesa::where('salon_id', '=', $salon->id)->get();
+					//print_r($oarraymesas); die();
                     //limpiar mesas
 					foreach ($oarraymesas[$salon->id] as $dato) {
 						$mesa = Mesa::find($dato->id);
@@ -81,7 +82,21 @@ class CajasController extends BaseController {
 						}
 					}
 				}
-				return View::make('cajas.index2', compact('salones', 'arraymesas', 'detcaja', 'platoscontrol','arrayocupadas'));
+				//para las mesas juntadas
+				$arrPedJuntar = array();
+				$ContJuntar = 1;
+				foreach ($arrayocupadas as $dato) {
+					if (count(DetMesa::where('pedido_id','=',$dato['pedidoid'])->get()) > 1) {
+						if (array_search($dato['pedidoid'],$arrPedJuntar) != null) continue;
+						$arrPedJuntar[$ContJuntar] = $dato['pedidoid'];
+						$ContJuntar++;
+					}
+					
+				}
+				//print_r($arrPedJuntar);
+				//die();
+				//fin
+				return View::make('cajas.index2', compact('salones', 'arraymesas', 'detcaja', 'platoscontrol','arrayocupadas','arrPedJuntar'));
 			} else {
 				$cajas = Caja::where('id','=',0);
 				if (Auth::user()->persona->perfil->nombre === 'Caja') {
@@ -269,6 +284,10 @@ class CajasController extends BaseController {
 				$omesasa = $salon->mesas()->where('estado', '=', 'L')->lists('nombre', 'id');
 					$listamesas[$salon->nombre] = $omesasa;
 			}
+            foreach ($salones as $salon) {
+                $omesasa = $salon->mesas()->lists('nombre', 'id');
+                $listamesasJuntar[$salon->nombre] = $omesasa;
+            }
 			$autorizados = Usuariosautorizados::all()->lists('usuario_id');
 			$usuariosautorizados = Usuario::selectraw("usuario.id, Concat(persona.nombres,' ' , persona.apPaterno) as nombre")
 									->join('persona','persona.id', '=', 'usuario.persona_id')
@@ -279,7 +298,7 @@ class CajasController extends BaseController {
 			return View::make('cajas.cargarmesa2', compact('mesa', 'Opedido', 'combinacionesp', 
 															'platosp', 'placombinacionp', 'familias', 
 															'tiposcomb', 'platosfamilia', 'combinaciones', 
-															'infomozo', 'detcaja', 'listamesas','platoscontrol', 'usuariosautorizados'));
+															'infomozo', 'detcaja', 'listamesas','listamesasJuntar','platoscontrol', 'usuariosautorizados'));
 		} else {
 			return Redirect::to('/cajas');
 		}

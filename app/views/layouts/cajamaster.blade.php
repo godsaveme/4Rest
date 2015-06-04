@@ -326,6 +326,9 @@ if it's not present, don't show loader */
 						<a href="/combinacions/create" target="_blank"><i class="fa fa-plus-square-o"></i> Crear Menú</a>
 					</li>
 					<li class="list-group-item list_menu">
+						<a href="/productos/create" target="_blank"><i class="fa fa-plus-square-o"></i> Crear Producto</a>
+					</li>
+					<li class="list-group-item list_menu">
 					<a href="/monitores/monitorgeneral/{{Auth::user()->id_restaurante}}" target="_blank"><i class="fa fa-plus-square-o"></i> Monitor</a>
 					</li>
 					<li class="list-group-item list_menu">

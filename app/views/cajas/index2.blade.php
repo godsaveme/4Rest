@@ -42,7 +42,18 @@ background-image: linear-gradient(#ccefff 0%, #76caff 100%);"
               @else
                  <br style="color:navy; line-height: 30px">
                  <br>
-              @endif   
+              @endif
+              @if (isset($arrayocupadas[$dato->id]))
+                @if (array_search($arrayocupadas[$dato->id]['pedidoid'], $arrPedJuntar) != null)
+                    
+                      
+
+                           <span style="background:seashell;padding: 2px; border-radius:3px; box-shadow: 0 0 2px rgba(0,0,0,0.2);">
+                              U{{array_search($arrayocupadas[$dato->id]['pedidoid'], $arrPedJuntar)}}
+                           </span>
+                     
+                @endif
+              @endif
             </div>
           </li>
           @endforeach

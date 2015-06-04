@@ -6,6 +6,11 @@ Route::get('/', function () {
 		return Redirect::to('login');
 	});
 
+Route::get('/testing', function () {
+    $detmesa = DetMesa::where('pedido_id','=',26647)->get();
+    print_r($detmesa->toJson()); die();
+});
+
 Route::get('login', function () {
 		if (Auth::check()) {
 			return Redirect::to('web');
@@ -2287,6 +2292,43 @@ Hora:'.date('H:i:s').'</strong>
 					}
 				}
 			});
+
+            Route::post('juntarmesa', function () {
+                if (Request::ajax()) {
+                    $idmesaupdate = Input::get('idmesaupdate'); //mesa actual
+                    $idmesa = Input::get('idmesa'); //id de mesa donde se juntará
+                    $idpedido = Input::get('idpedido');
+                    $mesa = Mesa::find($idmesa); // mesa donde se juntará
+
+                    //verificar si es la misma mesa y que si ya está juntada
+                    $mesasCoin = DetMesa::where('mesa_id','=',$idmesa)->where('pedido_id','=',$idpedido)->get();
+                    //print_r($idmesaupdate.' '.$idmesa); die();
+
+                    if($idmesa != $idmesaupdate){
+
+                        if(count($mesasCoin) > 0){
+                            return Response::json(array('status'=>false,'msg' => 'Mesa ya juntada'));
+
+                        }else{
+                            if ($mesa->estado == 'L') {
+
+                                $detMesa = DetMesa::create(array('mesa_id' => $idmesa, 'pedido_id' => $idpedido));
+                                if (count($detMesa) > 0) {
+                                    return Response::json(array('status'=>true,'msg' => 'Unido con mesa: '.$mesa->salon->nombre.' '.$mesa->nombre));
+                                } else {
+                                    return Response::json(array('status'=>false,'msg' => 'No se logró juntar las mesas'));
+                                }
+                            } elseif($mesa->estado == 'O') {
+                                return Response::json(array('status'=>false,'msg' => 'Mesa Ocupada'));
+                            }
+                        }
+                    }else{
+                        return Response::json(array('status'=>false,'msg' => 'Mesa no puede ser la misma'));
+                    }
+                }
+            });
+
+
 
 		Route::post('imprimirdiariocaja', function () {
 				if (Request::ajax()) {

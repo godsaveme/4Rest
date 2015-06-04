@@ -1737,6 +1737,18 @@ $('#btn_cerrarmesa').on('click', function(event) {
 
 //fincerrarmesa
 
+
+    $('#btn_juntarmesa').on('click', function(event) {
+        event.preventDefault();
+
+        if ($('#infomozo').attr('data-idpedido') != 0) {
+
+            $(".windowsjuntarmesa").data("kendoWindow").open();
+        }else{
+            alert('Envía un pedido para poder juntar mesas');
+        }
+    });
+
 //cliente
 $(".windowsselecionacliente").kendoWindow({
   				actions: ["Close"],
@@ -2011,13 +2023,26 @@ $(".windowsmovermesa").kendoWindow({
   				actions: ["Close"],
   				visible: false,
   				modal: true,
-  				title: 'Seleciona una mesa libre...',
+  				title: 'Selecciona una mesa libre...',
   				resizable: false,
   				draggable: false,
   				animation: false,
   				width: '250px',
   				position: { top: 20 , left: 20}
 });
+
+//movermesa
+    $(".windowsjuntarmesa").kendoWindow({
+        actions: ["Close"],
+        visible: false,
+        modal: true,
+        title: 'Junta mesa con:',
+        resizable: false,
+        draggable: false,
+        animation: false,
+        width: '250px',
+        position: { top: 20 , left: 20}
+    });
 
 $('#btn_movermesa').on('click', function(event) {
 	event.preventDefault();
@@ -2029,6 +2054,10 @@ $('#btn_cancelarmesa').on('click', function(event) {
 	event.preventDefault();
 	$(".windowsmovermesa").data("kendoWindow").close();
 });
+    $('#btn_cancelarjuntarmesa').on('click', function(event) {
+        event.preventDefault();
+        $(".windowsjuntarmesa").data("kendoWindow").close();
+    });
 
 $('#btn_aceptarmesa').on('click', function(event) {
 	event.preventDefault();
@@ -2060,6 +2089,40 @@ $('#btn_aceptarmesa').on('click', function(event) {
 });
 
 //movermesa
+
+    $('#btn_aceptajuntarmesa').on('click', function(event) {
+        event.preventDefault();
+        if ($('#infomozo').attr('data-idpedido') > 0) {
+            var newidmesa = $('#selectjuntarmesa').find('option:selected').val();
+            //alert(newidmesa);
+            $.ajax({
+                url: '/juntarmesa',
+                type: 'POST',
+                dataType: 'json',
+                data: {idmesa: $('#selectjuntarmesa').val(), idpedido: $('#infomozo').attr('data-idpedido'),
+                    idmesaupdate: $('#infomesa').attr('data-id')}
+            })
+                .done(function(data) {
+                    if(data['status'] == true){
+                        alert('Completado. '+data['msg']);
+                        window.location.href = '/cajas/index';
+
+                    }else{
+                        if(data['status'] == false){
+                            alert('Operacion no completada. '+data['msg']);
+                        }
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        }else{
+            alert('Mesa no abierta');
+        }
+    });
 
 //para introducir cant 
 var previous;
