@@ -1,6 +1,6 @@
 <?php
 define('TIKET_DIR', public_path('temp/'));
-//\Debugbar::disable();
+\Debugbar::disable();
 
 Route::get('/', function () {
 		return Redirect::to('login');
