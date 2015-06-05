@@ -1,6 +1,6 @@
 <?php
 define('TIKET_DIR', public_path('temp/'));
-\Debugbar::disable();
+//\Debugbar::disable();
 
 Route::get('/', function () {
 		return Redirect::to('login');
@@ -1166,9 +1166,10 @@ Route::group(array('before' => 'auth'), function () {
                         </table>
                         <table>';
 						$importetotal = 0;
+						$newtamaño = 20*count($precuenta);
 						foreach ($precuenta as $predato) {
 							$html .= '<tr>
-                            <td>'.$predato['nombre'].'</td>
+                            <td>'.substr($predato['nombre'],0,18).'.'.'</td>
                             <td>'.$predato['preciou'].'</td>
                             <td>'.$predato['cantidad'].'</td>
                             <td style="text-align:right;">'.$predato['precio'].'</td>
@@ -1194,13 +1195,17 @@ Boleta&nbsp;
                         	<p>Teléfono: ...........................................</p>
                         	<br>
                         	<p>Email: ...............................................</p>
+                        	<br>
+                        	<center>**No válido como documento contable**</center>
+
 
                         </p>
                         </body>
                         </html>';
 						$headers = array('Content-Type' => 'application/pdf', );
 						$pdfPath = TIKET_DIR.$token.'.pdf';
-						File::put($pdfPath, PDF::load($html,array(0,0,224.00,370.00), 'portrait')->output());
+						$tamaño = 360+$newtamaño;
+						File::put($pdfPath, PDF::load($html,array(0,0,224.00,$tamaño), 'portrait')->output());
                         // init HTML2PDF
                         //$html2pdf = new HTML2PDF('P',array('74','130'), 'es', true, 'UTF-8', array(0, 0, 0, 0));
 
@@ -1215,12 +1220,14 @@ Boleta&nbsp;
 
                         // send the PDF
                         //$html2pdf->Output($pdfPath,'F');
+						//$cmd = "lpr -PEpson-TM-T20II-1 ";
 						$cmd = "lpr -PEpson-TM-T20II-1 ";
+						//$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
 						$cmd .= $pdfPath;
 						//if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);
 						//}
-						File::delete($pdfPath);
+						//File::delete($pdfPath);
 						return Response::json('true');
 					}
 				}

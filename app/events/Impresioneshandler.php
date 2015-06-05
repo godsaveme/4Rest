@@ -260,9 +260,10 @@
 			$html2pdf->WriteHTML($html);
 			$html2pdf->Output($pdfPatd, 'F');
 			$cmd = "lpr -P Epson-TM-T20II-1 ";
+			//$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
 			$cmd .= $pdfPatd;
 			$response = shell_exec($cmd);
-			File::delete($pdfPatd);
+			//File::delete($pdfPatd);
 		}
 
 		public function imprimir_ticketcaja($odetallestickete,$restaurante,$tickete, 
@@ -432,6 +433,6 @@
 			$cmd = "lpr -P".$impresora." ";
 			$cmd .= $pdfPath;
 			$response = shell_exec($cmd);
-			File::delete($pdfPath);
+			//File::delete($pdfPath);
 		}
 	}

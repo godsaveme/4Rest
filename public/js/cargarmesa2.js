@@ -189,7 +189,7 @@ var socket = io.connect('http://'+window.location.hostname+':3000');
     //prod autocomplete
                 $(document).ready(function() {
                     var autocomplete = $("#prodAutoCompl").kendoAutoComplete({
-                        minLength: 1,
+                        minLength: 3,
                         filter: "contains",
                         dataTextField: "nombre",
                         placeholder: "Ingrese nombre de Producto...",
