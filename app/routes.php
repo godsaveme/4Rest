@@ -1177,7 +1177,7 @@ Route::group(array('before' => 'auth'), function () {
 						$newtamaño = 4*count($precuenta);
 						foreach ($precuenta as $predato) {
 							$html .= '<tr>
-                            <td style="width: 180px;>'.str_pad(substr($predato['nombre'],0,15),15,'*').'.'.'</td>
+                            <td style="width: 180px;>'.str_pad(substr($predato['nombre'],0,15),12,'*').'.'.'</td>
                             <td style="width: 50px;text-align: right">'.$predato['preciou'].'</td>
                             <td style="width: 45px; text-align: right">'.$predato['cantidad'].'</td>
                             <td style="width: 45px;text-align: right">'.$predato['precio'].'</td>
