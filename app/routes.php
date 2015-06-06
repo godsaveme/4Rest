@@ -1128,67 +1128,79 @@ Route::group(array('before' => 'auth'), function () {
                                  font-family: arial;
                                  font-size: 13px;
                                  padding: 10px;
-                                 margin-bottom:-45px;
+                                 /*margin-bottom:-45px;
                                  margin-left: -45px;
-                                 margin-top:-45px;
+                                 margin-top:-45px;*/
+                                 /*padding:4px;*/
+                                 margin:5px;
                             }
                             table{
                                 width: 100%;
                                 font-size: 13px;
+                                border-bottom: 1px solid #000;
+                                border-top: 1px solid #000;
+                                margin: 2px 4px 2px 4px;                                
                             }
                             .importetotal{
+                            	width: 150px;
                                 font-size: 14px;
-                                text-align: right;
-                                font-weight: 900;
-                                width: 100%;
+                                /*text-align: right;*/
+
+                                font-weight: bold;
+                                /*margin-right:30px;*/
                                 border-top: 1px solid #000;
+                                padding: 0;
                             }
                             .titulos{
                                 border-bottom: 1px solid #000;
                             }
                             p {
                                 padding: 0;
-                                margin: 2px;
+                                margin: 2px 4px 2px 4px;
                             }
                         </style>
                         <body>
-                        <center><img src="'.public_path('/').'images/productos/tostao.jpg" height="83px" width="98px" alt=""/></center>
-                        <center><h3><strong>PRE-CUENTA</strong></h3></center>
-                        <table>
-                        <thead class="titulos">
-                            <tr >
-                                <td>Descripcion</td>
-                                <td>P.Uni.</td>
-                                <td>Cant.</td>
-                                <td>S/.</td>
-                            </tr>
-                        </thead>
+                        <p style="text-align:center"><img src="'.public_path('/').'images/productos/tostao.jpg" alt=""/></p>
+                        <p style="text-align:center"><h3><strong>PRE-CUENTA</strong></h3></p>
+                        
+                         <table>
+        						<tr style="border-bottom: 5px solid #000;">
+        							<td style="width: 110px; font-weight: bold;">Descripción</td>
+        							<td style="width: 50px; text-align:center;font-weight: bold;">P. Unit.</td>
+        							<td style="width: 40px; text-align:center;font-weight: bold;">Cant.</td>
+        							<td style="width: 40px; text-align:center;font-weight: bold;  ">S/.</td>
+        						</tr>
                         </table>
-                        <table>';
+                        
+                        <table style="width:2600px">';
 						$importetotal = 0;
-						$newtamaño = 20*count($precuenta);
+						$newtamaño = 4*count($precuenta);
 						foreach ($precuenta as $predato) {
 							$html .= '<tr>
-                            <td>'.substr($predato['nombre'],0,18).'.'.'</td>
-                            <td>'.$predato['preciou'].'</td>
-                            <td>'.$predato['cantidad'].'</td>
-                            <td style="text-align:right;">'.$predato['precio'].'</td>
+                            <td style="width: 180px;>'.str_pad(substr($predato['nombre'],0,15),15,'*').'.'.'</td>
+                            <td style="width: 50px;text-align: right">'.$predato['preciou'].'</td>
+                            <td style="width: 45px; text-align: right">'.$predato['cantidad'].'</td>
+                            <td style="width: 45px;text-align: right">'.$predato['precio'].'</td>
                         </tr>';
 							$importetotal = $importetotal+$predato['precio'];
 						}
 						$html .= '</table>
-                        <p class="importetotal">Total S/. '.number_format($importetotal, 2).' </p>
+                        <table>
+                        	<tr>
+                        		<td style="width: 260px;text-align: right;font-weight: bold;">TOTAL: S/.'.number_format($importetotal, 2).'</td>
+                        	</tr>
+                        </table>
                         <p>Descuentos:</p>
                         <p>Mesa Atendida:'.$nombremesa.'</p>
                         <p>Atendido por:'.$nombremozo.'</p>
-                        <hr>
+                        <div style="border-bottom: 1px solid #000; margin: 2px 0px 2px 4px; width:260px;">&nbsp;</div>
                         <p>[  ]&nbsp;
 Boleta&nbsp;
 &nbsp;
 [  ] Factura</p>
                         <p>[  ]&nbsp;Regístrate y acumula puntos. <br>
                         <br>
-                        	<p>Nombres/Razón Social: .................................. </p>
+                        	<p>Nombres/Razón Social: ...............................</p>
                         	<br>
                         	<p>DNI/RUC: ............................................</p>
                         	<br>
@@ -1196,7 +1208,7 @@ Boleta&nbsp;
                         	<br>
                         	<p>Email: ...............................................</p>
                         	<br>
-                        	<center>**No válido como documento contable**</center>
+                        	<p style="text-align:center">**No válido como documento contable**</p>
 
 
                         </p>
@@ -1204,8 +1216,11 @@ Boleta&nbsp;
                         </html>';
 						$headers = array('Content-Type' => 'application/pdf', );
 						$pdfPath = TIKET_DIR.$token.'.pdf';
-						$tamaño = 360+$newtamaño;
-						File::put($pdfPath, PDF::load($html,array(0,0,224.00,$tamaño), 'portrait')->output());
+						$tamaño = 145+$newtamaño;
+						//File::put($pdfPath, PDF::load($html,'A7', 'portrait')->output());
+						$html2pdf = new HTML2PDF('V', array('78', $tamaño), 'fr', true, 'UTF-8', 0);
+						$html2pdf->WriteHTML($html);
+						$html2pdf->Output($pdfPath, 'F');
                         // init HTML2PDF
                         //$html2pdf = new HTML2PDF('P',array('74','130'), 'es', true, 'UTF-8', array(0, 0, 0, 0));
 
@@ -1907,8 +1922,8 @@ Boleta&nbsp;
 					} else if ($tickete->contable == 2) {
 						$impresora = $restaurante->impresoranocontable;
 					}
-					Event::fire('imprimirticket', compact('odetallestickete', 'restaurante', 'tickete',
-							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));
+					/*Event::fire('imprimirticket', compact('odetallestickete', 'restaurante', 'tickete',
+							'cliente', 'nombremesa', 'nombremozo', 'cajero', 'impresora'));*/
 					return Response::json('true');
 				}
 			});
