@@ -6,7 +6,7 @@
 <div class="container">
 <div class="englobe">
 
-                <p class="text-center"><img src="{{Request::root().'/images/productos/tostao.jpg'}}" alt=""/></p>
+                <p class="text-center"><img src="{{Request::root().'/images/productos/tostao_login.jpg'}}" alt=""/></p>
   	{{Form::open(array('url' => 'login', 'class' => 'form-signin' , 'role' => 'form', 'id' => 'login'))}}
 
     		<h3 class="form-signin-heading text-center" style="margin: 0px;">¡Bienvenido a 4Rest!</h3>
