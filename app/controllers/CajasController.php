@@ -9,7 +9,7 @@ class CajasController extends BaseController {
 
 	public function getIndex($idcaja = NULL) {
 		$usuarios = Usuario::where('id_restaurante', '=', Auth::user()->id_restaurante)->lists('id');
-		$platoscontrol = DetPedido::select('usuario.login', 'mesa.nombre as mesa', 'detallepedido.id', 
+		/*$platoscontrol = DetPedido::select('usuario.login', 'mesa.nombre as mesa', 'detallepedido.id', 
 								'detallepedido.estado', 'producto.nombre', 'detallepedido.cantidad',
 								'detallepedido.fechaInicio', 'detallepedido.fechaProceso', 
 								'detallepedido.fechaDespacho', 'detallepedido.fechaDespachado')
@@ -24,6 +24,7 @@ class CajasController extends BaseController {
 								->wherein('pedido.usuario_id',$usuarios)
 								->whereNull('detallepedido.detalle_id')
 								->get();
+		*/						
 		if ($idcaja) {
 			$caja = Caja::find($idcaja);
 			$detcaja = $caja->detallecaja()->where('estado', '=', 'A')
