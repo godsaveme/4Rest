@@ -12,17 +12,17 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <form class="navbar-form navbar-left" role="search">
               <button type="submit" class="btn btn-info btn-lg" id="btn_movermesa"><i class="fa fa-retweet"></i> Mover Mesa</button>
-              <button type="submit" class="btn btn-danger btn-lg" id="ordenarpedidos" data-loading-text="Enviando.."> <i class="fa fa-shopping-cart"></i> Ordenar Pedido</button>
-              <button type="submit" class="btn btn-primary btn-lg" id="btn_precuenta"><i class="fa fa-tasks"></i> Precuenta</button>
-            <button type="submit" class="btn btn-success btn-lg" id="btn_cobrar"><i class="fa fa-usd"></i> Cobrar Pedido</button>
+              <button type="submit" class="btn btn-danger btn-lg" id="ordenarpedidos" data-loading-text="Enviando.." accesskey="S"> <i class="fa fa-shopping-cart"></i> Ordenar Pedido</button>
+              <button type="submit" class="btn btn-primary btn-lg" id="btn_precuenta" accesskey="P"><i class="fa fa-tasks" ></i> Precuenta</button>
+            <button type="submit" class="btn btn-success btn-lg" id="btn_cobrar" accesskey="O"><i class="fa fa-usd"></i> Cobrar Pedido</button>
             <button type="submit" class="btn btn-info btn-lg" id="btn_partircuenta"><i class="fa fa-tags"></i> Partir Cuenta</button>
 
 
-             <button type="submit" class="btn btn-primary btn-lg" id="btn_cerrarmesa"><i class="fa fa-external-link"></i> Cerrar Mesa</button>
+             <button type="submit" class="btn btn-primary btn-lg" id="btn_cerrarmesa" accesskey="C"><i class="fa fa-external-link"></i> Cerrar Mesa</button>
 
             <button type="submit" class="btn btn-default btn-lg" id="btn_juntarmesa"><i class="fa fa-chain-broken"></i> Junt. Mes.</button>
             <a href="#" class="btn btn-info btn-lg" id=""><i class="fa fa-times-circle-o"></i> Anu. Ped.</a>
-            <button type="submit" class="btn btn-warning btn-lg" id="btn_salirmesa"><i class="fa fa-reply-all"></i> Regresar</button>
+            <button type="submit" class="btn btn-warning btn-lg" id="btn_salirmesa" accesskey="R"><i class="fa fa-reply-all" ></i> Regresar</button>
 
           </form>
           </div>

@@ -782,7 +782,7 @@ $('body').on('mouseenter', '#enviarpf .notas', function(event) {
             success: function(data) {
               var contenido = '<div style="width: 25em; height: 300px; overflow-y: scroll" class="list-group">';
               		contenido += '<div class="list-group-item">';
-               		contenido += '<input type="search" id="inputpro_'+idpro+filaid+'" class="form-control" value="" required="required" title=""> <br>';
+               		contenido += '<input type="search" id="inputpro_'+idpro+filaid+'" class="form-control search_nota" value="" required="required" title=""> <br>';
                		contenido += '<button type="button" class="btn btn-primary btn-sm" style="margin-right: 5px;"'
                		contenido += 'onclick = "guardarnotapro('+idpro+','+filaid+')">Guardar</button>';
                		contenido += '</div>';
@@ -792,6 +792,12 @@ $('body').on('mouseenter', '#enviarpf .notas', function(event) {
                   }
                   contenido += '</div>';
               origin.tooltipster('content', contenido).data('ajax', 'cached');
+              $( ".search_nota" ).keypress(function( event ) {
+              		if ( event.which == 13 ) {
+						guardarnotapro(idpro,filaid);
+					}
+				});
+              $(".search_nota").focus();
             }
             });
            }
@@ -2227,5 +2233,24 @@ $('body').on('blur', '.kendoNumr2', function(event) {
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
-//fin para intro cant	
+//fin para intro cant
+
+var wnd = $(".modalwindowprecuenta").data("kendoWindow");
+	
+		$(document).keypress(function(){
+			if(!wnd.element.is(":hidden"))
+			{
+						if ( event.which == 13 ) {
+											event.preventDefault();
+											/* Act on the event */
+											precuenta(2, 0);
+											$('.modalwindowprecuenta').data("kendoWindow").close();
+										}
+							}
+		});
+
+
+
 })
+
+
