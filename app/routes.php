@@ -1160,8 +1160,8 @@ Route::group(array('before' => 'auth'), function () {
                             }
                         </style>
                         <body>
-                        <p style="text-align:center"><img src="'.public_path('/').'images/productos/tostao.jpg" alt=""/></p>
-                        <p style="text-align:center"><h3><strong>PRE-CUENTA</strong></h3></p>
+                        <p style="text-align:center"><img src="'.public_path('/').'images/productos/tostao.jpg" width="98px" height="84px" alt=""/></p>
+                        <p style="text-align:center"><h4><strong>PRE-CUENTA</strong></h4></p>
                         
                          <table>
         						<tr style="border-bottom: 5px solid #000;">
@@ -1187,27 +1187,21 @@ Route::group(array('before' => 'auth'), function () {
 						$html .= '</table>
                         <table>
                         	<tr>
-                        		<td style="width: 260px;text-align: right;font-weight: bold;">TOTAL: S/.'.number_format($importetotal, 2).'</td>
+                        		<td style="width: 260px;text-align: right;font-weight: bold; font-size:13px;">TOTAL: S/.'.number_format($importetotal, 2).'</td>
                         	</tr>
                         </table>
-                        <p>Descuentos:</p>
-                        <p>Mesa Atendida:'.$nombremesa.'</p>
-                        <p>Atendido por:'.$nombremozo.'</p>
+                        <p>Mesa Atendida: '.$nombremesa.'</p>
+                        <p>Atendido por: '.$nombremozo.'</p>
                         <div style="border-bottom: 1px solid #000; margin: 2px 0px 2px 4px; width:260px;">&nbsp;</div>
                         <p>[  ]&nbsp;
 Boleta&nbsp;
 &nbsp;
-[  ] Factura</p>
-                        <p>[  ]&nbsp;Regístrate y acumula puntos. <br>
-                        <br>
-                        	<p>Nombres/Razón Social: ...............................</p>
-                        	<br>
+[  ] Factura&nbsp; [ ]Por Cons.&nbsp; [ ]Detall.</p>
+                        <p>
+                           	<p>Nombres/Rzn Soc: ..................................</p>
+                        	<p>Direc.: ...........................................<p>
                         	<p>DNI/RUC: ............................................</p>
-                        	<br>
-                        	<p>Teléfono: ...........................................</p>
-                        	<br>
-                        	<p>Email: ...............................................</p>
-                        	<br>
+                        	<br>                        	
                         	<p style="text-align:center">**No válido como documento contable**</p>
 
 
