@@ -141,7 +141,7 @@
         <input id="prodAutoCompl" style="width: 100%" accesskey="w">
 
 
-	   <ul class="text-center" id="carta">
+	   <ul id="carta">
         @foreach ($tiposcomb as $tipocomb)
             <li>
             {{$tipocomb->TipoCombinacionNombre}}
@@ -153,26 +153,34 @@
             </ul>
             </li>
         @endforeach
-        @foreach ($familias as $familia)
-            <li class="familia" data-idf="{{$familia->id}}">
-            {{$familia->nombre}}
-            @foreach ($platosfamilia[$familia->nombre] as $datos)
-            <div class="product" data-pronombre = "{{$datos->nombre}}" 
-                data-proid="{{$datos->id}}" data-proprecio = "{{$datos->precio}}"
-                data-cantsabores = "
-                @if ($datos->cantidadsabores)
-                {{$datos->cantidadsabores}}
-                @endif">
-            {{HTML::image($datos->imagen)}}
-            <h3 style="color:#ab7829">{{$datos->nombre}}</h3>
 
-            <h4 style="color:#9e9e9e; font-size:1.3rem;">S/.{{$datos->precio}}</h4>
-            <p></p>
-            </div>
-            @endforeach
-          </li>
-        @endforeach
         </ul>
+
+        <ul id="newCarta">
+        </ul>
+
+        
+
+
+        <script type="text/x-kendo-template" id="template_newCesta">
+            <li class="familia">
+           #:value#
+           #for (var i in items) {#
+                <div class="product" data-pronombre="${items[i].nombre}" data-proid="${items[i].id}" data-proprecio="${items[i].precio}" data-cantsabores="${items[i].cantidadsabores}">
+                    #if (items[i].imagen) {# <img src="#:items[i].imagen#"> #}#
+                   
+                   <h3 style="color:\#ab7829"> #:items[i].nombre# </h3>
+                   <h4 style="color:\#9e9e9e; font-size:1.3rem;">S/.#:items[i].precio#</h4>
+                   <p></p>
+               </div>
+            #}#
+          
+          </li>
+         </script>
+
+        
+
+
 	</div>
 </div>
 <script type="text/x-kendo-template" id="template_cestacombinaciones">

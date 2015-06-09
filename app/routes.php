@@ -1,6 +1,6 @@
 <?php
 define('TIKET_DIR', public_path('temp/'));
-\Debugbar::disable();
+//\Debugbar::disable();
 
 Route::get('/', function () {
 		return Redirect::to('login');
@@ -1236,8 +1236,8 @@ Boleta&nbsp;
                         // send the PDF
                         //$html2pdf->Output($pdfPath,'F');
 						//$cmd = "lpr -PEpson-TM-T20II-1 ";
-						$cmd = "lpr -PEpson-TM-T20II-1 ";
-						//$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
+						$cmd = "lpr -P Epson-TM-T20II-1 ";
+						//$cmd = "lpr -P Photosmart-Plus-B209a-m ";
 						$cmd .= $pdfPath;
 						//if (Auth::user()->id_restaurante == 2) {
 							$response = shell_exec($cmd);
@@ -3678,6 +3678,43 @@ AND detallepedido.combinacion_id IS NOT NULL
 				$user->save();
 				return Response::json($codigo);
 			}
+		});
+
+		Route::get('/getCarta', function(){
+		if (Request::ajax()) {
+			/*$oComb = Combinacion::where('nombre','=','Normal')->first();
+			$familias = Familia::select('familia.nombre', 'familia.id')
+								->join('producto', 'producto.familia_id', '=', 'familia.id')
+								->join('precio', 'precio.producto_id', '=', 'producto.id')
+								->where('precio.combinacion_id', '=', $oComb->id)
+								->groupby('familia.nombre')
+								->get();
+
+			/*$platosfamilia = array();
+			foreach ($familias as $dato) {
+			$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores', 'producto.imagen', 'familia.nombre as familia')
+												 ->join('precio', 'precio.producto_id', '=', 'producto.id')
+												 ->join('combinacion', 'combinacion.id', '=', 'precio.combinacion_id')
+												 ->join('familia','familia.id','=','producto.familia_id')
+												 ->where('combinacion.nombre', '=', 'Normal')
+												 ->where('producto.familia_id', '=', $dato->id, 'AND')
+												 ->where('producto.estado', '=', 1)
+												 ->orderby('producto.nombre','ASC')
+												 ->get();
+			}*/
+
+			$products = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores', 'producto.imagen', 'familia.nombre as familia')
+												 ->join('precio', 'precio.producto_id', '=', 'producto.id')
+												 ->join('combinacion', 'combinacion.id', '=', 'precio.combinacion_id')
+												 ->join('familia','familia.id','=','producto.familia_id')
+												 ->where('combinacion.nombre', '=', 'Normal')												 
+												 ->where('producto.estado', '=', 1)
+												 ->orderby('familia.nombre','ASC')
+												 ->get();
+
+			return Response::json($products);
+		}
+
 		});
 
 	});

@@ -22,7 +22,7 @@ if it's not present, don't show loader */
   width: 100%;
   height: 100%;
   z-index: 99999;
-  background: url(/img/Preloader_2.gif) center no-repeat #fff;
+  background: url(/img/Preloader_21.gif) center no-repeat #fff;
 }
   </style>
 	{{HTML::style('css/normalize.css')}}
@@ -38,7 +38,7 @@ if it's not present, don't show loader */
   	{{HTML::style('css/kendo/kendo.mobile.all.min.css')}}
   	{{HTML::style('css/line/green.css')}}
   	{{HTML::style('css/tooltipster.css')}}
-  	{{HTML::style('css/themes/tooltipster-shadow.css')}}
+  	{{HTML::style('css/themes/tooltipster-light.css')}}
   	{{HTML::style('css/generalx2.css')}}
   	{{HTML::style('css/notificaciones.css')}}
   	<!--add fonts-->
@@ -65,7 +65,7 @@ if it's not present, don't show loader */
   // Wait for window load
   $(window).load(function() {
     // Animate loader off screen
-    $(".se-pre-con").fadeOut("slow");;
+    $(".se-pre-con").fadeOut("fast");;
   });
   </script>
 

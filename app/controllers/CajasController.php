@@ -190,12 +190,12 @@ class CajasController extends BaseController {
 			$detcaja = Detcaja::where('estado', '=', 'A')->where('usuario_id', '=', Auth::user()->id, 'AND')->first();
 			/*CARTA*/
 			$oComb = Combinacion::where('nombre','=','Normal')->first();
-			$familias = Familia::select('familia.nombre', 'familia.id')
+			/*$familias = Familia::select('familia.nombre', 'familia.id')
 								->join('producto', 'producto.familia_id', '=', 'familia.id')
 								->join('precio', 'precio.producto_id', '=', 'producto.id')
 								->where('precio.combinacion_id', '=', $oComb->id)
 								->groupby('familia.nombre')
-								->get();
+								->get();*/
 			$tiposcomb = DB::select( DB::raw("select * from (select tipocomb.id as TipoCombinacionId, tipocomb.nombre as TipoCombinacionNombre, 
 						combinacion.id as CombinacionId, combinacion.nombre as CombinacionNombre, horComb.FechaInicio AS x1, 
 						horComb.FechaTermino AS x2, horComb.id AS horComb_id 
@@ -224,7 +224,7 @@ class CajasController extends BaseController {
 						and x.TipoCombinacionId =".$dato->TipoCombinacionId." GROUP BY CombinacionId"));
 			}
 
-			$platosfamilia = array();
+			/*$platosfamilia = array();
 			foreach ($familias as $dato) {
 				$platosfamilia[$dato->nombre] = Producto::select('producto.nombre', 'producto.id', 'precio.precio', 'producto.cantidadsabores', 'producto.imagen')
 												 ->join('precio', 'precio.producto_id', '=', 'producto.id')
@@ -234,7 +234,8 @@ class CajasController extends BaseController {
 												 ->where('producto.estado', '=', 1)
 												 ->orderby('producto.nombre','ASC')
 												 ->get();
-			}
+			}*/
+			//print_r($platosfamilia); die();
 			/*fincarta*/
 			$mesa = Mesa::find($id);
 			$Opedido = $mesa->pedidos()->whereIn('pedido.estado', array('I'))->first();

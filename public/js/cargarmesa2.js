@@ -183,10 +183,57 @@ var socket = io.connect('http://'+window.location.hostname+':3000');
     CalcularPrecioTotal();
 
     $("#carta").kendoPanelBar({
-        animation: false
+        animation: false,
     });
+    /*$("#newCarta").kendoPanelBar({
+        animation: false,
+    });*/
 
-    //prod autocomplete
+/*$("#newCarta").kendoMobileListView({
+            dataSource: kendo.data.DataSource.create({
+            	transport: {
+            		read: {
+            			url: "/getCarta",
+            			dataType: "json"
+            		}
+            	},
+            	 group: "familia" 
+            }),
+            template: $("#customListViewTemplate").html(),
+            headerTemplate: "<h2> ${value}</h2>"	
+        });*/
+
+     var templateCesta = kendo.template($("#template_newCesta").html());
+
+            var dataSourceNewCarta = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "/getCarta",
+                        dataType: "json"
+                    }
+                },
+                requestStart: function() {
+                    kendo.ui.progress($("#newCarta"), true);
+                },
+                requestEnd: function() {
+                    kendo.ui.progress($("#newCarta"), false);
+                    
+                },
+                change: function() {
+                    $("#newCarta").html(kendo.render(templateCesta, this.view()));
+                    //$(document).ready(function() {
+                    $("#newCarta").kendoPanelBar({
+				        animation: false,
+				    });
+                	//});
+                },
+                group: { field: "familia" }
+            });
+
+            dataSourceNewCarta.read();
+
+
+           //prod autocomplete
                 $(document).ready(function() {
                     var autocomplete = $("#prodAutoCompl").kendoAutoComplete({
                         minLength: 3,
@@ -718,7 +765,8 @@ $('body').on('mouseenter', '#enviarpf .notas', function(event) {
         trigger: 'click',
         position:'right',
         content: 'Cargando.....',
-        theme: 'tooltipster-shadow',
+        theme: 'tooltipster-light',
+        animation: 'grow',
         contentAsHTML: 'true',
         interactive: 'true',
         functionBefore: function(origin, continueTooltip) {
@@ -761,7 +809,7 @@ $('body').on('mouseenter', '#enviarcombi .notas', function(event) {
         trigger: 'click',
         position:'right',
         content: 'Cargando.....',
-        theme: 'tooltipster-shadow',
+        theme: 'tooltipster-light',
         contentAsHTML: 'true',
         interactive: 'true',
         functionBefore: function(origin, continueTooltip) {
@@ -807,7 +855,7 @@ $('body').on('mouseenter', '#enviarpf .btn_adi', function(event) {
         trigger: 'click',
         position:'right',
         content: 'Cargando.....',
-        theme: 'tooltipster-shadow',
+        theme: 'tooltipster-light',
         contentAsHTML: 'true',
         interactive: 'true',
         functionBefore: function(origin, continueTooltip) {
@@ -936,7 +984,7 @@ $('body').on('mouseenter', '.produnombre', function(event) {
 	        trigger: 'click',
 	        position:'right',
 	        content: 'Cargando.....',
-	        theme: 'tooltipster-shadow',
+	        theme: 'tooltipster-light',
 	        contentAsHTML: 'true',
 	        interactive: 'true',
 	        functionBefore: function(origin, continueTooltip) {
