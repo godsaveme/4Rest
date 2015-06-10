@@ -1172,7 +1172,7 @@ Route::group(array('before' => 'auth'), function () {
         						</tr>
                         </table>
                         
-                        <table style="width:2600px">';
+                        <table style="width:260px">';
 						$importetotal = 0;
 						$newtamaño = 4*count($precuenta);
 						foreach ($precuenta as $predato) {
@@ -1198,9 +1198,9 @@ Boleta&nbsp;
 &nbsp;
 [  ] Factura&nbsp; [ ]Por Cons.&nbsp; [ ]Detall.</p>
                         <p>
-                           	<p>Nombres/Rzn Soc: ..................................</p>
-                        	<p>Direc.: ...........................................<p>
-                        	<p>DNI/RUC: ............................................</p>
+                           	<p>Nombres/Rzn Soc: .....................................</p>
+                        	<p>Direc.: .........................................................</p>
+                        	<p>DNI/RUC: ...................................................</p>
                         	<br>                        	
                         	<p style="text-align:center">**No válido como documento contable**</p>
 
