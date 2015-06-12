@@ -1230,7 +1230,7 @@ Boleta&nbsp;
                         // send the PDF
                         //$html2pdf->Output($pdfPath,'F');
 						//$cmd = "lpr -PEpson-TM-T20II-1 ";
-						$cmd = "lpr -P Epson-TM-T20II-1 ";
+						$cmd = "lpr -P barra ";
 						//$cmd = "lpr -P Photosmart-Plus-B209a-m ";
 						$cmd .= $pdfPath;
 						//if (Auth::user()->id_restaurante == 2) {
