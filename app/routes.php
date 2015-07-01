@@ -7,8 +7,23 @@ Route::get('/', function () {
 	});
 
 Route::get('/testing', function () {
-    $detmesa = DetMesa::where('pedido_id','=',26647)->get();
-    print_r($detmesa->toJson()); die();
+    /*$detmesa = DetMesa::where('pedido_id','=',26647)->get();
+    print_r($detmesa->toJson()); die();*/
+    
+
+    $myfile = fopen("newfile.php", "w") or die("Unable to open file!");
+	$txt = '<?php require_once(dirname(__FILE__) . "/../app/escpos/Escpos.php");
+	$printer = new Escpos();
+$printer -> text("Hello World!\n");
+$printer -> cut();
+$printer -> close();';
+	fwrite($myfile, $txt);
+	fclose($myfile);
+	$cmd = 'php /var/www/html/4Rest/public/newfile.php | nc 192.168.0.24 9100 > /dev/null 2>/dev/null &';
+	//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
+	shell_exec($cmd);//exec('sudo -u myuser ls /');
+	//echo $response;
+
 });
 
 Route::get('login', function () {
@@ -963,7 +978,8 @@ Route::group(array('before' => 'auth'), function () {
 						DB::rollBack();
 						return Response::json($e->getMessage().'. L:'.$e->getLine());
 					}
-					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
+					//Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
+					Event::fire('imprimirpedidosESCPOS', compact('arrayimprimir', 'mozoid', 'idmesa', 'cocinas'));
 					DB::commit();
 					return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid'));
 				}
@@ -1116,6 +1132,46 @@ Route::group(array('before' => 'auth'), function () {
 						DB::commit();
 						return Response::json($precuentaf);
 					} elseif ($tipopre == 2) {
+						if(true){
+							$txt = '<?php require_once(dirname(__FILE__) . "/../app/escpos/Escpos.php");
+							$printer = new Escpos();
+							$printer -> text("Pre Cuenta\n");
+							$printer -> feed();
+							$printer -> text("---------------------------------------");
+							$printer -> text("Descripción 	P.Unit.	   Cant. 	Subt.");
+							$printer -> text("---------------------------------------");';
+
+							$importetotal = 0;
+							foreach ($precuenta as $predato) {
+								$txt .= '$printer -> text("'.str_pad(substr($predato["nombre"],0,12),12,"*").'.	'.$predato["preciou"].'		X'.$predato["cantidad"].'	'.$predato["precio"].'");';
+
+								$importetotal = $importetotal+$predato["precio"];
+							}
+
+							$txt .= '$printer -> text("Total");';
+
+							$txt .= '$printer -> text("S/.'.number_format($importetotal, 2).'\n");';
+							$txt .= '$printer -> feed();';
+							$txt .= '$printer -> text("Mesa Atendida: '.$nombremesa.'\n");';
+							$txt .= '$printer -> text("Mozo: '.$nombremozo.'\n");';
+
+							$txt .= '$printer -> text("---------------------------------\n");';
+							$txt .= '$printer -> text("Fecha: '.date("d-m-Y").' '.date("H:i:s").'\n");';
+							$txt .= '$printer -> text("<<No válido como documento contable>>\n");';
+							$txt .= '$printer -> cut();';
+							$txt .= '$printer -> close();';
+
+							$myfile = fopen("preCuenta.php", "w") or die("Unable to open file!");
+							fwrite($myfile, $txt);
+							fclose($myfile);
+							$cmd = 'php /var/www/html/4Rest/public/preCuenta.php | nc 192.168.0.100 9100 > /dev/null 2>/dev/null &';
+							//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
+							shell_exec($cmd);//exec('sudo -u myuser ls /');
+
+							return Response::json('true');
+
+
+						}else{
 						$token = sha1(microtime().'tk');
 						$html = '<!doctype html>
                         <html lang="es">
@@ -1238,6 +1294,8 @@ Boleta&nbsp;
 						//}
 						//File::delete($pdfPath);
 						return Response::json('true');
+
+						}
 					}
 				}
 			});

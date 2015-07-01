@@ -148,6 +148,78 @@
 			}
 		}
 
+		public function imprimirpedidosESCPOS($datos, $mozoid, $idmesa,$cocinas){
+			
+			$infomozo = Usuario::find($mozoid);
+			$infomesa = Mesa::find($idmesa);
+			$date = date('l jS \of F Y h:i:s A');
+			$counter = 1;
+			foreach ($cocinas as $datococinas) {
+
+					$txt = '<?php require_once(dirname(__FILE__) . "/../app/escpos/Escpos.php");
+							$printer = new Escpos();
+						    $printer -> text("'.substr($datococinas,0,-2).'\n");						    
+						    $printer -> text("Fecha: '.date("d-m-Y").' / Hora: '.date("H:i:s").'\n");
+						    $printer -> text("Mesa:		'.$infomesa->nombre.'\n");
+						    $printer -> text("Mozo:		'.$infomozo->login.'\n");
+						    $printer -> text("---------------------------------\n");
+						    $printer -> text("Cant.					Descripción\n	");
+						    $printer -> text("---------------------------------\n");';
+
+
+						            
+					if (!empty($datos[$datococinas])) {
+						foreach ($datos[$datococinas] as $dato) {
+							$txt .= '$printer -> text("'.$dato["cantidad"].'   '.$dato["nombre"].'\n");';
+							
+							
+							if(isset($dato["sabores"])){
+								$txt .= '$printer -> text("	");';
+								foreach ($dato['sabores'] as $sabor) {
+									$txt .= '$printer -> text(" >'.$sabor["nombre"].'");';
+								}
+								$txt .= '$printer -> text("\n");';
+							}
+							if(isset($dato["notas"])){
+								$txt .= '$printer -> text(" 	");';
+								foreach ($dato['notas'] as $nota) {
+									$txt .= '$printer -> text(" /'.$nota["nombre"].'");';
+								}
+								$txt .= '$printer -> text("\n");';
+							}
+							if(isset($dato["adicionales"])){
+								$txt .= '$printer -> text(" 	");';
+								foreach ($dato['adicionales'] as $adi) {
+									$txt .= '$printer -> text(" *'.$adi["nombre"].' x '.$adi["cantidad"].'");';
+								}
+								$txt .= '$printer -> text("\n");';
+							}
+							
+						}
+					}
+
+						
+
+						$txt .= '$printer -> text("---------------------------------\n");';
+						$txt .= '$printer -> cut();';
+						$txt .= '$printer -> close();';
+
+						if (!empty($datos[$datococinas])) {
+							$ococina = Areadeproduccion::find(substr($datococinas, -1));
+							$myfile = fopen("printOrders".$counter.".php", "w") or die("Unable to open file!");
+							fwrite($myfile, $txt);
+							fclose($myfile);
+							$cmd = 'php /var/www/html/4Rest/public/printOrders'.$counter.'.php | nc '.$ococina->impresora.' 9100 > /dev/null 2>/dev/null &';
+							//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
+							shell_exec($cmd);//exec('sudo -u myuser ls /');
+							$counter = $counter + 1;
+						}
+					
+			}
+
+		}
+
+
 		public function imprimirreportediariocaja($datos){
 			$html = self::ENCABEZADOHTML.'<div class="container">
 						            <div class="encabezado">

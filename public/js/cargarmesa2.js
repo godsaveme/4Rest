@@ -1,3 +1,54 @@
+function selecionaradicionalp(idpro, idadi, nombreadi, filaid, adiprecio){
+	dataSourceprof.fetch(function(){
+		var data = this.get(filaid);
+		var oadicional = data.adicionales;
+		var nocantidad = data.cantidadadicionales;
+		var n =  -1;
+		var newadicional = {};
+		if(oadicional){
+			for (var i = nocantidad - 1; i >= 0; i--) {
+				var ocantidad = data['adicionales'][i]['cantidad'];
+				var newcantidad = 0;
+				if(data['adicionales'][i]['idadicional'] == idadi){
+					newcantidad = parseInt(ocantidad) + 1;
+					n = 1;
+				}else{
+					newcantidad = ocantidad;
+				}
+				var newprecio = parseFloat(data['adicionales'][i]['precio']) * parseInt(newcantidad);
+				newadicional[i] = {idadicional:data['adicionales'][i]['idadicional'] , 
+									   nombre: data['adicionales'][i]['nombre'],
+									   precio: data['adicionales'][i]['precio'],
+									   preciot: parseFloat(newprecio).toFixed(2),
+									   cantidad: newcantidad};
+			}
+			var newcantidadadicionales = nocantidad;
+		}else{
+			n = oadicional.indexOf(idadi);
+		}
+		if (parseInt(n) == -1) {
+			if(oadicional){
+				for (var i = nocantidad - 1; i >= 0; i--) {
+					newadicional[i] = {idadicional:data['adicionales'][i]['idadicional'] , 
+									   nombre: data['adicionales'][i]['nombre'],
+									   precio: data['adicionales'][i]['precio'],
+									   cantidad: data['adicionales'][i]['cantidad'],
+										preciot: data['adicionales'][i]['preciot']};
+				}
+					newadicional[nocantidad] = {idadicional: idadi, nombre: nombreadi, 
+												precio: adiprecio, preciot:adiprecio, cantidad: 1};
+					var newcantidadadicionales = parseInt(nocantidad) + 1;
+			}else{
+				newadicional[nocantidad] = {idadicional: idadi, nombre: nombreadi, 
+											precio: adiprecio, preciot: adiprecio,cantidad: 1};
+			}
+			var newcantidadadicionales = parseInt(nocantidad) + 1;
+		}
+		dataSourceprof.pushUpdate({id: filaid, adicionales: newadicional, cantidadadicionales: newcantidadadicionales});
+		console.log(dataSourceprof);
+	});
+CalcularPrecioTotal();
+}
 function guardarnotaprocombi(idpro, filaid, procombi){
 	$.ajax({
 		url: '/crearnotapro',
@@ -162,6 +213,19 @@ function selecionanotapro2(idpro, idnota, nombre, filaid, procombi){
 	});
 }
 //fin notas
+
+function CalcularPrecioTotal(){
+                    $total = 0;
+                    $c = 0;
+                    $('.montoTotal').each(function(index) {
+                      $total += parseFloat($(this).text());
+                      ++$c;
+                    });
+
+                    $('.montoTotalcu').html('S/.'+ $total.toFixed(2));
+                    $('.NmrItms').html($c);
+                    $('#infomesa').data('itotal', $total.toFixed(2));
+    }
 
 $(document).ready(function() {
 
@@ -889,57 +953,6 @@ $('body').on('mouseenter', '#enviarpf .btn_adi', function(event) {
   });
 });
 
-function selecionaradicionalp(idpro, idadi, nombreadi, filaid, adiprecio){
-	dataSourceprof.fetch(function(){
-		var data = this.get(filaid);
-		var oadicional = data.adicionales;
-		var nocantidad = data.cantidadadicionales;
-		var n =  -1;
-		var newadicional = {};
-		if(oadicional){
-			for (var i = nocantidad - 1; i >= 0; i--) {
-				var ocantidad = data['adicionales'][i]['cantidad'];
-				var newcantidad = 0;
-				if(data['adicionales'][i]['idadicional'] == idadi){
-					newcantidad = parseInt(ocantidad) + 1;
-					n = 1;
-				}else{
-					newcantidad = ocantidad;
-				}
-				var newprecio = parseFloat(data['adicionales'][i]['precio']) * parseInt(newcantidad);
-				newadicional[i] = {idadicional:data['adicionales'][i]['idadicional'] , 
-									   nombre: data['adicionales'][i]['nombre'],
-									   precio: data['adicionales'][i]['precio'],
-									   preciot: parseFloat(newprecio).toFixed(2),
-									   cantidad: newcantidad};
-			}
-			var newcantidadadicionales = nocantidad;
-		}else{
-			n = oadicional.indexOf(idadi);
-		}
-		if (parseInt(n) == -1) {
-			if(oadicional){
-				for (var i = nocantidad - 1; i >= 0; i--) {
-					newadicional[i] = {idadicional:data['adicionales'][i]['idadicional'] , 
-									   nombre: data['adicionales'][i]['nombre'],
-									   precio: data['adicionales'][i]['precio'],
-									   cantidad: data['adicionales'][i]['cantidad'],
-										preciot: data['adicionales'][i]['preciot']};
-				}
-					newadicional[nocantidad] = {idadicional: idadi, nombre: nombreadi, 
-												precio: adiprecio, preciot:adiprecio, cantidad: 1};
-					var newcantidadadicionales = parseInt(nocantidad) + 1;
-			}else{
-				newadicional[nocantidad] = {idadicional: idadi, nombre: nombreadi, 
-											precio: adiprecio, preciot: adiprecio,cantidad: 1};
-			}
-			var newcantidadadicionales = parseInt(nocantidad) + 1;
-		}
-		dataSourceprof.pushUpdate({id: filaid, adicionales: newadicional, cantidadadicionales: newcantidadadicionales});
-		console.log(dataSourceprof);
-	});
-CalcularPrecioTotal();
-}
 
 $('body').on('click', '#enviarpf .btn_minadi', function(event) {
 	event.preventDefault();
