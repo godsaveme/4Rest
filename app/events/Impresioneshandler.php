@@ -209,7 +209,7 @@
 							$myfile = fopen("printOrders".$counter.".php", "w") or die("Unable to open file!");
 							fwrite($myfile, $txt);
 							fclose($myfile);
-							$cmd = 'php /var/www/html/4Rest/public/printOrders'.$counter.'.php | nc '.$ococina->impresora.' 9100 > /dev/null 2>/dev/null &';
+							$cmd = 'php '.public_path("/").'printOrders'.$counter.'.php | nc '.$ococina->impresora.' 9100 > /dev/null 2>/dev/null &';
 							//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
 							shell_exec($cmd);//exec('sudo -u myuser ls /');
 							$counter = $counter + 1;
