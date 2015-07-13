@@ -227,6 +227,7 @@
 
 
 		public function imprimirreportediariocaja($datos){
+            /*print_r('hola'); die();*/
 			/*$html = self::ENCABEZADOHTML.'<div class="container">
 						            <div class="encabezado">
 						                REPORTE DIARIO CAJA

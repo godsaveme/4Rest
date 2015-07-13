@@ -2444,7 +2444,7 @@ Hora:'.date('H:i:s').'</strong>
 						'fecha'                            => Input::get('fecha'),
 						'rango'                            => Input::get('rango'));
 					/*Event::fire('imprimirreportediariocaja', compact('arraydatos'));*/
-					return Response::json('true');
+					return Response::json('false');
 				}
 			});
 
