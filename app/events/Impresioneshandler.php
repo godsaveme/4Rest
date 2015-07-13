@@ -158,37 +158,43 @@
 
 					$txt = '<?php require_once(dirname(__FILE__) . "/../app/escpos/Escpos.php");
 							$printer = new Escpos();
-						    $printer -> text("'.substr($datococinas,0,-2).'\n");						    
+							$printer -> feed();
+							$printer -> feed();
+							$printer -> setJustification(Escpos::JUSTIFY_CENTER);
+							$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);
+						    $printer -> text("'.substr($datococinas,0,-2).'\n");
+						    $printer -> selectPrintMode();
+							$printer -> setJustification(Escpos::JUSTIFY_LEFT);
 						    $printer -> text("Fecha: '.date("d-m-Y").' / Hora: '.date("H:i:s").'\n");
-						    $printer -> text("Mesa:		'.$infomesa->nombre.'\n");
-						    $printer -> text("Mozo:		'.$infomozo->login.'\n");
-						    $printer -> text("---------------------------------\n");
-						    $printer -> text("Cant.					Descripción\n	");
-						    $printer -> text("---------------------------------\n");';
+						    $printer -> text("Mesa:  '.$infomesa->nombre.'\n");
+						    $printer -> text("Mozo:  '.$infomozo->login.'\n");
+						    $printer -> text("------------------------------------------------\n");
+						    $printer -> text("Cant.      Descripción\n");
+						    $printer -> text("------------------------------------------------\n");';
 
 
 						            
 					if (!empty($datos[$datococinas])) {
 						foreach ($datos[$datococinas] as $dato) {
-							$txt .= '$printer -> text("'.$dato["cantidad"].'   '.$dato["nombre"].'\n");';
+							$txt .= '$printer -> text("X'.$dato["cantidad"].'   '.$dato["nombre"].'\n");';
 							
 							
 							if(isset($dato["sabores"])){
-								$txt .= '$printer -> text("	");';
+								$txt .= '$printer -> text(" ");';
 								foreach ($dato['sabores'] as $sabor) {
 									$txt .= '$printer -> text(" >'.$sabor["nombre"].'");';
 								}
 								$txt .= '$printer -> text("\n");';
 							}
 							if(isset($dato["notas"])){
-								$txt .= '$printer -> text(" 	");';
+								$txt .= '$printer -> text("   ");';
 								foreach ($dato['notas'] as $nota) {
 									$txt .= '$printer -> text(" /'.$nota["nombre"].'");';
 								}
 								$txt .= '$printer -> text("\n");';
 							}
 							if(isset($dato["adicionales"])){
-								$txt .= '$printer -> text(" 	");';
+								$txt .= '$printer -> text("   ");';
 								foreach ($dato['adicionales'] as $adi) {
 									$txt .= '$printer -> text(" *'.$adi["nombre"].' x '.$adi["cantidad"].'");';
 								}
@@ -200,7 +206,7 @@
 
 						
 
-						$txt .= '$printer -> text("---------------------------------\n");';
+						$txt .= '$printer -> text("------------------------------------------------\n");';
 						$txt .= '$printer -> cut();';
 						$txt .= '$printer -> close();';
 
@@ -221,7 +227,7 @@
 
 
 		public function imprimirreportediariocaja($datos){
-			$html = self::ENCABEZADOHTML.'<div class="container">
+			/*$html = self::ENCABEZADOHTML.'<div class="container">
 						            <div class="encabezado">
 						                REPORTE DIARIO CAJA
 						            </div>
@@ -335,7 +341,7 @@
 			//$cmd = "lpr -P HP_Photosmart_Plus_B209a-m ";
 			$cmd .= $pdfPatd;
 			$response = shell_exec($cmd);
-			//File::delete($pdfPatd);
+			//File::delete($pdfPatd);*/
 		}
 
 		public function imprimir_ticketcaja($odetallestickete,$restaurante,$tickete, 

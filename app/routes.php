@@ -1134,28 +1134,48 @@ Route::group(array('before' => 'auth'), function () {
 					} elseif ($tipopre == 2) {
 						if(true){
 							$txt = '<?php require_once(dirname(__FILE__) . "/../app/escpos/Escpos.php");
+							//$logo = new EscposImage("images/productos/tostao.jpg");
 							$printer = new Escpos();
+							/* Print top logo */
+                            $printer -> setJustification(Escpos::JUSTIFY_CENTER);
+                            //$printer -> graphics($logo);
+							$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);
 							$printer -> text("Pre Cuenta\n");
+							$printer -> selectPrintMode();
+							$printer -> setJustification(Escpos::JUSTIFY_LEFT);
 							$printer -> feed();
-							$printer -> text("---------------------------------------");
-							$printer -> text("Descripción 	P.Unit.	   Cant. 	Subt.");
-							$printer -> text("---------------------------------------");';
+							$printer -> text("------------------------------------------------\n");
+							$printer -> text("Descripción      P.Unit.      Cant.       Subt.\n");
+							$printer -> text("------------------------------------------------\n");';
 
 							$importetotal = 0;
+                            $cantTotal = 0;
 							foreach ($precuenta as $predato) {
-								$txt .= '$printer -> text("'.str_pad(substr($predato["nombre"],0,12),12,"*").'.	'.$predato["preciou"].'		X'.$predato["cantidad"].'	'.$predato["precio"].'");';
+								$txt .= '$printer -> text("'.str_pad(substr($predato["nombre"],0,12),12,"*").'.   '.str_pad($predato["preciou"], 6, " ", STR_PAD_LEFT).'        X'
+                                    .str_pad($predato["cantidad"],3," ",STR_PAD_LEFT).'        '
+                                    .str_pad($predato["precio"], 6, " "  , STR_PAD_LEFT).'\n");';
 
-								$importetotal = $importetotal+$predato["precio"];
+								$importetotal += $predato["precio"];
+                                $cantTotal += 1;
 							}
-
-							$txt .= '$printer -> text("Total");';
-
+                            $txt .= '$printer -> text("------------------------------------------------\n");';
+                            $txt .= '$printer -> text("Total de Items:  '.$cantTotal.'\n");';
+                            $txt .= '$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);';
+                            $txt .= '$printer -> setEmphasis(true);';
+							$txt .= '$printer -> text("Total  ");';
 							$txt .= '$printer -> text("S/.'.number_format($importetotal, 2).'\n");';
 							$txt .= '$printer -> feed();';
+                            $txt .= '$printer -> selectPrintMode();';
+                            $txt .= '$printer -> setEmphasis(false);';
 							$txt .= '$printer -> text("Mesa Atendida: '.$nombremesa.'\n");';
 							$txt .= '$printer -> text("Mozo: '.$nombremozo.'\n");';
 
-							$txt .= '$printer -> text("---------------------------------\n");';
+							$txt .= '$printer -> text("------------------------------------------------\n");';
+                            $txt .= '$printer -> text("Boleta[] Factura[] / Consumo[] Detall.[]\n");';
+                            $txt .= '$printer -> text("Nombres/Rzon Soc.:______________________________\n");';
+                            $txt .= '$printer -> text("Direcc.:________________________________________\n");';
+                            $txt .= '$printer -> text("DNI/RUC.:_______________________________________\n");';
+                            $txt .= '$printer -> feed();';
 							$txt .= '$printer -> text("Fecha: '.date("d-m-Y").' '.date("H:i:s").'\n");';
 							$txt .= '$printer -> text("<<No válido como documento contable>>\n");';
 							$txt .= '$printer -> cut();';
@@ -1164,7 +1184,7 @@ Route::group(array('before' => 'auth'), function () {
 							$myfile = fopen("preCuenta.php", "w") or die("Unable to open file!");
 							fwrite($myfile, $txt);
 							fclose($myfile);
-							$cmd = 'php '.public_path("/").'preCuenta.php | nc 192.168.0.100 9100 > /dev/null 2>/dev/null &';
+							$cmd = 'php '.public_path("/").'preCuenta.php | nc 192.168.0.10 9100 > /dev/null 2>/dev/null &';
 							//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
 							shell_exec($cmd);//exec('sudo -u myuser ls /');
 
@@ -1568,8 +1588,8 @@ Boleta&nbsp;
 						return Response::json($e);
 					}
 					$cajero = Auth::user()->login;
-					Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete',
-					'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));
+					/*Event::fire('imprimirticket', compact('odetallestickete','restaurante','tickete',
+					'cliente','nombremesa', 'nombremozo', 'cajero','impresora'));*/
 					//DB::rollback();
 					//return json_encode('false del rollBack');
 					DB::commit();
@@ -2175,7 +2195,7 @@ Hora:'.date('H:i:s').'</strong>
 			</div>
 			</body>
 			</html>';
-					$headers = array('Content-Type' => 'application/pdf', );
+					/*$headers = array('Content-Type' => 'application/pdf', );
 					$pdfPath = TIKET_DIR.$token.'.pdf';
 					$tamaño = 125+$newtamaño;
 					$html2pdf = new HTML2PDF('V', array('72', $tamaño), 'fr', true, 'UTF-8', 0);
@@ -2184,7 +2204,7 @@ Hora:'.date('H:i:s').'</strong>
 					$cmd = "lpr -P".$infocaja->impresora." ";
 					$cmd .= $pdfPath;
 					//$response = shell_exec($cmd);
-					//File::delete($pdfPath);
+					//File::delete($pdfPath);*/
 					$tickete->save();
 					$infocaja->save();
 					return Response::json('true');
@@ -2423,7 +2443,7 @@ Hora:'.date('H:i:s').'</strong>
 						'pvendidos'                        => Input::get('pvendidos'),
 						'fecha'                            => Input::get('fecha'),
 						'rango'                            => Input::get('rango'));
-					Event::fire('imprimirreportediariocaja', compact('arraydatos'));
+					/*Event::fire('imprimirreportediariocaja', compact('arraydatos'));*/
 					return Response::json('true');
 				}
 			});
@@ -3581,7 +3601,7 @@ AND detallepedido.combinacion_id IS NOT NULL
 						$arraycocinaimpresion[] = $cdato['areanombre'].'_'.$cdato['id'];
 					}
 
-					Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'arraycocinaimpresion'));
+					/*Event::fire('imprimirpedidos', compact('arrayimprimir', 'mozoid', 'idmesa', 'arraycocinaimpresion'));*/
 					return Response::json(compact('orden', 'arrayproco', 'arrayprof', 'pedidoid', 'mozoid'));
 				}
 			});
