@@ -1184,7 +1184,7 @@ Route::group(array('before' => 'auth'), function () {
 							$myfile = fopen("preCuenta.php", "w") or die("Unable to open file!");
 							fwrite($myfile, $txt);
 							fclose($myfile);
-							$cmd = 'php '.public_path("/").'preCuenta.php | nc 192.168.0.10 9100 > /dev/null 2>/dev/null &';
+							$cmd = 'php '.public_path("/").'preCuenta.php | nc 192.168.1.10 9100 > /dev/null 2>/dev/null &';
 							//$cmd = 'lpr -P Photosmart-Plus-B209a-m /var/www/html/4Rest/public/newfile.php';
 							shell_exec($cmd);//exec('sudo -u myuser ls /');
 
