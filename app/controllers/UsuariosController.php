@@ -32,7 +32,7 @@
 		public function getCreate()
 		{
 			$restaurantes = Restaurante::all()->lists('nombreComercial','id');
-			$colaboradores = Colaborador::all()->lists('nombre','id');
+			//$colaboradores = Colaborador::all()->lists('nombre','id');
 	        return View::make('usuarios.create', compact('restaurantes', 'colaboradores'));
 		}
 
