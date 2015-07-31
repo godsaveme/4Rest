@@ -1159,7 +1159,7 @@ Route::group(array('before' => 'auth'), function () {
                                 $cantTotal += 1;
 							}
                             $txt .= '$printer -> text("------------------------------------------------\n");';
-                            $txt .= '$printer -> text("Total de Items:  '.$cantTotal.'\n");';
+                            //$txt .= '$printer -> text("Total de Items:  '.$cantTotal.'\n");';
                             $txt .= '$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);';
                             $txt .= '$printer -> setEmphasis(true);';
 							$txt .= '$printer -> text("Total  ");';
@@ -1167,8 +1167,10 @@ Route::group(array('before' => 'auth'), function () {
 							$txt .= '$printer -> feed();';
                             $txt .= '$printer -> selectPrintMode();';
                             $txt .= '$printer -> setEmphasis(false);';
+                            $txt .= '$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);';
 							$txt .= '$printer -> text("Mesa Atendida: '.$nombremesa.'\n");';
 							$txt .= '$printer -> text("Mozo: '.$nombremozo.'\n");';
+                            $txt .= '$printer -> selectPrintMode();';
 
 							$txt .= '$printer -> text("------------------------------------------------\n");';
                             $txt .= '$printer -> text("Boleta[] Factura[] / Consumo[] Detall.[]\n");';
