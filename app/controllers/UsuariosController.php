@@ -95,7 +95,7 @@
 		{
 			$restaurantes = Restaurante::all()->lists('nombreComercial','id');
 			$usuario = Usuario::find($id);
-			$colaboradores = Colaborador::all()->lists('nombre','id');
+			//$colaboradores = Colaborador::all()->lists('nombre','id');
 	        return View::make('usuarios.edit', compact('usuario', 'restaurantes','colaboradores'));
 		}
 
