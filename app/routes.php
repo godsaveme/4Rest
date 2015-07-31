@@ -1168,7 +1168,7 @@ Route::group(array('before' => 'auth'), function () {
                             $txt .= '$printer -> selectPrintMode();';
                             $txt .= '$printer -> setEmphasis(false);';
                             $txt .= '$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);';
-							$txt .= '$printer -> text("Mesa Atendida: '.$nombremesa.'\n");';
+							$txt .= '$printer -> text("'.$nombremesa.'\n");';
 							$txt .= '$printer -> text("Mozo: '.$nombremozo.'\n");';
                             $txt .= '$printer -> selectPrintMode();';
 
