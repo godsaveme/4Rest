@@ -7,9 +7,9 @@
 						    $printer -> text("Barra\n");
 						    $printer -> selectPrintMode();
 							$printer -> setJustification(Escpos::JUSTIFY_LEFT);
-						    $printer -> text("Fecha: 13-07-2015 / Hora: 16:18:53\n");
-						    $printer -> text("Mesa:  Mesa 14\n");
-						    $printer -> text("Mozo:  cristopherq\n");
+						    $printer -> text("Fecha: 27-09-2015 / Hora: 18:31:01\n");
+						    $printer -> text("Mesa:  Mesa 20\n");
+						    $printer -> text("Mozo:  ivanG\n");
 						    $printer -> text("------------------------------------------------\n");
 						    $printer -> text("Cant.      Descripción\n");
-						    $printer -> text("------------------------------------------------\n");$printer -> text("X1   Frappe Mokachips\n");$printer -> text("   ");$printer -> text(" /todo para llevar");$printer -> text("\n");$printer -> text("X1   Helado Triple\n");$printer -> text(" ");$printer -> text(" >Café");$printer -> text(" >Higos");$printer -> text(" >Vainilla");$printer -> text("\n");$printer -> text("------------------------------------------------\n");$printer -> cut();$printer -> close();
+						    $printer -> text("------------------------------------------------\n");$printer -> text("X1   Te Frutado c/Limon\n");$printer -> text("------------------------------------------------\n");$printer -> cut();$printer -> close();
