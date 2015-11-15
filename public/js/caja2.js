@@ -396,6 +396,13 @@ function tiempoenmesa(){
 		.done(function(data) {
 			console.log(data);
 			if(data['tiempo'].length > 0){
+				if(data['tiempo'] == "00:15"){
+					$('#mesa_'+idpedido).addClass('parpadea');
+				}else{
+					$('#mesa_'+idpedido).removeClass('parpadea');
+				}
+
+				//tiempo: "138:28"
 				$('#mesa_'+idpedido).text(data['tiempo']);
 			}
 		})

@@ -4,12 +4,12 @@
 							$printer -> feed();
 							$printer -> setJustification(Escpos::JUSTIFY_CENTER);
 							$printer -> selectPrintMode(Escpos::MODE_DOUBLE_WIDTH);
-						    $printer -> text("Cocina\n");
+						    $printer -> text("Barra\n");
 						    $printer -> selectPrintMode();
 							$printer -> setJustification(Escpos::JUSTIFY_LEFT);
-						    $printer -> text("Fecha: 09-11-2015 / Hora: 16:25:09\n");
-						    $printer -> text("Mesa:  Mesa 05\n");
-						    $printer -> text("Mozo:  ivanG\n");
+						    $printer -> text("Fecha: 15-11-2015 / Hora: 11:17:23\n");
+						    $printer -> text("Mesa:  Mesa 04\n");
+						    $printer -> text("Mozo:  brunello\n");
 						    $printer -> text("------------------------------------------------\n");
 						    $printer -> text("Cant.      Descripción\n");
-						    $printer -> text("------------------------------------------------\n");$printer -> text("X1   Humita\n");$printer -> text("X1   Salchipapas Especial\n");$printer -> text("------------------------------------------------\n");$printer -> cut();$printer -> close();
+						    $printer -> text("------------------------------------------------\n");$printer -> text("X1   Cortado\n");$printer -> text("X1   Chocolate Kango\n");$printer -> text("------------------------------------------------\n");$printer -> cut();$printer -> close();
